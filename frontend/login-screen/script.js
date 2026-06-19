@@ -339,7 +339,23 @@ document.addEventListener('DOMContentLoaded', () => {
     rawTargetSecurityKey
 );
 
-const firebaseUser = userCredential.user; // Promisified Clean Lifecycle
+const firebaseUser = userCredential.user;
+              const studentRef = doc(db, "students", "student001");
+const studentSnap = await getDoc(studentRef);
+
+if (studentSnap.exists()) {
+    console.log(studentSnap.data());
+    showNotification(
+        "Student profile loaded successfully.",
+        "success"
+    );
+} else {
+    showNotification(
+        "Student profile not found in Firestore.",
+        "warning"
+    );
+}
+              // Promisified Clean Lifecycle
                 setButtonSubmissionEngineState('resolved');
                 showNotification("Authentication established! Mapping secure routing gate metrics...", "success");
                 

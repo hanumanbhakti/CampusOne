@@ -6,6 +6,32 @@
  * =========================================================================
  */
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDEIn2c2kgyMwwwSMyQg3DDZrNLoJF_fGw",
+  authDomain: "campusone-bd5c5.firebaseapp.com",
+  projectId: "campusone-bd5c5",
+  storageBucket: "campusone-bd5c5.firebasestorage.app",
+  messagingSenderId: "1056457840584",
+  appId: "1:1056457840584:web:313eb137ebd5aedab912fd",
+  measurementId: "G-QD0RL1B9EH"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. ENCAPSULATED APPLICATION STATE STORAGE & DATA DICTIONARIES ---
@@ -307,7 +333,13 @@ document.addEventListener('DOMContentLoaded', () => {
             pushSystemTelemetryEvent('AUTH_REQUEST_DISPATCHED', `Dispatched secure structural transaction stream channel for [${CampusOS.state.currentRole}].`);
 
             try {
-                await executeAsynchronousNetworkPipelineTrace(1500); // Promisified Clean Lifecycle
+                const userCredential = await signInWithEmailAndPassword(
+    auth,
+    targetUserEmail,
+    rawTargetSecurityKey
+);
+
+const firebaseUser = userCredential.user; // Promisified Clean Lifecycle
                 setButtonSubmissionEngineState('resolved');
                 showNotification("Authentication established! Mapping secure routing gate metrics...", "success");
                 

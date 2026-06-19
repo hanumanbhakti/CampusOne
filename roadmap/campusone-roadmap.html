@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CampusOne – Product Roadmap & Technical Blueprint v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #2563EB;
+    --secondary: #0EA5E9;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --purple: #7C3AED;
+    --dark: #0F172A;
+    --dark2: #1E293B;
+    --dark3: #334155;
+    --light: #F1F5F9;
+    --white: #ffffff;
+    --grad: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--dark);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--dark);
+    padding: 70px 20px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(37,99,235,0.25) 0%, transparent 70%);
+    top: -150px; left: 50%; transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .logo-svg { width: 95px; height: 55px; margin-bottom: 18px; display: inline-block; }
+
+  .hero h1 {
+    font-size: clamp(2rem, 6vw, 3.6rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+  .hero h1 span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero p {
+    margin: 14px auto 0;
+    max-width: 560px;
+    color: #94A3B8;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  .tagline-pill {
+    display: inline-block;
+    background: rgba(14,165,233,0.15);
+    border: 1px solid rgba(14,165,233,0.4);
+    color: var(--secondary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 40px;
+  }
+
+  /* ── VISION CARDS ── */
+  .vision-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .vision-card {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: center;
+    transition: transform .2s, border-color .2s;
+  }
+  .vision-card:hover { transform: translateY(-4px); border-color: rgba(37,99,235,0.5); }
+  .vision-card .icon { font-size: 2rem; margin-bottom: 10px; }
+  .vision-card h3 { font-size: 0.95rem; font-weight: 600; color: var(--white); }
+  .vision-card p { font-size: 0.78rem; color: #64748B; margin-top: 4px; }
+
+  /* ── NEW SECTION: USER ROLES MATRIX ── */
+  .matrix-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: var(--dark2);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.85rem;
+  }
+  .matrix-table th, .matrix-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .matrix-table th {
+    background: rgba(37,99,235,0.12);
+    color: var(--secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+  }
+  .matrix-table tr:last-child td { border-bottom: none; }
+  .matrix-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  .matrix-badge.view { background: rgba(34,197,94,0.15); color: #4ADE80; }
+  .matrix-badge.mark { background: rgba(245,158,11,0.15); color: #FBBF24; }
+  .matrix-badge.create { background: rgba(124,58,237,0.15); color: #C084FC; }
+  .matrix-badge.manage { background: rgba(239,68,68,0.15); color: #F87171; }
+
+  /* ── NEW SECTION: APP FOLDER STRUCTURE ── */
+  .struct-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 20px;
+  }
+  @media (max-width: 768px) { .struct-grid { grid-template-columns: 1fr; } }
+  .code-container {
+    background: #090D16;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 24px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #CBD5E1;
+    overflow-x: auto;
+  }
+  .folder { color: #60A5FA; font-weight: 700; }
+  .file { color: #34D399; }
+  .comment { color: #475569; margin-left: 10px; font-style: italic; }
+  
+  .struct-info {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .struct-info h4 { font-size: 1rem; color: var(--secondary); margin-bottom: 10px; }
+  .struct-info p { font-size: 0.82rem; color: #94A3B8; line-height: 1.6; }
+
+  /* ── NEW SECTION: SCREEN COUNT ROADMAP ── */
+  .scr-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .scr-card {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 22px;
+  }
+  .scr-card h4 {
+    font-size: 0.9rem;
+    color: var(--white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }
+  .scr-card h4 span {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .v1-tag { background: rgba(37,99,235,0.2); color: #60A5FA; }
+  .v2-tag { background: rgba(124,58,237,0.2); color: #A78BFA; }
+  .v3-tag { background: rgba(5,150,105,0.2); color: #34D399; }
+  .v4-tag { background: rgba(217,119,6,0.2); color: #FCD34D; }
+
+  .scr-list { list-style: none; }
+  .scr-list li {
+    font-size: 0.8rem;
+    color: #94A3B8;
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .scr-list li::before { content: "•"; color: var(--secondary); font-weight: bold; }
+
+  /* ── NEW SECTION: ONBOARDING FLOW ── */
+  .flow-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .flow-card {
+    flex: 1;
+    min-width: 160px;
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 20px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .flow-card:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    right: -10px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: var(--secondary);
+    z-index: 2;
+  }
+  @media (max-width: 900px) { .flow-card:not(:last-child)::after { display: none; } }
+  .flow-num {
+    width: 28px; height: 28px;
+    background: var(--grad);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700;
+    margin: 0 auto 10px;
+  }
+  .flow-card h5 { font-size: 0.85rem; font-weight: 600; color: var(--white); }
+  .flow-card p { font-size: 0.72rem; color: #64748B; margin-top: 4px; }
+
+  /* ── BRANDIdentity ── */
+  .palette { display: flex; flex-wrap: wrap; gap: 12px; }
+  .color-swatch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+  .swatch-dot { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; }
+  .swatch-info { line-height: 1.3; }
+  .swatch-name { font-size: 0.75rem; font-weight: 600; color: var(--white); }
+  .swatch-hex { font-size: 0.68rem; color: #475569; font-family: monospace; }
+
+  /* ── TECH STACK ── */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+  }
+  .tech-card {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .tech-card .tech-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #475569; }
+  .tech-card .tech-name { font-size: 1rem; font-weight: 700; color: var(--white); }
+  .tech-card .tech-icon { font-size: 1.6rem; }
+
+  /* ── MVP MODULES ── */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .module-card {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 22px 20px;
+    transition: transform .2s;
+  }
+  .module-card:hover { transform: translateY(-3px); }
+  .module-card h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .module-card ul { list-style: none; }
+  .module-card ul li {
+    font-size: 0.78rem;
+    color: #94A3B8;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .module-card ul li::before { content: '›'; color: var(--secondary); font-weight: 700; }
+
+  /* ── PHASE ROADMAP ── */
+  .phases { display: flex; flex-direction: column; gap: 0; }
+  .phase-row {
+    display: grid;
+    grid-template-columns: 120px 40px 1fr;
+    gap: 0 20px;
+    align-items: start;
+  }
+  .phase-time { text-align: right; padding-top: 14px; }
+  .phase-time .days { font-size: 0.72rem; font-weight: 700; color: var(--secondary); letter-spacing: 0.5px; }
+  .phase-time .label { font-size: 0.68rem; color: #475569; margin-top: 2px; }
+  .phase-line { display: flex; flex-direction: column; align-items: center; }
+  .phase-dot {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
+    position: relative; z-index: 1;
+  }
+  .phase-connector {
+    width: 2px; flex: 1; min-height: 40px;
+    background: linear-gradient(to bottom, rgba(37,99,235,0.5), rgba(37,99,235,0.1));
+    margin: 4px 0;
+  }
+  .phase-row:last-child .phase-connector { display: none; }
+  .phase-content {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+    transition: border-color .2s;
+  }
+  .phase-content:hover { border-color: rgba(37,99,235,0.4); }
+  .phase-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .phase-num { font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
+  .phase-title { font-size: 1.1rem; font-weight: 700; color: var(--white); }
+  .phase-goal { font-size: 0.78rem; color: #64748B; margin-bottom: 14px; font-style: italic; }
+  .feature-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .feature-tag {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+    padding: 5px 12px; font-size: 0.75rem; font-weight: 500; color: #CBD5E1;
+  }
+
+  /* Phase colors */
+  .p1 .phase-dot { background: linear-gradient(135deg,#2563EB,#0EA5E9); color: white; }
+  .p1 .phase-num { background: rgba(37,99,235,0.2); color: #60A5FA; }
+  .p1 .phase-content { border-color: rgba(37,99,235,0.25); }
+  .p2 .phase-dot { background: linear-gradient(135deg,#7C3AED,#A78BFA); color: white; }
+  .p2 .phase-num { background: rgba(124,58,237,0.2); color: #A78BFA; }
+  .p2 .phase-content { border-color: rgba(124,58,237,0.25); }
+  .p3 .phase-dot { background: linear-gradient(135deg,#059669,#34D399); color: white; }
+  .p3 .phase-num { background: rgba(5,150,105,0.2); color: #34D399; }
+  .p3 .phase-content { border-color: rgba(5,150,105,0.25); }
+  .p4 .phase-dot { background: linear-gradient(135deg,#D97706,#FCD34D); color: white; }
+  .p4 .phase-num { background: rgba(217,119,6,0.2); color: #FCD34D; }
+  .p4 .phase-content { border-color: rgba(217,119,6,0.25); }
+  .p5 .phase-dot { background: linear-gradient(135deg,#DC2626,#F87171); color: white; }
+  .p5 .phase-num { background: rgba(220,38,38,0.2); color: #F87171; }
+  .p5 .phase-content { border-color: rgba(220,38,38,0.25); }
+
+  /* ── DB SCHEMA ── */
+  .schema-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .schema-card { background: var(--dark2); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; overflow: hidden; }
+  .schema-head { background: rgba(37,99,235,0.15); border-bottom: 1px solid rgba(37,99,235,0.2); padding: 12px 16px; font-size: 0.85rem; font-weight: 700; color: #60A5FA; display: flex; align-items: center; gap: 8px; }
+  .schema-body { padding: 12px 16px; }
+  .schema-field { font-size: 0.75rem; color: #94A3B8; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; justify-content: space-between; }
+  .schema-field:last-child { border-bottom: none; }
+  .schema-field .field-type { color: #475569; font-size: 0.68rem; }
+
+  /* ── REVENUE ── */
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+  .pricing-card { background: var(--dark2); border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 28px 22px; text-align: center; transition: transform .2s; }
+  .pricing-card:hover { transform: translateY(-4px); }
+  .pricing-card.featured { background: var(--grad); border-color: transparent; }
+  .pricing-card.featured .plan-name, .pricing-card.featured .plan-price, .pricing-card.featured .plan-detail { color: white !important; }
+  .plan-name { font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #64748B; margin-bottom: 8px; }
+  .plan-price { font-size: 2rem; font-weight: 800; color: var(--white); line-height: 1; }
+  .plan-price sup { font-size: 1rem; font-weight: 600; }
+  .plan-price sub { font-size: 0.75rem; font-weight: 400; color: #94A3B8; }
+  .plan-detail { font-size: 0.78rem; color: #64748B; margin-top: 6px; }
+  .plan-students { display: inline-block; margin-top: 14px; font-size: 0.78rem; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,0.08); color: #CBD5E1; }
+
+  /* ── NEW SECTION: FUTURE ENTERPRISE FEATURES ── */
+  .ent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .ent-card {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+  .ent-card:hover { border-color: rgba(124,58,237,0.4); }
+  .ent-card h4 { font-size: 0.95rem; color: #FFF; display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .ent-card p { font-size: 0.78rem; color: #94A3B8; line-height: 1.5; }
+
+  /* ── IMMEDIATE ACTION PLAN ── */
+  .steps-list { display: flex; flex-direction: column; gap: 12px; }
+  .step-item { display: flex; align-items: flex-start; gap: 16px; background: var(--dark2); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 18px 20px; }
+  .step-num { width: 36px; height: 36px; border-radius: 10px; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; flex-shrink: 0; }
+  .step-text h4 { font-size: 0.95rem; font-weight: 700; color: var(--white); }
+  .step-text p { font-size: 0.78rem; color: #64748B; margin-top: 2px; }
+  .step-status { margin-left: auto; font-size: 0.68rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; flex-shrink: 0; align-self: center; }
+  .done { background: rgba(34,197,94,0.15); color: #4ADE80; }
+  .next { background: rgba(37,99,235,0.15); color: #60A5FA; }
+  .pending { background: rgba(255,255,255,0.05); color: #475569; }
+
+  /* ── FOOTER ── */
+  footer { text-align: center; padding: 50px 20px 60px; color: #334155; font-size: 0.78rem; }
+  footer .grad-text { font-weight: 700; font-size: 1.3rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: 6px; }
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent); margin: 0 20px; }
+
+  @media (max-width: 600px) {
+    .phase-row { grid-template-columns: 80px 32px 1fr; gap: 0 12px; }
+    .phase-time { padding-top: 12px; }
+    .phase-time .days { font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <svg class="logo-svg" viewBox="0 0 180 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#2563EB"/>
+        <stop offset="100%" stop-color="#0EA5E9"/>
+      </linearGradient>
+    </defs>
+    <path d="M55 15 A40 40 0 1 0 55 95 L55 78 A23 23 0 1 1 55 32 Z" fill="url(#g1)"/>
+    <path d="M95 15 A40 40 0 0 1 135 55 A40 40 0 0 1 95 95 L95 78 A23 23 0 0 0 118 55 A23 23 0 0 0 95 32 Z" fill="url(#g1)" opacity="0.7"/>
+    <path d="M55 46 Q75 55 95 64" stroke="url(#g1)" stroke-width="17" stroke-linecap="round" fill="none"/>
+  </svg>
+  <div class="tagline-pill">Product Blueprint &amp; Roadmap v2.0</div>
+  <h1><span>CampusOne</span></h1>
+  <p>One App for Every Campus — India's modern Digital Campus Operating System for Schools, Colleges &amp; Coaching Institutes.</p>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Vision</div>
+  <div class="section-title">Who is CampusOne for?</div>
+  <div class="vision-grid">
+    <div class="vision-card"><div class="icon">🎓</div><h3>Students</h3><p>Attendance, assignments, results &amp; AI assistant</p></div>
+    <div class="vision-card"><div class="icon">👨‍🏫</div><h3>Teachers</h3><p>Mark attendance, upload notes, enter marks</p></div>
+    <div class="vision-card"><div class="icon">👨‍👩‍👧</div><h3>Parents</h3><p>Track attendance, results &amp; fee payments</p></div>
+    <div class="vision-card"><div class="icon">🏫</div><h3>Administrators</h3><p>Full control — users, notices, analytics</p></div>
+    <div class="vision-card"><div class="icon">🏢</div><h3>Institutions</h3><p>Schools, Colleges &amp; Coaching Centers</p></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Access Control Matrix</div>
+  <div class="section-title">User Roles &amp; Permissions</div>
+  <div class="matrix-wrapper">
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Student</th>
+          <th>Teacher</th>
+          <th>Parent</th>
+          <th>Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Attendance</strong></td>
+          <td><span class="matrix-badge view">View</span></td>
+          <td><span class="matrix-badge mark">Mark</span></td>
+          <td><span class="matrix-badge view">View</span></td>
+          <td><span class="matrix-badge manage">Manage</span></td>
+        </tr>
+        <tr>
+          <td><strong>Notice Board</strong></td>
+          <td><span class="matrix-badge view">View</span></td>
+          <td><span class="matrix-badge create">Create</span></td>
+          <td><span class="matrix-badge view">View</span></td>
+          <td><span class="matrix-badge manage">Manage</span></td>
+        </tr>
+        <tr>
+          <td><strong>Results / Grades</strong></td>
+          <td><span class="matrix-badge view">View</span></td>
+          <td><span class="matrix-badge create">Upload</span></td>
+          <td><span class="matrix-badge view">View</span></td>
+          <td><span class="matrix-badge manage">Manage</span></td>
+        </tr>
+        <tr>
+          <td><strong>Assignments</strong></td>
+          <td><span class="matrix-badge create">Submit</span></td>
+          <td><span class="matrix-badge manage">Grade / Review</span></td>
+          <td><span class="matrix-badge view">View</span></td>
+          <td><span class="matrix-badge manage">Manage</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Technical Blueprint</div>
+  <div class="section-title">App Folder Structure (Feature-First approach)</div>
+  <div class="struct-grid">
+    <div class="code-container">
+      <span class="folder">lib/</span><br/>
+      ├── <span class="folder">screens/</span><span class="comment">// Core App Screen UIs</span><br/>
+      ├── <span class="folder">widgets/</span><span class="comment">// Global Reusable Custom UI Elements</span><br/>
+      ├── <span class="folder">models/</span><span class="comment">// Dart Data classes for Firestore serialization</span><br/>
+      ├── <span class="folder">services/</span><span class="comment">// Firebase Auth, Firestore streams singletons</span><br/>
+      ├── <span class="folder">providers/</span><span class="comment">// State management (Provider/Riverpod Controllers)</span><br/>
+      ├── <span class="folder">utils/</span><span class="comment">// Helpers, formatters, inputs validation rules</span><br/>
+      ├── <span class="folder">themes/</span><span class="comment">// Light/Dark style variables (Poppins config)</span><br/>
+      └── <span class="file">main.dart</span><span class="comment">// Application initialization gateway</span>
+    </div>
+    <div class="struct-info">
+      <h4>Architecture Highlights</h4>
+      <p>Clean, scalable, aur decouple approach follow kiya gaya hai. State management aur network/database protocols rules ko views layer se bilkul separate rakha hai taaki feature scaling me asani ho.</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Product Layout</div>
+  <div class="section-title">Screen Count Roadmap Distribution</div>
+  <div class="scr-grid">
+    <div class="scr-card">
+      <h4>Version 1.0 <span class="v1-tag">Core MVP</span></h4>
+      <ul class="scr-list">
+        <li>Login / Auth Screen</li>
+        <li>Main Dashboard View</li>
+        <li>Attendance Tracker</li>
+        <li>Notice Hub View</li>
+        <li>User Profile System</li>
+      </ul>
+    </div>
+    <div class="scr-card">
+      <h4>Version 2.0 <span class="v2-tag">Engagement</span></h4>
+      <ul class="scr-list">
+        <li>Assignments Manager</li>
+        <li>Dynamic Timetable</li>
+        <li>Academic Notes Library</li>
+        <li>Central Notification Hub</li>
+      </ul>
+    </div>
+    <div class="scr-card">
+      <h4>Version 3.0 <span class="v3-tag">Portals</span></h4>
+      <ul class="scr-list">
+        <li>Exam Results Suite</li>
+        <li>Fee Management Slate</li>
+        <li>Dedicated Parent Portal</li>
+        <li>Dedicated Teacher Suite</li>
+      </ul>
+    </div>
+    <div class="scr-card">
+      <h4>Version 4.0 <span class="v4-tag">Smart AI</span></h4>
+      <ul class="scr-list">
+        <li>AI Support Assistant</li>
+        <li>Secure QR Attendance</li>
+        <li>Administrative Analytics</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Operations Pipeline</div>
+  <div class="section-title">Institution Onboarding Pipeline Flow</div>
+  <div class="flow-container">
+    <div class="flow-card"><div class="flow-num">1</div><h5>School Register</h5><p>Institute logs profile details into portal</p></div>
+    <div class="flow-card"><div class="flow-num">2</div><h5>Admin Create</h5><p>Root master administration keys generation</p></div>
+    <div class="flow-card"><div class="flow-num">3</div><h5>Teachers Add</h5><p>Batch deployment of dynamic staff handles</p></div>
+    <div class="flow-card"><div class="flow-num">4</div><h5>Students Import</h5><p>Automated bulk parsing using CSV profiles</p></div>
+    <div class="flow-card"><div class="flow-num">5</div><h5>Classes Create</h5><p>Structural room maps linking students to teachers</p></div>
+    <div class="flow-card"><div class="flow-num">6</div><h5>Go Live</h5><p>App activation logs go active instantly</p></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Brand Identity</div>
+  <div class="section-title">Color System &amp; Typography</div>
+  <div class="palette">
+    <div class="color-swatch"><div class="swatch-dot" style="background:#2563EB;"></div><div class="swatch-info"><div class="swatch-name">Primary Blue</div><div class="swatch-hex">#2563EB</div></div></div>
+    <div class="color-swatch"><div class="swatch-dot" style="background:#0EA5E9;"></div><div class="swatch-info"><div class="swatch-name">Sky Blue</div><div class="swatch-hex">#0EA5E9</div></div></div>
+    <div class="color-swatch"><div class="swatch-dot" style="background:#22C55E;"></div><div class="swatch-info"><div class="swatch-name">Success</div><div class="swatch-hex">#22C55E</div></div></div>
+    <div class="color-swatch"><div class="swatch-dot" style="background:#F59E0B;"></div><div class="swatch-info"><div class="swatch-name">Warning</div><div class="swatch-hex">#F59E0B</div></div></div>
+    <div class="color-swatch"><div class="swatch-dot" style="background:#EF4444;"></div><div class="swatch-info"><div class="swatch-name">Danger</div><div class="swatch-hex">#EF4444</div></div></div>
+    <div class="color-swatch"><div class="swatch-dot" style="background:#0F172A; border:1px solid #334155;"></div><div class="swatch-info"><div class="swatch-name">Dark Navy</div><div class="swatch-hex">#0F172A</div></div></div>
+  </div>
+  <p style="margin-top:20px; font-size:0.82rem; color:#475569;">Font: <strong style="color:#94A3B8">Poppins</strong> — 300 / 400 / 600 / 700 / 800</p>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Tech Stack</div>
+  <div class="section-title">Technology Choices</div>
+  <div class="tech-grid">
+    <div class="tech-card"><div class="tech-icon">📱</div><div class="tech-label">Frontend</div><div class="tech-name">Flutter</div></div>
+    <div class="tech-card"><div class="tech-icon">🔥</div><div class="tech-label">Backend</div><div class="tech-name">Firebase</div></div>
+    <div class="tech-card"><div class="tech-icon">🗄️</div><div class="tech-label">Database</div><div class="tech-name">Cloud Firestore</div></div>
+    <div class="tech-card"><div class="tech-icon">📦</div><div class="tech-label">Storage</div><div class="tech-name">Firebase Storage</div></div>
+    <div class="tech-card"><div class="tech-icon">🔐</div><div class="tech-label">Auth</div><div class="tech-name">Firebase Auth</div></div>
+    <div class="tech-card"><div class="tech-icon">🔔</div><div class="tech-label">Push Alerts</div><div class="tech-name">FCM</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Version 1.0 — MVP</div>
+  <div class="section-title">Core Modules (Phase 1 Detailed)</div>
+  <div class="modules-grid">
+    <div class="module-card" style="border-color:rgba(37,99,235,0.3)">
+      <h3><span>🔑</span> Login &amp; Auth</h3>
+      <ul><li>Email Login</li><li>Password Login</li><li>Forgot Password</li><li>Logout</li></ul>
+    </div>
+    <div class="module-card" style="border-color:rgba(14,165,233,0.3)">
+      <h3><span>🏠</span> Dashboard</h3>
+      <ul><li>Welcome Card</li><li>Attendance Summary</li><li>Latest Notices</li><li>Quick Actions</li></ul>
+    </div>
+    <div class="module-card" style="border-color:rgba(34,197,94,0.3)">
+      <h3><span>📅</span> Attendance</h3>
+      <ul><li>Present Days</li><li>Absent Days</li><li>Attendance %</li><li>Monthly Calendar View</li></ul>
+    </div>
+    <div class="module-card" style="border-color:rgba(245,158,11,0.3)">
+      <h3><span>📢</span> Notice Board</h3>
+      <ul><li>School Notices</li><li>Events</li><li>Holiday List</li><li>Announcements</li></ul>
+    </div>
+    <div class="module-card" style="border-color:rgba(124,58,237,0.3)">
+      <h3><span>👤</span> Profile</h3>
+      <ul><li>Name &amp; Email</li><li>Mobile Number</li><li>Role Display</li><li>Logout</li></ul>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Development Roadmap</div>
+  <div class="section-title">5-Phase Scale Strategy</div>
+  <div class="phases">
+    <div class="phase-row p1">
+      <div class="phase-time"><div class="days">Day 0–30</div><div class="label">Month 1</div></div>
+      <div class="phase-line"><div class="phase-dot">1</div><div class="phase-connector"></div></div>
+      <div>
+        <div class="phase-content">
+          <div class="phase-header"><span class="phase-num">Phase 1</span><span class="phase-title">Working MVP</span></div>
+          <div class="phase-goal">🎯 Goal: Deploy karo, users ko functional look dikhao</div>
+          <div class="feature-tags">
+            <span class="feature-tag">🔑 Login Screen</span><span class="feature-tag">🏠 Dashboard</span>
+            <span class="feature-tag">📅 Attendance</span><span class="feature-tag">📢 Notice Board</span>
+            <span class="feature-tag">👤 Profile</span><span class="feature-tag">🔥 Firebase Core Sync</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-row p2">
+      <div class="phase-time"><div class="days">Month 2–3</div><div class="label">60 Days</div></div>
+      <div class="phase-line"><div class="phase-dot">2</div><div class="phase-connector"></div></div>
+      <div>
+        <div class="phase-content">
+          <div class="phase-header"><span class="phase-num">Phase 2</span><span class="phase-title">Daily Student Usage</span></div>
+          <div class="phase-goal">🎯 Goal: App interaction retention rate control me lana</div>
+          <div class="feature-tags">
+            <span class="feature-tag">📝 Assignments</span><span class="feature-tag">🕐 Timetable</span>
+            <span class="feature-tag">📚 Notes Upload</span><span class="feature-tag">🔔 Push Notifications</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-row p3">
+      <div class="phase-time"><div class="days">Month 4–6</div><div class="label">90 Days</div></div>
+      <div class="phase-line"><div class="phase-dot">3</div><div class="phase-connector"></div></div>
+      <div>
+        <div class="phase-content">
+          <div class="phase-header"><span class="phase-num">Phase 3</span><span class="phase-title">Complete Academic Suite</span></div>
+          <div class="phase-goal">🎯 Goal: Institutional operations mapping logic deploy karna</div>
+          <div class="feature-tags">
+            <span class="feature-tag">📊 Results &amp; Marks</span><span class="feature-tag">📋 Exam Schedules</span>
+            <span class="feature-tag">👨‍👩‍👧 Parent Portal</span><span class="feature-tag">💰 Fee Ledgers</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-row p4">
+      <div class="phase-time"><div class="days">Month 6–9</div><div class="label">90 Days</div></div>
+      <div class="phase-line"><div class="phase-dot">4</div><div class="phase-connector"></div></div>
+      <div>
+        <div class="phase-content">
+          <div class="phase-header"><span class="phase-num">Phase 4</span><span class="phase-title">Advanced Management</span></div>
+          <div class="phase-goal">🎯 Goal: Smart enterprise capabilities automation optimization</div>
+          <div class="feature-tags">
+            <span class="feature-tag">🤖 AI Assistant</span><span class="feature-tag">📸 QR Automation</span>
+            <span class="feature-tag">📈 Admin Analytics Dashboards</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-row p5">
+      <div class="phase-time"><div class="days">Month 9–12</div><div class="label">90 Days</div></div>
+      <div class="phase-line"><div class="phase-dot">5</div><div class="phase-connector"></div></div>
+      <div>
+        <div class="phase-content">
+          <div class="phase-header"><span class="phase-num">Phase 5</span><span class="phase-title">Commercial SaaS Scaling</span></div>
+          <div class="phase-goal">🎯 Goal: Subscriptions active base rollout aur MRR increase karna</div>
+          <div class="feature-tags">
+            <span class="feature-tag">🏢 Multi-School SaaS Architecture</span><span class="feature-tag">🎨 Automated White-Labeling</span>
+            <span class="feature-tag">💳 Dynamic Ledgers Payment Hub</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Database Design</div>
+  <div class="section-title">Firestore Architecture Collections</div>
+  <div class="schema-grid">
+    <div class="schema-card">
+      <div class="schema-head">🏫 Institutions</div>
+      <div class="schema-body">
+        <div class="schema-field"><span>institution_id</span><span class="field-type">String (ID)</span></div>
+        <div class="schema-field"><span>name</span><span class="field-type">String</span></div>
+        <div class="schema-field"><span>type</span><span class="field-type">Enum</span></div>
+        <div class="schema-field"><span>address</span><span class="field-type">String</span></div>
+      </div>
+    </div>
+    <div class="schema-card">
+      <div class="schema-head">👤 Users</div>
+      <div class="schema-body">
+        <div class="schema-field"><span>user_id</span><span class="field-type">String (ID)</span></div>
+        <div class="schema-field"><span>name</span><span class="field-type">String</span></div>
+        <div class="schema-field"><span>email</span><span class="field-type">String</span></div>
+        <div class="schema-field"><span>role</span><span class="field-type">Enum</span></div>
+      </div>
+    </div>
+    <div class="schema-card">
+      <div class="schema-head">📅 Attendance</div>
+      <div class="schema-body">
+        <div class="schema-field"><span>attendance_id</span><span class="field-type">String (ID)</span></div>
+        <div class="schema-field"><span>student_id</span><span class="field-type">Ref</span></div>
+        <div class="schema-field"><span>date</span><span class="field-type">Timestamp</span></div>
+        <div class="schema-field"><span>status</span><span class="field-type">Enum</span></div>
+      </div>
+    </div>
+    <div class="schema-card">
+      <div class="schema-head">📢 Notices</div>
+      <div class="schema-body">
+        <div class="schema-field"><span>notice_id</span><span class="field-type">String (ID)</span></div>
+        <div class="schema-field"><span>title</span><span class="field-type">String</span></div>
+        <div class="schema-field"><span>description</span><span class="field-type">String</span></div>
+        <div class="schema-field"><span>target_role</span><span class="field-type">Enum</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Revenue Model</div>
+  <div class="section-title">Subscription Plans Matrix</div>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price"><sup>₹</sup>999<sub>/mo</sub></div>
+      <div class="plan-detail">Coaching Frameworks</div>
+      <div class="plan-students">👥 Upto 100 Students</div>
+    </div>
+    <div class="pricing-card featured">
+      <div class="plan-name">Growth</div>
+      <div class="plan-price"><sup>₹</sup>2999<sub>/mo</sub></div>
+      <div class="plan-detail">Mid-Tier Frameworks</div>
+      <div class="plan-students">👥 Upto 500 Students</div>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-name">Pro</div>
+      <div class="plan-price"><sup>₹</sup>5999<sub>/mo</sub></div>
+      <div class="plan-detail">Flagship Institutes</div>
+      <div class="plan-students">👥 Upto 1000 Students</div>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price" style="font-size:1.3rem">Custom Pricing</div>
+      <div class="plan-detail">White-Label Scale Hubs</div>
+      <div class="plan-students">👥 Unlimited</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Enterprise Footprint</div>
+  <div class="section-title">Future Commercial Expansion Roadmap Modules</div>
+  <div class="ent-grid">
+    <div class="ent-card">
+      <h4><span>🎨</span> White Label Apps</h4>
+      <p>Independent deployment pipelines to release standalone apps on Play Store / App Store for high-tier institutions.</p>
+    </div>
+    <div class="ent-card">
+      <h4><span>🌐</span> Custom Domain Support</h4>
+      <p>Allows colleges to route dashboard web portals straight into their custom domain URLs seamlessly.</p>
+    </div>
+    <div class="ent-card">
+      <h4><span>🚌</span> Transport &amp; Fleet Tracker</h4>
+      <p>Integrated GPS streaming mapping live campus transit loops tracking buses coordinates inside the active client portal.</p>
+    </div>
+    <div class="ent-card">
+      <h4><span>🏢</span> Multi-Campus Enterprise Support</h4>
+      <p>Central management panel to switch networks and review multi-tier chain institutes data structures concurrently.</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-label">Immediate Execution Pipeline</div>
+  <div class="section-title">Next Steps — Abhi Karo</div>
+  <div class="steps-list">
+    <div class="step-item"><div class="step-num">1</div><div class="step-text"><h4>Logo Assets Finalised ✅</h4><p>CO Monogram — Modern SaaS Blue Gradient asset blocks ready</p></div><span class="step-status done">Done</span></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-text"><h4>Flutter Project Architecture</h4><p>Setup clean workspace environment setting up base libraries dependencies</p></div><span class="step-status next">Next</span></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-text"><h4>Build UI Authentication Screen</h4><p>Craft clean production login screen following exact branding rules code templates</p></div><span class="step-status next">Next</span></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-text"><h4>Firebase Connection Pipelines</h4><p>Setup Firebase configs keys pairing dynamic authentication flows hooks</p></div><span class="step-status pending">Pending</span></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<footer>
+  <span class="grad-text">CampusOne</span>
+  One App for Every Campus &nbsp;·&nbsp; Digital Campus Operating System<br/>
+  <span style="margin-top:8px; display:block;">Built with 🔥 Flutter + Firebase &nbsp;·&nbsp; Architecture Blueprint Slate v2.0 (2026)</span>
+</footer>
+
+</body>
+</html>

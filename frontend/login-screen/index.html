@@ -13,6 +13,8 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -24,18 +26,18 @@
             <div class="orb node-secondary-glowing"></div>
             <div class="orb node-accent-glowing"></div>
         </div>
-        <canvas id="co-particle-pipeline-surface" data-fps-target="60"></canvas>
     </div>
 
     <div id="co-sys-utilities-rail">
-        <nav class="lang-switcher-pod" aria-label="Language Localization">
+        <div class="lang-switcher-pod" aria-label="Language Localization">
+            <span class="global-lang-icon" aria-hidden="true">🌐</span>
             <button type="button" class="lang-node state-active" data-lang-target="en" aria-current="true">EN</button>
             <span class="rail-separator" aria-hidden="true">|</span>
             <button type="button" class="lang-node" data-lang-target="hi">हि</button>
-        </nav>
+        </div>
 
         <div class="theme-switch-orchestrator">
-            <button type="button" id="btn-theme-toggle" class="theme-toggle-trigger" aria-label="Toggle system color theme" data-current-theme="dark">
+            <button type="button" id="theme-toggle-trigger" class="theme-toggle-trigger" aria-label="Toggle system color theme" data-current-theme="dark">
                 <span class="theme-icon mode-light" aria-hidden="true">☀️</span>
                 <span class="theme-icon mode-dark" aria-hidden="true">🌙</span>
             </button>
@@ -49,28 +51,28 @@
                 <div class="snapshot-metric-card" data-metric-trend="optimal">
                     <div class="metric-visual-accent">
                         <span class="metric-icon-indicator" aria-hidden="true">📈</span>
-                        <span class="metric-value-stream" data-source="analytics.attendance">--%</span>
+                        <span id="metric-attendance" class="metric-value-stream" data-source="analytics.attendance">94.8%</span>
                     </div>
                     <p class="metric-caption-label">Attendance Rate</p>
                 </div>
                 <div class="snapshot-metric-card" data-metric-trend="steady">
                     <div class="metric-visual-accent">
                         <span class="metric-icon-indicator" aria-hidden="true">🎓</span>
-                        <span class="metric-value-stream" data-source="analytics.students">-,---</span>
+                        <span id="metric-scholars" class="metric-value-stream" data-source="analytics.students">1,420</span>
                     </div>
                     <p class="metric-caption-label">Scholars Enrolled</p>
                 </div>
                 <div class="snapshot-metric-card" data-metric-trend="steady">
                     <div class="metric-visual-accent">
                         <span class="metric-icon-indicator" aria-hidden="true">👨‍🏫</span>
-                        <span class="metric-value-stream" data-source="analytics.teachers">--+</span>
+                        <span id="metric-educators" class="metric-value-stream" data-source="analytics.teachers">84+</span>
                     </div>
                     <p class="metric-caption-label">Educators Online</p>
                 </div>
                 <div class="snapshot-metric-card" data-metric-trend="alert">
                     <div class="metric-visual-accent">
                         <span class="metric-icon-indicator" aria-hidden="true">📢</span>
-                        <span class="metric-value-stream" data-source="analytics.notices">--</span>
+                        <span id="metric-notices" class="metric-value-stream" data-source="analytics.notices">25</span>
                     </div>
                     <p class="metric-caption-label">Active Notices</p>
                 </div>
@@ -82,15 +84,7 @@
             <header class="brand-block-conductor" role="banner">
                 <div class="platform-identity-row">
                     <div class="monogram-glass-pod-wrap">
-                        <svg class="co-vector-monogram" width="44" height="44" viewBox="0 0 100 100" aria-label="CampusOne Platform Monogram">
-                            <defs>
-                                <linearGradient id="co-primary-gradient-axis" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#2563EB" />
-                                    <stop offset="100%" stop-color="#0EA5E9" />
-                                </linearGradient>
-                            </defs>
-                            <circle cx="50" cy="50" r="40" stroke="url(#co-primary-gradient-axis)" stroke-width="12" fill="none"/>
-                        </svg>
+                        <img src="assets/logo-icon.png" alt="CampusOne Identity Logo" class="brand-embedded-image-asset">
                     </div>
                     <div class="platform-naming-stack">
                         <h1 class="brand-title-wordmark">CampusOne</h1>
@@ -98,12 +92,12 @@
                     </div>
                 </div>
 
-                <div id="dynamic-tenant-branding-pod" data-tenant-status="unlinked">
+                <div id="dynamic-tenant-branding-pod" style="display: none;" data-tenant-status="unlinked">
                     <div class="tenant-separator" aria-hidden="true"></div>
                     <div class="tenant-branding-profile">
                         <div class="tenant-logo-placeholder"><span class="tenant-fallback-icon">🏫</span></div>
                         <div class="tenant-text-stack">
-                            <span class="tenant-resolved-name">Awaiting Campus Link</span>
+                            <span id="tenant-resolved-name" class="tenant-resolved-name">Awaiting Campus Link</span>
                             <span class="tenant-resolved-meta">Enterprise Node Architecture</span>
                         </div>
                     </div>
@@ -111,29 +105,27 @@
             </header>
 
             <section class="context-greeting-deck" aria-live="polite" aria-atomic="true">
-                <div class="greeting-hgroup">
-                    <h2 class="dynamic-greeting text-visible" data-role-context="student">Welcome Back, Scholar</h2>
-                    <h2 class="dynamic-greeting text-hidden" data-role-context="teacher" aria-hidden="true">Welcome Back, Educator</h2>
-                    <h2 class="dynamic-greeting text-hidden" data-role-context="parent" aria-hidden="true">Welcome Back, Guardian</h2>
-                    <h2 class="dynamic-greeting text-hidden" data-role-context="admin" aria-hidden="true">System Control Gateway</h2>
+                <div id="greeting-hgroup" class="greeting-hgroup">
+                    <h2 id="dynamic-greeting" class="brand-title-wordmark">Welcome Back, Scholar! 👋</h2>
                 </div>
-                <p class="context-subtext">Enter your credentials below to synchronize your institutional workspace.</p>
+                <p id="context-subtext" class="context-subtext">Access your premium personalized learning matrix dashboard.</p>
             </section>
 
             <nav class="segmented-control-track" role="tablist" aria-label="Workspace Context Selector">
-                <button type="button" role="tab" id="tab-student" aria-selected="true" aria-controls="panel-auth-fields" class="control-node state-active" data-action-route="student">Student</button>
-                <button type="button" role="tab" id="tab-teacher" aria-selected="false" aria-controls="panel-auth-fields" class="control-node" data-action-route="teacher" tabindex="-1">Teacher</button>
-                <button type="button" role="tab" id="tab-parent" aria-selected="false" aria-controls="panel-auth-fields" class="control-node" data-action-route="parent" tabindex="-1">Parent</button>
-                <button type="button" role="tab" id="tab-admin" aria-selected="false" aria-controls="panel-auth-fields" class="control-node" data-action-route="admin" tabindex="-1">Admin</button>
+                <div class="sliding-highlight-node"></div>
+                <button type="button" role="tab" id="tab-student" aria-selected="true" aria-controls="panel-auth-fields" class="control-node state-active" data-role-context="student">Student</button>
+                <button type="button" role="tab" id="tab-teacher" aria-selected="false" aria-controls="panel-auth-fields" class="control-node" data-role-context="teacher" tabindex="-1">Teacher</button>
+                <button type="button" role="tab" id="tab-parent" aria-selected="false" aria-controls="panel-auth-fields" class="control-node" data-role-context="parent" tabindex="-1">Parent</button>
+                <button type="button" role="tab" id="tab-admin" aria-selected="false" aria-controls="panel-auth-fields" class="control-node" data-role-context="admin" tabindex="-1">Admin</button>
             </nav>
 
             <div role="tabpanel" id="panel-auth-fields" aria-labelledby="tab-student">
-                <form id="co-auth-pipeline" class="form-grid-layout" method="POST" action="/api/v1/auth/session" autocomplete="on" novalidate>
+                <form id="campusone-auth-form" class="form-grid-layout" method="POST" action="/api/v1/auth/session" autocomplete="on" novalidate>
                     
                     <div class="input-field-wrapper field-conditional-routing" data-flow-state="initial" data-field-focus="idle">
                         <div class="label-row-spacing">
                             <label for="input-institution-code" class="field-label-text">Campus Code</label>
-                            <span class="field-helper-caption">Provided by your institution</span>
+                            <span class="field-helper-caption">Double-click to link</span>
                             <button type="button" class="btn-context-link action-clear-tenant" hidden>Switch Campus</button>
                         </div>
                         <div class="input-interactive-shell">
@@ -143,7 +135,7 @@
                                 id="input-institution-code" 
                                 name="campus_tenant_code" 
                                 required 
-                                placeholder="e.g., MIT-DELHI-2026"
+                                placeholder="Institution Code"
                                 autofocus
                                 autocorrect="off"
                                 autocapitalize="characters"
@@ -155,7 +147,7 @@
 
                     <div class="input-field-wrapper" data-field-focus="idle">
                         <div class="label-row-spacing">
-                            <label for="input-user-identity" class="field-label-text">Account ID / Email / Mobile</label>
+                            <label for="input-user-identity" class="field-label-text">Account Identification</label>
                         </div>
                         <div class="input-interactive-shell">
                             <span class="field-decorator-icon position-prefix icon-user" aria-hidden="true">👤</span>
@@ -164,7 +156,7 @@
                                 id="input-user-identity" 
                                 name="campus_user_identity" 
                                 required 
-                                placeholder="name@campus.edu or 10-digit mobile"
+                                placeholder="Email or Mobile Number"
                                 autocomplete="username"
                                 autocorrect="off"
                                 autocapitalize="none"
@@ -176,13 +168,14 @@
 
                     <div class="input-field-wrapper" data-field-focus="idle">
                         <div class="label-row-spacing">
-                            <label for="input-user-credentials" class="field-label-text">Password</label>
+                            <label for="input-secure-key" class="field-label-text">Password</label>
+                            <span id="caps-lock-detector" class="field-helper-caption" style="display: none; color: var(--color-danger); font-weight: bold;">⚠️ CAPS LOCK ACTIVE</span>
                         </div>
                         <div class="input-interactive-shell">
                             <span class="field-decorator-icon position-prefix icon-lock" aria-hidden="true">🔒</span>
                             <input 
                                 type="password" 
-                                id="input-user-credentials" 
+                                id="input-secure-key" 
                                 name="campus_user_credentials" 
                                 required 
                                 placeholder="••••••••"
@@ -199,7 +192,7 @@
                     <div class="utilities-flex-interceptor">
                         <div class="persistence-telemetry-block">
                             <label class="hybrid-checkbox-root">
-                                <input type="checkbox" id="check-remember-session" name="persistent_session" checked class="native-hidden-checkbox">
+                                <input type="checkbox" id="remember-me-checkbox" name="persistent_session" checked class="native-hidden-checkbox">
                                 <span class="custom-ui-checkbox" aria-hidden="true"></span>
                                 <span class="checkbox-caption-label">Remember Me</span>
                             </label>
@@ -209,7 +202,7 @@
                             </div>
                         </div>
                         <div class="recovery-action-node">
-                            <a href="/auth/recovery" class="secure-anchor-link text-gradient-hover" tabindex="0">Forgot Password?</a>
+                            <a href="/auth/recovery" class="auth-link text-gradient-hover" tabindex="0">Forgot Password?</a>
                         </div>
                     </div>
 
@@ -218,7 +211,7 @@
                         <p class="shield-caption-text">Protected by <span class="monospaced-bold-token">CampusOne Secure Identity</span> system</p>
                     </div>
 
-                    <button type="submit" id="btn-primary-auth-trigger" class="cta-gradient-button" data-engine-state="idle">
+                    <button type="submit" id="cta-submit-node" class="cta-gradient-button" data-engine-state="idle">
                         <span class="state-view-wrapper view-idle">Sign In to CampusOne</span>
                         <span class="state-view-wrapper view-submitting" aria-hidden="true"><span class="spinner-dot-ring-animation"></span></span>
                         <span class="state-view-wrapper view-resolved" aria-hidden="true">Sync Complete ✓</span>
@@ -228,7 +221,7 @@
                     <div class="onboarding-registration-interceptor">
                         <p class="onboarding-prompt-text">
                             Don't have an account or institutional access? 
-                            <a href="/access/request-gateway" class="action-request-link">Request Access / Contact Admin</a>
+                            <a href="/access/request-gateway" class="auth-link action-request-link">Request Access / Contact Admin</a>
                         </p>
                     </div>
 
@@ -253,15 +246,24 @@
             <section class="trust-assurance-matrix" aria-label="System Security Baselines">
                 <div class="assurance-card-node" title="AES 256bit Cryptographic Security">
                     <span class="node-badge-icon" aria-hidden="true">🔒</span>
-                    <span class="node-badge-title">Secure Authentication</span>
+                    <div class="node-text-group">
+                        <span class="node-badge-title">Secure Authentication</span>
+                        <span class="node-badge-subtitle">256-bit encrypted access</span>
+                    </div>
                 </div>
                 <div class="assurance-card-node" title="Low latency Database Clustering">
                     <span class="node-badge-icon" aria-hidden="true">☁️</span>
-                    <span class="node-badge-title">Cloud Sync</span>
+                    <div class="node-text-group">
+                        <span class="node-badge-title">Cloud Sync</span>
+                        <span class="node-badge-subtitle">Instant institutional sync</span>
+                    </div>
                 </div>
                 <div class="assurance-card-node" title="WebSocket Synchronization Pipeline">
                     <span class="node-badge-icon" aria-hidden="true">⚡</span>
-                    <span class="node-badge-title">Real-Time Updates</span>
+                    <div class="node-text-group">
+                        <span class="node-badge-title">Real-Time Updates</span>
+                        <span class="node-badge-subtitle">Live campus notifications</span>
+                    </div>
                 </div>
             </section>
 
@@ -273,11 +275,11 @@
             </section>
 
             <nav class="legal-compliance-directory" aria-label="Legal Metadata Links">
-                <a href="/legal/privacy" class="legal-link-anchor">Privacy Policy</a>
+                <a href="/legal/privacy" class="auth-link">Privacy Policy</a>
                 <span class="directory-dot-separator" aria-hidden="true">•</span>
-                <a href="/legal/terms" class="legal-link-anchor">Terms of Service</a>
+                <a href="/legal/terms" class="auth-link">Terms of Service</a>
                 <span class="directory-dot-separator" aria-hidden="true">•</span>
-                <a href="/support/helpdesk" class="legal-link-anchor">Support Gateway</a>
+                <a href="/support/helpdesk" class="auth-link">Support Gateway</a>
             </nav>
 
             <footer class="telemetry-metadata-anchor" role="contentinfo">
@@ -288,7 +290,7 @@
 
         </div>
     </main>
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 </body>
-  </html>
-  
+    </html>
+    

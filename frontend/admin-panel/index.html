@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CampusOne Admin Console for institutional management, student onboarding, faculty provisioning, notices and system operations.">
+    <link rel="icon" href="../../assets/logo-icon.png">
+    <title>CampusOne | Admin Command Console</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="admin-shell">
+    
+    <aside class="sidebar-rail" aria-label="Primary Navigation">
+        <div class="brand-block">
+            <img src="../../assets/logo-icon.png" alt="CampusOne Logo" class="brand-logo">
+            <div class="brand-content">
+                <h1 class="brand-title">CampusOne</h1>
+                <p class="brand-tagline">ADMIN COMMAND CONSOLE</p>
+            </div>
+        </div>
+
+        <nav class="navigation-group" aria-label="Admin Navigation">
+            <button type="button" class="nav-item state-active" data-view="dashboard">Dashboard</button>
+            <button type="button" class="nav-item" data-view="students">Students</button>
+            <button type="button" class="nav-item" data-view="faculty">Faculty</button>
+            <button type="button" class="nav-item" data-view="notices">Notices</button>
+            <button type="button" class="nav-item" data-view="activity">Activity</button>
+            <button type="button" class="nav-item" data-view="settings">Settings</button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="tenant-badge">
+                <span>Tenant</span>
+                <strong id="tenant-name">MIT-DELHI-2026</strong>
+            </div>
+            <button type="button" id="logout-trigger" class="logout-node">Logout</button>
+        </div>
+    </aside>
+
+    <main class="console-viewport">
+
+        <header class="command-header">
+            <div class="header-copy">
+                <h2>CampusOne Admin Console</h2>
+                <label for="global-search" class="sr-only">Search CampusOne</label>
+                <input type="search" id="global-search" placeholder="Search students, faculty, notices...">
+            </div>
+            <div class="header-profile">
+                <button type="button" id="theme-toggle" aria-label="Toggle Theme">Theme</button>
+                <span class="admin-status">Online</span>
+                <div class="admin-identity">
+                    <strong id="admin-name">Loading...</strong>
+                </div>
+            </div>
+        </header>
+
+        <section id="module-dashboard" class="operational-deck active-view">
+            <header class="deck-header">
+                <h3>Dashboard Overview</h3>
+                <div class="quick-actions">
+                    <button type="button" data-action="students">+ Create Student</button>
+                    <button type="button" data-action="faculty">+ Create Faculty</button>
+                    <button type="button" data-action="notices">+ Publish Notice</button>
+                </div>
+            </header>
+            <div class="metrics-grid">
+                <article class="metric-card" data-metric="students"><h4>Total Students</h4><strong id="metric-total-students">0</strong></article>
+                <article class="metric-card" data-metric="faculty"><h4>Total Faculty</h4><strong id="metric-total-faculty">0</strong></article>
+                <article class="metric-card" data-metric="notices"><h4>Active Notices</h4><strong id="metric-total-notices">0</strong></article>
+                <article class="metric-card" data-metric="health"><h4>System Health</h4><strong id="metric-system-health">Healthy</strong></article>
+            </div>
+        </section>
+
+        <section id="module-students" class="operational-deck">
+            <header class="deck-header"><h3>Student Onboarding Matrix</h3></header>
+            <form id="student-create-form" aria-label="Student Creation Form">
+                <input id="student-name" name="student_name" type="text" placeholder="Full Name" required>
+                <input id="student-email" name="student_email" type="email" placeholder="Email Address" required>
+                <input id="student-mobile" name="student_mobile" type="tel" placeholder="Mobile Number" required>
+                <input id="student-roll" name="student_roll" type="text" placeholder="Roll Number" required>
+                <input id="student-class" name="student_class" type="text" placeholder="Class" required>
+                <input id="student-section" name="student_section" type="text" placeholder="Section" required>
+                <input type="hidden" id="student-role" name="role" value="student">
+                <input type="hidden" id="student-status" name="status" value="active">
+                <button type="submit">Create Student</button>
+            </form>
+        </section>
+
+        <section id="module-faculty" class="operational-deck">
+            <header class="deck-header"><h3>Faculty Provisioning Tool</h3></header>
+            <form id="faculty-create-form" aria-label="Faculty Creation Form">
+                <input id="faculty-name" name="faculty_name" type="text" placeholder="Faculty Name" required>
+                <input id="faculty-email" name="faculty_email" type="email" placeholder="Email Address" required>
+                <input id="faculty-id" name="faculty_id" type="text" placeholder="Employee ID" required>
+                <input id="faculty-dept" name="faculty_dept" type="text" placeholder="Department" required>
+                <input id="faculty-subject" name="faculty_subject" type="text" placeholder="Subject" required>
+                <input type="hidden" id="faculty-role" name="role" value="teacher">
+                <input type="hidden" id="faculty-status" name="status" value="active">
+                <button type="submit">Create Faculty</button>
+            </form>
+        </section>
+
+        <section id="module-notices" class="operational-deck">
+            <header class="deck-header"><h3>Campus Broadcast Center</h3></header>
+            <form id="notice-create-form" aria-label="Notice Publication Form">
+                <input id="notice-title" name="notice_title" type="text" placeholder="Notice Title" required>
+                <select id="notice-audience" name="notice_audience" required>
+                    <option value="">Select Audience</option>
+                    <option value="all">All</option>
+                    <option value="students">Students</option>
+                    <option value="faculty">Faculty</option>
+                    <option value="parents">Parents</option>
+                </select>
+                <textarea id="notice-content" name="notice_content" rows="6" placeholder="Notice Content" required></textarea>
+                <button type="submit">Publish Notice</button>
+            </form>
+        </section>
+
+        <section id="module-activity" class="operational-deck">
+            <header class="deck-header"><h3>System Activity Feed</h3></header>
+            <div id="system-activity-logger">
+                <div class="empty-state">No activity recorded yet.</div>
+            </div>
+        </section>
+
+        <section id="module-settings" class="operational-deck">
+            <header class="deck-header"><h3>System Status & Configuration</h3></header>
+            <div id="system-status-grid">
+                <div class="status-badge">Firebase: <span id="status-firebase">Checking...</span></div>
+                <div class="status-badge">Firestore: <span id="status-firestore">Checking...</span></div>
+                <div class="status-badge">Auth: <span id="status-auth">Checking...</span></div>
+            </div>
+        </section>
+
+        <footer class="system-footer">
+            <span>CampusOne Cloud</span>
+            <span>Admin Console v1.0.0</span>
+        </footer>
+
+    </main>
+</div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>                                                                                                                    

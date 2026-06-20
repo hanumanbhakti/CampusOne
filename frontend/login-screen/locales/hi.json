@@ -1,0 +1,12 @@
+{
+  "welcome": "CampusOne में आपका स्वागत है 👋",
+  "subtitle": "अपने डिजिटल कैंपस कार्यक्षेत्र में सुरक्षित प्रवेश करें।",
+  "campusCode": "कैंपस कोड",
+  "accountIdentification": "खाता पहचान",
+  "password": "पासवर्ड",
+  "rememberMe": "मुझे याद रखें",
+  "forgotPassword": "पासवर्ड भूल गए?",
+  "loginButton": "CampusOne में प्रवेश करें",
+  "requestAccess": "प्रवेश का अनुरोध करें / एडमिन से संपर्क करें",
+  "statusConnecting": "CampusOne Cloud से कनेक्ट किया जा रहा है..."
+}

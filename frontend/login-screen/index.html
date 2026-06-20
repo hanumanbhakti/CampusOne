@@ -30,7 +30,7 @@
 
     <div id="co-sys-utilities-rail">
         <div class="lang-switcher-pod" aria-label="Language Localization">
-            <span class="global-lang-icon" aria-hidden="true">🌐</span>
+            <span class="global-lang-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c2.5 2.8 4 6.4 4 10s-1.5 7.2-4 10c-2.5-2.8-4-6.4-4-10s1.5-7.2 4-10z"/></svg></span>
             <button type="button" class="lang-node state-active" data-lang-target="en" aria-current="true">EN</button>
             <span class="rail-separator" aria-hidden="true">|</span>
             <button type="button" class="lang-node" data-lang-target="hi">हि</button>
@@ -38,8 +38,8 @@
 
         <div class="theme-switch-orchestrator">
             <button type="button" id="theme-toggle-trigger" class="theme-toggle-trigger" aria-label="Toggle system color theme" data-current-theme="dark">
-                <span class="theme-icon mode-light" aria-hidden="true">☀️</span>
-                <span class="theme-icon mode-dark" aria-hidden="true">🌙</span>
+                <span class="theme-icon mode-light" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+                <span class="theme-icon mode-dark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
             </button>
         </div>
     </div>
@@ -50,28 +50,28 @@
             <div class="snapshot-grid-container">
                 <div class="snapshot-metric-card" data-metric-trend="optimal">
                     <div class="metric-visual-accent">
-                        <span class="metric-icon-indicator" aria-hidden="true">📈</span>
+                        <span class="metric-icon-indicator" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
                         <span id="metric-attendance" class="metric-value-stream" data-source="analytics.attendance">--</span>
                     </div>
                     <p class="metric-caption-label" data-i18n="attendanceRate">Attendance Rate</p>
                 </div>
                 <div class="snapshot-metric-card" data-metric-trend="steady">
                     <div class="metric-visual-accent">
-                        <span class="metric-icon-indicator" aria-hidden="true">🎓</span>
+                        <span class="metric-icon-indicator" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span>
                         <span id="metric-scholars" class="metric-value-stream" data-source="analytics.students">--</span>
                     </div>
                     <p class="metric-caption-label" data-i18n="scholarsEnrolled">Scholars Enrolled</p>
                 </div>
                 <div class="snapshot-metric-card" data-metric-trend="steady">
                     <div class="metric-visual-accent">
-                        <span class="metric-icon-indicator" aria-hidden="true">👨‍🏫</span>
+                        <span class="metric-icon-indicator" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
                         <span id="metric-educators" class="metric-value-stream" data-source="analytics.teachers">--</span>
                     </div>
                     <p class="metric-caption-label" data-i18n="educatorsOnline">Educators Online</p>
                 </div>
                 <div class="snapshot-metric-card" data-metric-trend="alert">
                     <div class="metric-visual-accent">
-                        <span class="metric-icon-indicator" aria-hidden="true">📢</span>
+                        <span class="metric-icon-indicator" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
                         <span id="metric-notices" class="metric-value-stream" data-source="analytics.notices">--</span>
                     </div>
                     <p class="metric-caption-label" data-i18n="activeNotices">Active Notices</p>
@@ -95,10 +95,10 @@
                 <div id="dynamic-tenant-branding-pod" style="display: none;" data-tenant-status="unlinked">
                     <div class="tenant-separator" aria-hidden="true"></div>
                     <div class="tenant-branding-profile">
-                        <div class="tenant-logo-placeholder"><span class="tenant-fallback-icon">🏫</span></div>
+                        <div class="tenant-logo-placeholder"><span class="tenant-fallback-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/></svg></span></div>
                         <div class="tenant-text-stack">
-                            <span id="tenant-resolved-name" class="tenant-resolved-name">Awaiting Campus Link</span>
-                            <span class="tenant-resolved-meta">Enterprise Node Architecture</span>
+                            <span id="tenant-resolved-name" class="tenant-resolved-name" data-i18n="awaitingCampusLink">Awaiting Campus Link</span>
+                            <span class="tenant-resolved-meta" data-i18n="enterpriseNode">Enterprise Node Architecture</span>
                         </div>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
 
             <section class="context-greeting-deck" aria-live="polite" aria-atomic="true">
                 <div id="greeting-hgroup" class="greeting-hgroup">
-                    <h2 id="dynamic-greeting" class="brand-title-wordmark">Welcome to CampusOne 👋</h2>
+                    <h2 id="dynamic-greeting" class="brand-title-wordmark" data-i18n="welcome">Welcome to CampusOne</h2>
                 </div>
                 <p id="context-subtext" class="context-subtext">Secure access to your digital campus workspace.</p>
             </section>
@@ -126,10 +126,10 @@
                         <div class="label-row-spacing">
                             <label for="input-institution-code" class="field-label-text" data-i18n="campusCode">Campus Code</label>
                             <span class="field-helper-caption" data-i18n="institutionCodeHelp">Enter your institution code</span>
-                            <button type="button" class="btn-context-link action-clear-tenant" hidden>Switch Campus</button>
+                            <button type="button" class="btn-context-link action-clear-tenant" hidden data-i18n="switchCampus">Switch Campus</button>
                         </div>
                         <div class="input-interactive-shell">
-                            <span class="field-decorator-icon position-prefix icon-globe" aria-hidden="true">🌐</span>
+                            <span class="field-decorator-icon position-prefix icon-globe" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2c2.5 2.8 4 6.4 4 10s-1.5 7.2-4 10c-2.5-2.8-4-6.4-4-10s1.5-7.2 4-10z"/></svg></span>
                             <input 
                                 type="text" 
                                 id="input-institution-code" 
@@ -150,7 +150,7 @@
                             <label for="input-user-identity" class="field-label-text" data-i18n="accountIdentification">Account Identification</label>
                         </div>
                         <div class="input-interactive-shell">
-                            <span class="field-decorator-icon position-prefix icon-user" aria-hidden="true">👤</span>
+                            <span class="field-decorator-icon position-prefix icon-user" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
                             <input 
                                 type="text" 
                                 id="input-user-identity" 
@@ -170,10 +170,10 @@
                     <div class="input-field-wrapper" data-field-focus="idle">
                         <div class="label-row-spacing">
                             <label for="input-secure-key" class="field-label-text" data-i18n="password">Password</label>
-                            <span id="caps-lock-detector" class="field-helper-caption" style="display: none; color: var(--color-danger); font-weight: bold;">⚠️ CAPS LOCK ACTIVE</span>
+                            <span id="caps-lock-detector" class="field-helper-caption" style="display: none; color: var(--color-danger); font-weight: bold;"><svg viewBox="0 0 24 24" style="width:0.85em;height:0.85em;vertical-align:-0.1em;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;margin-right:4px;" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span data-i18n="capsLockActive">CAPS LOCK ACTIVE</span></span>
                         </div>
                         <div class="input-interactive-shell">
-                            <span class="field-decorator-icon position-prefix icon-lock" aria-hidden="true">🔒</span>
+                            <span class="field-decorator-icon position-prefix icon-lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
                             <input 
                                 type="password" 
                                 id="input-secure-key" 
@@ -185,14 +185,14 @@
                                 autocapitalize="none"
                                 aria-required="true"
                                 class="form-input-node">
-                            <button type="button" id="btn-toggle-masking" class="suffix-action-trigger" aria-label="Reveal password" aria-pressed="false">👁️</button>
+                            <button type="button" id="btn-toggle-masking" class="suffix-action-trigger" aria-label="Reveal password" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
                             <span class="field-decorator-status position-suffix icon-validation" aria-hidden="true"></span>
                         </div>
                         <div class="password-strength-wrapper">
                         <div class="password-strength-bar">
                         <div id="password-strength-meter"></div>
                        </div>
-                          <span id="password-strength-label">Password Strength</span>
+                          <span id="password-strength-label" data-i18n="passwordStrength">Password Strength</span>
                        </div>                       
                     </div>
 
@@ -214,20 +214,20 @@
                     </div>
 
                     <div class="vault-security-attribution-shield" aria-label="Security Assurance">
-                        <span class="shield-vector-mark" aria-hidden="true">🛡️</span>
-                        <p class="shield-caption-text" data-i18n="secureIdentity">Protected by <span class="monospaced-bold-token">CampusOne Secure Identity</span> system</p>
+                        <span class="shield-vector-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5.25 3.4 9.74 8 11 4.6-1.26 8-5.75 8-11V5z"/></svg></span>
+                        <p class="shield-caption-text" data-i18n="secureIdentity">Protected by CampusOne Secure Identity system</p>
                     </div>
 
                     <button type="submit" id="cta-submit-node" class="cta-gradient-button" data-engine-state="idle">
                         <span class="state-view-wrapper view-idle" data-i18n="loginButton">Sign In to CampusOne</span>
                         <span class="state-view-wrapper view-submitting" aria-hidden="true"><span class="spinner-dot-ring-animation"></span></span>
-                        <span class="state-view-wrapper view-resolved" aria-hidden="true">Login Successful ✓</span>
-                        <span class="state-view-wrapper view-rejected" aria-hidden="true">Login Failed ✕</span>
+                        <span class="state-view-wrapper view-resolved" aria-hidden="true"><svg viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;margin-right:6px;"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="loginSuccess">Login Successful</span></span>
+                        <span class="state-view-wrapper view-rejected" aria-hidden="true"><svg viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;margin-right:6px;"><path d="M18 6 6 18M6 6l12 12"/></svg><span data-i18n="loginFailed">Login Failed</span></span>
                     </button>
 
                     <div class="onboarding-registration-interceptor">
                         <p class="onboarding-prompt-text">
-                            Don't have an account or institutional access? 
+                            <span data-i18n="noAccountPrompt">Don't have an account or institutional access?</span>
                             <a href="/access/request-gateway" class="auth-link action-request-link" data-i18n="requestAccess">Request Access / Contact Admin</a>
                         </p>
                     </div>
@@ -236,7 +236,7 @@
             </div>
 
             <section class="oauth-federation-bridge">
-                <div class="contextual-divider" role="separator"><span>OR</span></div>
+                <div class="contextual-divider" role="separator"><span data-i18n="orDivider">OR</span></div>
                 <div class="oauth-action-grid">
                     <button type="button" id="btn-oauth-google" class="glass-action-button" aria-label="Authenticate using Google">
                         <svg class="vector-google-icon" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -252,24 +252,24 @@
 
             <section class="trust-assurance-matrix" aria-label="System Security Baselines">
                 <div class="assurance-card-node" title="AES 256bit Cryptographic Security">
-                    <span class="node-badge-icon" aria-hidden="true">🔒</span>
+                    <span class="node-badge-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
                     <div class="node-text-group">
                         <span class="node-badge-title" data-i18n="secureAuthentication">Secure Authentication</span>
-                        <span class="node-badge-subtitle">256-bit encrypted access</span>
+                        <span class="node-badge-subtitle" data-i18n="secureAuthenticationSub">256-bit encrypted access</span>
                     </div>
                 </div>
                 <div class="assurance-card-node" title="Low latency Database Clustering">
-                    <span class="node-badge-icon" aria-hidden="true">☁️</span>
+                    <span class="node-badge-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.5 1.5A4 4 0 0 0 6 19h11.5z"/></svg></span>
                     <div class="node-text-group">
                         <span class="node-badge-title" data-i18n="cloudSync">Cloud Sync</span>
-                        <span class="node-badge-subtitle">Instant institutional sync</span>
+                        <span class="node-badge-subtitle" data-i18n="cloudSyncSub">Instant institutional sync</span>
                     </div>
                 </div>
                 <div class="assurance-card-node" title="WebSocket Synchronization Pipeline">
-                    <span class="node-badge-icon" aria-hidden="true">⚡</span>
+                    <span class="node-badge-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
                     <div class="node-text-group">
                         <span class="node-badge-title" data-i18n="realTimeUpdates">Real-Time Updates</span>
-                        <span class="node-badge-subtitle">Live campus notifications</span>
+                        <span class="node-badge-subtitle" data-i18n="realTimeUpdatesSub">Live campus notifications</span>
                     </div>
                 </div>
             </section>

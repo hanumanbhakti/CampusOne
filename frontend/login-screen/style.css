@@ -250,6 +250,44 @@ button, input {
 [data-theme="light"] .mode-dark { display: none; }
 
 /* =========================================================================
+   ICON SYSTEM — inline SVG icons replace emoji glyphs across the UI.
+   Each icon inherits size from its parent's font-size (1em) and color
+   from the parent's `color` property via currentColor, so existing
+   selectors that set font-size/color keep working without duplication.
+   ========================================================================= */
+.global-lang-icon svg,
+.theme-icon svg,
+.field-decorator-icon svg,
+.suffix-action-trigger svg,
+.node-badge-icon svg,
+.metric-icon-indicator svg,
+.shield-vector-mark svg,
+.tenant-fallback-icon svg {
+    width: 1em;
+    height: 1em;
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.suffix-action-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.suffix-action-trigger[aria-pressed="true"] svg circle,
+.suffix-action-trigger[aria-pressed="true"] svg path:last-child {
+    opacity: 0.55;
+}
+
+/* =========================================================================
    PILLAR 5 — CENTRAL SCAFFOLD & COMPONENT CONTAINER LAYOUT
    ========================================================================= */
 .viewport-centralizer {

@@ -1,36 +1,23 @@
 /**
  * =========================================================================
- * CAMPUSONE INFINITE INTELLIGENCE ENGINE (v5.0.0 - PRODUCTION MASTER RELEASE)
- * Core Gateway Module Controller • Full Reactive State Machine Pipeline
- * Security Level: Enterprise Hardened • Status: AUDIT PASSED & FROZEN ✅
+ * CAMPUSONE GATEWAY ENGINE
+ * Core Login Screen Controller — Reactive State Machine + Firebase Auth
  * =========================================================================
  */
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import {
-  getAuth,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
-  getFirestore,
   doc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDEIn2c2kgyMwwwSMyQg3DDZrNLoJF_fGw",
-  authDomain: "campusone-bd5c5.firebaseapp.com",
-  projectId: "campusone-bd5c5",
-  storageBucket: "campusone-bd5c5.firebasestorage.app",
-  messagingSenderId: "1056457840584",
-  appId: "1:1056457840584:web:313eb137ebd5aedab912fd",
-  measurementId: "G-QD0RL1B9EH"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+// Single source of truth for Firebase init — keeps config in one place
+// instead of duplicating apiKeys/initializeApp across every screen.
+import { auth, db, googleProvider } from "./firebase-config.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -76,108 +63,79 @@ document.addEventListener('DOMContentLoaded', () => {
             inactivityTimer: null
         }
     };
+    // --- TRANSLATIONS: loaded from locales/en.json + locales/hi.json -------
+    // Previously this object was hand-duplicated here AND in /locales/*.json,
+    // so editing one never updated the screen — that's why translation only
+    // ever covered ~30% of the page. Now the JSON files are the single
+    // source of truth; this is just an in-memory cache once they're fetched.
+    // A tiny inline fallback keeps the screen readable even if the fetch
+    // fails (e.g. opened directly from disk instead of a web server).
     const translations = {
         en: {
-            welcome: "Welcome to CampusOne 👋",
+            welcome: "Welcome to CampusOne",
             subtitle: "Secure access to your digital campus workspace.",
-            student: "Student",
-            teacher: "Teacher",
-            parent: "Parent",
-            admin: "Admin",
-            campusCode: "Campus Code",
-            institutionCodeHelp: "Enter your institution code",
-            institutionCodePlaceholder: "Institution Code",
-            accountIdentification: "Account Identification",
-            emailPlaceholder: "Enter Email Address",
-            password: "Password",
-            rememberMe: "Remember Me",
-            forgotPassword: "Forgot Password?",
             loginButton: "Sign In to CampusOne",
-            requestAccess: "Request Access / Contact Admin",
-            attendanceRate: "Attendance Rate",
-            scholarsEnrolled: "Scholars Enrolled",
-            educatorsOnline: "Educators Online",
-            activeNotices: "Active Notices",
-            tagline: "Digital Campus Operating System",
-            lastAuthentication: "Last Authentication",
-            neverLoggedIn: "Never Logged In",
-            continueGoogle: "Continue with Google",
-            secureAuthentication: "Secure Authentication",
-            cloudSync: "Cloud Sync",
-            realTimeUpdates: "Real-Time Updates",
-            checkingStatus: "Checking System Status...",
-            privacyPolicy: "Privacy Policy",
-            termsService: "Terms of Service",
-            supportGateway: "Support Gateway",
             roleGreetings: {
-                student: { greeting: "Welcome Back, Scholar! 👋", subtext: "Access your personalized learning dashboard, assignments, attendance and academic resources." },
-                teacher: { greeting: "Welcome, Educator! 👨‍🏫", subtext: "Manage classes, attendance, examinations and student performance." },
-                parent: { greeting: "Greetings, Guardian! 👨‍👩‍👧", subtext: "Track attendance, progress reports and institutional updates." },
-                admin: { greeting: "System Console Active 🛡️", subtext: "Manage users, institutions, analytics and administration." }
+                student: { greeting: "Welcome Back, Scholar!", subtext: "Access your personalized learning dashboard, assignments, attendance and academic resources." },
+                teacher: { greeting: "Welcome, Educator!", subtext: "Manage classes, attendance, examinations and student performance." },
+                parent: { greeting: "Greetings, Guardian!", subtext: "Track attendance, progress reports and institutional updates." },
+                admin: { greeting: "System Console Active", subtext: "Manage users, institutions, analytics and administration." }
             }
         },
-
-        hi: {
-            welcome: "कैम्पसवन में आपका स्वागत है 👋",
-            subtitle: "अपने डिजिटल कैंपस कार्यक्षेत्र में सुरक्षित प्रवेश करें।",
-            student: "विद्यार्थी",
-            teacher: "शिक्षक",
-            parent: "अभिभावक",
-            admin: "प्रशासक",
-            campusCode: "कैंपस कोड",
-            institutionCodeHelp: "अपना संस्थान कोड दर्ज करें",
-            institutionCodePlaceholder: "संस्थान कोड",
-            accountIdentification: "खाता पहचान",
-            emailPlaceholder: "ईमेल पता दर्ज करें",
-            password: "पासवर्ड",
-            rememberMe: "मुझे याद रखें",
-            forgotPassword: "पासवर्ड भूल गए?",
-            loginButton: "कैंपसवन में लॉगिन करें",
-            requestAccess: "एक्सेस अनुरोध / एडमिन से संपर्क करें",
-            attendanceRate: "उपस्थिति दर",
-            scholarsEnrolled: "नामांकित विद्यार्थी",
-            educatorsOnline: "ऑनलाइन शिक्षक",
-            activeNotices: "सक्रिय सूचनाएँ",
-            tagline: "डिजिटल कैंपस ऑपरेटिंग सिस्टम",
-            lastAuthentication: "पिछला लॉगिन",
-            neverLoggedIn: "कभी लॉगिन नहीं किया",
-            continueGoogle: "Google से जारी रखें",
-            secureAuthentication: "सुरक्षित प्रमाणीकरण",
-            cloudSync: "क्लाउड सिंक",
-            realTimeUpdates: "रियल-टाइम अपडेट",
-            checkingStatus: "सिस्टम स्थिति जाँची जा रही है...",
-            privacyPolicy: "गोपनीयता नीति",
-            termsService: "सेवा की शर्तें",
-            supportGateway: "सहायता केंद्र",
-            roleGreetings: {
-                student: { greeting: "वापसी पर स्वागत है, विद्यार्थी! 👋", subtext: "अपना लर्निंग डैशबोर्ड, असाइनमेंट्स, उपस्थिति और शैक्षणिक संसाधन देखें।" },
-                teacher: { greeting: "स्वागत है, शिक्षक! 👨‍🏫", subtext: "कक्षाएँ, उपस्थिति, परीक्षाएँ और छात्र प्रदर्शन प्रबंधित करें।" },
-                parent: { greeting: "नमस्ते, अभिभावक! 👨‍👩‍👧", subtext: "उपस्थिति, प्रगति रिपोर्ट और संस्थागत अपडेट देखें।" },
-                admin: { greeting: "सिस्टम कंसोल सक्रिय 🛡️", subtext: "उपयोगकर्ता, संस्थान, एनालिटिक्स और प्रशासन प्रबंधित करें।" }
-            }
-        }
+        hi: {}
     };
 
-    function switchLanguage(lang) {
+    async function loadTranslationPack(lang) {
+        try {
+            const response = await fetch(`./locales/${lang}.json`, { cache: "no-cache" });
+            if (!response.ok) throw new Error(`Locale file responded with ${response.status}`);
+            const pack = await response.json();
+            translations[lang] = pack;
+            return true;
+        } catch (loadError) {
+            console.warn(`[CampusOne i18n] Could not load locales/${lang}.json, using fallback strings.`, loadError);
+            return false;
+        }
+    }
+
+    function applyTranslationPack(lang) {
         CampusOS.state.currentLanguage = lang;
+        const pack = translations[lang] || translations.en;
 
         document.querySelectorAll("[data-i18n]").forEach(el => {
             const key = el.dataset.i18n;
-            if (translations[lang]?.[key]) {
-                el.textContent = translations[lang][key];
+            if (pack[key]) {
+                el.textContent = pack[key];
             }
         });
 
         document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
             const key = el.dataset.i18nPlaceholder;
-            if (translations[lang]?.[key]) {
-                el.placeholder = translations[lang][key];
+            if (pack[key]) {
+                el.placeholder = pack[key];
             }
         });
+
+        document.documentElement.setAttribute('lang', lang);
 
         // Re-apply the current role's greeting in the new language so it never reverts to the generic text
         updateGreetingDisplay(CampusOS.state.currentRole, false);
     }
+
+    async function switchLanguage(lang) {
+        if (!translations[lang] || Object.keys(translations[lang]).length === 0) {
+            await loadTranslationPack(lang);
+        }
+        applyTranslationPack(lang);
+    }
+
+    // Looks up a translated string by key for the *current* language, with an
+    // English fallback — used for dynamically generated text like toasts.
+    function t(key, fallback) {
+        const pack = translations[CampusOS.state.currentLanguage] || {};
+        return pack[key] || translations.en[key] || fallback || key;
+    }
+
     // --- 2. FAST INLINE CACHED REFERENCE DOM SELECTORS ---
     const DOM = {
         htmlRoot: document.documentElement,
@@ -194,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         passwordInput: document.getElementById('input-secure-key'),
         toggleMaskingBtn: document.getElementById('btn-toggle-masking'), 
         submitBtn: document.getElementById('cta-submit-node'),
+        googleOAuthBtn: document.getElementById('btn-oauth-google'),
         capsLockWarning: document.getElementById('caps-lock-detector'),
         demoTriggerLink: document.querySelector('.action-request-link'),
         
@@ -211,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
             DOM.themeTrigger.addEventListener('click', () => {
                 const targetedTheme = DOM.htmlRoot.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
                 applySystemThemeContext(targetedTheme);
-                triggerDeviceTactileHapticPulse(5); // 🟢 Nice to Have: 5ms Haptic Switch Pulse
+                triggerDeviceTactileHapticPulse(5); // 5ms haptic pulse on theme switch
             });
         }
     }
@@ -230,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tab.addEventListener('click', (e) => {
                 const targetRole = e.target.getAttribute('data-role-context');
                 switchWorkspaceRoleContext(targetRole);
-                triggerDeviceTactileHapticPulse(10); // 🟢 Nice to Have: 10ms Haptic Workspace Switch
+                triggerDeviceTactileHapticPulse(10); // 10ms haptic pulse on workspace switch
             });
 
             tab.addEventListener('keydown', (e) => {
@@ -292,18 +251,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 5. REAL-TIME PASSWORD VISIBILITY TOGGLE (🏆 PRIORITY 1 RESOLVED) ---
+    // --- 5. REAL-TIME PASSWORD VISIBILITY TOGGLE ---
+    const ICON_EYE = '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    const ICON_EYE_OFF = '<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></svg>';
+
     if (DOM.toggleMaskingBtn && DOM.passwordInput) {
         DOM.toggleMaskingBtn.addEventListener('click', () => {
             const isCurrentlyMasked = DOM.passwordInput.getAttribute('type') === 'password';
             DOM.passwordInput.setAttribute('type', isCurrentlyMasked ? 'text' : 'password');
             DOM.toggleMaskingBtn.setAttribute('aria-pressed', isCurrentlyMasked ? 'true' : 'false');
-            DOM.toggleMaskingBtn.textContent = isCurrentlyMasked ? '🙈' : '👁️';
+            DOM.toggleMaskingBtn.setAttribute('aria-label', isCurrentlyMasked ? 'Hide password' : 'Reveal password');
+            DOM.toggleMaskingBtn.innerHTML = isCurrentlyMasked ? ICON_EYE_OFF : ICON_EYE;
             triggerDeviceTactileHapticPulse(12);
         });
     }
 
-    // --- 6. REAL-TIME INSTANT ENTROPY STRENGTH METER ENGINE (🏆 PRIORITY 4 RESOLVED) ---
+    // --- 6. REAL-TIME INSTANT ENTROPY STRENGTH METER ENGINE ---
     if (DOM.passwordInput) {
         DOM.passwordInput.addEventListener('input', (e) => {
             const rawPasswordValue = e.target.value;
@@ -313,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function evaluatePasswordEntropyStrength(password) {
         if (!password) {
-            updateStrengthMeterUI(0, 'None', 'transparent');
+            updateStrengthMeterUI(0, t('passwordStrength', 'Password Strength'), 'transparent');
             return;
         }
 
@@ -325,11 +288,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // UI Feedback Mapping Pipeline Cascades
         if (totalEntropyScore <= 2) {
-            updateStrengthMeterUI(33, 'Weak ⚠️', 'var(--color-danger, #EF4444)');
+            updateStrengthMeterUI(33, t('strengthWeak', 'Weak'), 'var(--color-danger, #EF4444)');
         } else if (totalEntropyScore === 3) {
-            updateStrengthMeterUI(66, 'Medium ⚡', 'var(--color-warning, #F59E0B)');
+            updateStrengthMeterUI(66, t('strengthMedium', 'Medium'), 'var(--color-warning, #F59E0B)');
         } else if (totalEntropyScore === 4) {
-            updateStrengthMeterUI(100, 'Strong 🔥', 'var(--color-success, #22C55E)');
+            updateStrengthMeterUI(100, t('strengthStrong', 'Strong'), 'var(--color-success, #22C55E)');
         }
     }
 
@@ -397,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // 🟢 Explicit Professional Button Click Capture Strategy Interceptor
+        // Demo/sandbox campus trigger
         if (DOM.demoTriggerLink) {
             DOM.demoTriggerLink.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -417,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (DOM.clearTenantBtn) DOM.clearTenantBtn.removeAttribute('hidden');
             markFieldValidity(DOM.tenantInput, true);
-            showNotification(`System linked successfully to node: ${token}`, "success");
+            showNotification(t('toastCampusLinked', `System linked successfully to node: ${token}`).replace('{token}', token), "success");
             pushSystemTelemetryEvent('TENANT_RESOLVED', `Connected to tenant pipeline secure workspace mapping: [${token}].`);
         } else {
             if (CampusOS.state.activeTenant) clearTenantVerificationState();
@@ -431,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
             DOM.tenantInput.value = demoFallbackKey;
             evaluateInstitutionalTokenAccess(demoFallbackKey);
             triggerDeviceTactileHapticPulse(40);
-            showNotification("Sandbox Explorer environment activated successfully.", "success");
+            showNotification(t('toastDemoActivated', 'Sandbox Explorer environment activated successfully.'), "success");
         }
     }
 
@@ -477,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // --- 8. AUTH PIPELINE WITH RIGID DEEP CORE VALIDATIONS (🏆 PRIORITY 5 RESOLVED) ---
+    // --- 8. AUTH PIPELINE WITH RIGID DEEP CORE VALIDATIONS ---
     function initializeAuthPipeline() {
         if (!DOM.authForm) return;
 
@@ -497,17 +460,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Runtime Scope Hard Infrastructure Verification Boundary Checking Checks
             if (!CampusOS.state.activeTenant) {
-                showNotification(
-                    "Please enter a valid Campus Code before signing in.",
-                    "danger"
-                );
+                showNotification(t('toastCampusInvalid', 'Please enter a valid Campus Code before signing in.'), "danger");
                 if (DOM.tenantInput) DOM.tenantInput.focus();
                 return;
             }
 
             // Email format check
             if (!targetUserEmail || !CampusOS.config.emailRegex.test(targetUserEmail)) {
-                showNotification("Please enter a valid email address.", "warning");
+                showNotification(t('toastEmailInvalid', 'Please enter a valid email address.'), "warning");
                 markFieldValidity(DOM.userIdentityInput, false);
                 return;
             }
@@ -516,7 +476,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Login only needs to confirm a password was entered — full complexity rules
             // belong on the registration form, not here, or valid existing users get locked out.
             if (!rawTargetSecurityKey || rawTargetSecurityKey.length < 6) {
-                showNotification("Please enter your password.", "danger");
+                showNotification(t('toastPasswordRequired', 'Please enter your password.'), "danger");
                 markFieldValidity(DOM.passwordInput, false);
                 return;
             }
@@ -528,59 +488,82 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const selectedRole = CampusOS.state.currentRole;
                 const userCredential = await signInWithEmailAndPassword(auth, targetUserEmail, rawTargetSecurityKey);
-                const firebaseUser = userCredential.user;
-
-                // Look up the profile in a single shared "users" collection, keyed by uid,
-                // with each document carrying its own `role` field. This works for every
-                // role tab (student/teacher/parent/admin) instead of only ever checking "students".
-                const userRef = doc(db, "users", firebaseUser.uid);
-                const userSnap = await getDoc(userRef);
-
-                if (userSnap.exists()) {
-                    const userData = userSnap.data();
-                    // Trust the role stored against the account over whatever tab was clicked in the UI
-                    CampusOS.state.currentRole = userData.role || selectedRole;
-                    showNotification("Profile loaded successfully.", "success");
-                } else {
-                    // No profile doc yet — proceed with the role the user selected on the tab
-                    CampusOS.state.currentRole = selectedRole;
-                    showNotification("Signed in. No extended profile found yet.", "warning");
-                }
-
-                setButtonSubmissionEngineState('resolved');
-                showNotification("Authentication successful! Redirecting you now...", "success");
-
-                setTimeout(() => {
-                    DOM.authForm.reset();
-                    clearTenantVerificationState();
-                    updateStrengthMeterUI(0, 'None', 'transparent');
-
-                    const configuredExplicitRedirectRoute = CampusOS.roleContexts[CampusOS.state.currentRole]?.targetRoute
-                        || CampusOS.roleContexts.student.targetRoute;
-                    pushSystemTelemetryEvent('REDIRECT_FORCED', `Forcing explicit route shift execution sequence target: [${configuredExplicitRedirectRoute}].`);
-
-                    window.location.href = configuredExplicitRedirectRoute;
-                }, 1000);
-
+                await completeSuccessfulLogin(userCredential.user, selectedRole);
             } catch (authError) {
                 setButtonSubmissionEngineState('rejected');
                 const friendlyMessage = authError?.code === 'auth/invalid-credential' || authError?.code === 'auth/wrong-password' || authError?.code === 'auth/user-not-found'
-                    ? "Incorrect email or password."
-                    : "Sign-in failed. Please check your connection and try again.";
+                    ? t('toastAuthInvalidCreds', 'Incorrect email or password.')
+                    : t('toastAuthFailedGeneric', 'Sign-in failed. Please check your connection and try again.');
                 showNotification(friendlyMessage, "danger");
                 setTimeout(() => setButtonSubmissionEngineState('idle'), 3000);
             }
         });
+
+        if (DOM.googleOAuthBtn) {
+            DOM.googleOAuthBtn.addEventListener('click', async () => {
+                if (!CampusOS.state.activeTenant) {
+                    showNotification(t('toastCampusInvalid', 'Please enter a valid Campus Code before signing in.'), "danger");
+                    if (DOM.tenantInput) DOM.tenantInput.focus();
+                    return;
+                }
+                try {
+                    DOM.googleOAuthBtn.setAttribute('disabled', 'true');
+                    const selectedRole = CampusOS.state.currentRole;
+                    const userCredential = await signInWithPopup(auth, googleProvider);
+                    await completeSuccessfulLogin(userCredential.user, selectedRole);
+                } catch (oauthError) {
+                    pushSystemTelemetryEvent('GOOGLE_AUTH_FAILED', `Google sign-in rejected: [${oauthError?.code || 'unknown'}].`);
+                    showNotification(t('toastGoogleFailed', 'Google sign-in failed. Please try again.'), "danger");
+                } finally {
+                    DOM.googleOAuthBtn.removeAttribute('disabled');
+                }
+            });
+        }
+    }
+
+    // Shared by both email/password and Google sign-in — looks up the user's
+    // profile doc, resolves their real role, and redirects to the matching dashboard.
+    async function completeSuccessfulLogin(firebaseUser, selectedRole) {
+        // Look up the profile in a single shared "users" collection, keyed by uid,
+        // with each document carrying its own `role` field. This works for every
+        // role tab (student/teacher/parent/admin) instead of only ever checking "students".
+        const userRef = doc(db, "users", firebaseUser.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+            const userData = userSnap.data();
+            // Trust the role stored against the account over whatever tab was clicked in the UI
+            CampusOS.state.currentRole = userData.role || selectedRole;
+            showNotification(t('toastProfileLoaded', 'Profile loaded successfully.'), "success");
+        } else {
+            // No profile doc yet — proceed with the role the user selected on the tab
+            CampusOS.state.currentRole = selectedRole;
+            showNotification(t('toastNoProfile', 'Signed in. No extended profile found yet.'), "warning");
+        }
+
+        setButtonSubmissionEngineState('resolved');
+        showNotification(t('toastAuthSuccess', 'Authentication successful! Redirecting you now...'), "success");
+
+        setTimeout(() => {
+            DOM.authForm.reset();
+            clearTenantVerificationState();
+            updateStrengthMeterUI(0, t('passwordStrength', 'Password Strength'), 'transparent');
+
+            const configuredExplicitRedirectRoute = CampusOS.roleContexts[CampusOS.state.currentRole]?.targetRoute
+                || CampusOS.roleContexts.student.targetRoute;
+            pushSystemTelemetryEvent('REDIRECT_FORCED', `Forcing explicit route shift execution sequence target: [${configuredExplicitRedirectRoute}].`);
+
+            window.location.href = configuredExplicitRedirectRoute;
+        }, 1000);
     }
 
     function setButtonSubmissionEngineState(targetState) {
         if (!DOM.submitBtn) return;
+        // Visibility of each state's markup (idle/processing/resolved/rejected) is handled
+        // entirely by CSS via [data-engine-state]; we only flip the attribute here. The
+        // markup itself (icons + i18n text) lives in the HTML and should never be overwritten,
+        // or the SVG icons inside the resolved/rejected states would get wiped out.
         DOM.submitBtn.setAttribute('data-engine-state', targetState);
-        const engineLabelsMapping = { 'idle': 'Sign In to CampusOne', 'processing': 'Signing In...', 'resolved': 'Login Successful ✓', 'rejected': 'Login Failed ✕' };
-        const innerStateLabelNode = DOM.submitBtn.querySelector(`.view-${targetState}`);
-        if (innerStateLabelNode && engineLabelsMapping[targetState]) {
-            innerStateLabelNode.textContent = engineLabelsMapping[targetState];
-        }
     }
 
     // --- 9. IDLE-PROTECTION: CLEAR SENSITIVE FIELDS AFTER PROLONGED INACTIVITY ---
@@ -590,8 +573,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (DOM.passwordInput && DOM.passwordInput.value) {
             DOM.passwordInput.value = '';
             markFieldValidity(DOM.passwordInput, null);
-            updateStrengthMeterUI(0, 'None', 'transparent');
-            showNotification("Password field cleared after inactivity for your security.", "warning");
+            updateStrengthMeterUI(0, t('passwordStrength', 'Password Strength'), 'transparent');
+            showNotification(t('toastIdleClear', 'Password field cleared after inactivity for your security.'), "warning");
             pushSystemTelemetryEvent('IDLE_PASSWORD_CLEAR', 'Password field cleared after prolonged inactivity.');
         }
     }
@@ -631,8 +614,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function evaluateNetworkStateHardwareMutation(isOnlineNow) {
         CampusOS.state.isNetworkOnline = isOnlineNow;
-        showNotification(`Telemetry Warning: System interface connectivity link status [${isOnlineNow ? "ONLINE" : "OFFLINE"}].`, isOnlineNow ? "success" : "danger");
-        pushSystemTelemetryEvent('NETWORK_MUTATION', `Hardware link interface mutated tracing index explicitly state: [${isOnlineNow ? "ONLINE" : "OFFLINE"}].`);
+        const message = isOnlineNow
+            ? t('toastOnline', "You're back online.")
+            : t('toastOffline', 'Connection lost. Some features may be unavailable.');
+        showNotification(message, isOnlineNow ? "success" : "danger");
+        pushSystemTelemetryEvent('NETWORK_MUTATION', `Network connectivity changed to: [${isOnlineNow ? "ONLINE" : "OFFLINE"}].`);
     }
 
     // --- 12. RUNTIME TELEMETRY EVENT INTERCEPTOR TOAST QUEUE ---
@@ -698,7 +684,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeLanguageEngine();
         updateGreetingDisplay(CampusOS.state.currentRole, false); // Sync greeting with default active tab
 
-        console.log("[CampusOne Core Framework] Production Module Engine initialized cleanly to Gold v1.0. 🚀");
+        console.log("[CampusOne Core Framework] Login screen initialized.");
     }
 
     // Fire application runtime engine infrastructure orchestration frame...

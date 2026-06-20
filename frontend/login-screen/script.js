@@ -306,10 +306,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const rawTargetSecurityKey = DOM.passwordInput?.value;
 
             // Runtime Scope Hard Infrastructure Verification Boundary Checking Checks
-            if (!CampusOS.state.activeTenant) {
-                showNotification("Handshake refused. Invalid Institutional Scope Token.", "danger");
-                return;
-            }
+            // if (!CampusOS.state.activeTenant) {
+//     showNotification(
+//       "Handshake refused. Invalid Institutional Scope Token.",
+//       "danger"
+//     );
+//     return;
+// }
 
             // 🏆 Priority 5 Core Fix: Extended Explicit Email Format Handshake Check
             if (!targetUserEmail || !CampusOS.config.emailRegex.test(targetUserEmail)) {

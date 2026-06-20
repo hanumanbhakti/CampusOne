@@ -1102,3 +1102,16 @@ button, input {
     font-size:.72rem;
     color:var(--text-muted);
 }
+
+@keyframes logoFloat {
+    0%,100%{
+        transform: translateY(0);
+    }
+    50%{
+        transform: translateY(-10px);
+    }
+}
+
+.monogram-glass-pod-wrap{
+    animation: logoFloat 6s ease-in-out infinite;
+}

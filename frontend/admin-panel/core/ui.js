@@ -2,142 +2,274 @@
 // CAMPUSONE UI CORE ENGINE
 // ======================================================
 
-export const UI = {
+const loader =
+    document.getElementById("co-global-loader");
 
-    // -------------------------
-    // DOM SELECTORS
-    // -------------------------
+const toastContainer =
+    document.getElementById("co-toast-container");
 
-    loader: document.getElementById("co-global-loader"),
-    toastContainer: document.getElementById("co-toast-container"),
-    modal: document.getElementById("co-global-modal"),
-    modalTitle: document.getElementById("co-modal-title"),
-    modalBody: document.getElementById("co-modal-body"),
+const modal =
+    document.getElementById("co-global-modal");
 
-    // -------------------------
-    // LOADER
-    // -------------------------
+const modalTitle =
+    document.getElementById("co-modal-title");
 
-    showLoader() {
-        if (!this.loader) return;
-        this.loader.classList.remove("hidden");
-    },
+const modalBody =
+    document.getElementById("co-modal-body");
 
-    hideLoader() {
-        if (!this.loader) return;
-        this.loader.classList.add("hidden");
-    },
+const modalConfirmBtn =
+    document.getElementById("co-global-modal-confirm-btn");
 
-    // -------------------------
-    // TOAST
-    // -------------------------
+const sidebarOverlay =
+    document.getElementById("co-sidebar-overlay-backdrop");
 
-    toast(message, type = "info", duration = 3000) {
+const commandPalette =
+    document.getElementById("co-command-palette-modal");
 
-        if (!this.toastContainer) return;
 
-        const toast = document.createElement("div");
+// ======================================================
+// LOADER
+// ======================================================
 
-        toast.className = `co-toast co-toast-${type}`;
+export function toggleLoader(show = true) {
 
-        toast.innerHTML = `
-            <span>${message}</span>
-        `;
+    if (!loader) return;
 
-        this.toastContainer.appendChild(toast);
+    loader.classList.toggle("hidden", !show);
+}
+
+
+// ======================================================
+// TOAST
+// ======================================================
+
+export function showToast(
+    message,
+    type = "info",
+    duration = 3000
+) {
+
+    if (!toastContainer) return;
+
+    const toast = document.createElement("div");
+
+    toast.className =
+        `co-toast co-toast-${type}`;
+
+    toast.textContent = message;
+
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+
+        toast.style.opacity = "0";
 
         setTimeout(() => {
-            toast.style.opacity = "0";
+            toast.remove();
+        }, 300);
 
-            setTimeout(() => {
-                toast.remove();
-            }, 300);
+    }, duration);
+}
 
-        }, duration);
-    },
 
-    // -------------------------
-    // MODAL
-    // -------------------------
+// ======================================================
+// MODAL
+// ======================================================
 
-    openModal(title, content) {
+export function showModal(
+    title = "CampusOne",
+    content = ""
+) {
 
-        if (!this.modal) return;
+    if (!modal) return;
 
-        this.modalTitle.textContent = title;
-        this.modalBody.innerHTML = content;
+    modalTitle.textContent = title;
 
-        this.modal.classList.remove("hidden");
-    },
+    modalBody.innerHTML = content;
 
-    closeModal() {
+    modal.classList.remove("hidden");
+}
 
-        if (!this.modal) return;
+export function closeModal() {
 
-        this.modal.classList.add("hidden");
-    },
+    modal?.classList.add("hidden");
+}
 
-    // -------------------------
-    // COMMAND PALETTE
-    // -------------------------
 
-    openCommandPalette() {
+// ======================================================
+// CONFIRM DIALOG
+// ======================================================
 
-        const palette = document.getElementById(
-            "co-command-palette-modal"
+export function showConfirmDialog(
+    title,
+    message,
+    onConfirm
+) {
+
+    showModal(
+        title,
+        `<p>${message}</p>`
+    );
+
+    const confirmBtn =
+        document.getElementById(
+            "co-global-modal-confirm-btn"
         );
 
-        if (!palette) return;
+    const handler = () => {
 
-        palette.classList.remove("hidden");
-    },
+        closeModal();
 
-    closeCommandPalette() {
+        if (typeof onConfirm === "function") {
+            onConfirm();
+        }
 
-        const palette = document.getElementById(
-            "co-command-palette-modal"
+        confirmBtn.removeEventListener(
+            "click",
+            handler
         );
+    };
 
-        if (!palette) return;
+    confirmBtn.addEventListener(
+        "click",
+        handler
+    );
+}
 
-        palette.classList.add("hidden");
-    },
 
-    // -------------------------
-    // HELPERS
-    // -------------------------
+// ======================================================
+// SIDEBAR OVERLAY
+// ======================================================
 
-    qs(selector) {
-        return document.querySelector(selector);
-    },
+export function showSidebarOverlay() {
 
-    qsa(selector) {
-        return document.querySelectorAll(selector);
+    sidebarOverlay?.classList.remove("hidden");
+}
+
+export function hideSidebarOverlay() {
+
+    sidebarOverlay?.classList.add("hidden");
+}
+
+
+// ======================================================
+// COMMAND PALETTE
+// ======================================================
+
+export function openCommandPalette() {
+
+    commandPalette?.classList.remove("hidden");
+
+    document
+        .getElementById("co-command-palette-input")
+        ?.focus();
+}
+
+export function closeCommandPalette() {
+
+    commandPalette?.classList.add("hidden");
+}
+
+
+// ======================================================
+// EMPTY STATE
+// ======================================================
+
+export function setEmptyState(
+    targetId,
+    message = "No records found"
+) {
+
+    const el =
+        document.getElementById(targetId);
+
+    if (!el) return;
+
+    el.innerHTML = `
+        <div class="co-empty-state">
+            <p>${message}</p>
+        </div>
+    `;
+}
+
+
+// ======================================================
+// SKELETON
+// ======================================================
+
+export function showSkeleton(targetId) {
+
+    const el =
+        document.getElementById(targetId);
+
+    if (!el) return;
+
+    el.dataset.loading = "true";
+}
+
+export function hideSkeleton(targetId) {
+
+    const el =
+        document.getElementById(targetId);
+
+    if (!el) return;
+
+    delete el.dataset.loading;
+}
+
+
+// ======================================================
+// DEBOUNCE
+// ======================================================
+
+export function debounce(
+    func,
+    delay = 300
+) {
+
+    let timer;
+
+    return (...args) => {
+
+        clearTimeout(timer);
+
+        timer = setTimeout(
+            () => func(...args),
+            delay
+        );
+    };
+}
+
+
+// ======================================================
+// AUTO EVENTS
+// ======================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        document
+            .getElementById(
+                "co-global-modal-close-trigger"
+            )
+            ?.addEventListener(
+                "click",
+                closeModal
+            );
+
+        document
+            .getElementById(
+                "co-global-modal-cancel-btn"
+            )
+            ?.addEventListener(
+                "click",
+                closeModal
+            );
+
+        sidebarOverlay?.addEventListener(
+            "click",
+            hideSidebarOverlay
+        );
     }
-};
-
-// ======================================================
-// MODAL EVENTS
-// ======================================================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const closeBtn =
-        document.getElementById(
-            "co-global-modal-close-trigger"
-        );
-
-    const cancelBtn =
-        document.getElementById(
-            "co-global-modal-cancel-btn"
-        );
-
-    closeBtn?.addEventListener("click", () => {
-        UI.closeModal();
-    });
-
-    cancelBtn?.addEventListener("click", () => {
-        UI.closeModal();
-    });
-
-});
+);

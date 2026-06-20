@@ -1,1 +1,12 @@
-
+{
+  "welcome": "Welcome to CampusOne 👋",
+  "subtitle": "Secure access to your digital campus workspace.",
+  "campusCode": "Campus Code",
+  "accountIdentification": "Account Identification",
+  "password": "Password",
+  "rememberMe": "Remember Me",
+  "forgotPassword": "Forgot Password?",
+  "loginButton": "Sign In to CampusOne",
+  "requestAccess": "Request Access / Contact Admin",
+  "statusConnecting": "Connecting to CampusOne Cloud..."
+}

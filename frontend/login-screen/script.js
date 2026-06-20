@@ -56,11 +56,30 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Contextual UI Theme Layout Framework Templates
         roleContexts: {
-            student: { greeting: "Welcome Back, Scholar! 👋", subtext: "Access your premium personalized learning matrix dashboard.", targetRoute: "dashboard.html" },
-            teacher: { greeting: "Welcome, Educator! 👨‍🏫", subtext: "Manage workspaces, evaluate benchmarks, and direct classes.", targetRoute: "teacher.html" },
-            parent: { greeting: "Greetings, Guardian! 🏡", subtext: "Track academic indices, fee balances, and holistic performance.", targetRoute: "parent.html" },
-            admin: { greeting: "System Console Active 🛡️", subtext: "Execute institutional policies, inspect audits, and scale infrastructure.", targetRoute: "admin.html" }
-        },
+    student: {
+        greeting: "Welcome Back, Scholar! 👋",
+        subtext: "Access your personalized learning dashboard, assignments, attendance and academic resources.",
+        targetRoute: "../student-dashboard/index.html"
+    },
+
+    teacher: {
+        greeting: "Welcome, Educator! 👨‍🏫",
+        subtext: "Manage classes, attendance, examinations and student performance.",
+        targetRoute: "../teacher-dashboard/index.html"
+    },
+
+    parent: {
+        greeting: "Greetings, Guardian! 👨‍👩‍👧",
+        subtext: "Track attendance, progress reports and institutional updates.",
+        targetRoute: "../parent-dashboard/index.html"
+    },
+
+    admin: {
+        greeting: "System Console Active 🛡️",
+        subtext: "Manage users, institutions, analytics and administration.",
+        targetRoute: "../admin-dashboard/index.html"
+    }
+},
 
         // Global Dynamic State Variable Nodes
         state: {

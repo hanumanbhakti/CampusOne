@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title id="co-admin-panel-title">Master Console | CampusOne Enterprise</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="co-dashboard-body-matrix">
+
+    <div id="co-global-loader" class="co-system-master-loader-layer" role="alert" aria-busy="true">
+        <div class="loader-central-spinner-box">
+            <div class="spinner-vector"></div>
+            <span class="loader-telemetry-text">Hydrating Realtime Multi-Tenant Mesh Network...</span>
+        </div>
+    </div>
+
+    <div id="co-toast-container" class="co-toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <div id="co-sidebar-overlay-backdrop" class="co-sidebar-mobile-overlay hidden"></div>
+
+    <div id="co-command-palette-modal" class="co-command-palette-backdrop hidden" role="dialog" aria-modal="true" aria-label="Global Command Matrix">
+        <div class="co-command-palette-window">
+            <div class="palette-search-wrapper-row">
+                <span class="palette-search-icon">🔍</span>
+                <input type="text" id="co-command-palette-input" placeholder="Type a command or search metrics... (e.g., /create)" autocomplete="off">
+                <span class="palette-escape-pill">ESC</span>
+            </div>
+            <div class="co-command-palette-results-viewport">
+                <div class="palette-results-section">
+                    <span class="section-group-label">Quick Actions Shortcut</span>
+                    <ul class="palette-action-links-list">
+                        <li class="palette-item active" data-command="create-student"><span class="icon">🎓</span> <span class="label">Create Student Profile</span> <kbd class="shortcut-hint">/student</kbd></li>
+                        <li class="palette-item" data-command="create-faculty"><span class="icon">💼</span> <span class="label">Provision Faculty Member</span> <kbd class="shortcut-hint">/faculty</kbd></li>
+                        <li class="palette-item" data-command="publish-notice"><span class="icon">📢</span> <span class="label">Broadcast Notice Bulletin</span> <kbd class="shortcut-hint">/notice</kbd></li>
+                        <li class="palette-item" data-command="open-settings"><span class="icon">⚙️</span> <span class="label">Go to Core Settings Matrix</span> <kbd class="shortcut-hint">/settings</kbd></li>
+                    </ul>
+                </div>
+                <div class="palette-results-section">
+                    <span class="section-group-label">System Modules Navigation</span>
+                    <ul class="palette-action-links-list">
+                        <li class="palette-item" data-nav-target="dashboard"><span class="icon">📊</span> <span class="label">Switch to Main Analytics Dashboard</span></li>
+                        <li class="palette-item" data-nav-target="parents"><span class="icon">👪</span> <span class="label">Switch to Parents Registry Console</span></li>
+                        <li class="palette-item" data-nav-target="activity"><span class="icon">🛡️</span> <span class="label">View Security Audit Trail Logs</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="co-command-palette-footer-telemetry">
+                <span>Use <kbd>↑</kbd> <kbd>↓</kbd> to navigate, <kbd>Enter</kbd> to execute layout switch.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="co-dashboard-shell-container">
+
+        <aside class="co-sidebar-wrapper" id="co-sidebar-navigation-rail" aria-label="Primary Navigation Matrix">
+            <div class="co-sidebar-brand-block">
+                <img src="../assets/logo-icon.png" alt="CampusOne Engine Logo" class="co-sidebar-logo-vector">
+                <div class="co-sidebar-brand-text">
+                    <span class="brand-name">CampusOne</span>
+                    <span class="brand-badge-core">PREMIUM v1.0</span>
+                </div>
+                <button id="co-mobile-menu-close-btn" class="co-sidebar-mobile-close-trigger" aria-label="Close navigation panel">✕</button>
+            </div>
+
+            <nav class="co-sidebar-navigation-menu">
+                <ul class="co-sidebar-nav-list" role="tablist">
+                    <li class="co-sidebar-nav-heading">Tenant Console</li>
+                    <li class="co-sidebar-nav-item">
+                        <button class="co-sidebar-nav-link active" data-target-module="dashboard" role="tab" aria-selected="true">
+                            <span class="nav-icon-facade">📊</span> <span class="nav-label-node">Dashboard</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item">
+                        <button class="co-sidebar-nav-link" data-target-module="students" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">🎓</span> <span class="nav-label-node">Students Matrix</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item">
+                        <button class="co-sidebar-nav-link" data-target-module="faculty" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">💼</span> <span class="nav-label-node">Faculty Setup</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item">
+                        <button class="co-sidebar-nav-link" data-target-module="parents" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">👪</span> <span class="nav-label-node">Parents Registry</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item">
+                        <button class="co-sidebar-nav-link" data-target-module="classes" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">🏫</span> <span class="nav-label-node">Classes Matrix</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item">
+                        <button class="co-sidebar-nav-link" data-target-module="notices" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">📢</span> <span class="nav-label-node">Notices Board</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item">
+                        <button class="co-sidebar-nav-link" data-target-module="activity" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">🛡️</span> <span class="nav-label-node">Activity Logs</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item">
+                        <button class="co-sidebar-nav-link" data-target-module="settings" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">⚙️</span> <span class="nav-label-node">Settings Desk</span>
+                        </button>
+                    </li>
+                    
+                    <li class="co-sidebar-nav-heading super-admin-lock">SaaS Engine Control</li>
+                    <li class="co-sidebar-nav-item super-admin-lock">
+                        <button class="co-sidebar-nav-link" data-target-module="saas-tenants" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">🏢</span> <span class="nav-label-node">Tenants Registry</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item super-admin-lock">
+                        <button class="co-sidebar-nav-link" data-target-module="saas-billing" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">💳</span> <span class="nav-label-node">Billing & Plans</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item super-admin-lock">
+                        <button class="co-sidebar-nav-link" data-target-module="saas-subscriptions" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">🔄</span> <span class="nav-label-node">Subscriptions</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item super-admin-lock">
+                        <button class="co-sidebar-nav-link" data-target-module="saas-admins" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">👑</span> <span class="nav-label-node">Global Admins</span>
+                        </button>
+                    </li>
+                    <li class="co-sidebar-nav-item super-admin-lock">
+                        <button class="co-sidebar-nav-link" data-target-module="saas-usage" role="tab" aria-selected="false">
+                            <span class="nav-icon-facade">⚡</span> <span class="nav-label-node">Cluster Usage</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="co-sidebar-footer-action-block">
+                <button id="co-admin-session-termination-btn" class="co-sidebar-logout-action-btn">
+                    <span class="btn-icon">🚪</span> <span class="btn-label">Terminate Session</span>
+                </button>
+            </div>
+        </aside>
+
+        <div class="co-dashboard-viewport-axis">
+
+            <header class="co-dashboard-header-node" role="banner">
+                <div class="co-header-left-cluster-group">
+                    <button id="mobile-menu-toggle" class="co-header-mobile-drawer-trigger-btn" aria-label="Toggle navigation menu">
+                        ☰
+                    </button>
+                    
+                    <div class="co-header-global-search-container">
+                        <div class="co-header-global-search-wrapper" id="co-trigger-omni-palette-click-zone">
+                            <span class="search-indicator-vector">🔍</span>
+                            <input type="search" id="co-global-omni-search" placeholder="Search across clusters... (Ctrl + K)" autocomplete="off" aria-label="Global Omni Search Interface">
+                            <kbd class="co-search-hotkey-badge">Ctrl K</kbd>
+                        </div>
+                        
+                        <div id="co-global-search-results-drawer" class="co-header-search-results-drawer hidden">
+                            <div class="drawer-section-wrapper">
+                                <span class="section-badge">Matched Student Profiles</span>
+                                <ul id="search-results-students-list" class="drawer-results-item-group">
+                                    <li class="result-entry-row" data-ref="STU001">
+                                        <span class="avatar-stub">🎓</span>
+                                        <div class="meta"><p class="title">Aarav Sharma</p><p class="sub">UID: CO-2026-0043 · Class: BTech-CS</p></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="drawer-section-wrapper">
+                                <span class="section-badge">Matched Faculty Nodes</span>
+                                <ul id="search-results-faculty-list" class="drawer-results-item-group">
+                                    <li class="result-entry-row" data-ref="FAC012">
+                                        <span class="avatar-stub">💼</span>
+                                        <div class="meta"><p class="title">Dr. Meera Nair</p><p class="sub">EMP ID: CO-EMP-9982 · Computer Science</p></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="drawer-section-wrapper">
+                                <span class="section-badge">Broadcast Bulletins</span>
+                                <ul id="search-results-notices-list" class="drawer-results-item-group">
+                                    <li class="result-entry-row" data-ref="NOT088">
+                                        <span class="avatar-stub">📢</span>
+                                        <div class="meta"><p class="title">End-Semester Exam Matrix Schedule</p><p class="sub">Target: Global Multi-Tenancy</p></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="search-drawer-empty-fallback" class="search-drawer-no-results hidden">
+                                ❌ No matched entity records found in current tenant scope.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="co-header-session-telemetry-capsule-dock">
+                        <div class="telemetry-pill-meta"><span class="lbl">Tenant:</span> <span id="co-meta-current-tenant" class="val-code">MIT-DELHI-2026</span></div>
+                        <div class="telemetry-pill-meta"><span class="lbl">Last Sign-In:</span> <span id="co-meta-last-login" class="val">10:42 AM</span></div>
+                        <div class="telemetry-pill-meta"><span class="lbl">Session Token:</span> <span id="co-meta-session-expiry" class="val text-orange-alert">14:59s</span></div>
+                    </div>
+                </div>
+
+                <div class="co-header-utilities-matrix-tray">
+                    <div class="co-header-action-dropdown-wrapper" style="position: relative;">
+                        <button id="co-notification-bell-trigger-btn" class="co-header-utility-icon-btn" aria-label="Open notifications dropdown">
+                            <span>🔔</span>
+                            <span class="co-utility-notification-badge-dot"></span>
+                        </button>
+                        
+                        <div id="co-notification-drawer" class="co-notification-drawer hidden">
+                            <div class="drawer-header-row-box">
+                                <span class="drawer-title-lbl">System Bulletins</span>
+                                <button id="co-clear-all-notifications-btn" class="drawer-clear-all-link-btn">Clear All</button>
+                            </div>
+                            
+                            <div class="co-notification-category-filter-bar">
+                                <button class="category-chip active" data-filter-cat="all">All</button>
+                                <button class="category-chip" data-filter-cat="system">💻 System</button>
+                                <button class="category-chip" data-filter-cat="security">🔒 Security</button>
+                                <button class="category-chip" data-filter-cat="notice">📢 Notice</button>
+                            </div>
+
+                            <div id="co-notification-list" class="drawer-bulletins-scroll-list-viewport">
+                                <div class="notification-element-item co-matrix-empty-state-container" data-empty-context="notifications">
+                                    <span class="empty-state-vector-icon">🔔</span>
+                                    <p class="empty-state-headline-msg">No Notifications Recorded</p>
+                                    <p class="empty-state-subtext-msg">Your institutional communication trace channels are quiet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="co-theme-mutation-toggle" class="co-header-utility-icon-btn" aria-label="Toggle layout mode">
+                        <span class="theme-icon-slot">🌙</span>
+                    </button>
+
+                    <div class="co-header-divider-vector"></div>
+
+                    <div class="co-header-identity-dropdown-container-root">
+                        <div class="co-header-identity-profile-capsule" id="co-header-profile-trigger-node">
+                            <div class="identity-text-metadata-block">
+                                <span id="co-header-admin-display-name" class="profile-display-title">Loading Identity...</span>
+                                <span id="co-header-admin-assigned-role" class="profile-clearance-tag">System Admin</span>
+                            </div>
+                            <div class="identity-avatar-frame-wrapper">
+                                <img id="co-header-admin-avatar-img" src="../assets/default-avatar.png" alt="Admin Profile Avatar" class="co-header-native-avatar">
+                            </div>
+                        </div>
+                        
+                        <div id="co-admin-profile-floating-overlay-card" class="co-profile-dropdown-popover-portal hidden">
+                            <div class="profile-card-header-summary">
+                                <p class="user-fullname" id="co-profile-overlay-name">System Operator</p>
+                                <p class="user-email-string" id="co-profile-overlay-email">operator@campusone.io</p>
+                            </div>
+                            <ul class="profile-card-links-list">
+                                <li><button class="profile-card-action-item" data-action-link="profile-settings">👤 Profile Settings</button></li>
+                                <li><button class="profile-card-action-item" data-action-link="security-keys">🔑 Encryption Hub</button></li>
+                                <li class="divider-line"></li>
+                                <li><button class="profile-card-action-item text-danger-highlight" id="co-profile-overlay-logout-trigger">🚪 Immediate Logout</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="co-system-breadcrumb-navigation-bar" aria-label="Breadcrumb Trail Segment">
+                <ul class="breadcrumb-trail-list" id="co-breadcrumb-dynamic-render-dock">
+                    <li class="breadcrumb-item-node"><a href="#dashboard" class="root-anchor">Console Master</a></li>
+                    <li class="breadcrumb-item-node-separator">/</li>
+                    <li class="breadcrumb-item-node active-current" id="co-breadcrumb-current-leaf">Dashboard Metrics</li>
+                </ul>
+            </nav>
+
+            <main id="co-dashboard-dynamic-view-viewport" class="co-dashboard-content-main-grid" role="main">
+
+                <section id="co-module-dashboard" class="co-spa-view-panel-container active" role="tabpanel">
+                    
+                    <div class="co-dashboard-master-hero-split-deck">
+                        <div class="co-dashboard-welcome-banner-surface">
+                            <div class="welcome-text-context-group">
+                                <h2 class="welcome-heading-title">Welcome Back, <span id="co-banner-admin-firstname">Admin</span>!</h2>
+                                <p class="welcome-subtext-para">Your institutional node clusters are running in optimal conditions.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="co-dashboard-health-telemetry-card">
+                            <div class="health-ring-svg-wrapper">
+                                <svg class="co-circular-health-ring-vector" viewBox="0 0 36 36">
+                                    <path class="ring-bg-track" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="ring-fill-progress-indicator" stroke-dasharray="98, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="health-percentage-absolute-node">
+                                    <span class="percentage-number" id="co-health-live-percentage">98%</span>
+                                </div>
+                            </div>
+                            <div class="health-telemetry-text-block">
+                                <span class="lbl-heading">System Health</span>
+                                <span class="status-subtext-signal">Ecosystem Secured & Stable</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="co-dashboard-announcement-strip-banner">
+                        <span class="announcement-badge">CRITICAL BROADCAST</span>
+                        <p id="co-dashboard-latest-notice-ticker" class="announcement-ticker-text">Loading latest institutional announcement pipeline channel...</p>
+                    </div>
+
+                    <div class="co-dashboard-quick-actions-flex-row">
+                        <button class="co-action-shortcut-card" id="co-shortcut-btn-student">
+                            <span>➕🎓</span> <span class="shortcut-label-node">Create Student</span>
+                        </button>
+                        <button class="co-action-shortcut-card" id="co-shortcut-btn-faculty">
+                            <span>➕💼</span> <span class="shortcut-label-node">Create Faculty</span>
+                        </button>
+                        <button class="co-action-shortcut-card" id="co-shortcut-btn-notice">
+                            <span>📣✨</span> <span class="shortcut-label-node">Publish Notice</span>
+                        </button>
+                    </div>
+
+                    <div class="co-dashboard-telemetry-metrics-grid7">
+                        <div class="co-metric-data-card">
+                            <div class="card-metric-header-row"><span class="label">Total Students</span> <span class="icon">🎓</span></div>
+                            <div class="card-metric-numeric-value" id="co-metric-total-students">--</div>
+                            <div class="card-metric-trend-indicator trend-up">▲ 12.5% <span class="trend-lbl">This Month</span></div>
+                        </div>
+                        <div class="co-metric-data-card">
+                            <div class="card-metric-header-row"><span class="label">Total Faculty</span> <span class="icon">💼</span></div>
+                            <div class="card-metric-numeric-value" id="co-metric-total-faculty">--</div>
+                            <div class="card-metric-trend-indicator trend-up">▲ 4.2% <span class="trend-lbl">Since Session Start</span></div>
+                        </div>
+                        <div class="co-metric-data-card">
+                            <div class="card-metric-header-row"><span class="label">Registered Parents</span> <span class="icon">👪</span></div>
+                            <div class="card-metric-numeric-value" id="co-metric-total-parents">--</div>
+                            <div class="card-metric-trend-indicator trend-up">▲ 8.1% <span class="trend-lbl">This Term</span></div>
+                        </div>
+                        <div class="co-metric-data-card">
+                            <div class="card-metric-header-row"><span class="label">Active Classes</span> <span class="icon">🏫</span></div>
+                            <div class="card-metric-numeric-value" id="co-metric-total-classes">--</div>
+                            <div class="card-metric-trend-indicator trend-stable">■ Stable <span class="trend-lbl">No Mutation</span></div>
+                        </div>
+                        <div class="co-metric-data-card">
+                            <div class="card-metric-header-row"><span class="label">Departments Matrix</span> <span class="icon">🏢</span></div>
+                            <div class="card-metric-numeric-value" id="co-metric-total-departments">--</div>
+                            <div class="card-metric-trend-indicator trend-up">▲ 2 New <span class="trend-lbl">Added</span></div>
+                        </div>
+                        <div class="co-metric-data-card">
+                            <div class="card-metric-header-row"><span class="label">Global Attendance Ratio</span> <span class="icon">📈</span></div>
+                            <div class="card-metric-numeric-value text-green-pulse" id="co-metric-avg-attendance">-- %</div>
+                            <div class="card-metric-trend-indicator trend-down">▼ 1.2% <span class="trend-lbl">Last Week</span></div>
+                        </div>
+                        <div class="co-metric-data-card">
+                            <div class="card-metric-header-row"><span class="label">Active Notices</span> <span class="icon">📢</span></div>
+                            <div class="card-metric-numeric-value" id="co-metric-active-notices">--</div>
+                            <div class="card-metric-trend-indicator trend-up">▲ 3 High Severity <span class="trend-lbl">Broadcasted</span></div>
+                        </div>
+                    </div>
+
+                    <div class="co-dashboard-split-layout-grid-row">
+                        <div class="co-split-card-surface-panel flex-grow-2">
+                            <h3 class="panel-section-title-label">📊 Real-Time Institutional Analytics Overview</h3>
+                            <div class="analytics-tab-pill-switcher-strip">
+                                <button class="chart-tab-btn active" data-chart-target="attendance">Attendance Vector</button>
+                                <button class="chart-tab-btn" data-chart-target="growth">Student Expansion</button>
+                            </div>
+                            
+                            <div class="co-canvas-chart-engine-surface-box">
+                                <canvas id="co-production-analytics-canvas-hook"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="co-split-card-surface-panel flex-grow-1">
+                            <h3 class="panel-section-title-label">Institution Node Metadata</h3>
+                            <div class="co-tenant-profile-data-ledger-list">
+                                <div class="ledger-row"><span class="prop-key">Institution Name</span> <span id="co-profile-tenant-name" class="prop-val">--</span></div>
+                                <div class="ledger-row"><span class="prop-key">Institution Code</span> <span id="co-profile-tenant-code" class="prop-val code-transform-uppercase">--</span></div>
+                                <div class="ledger-row"><span class="prop-key">Academic Session</span> <span id="co-profile-academic-year" class="prop-val">--</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="co-dashboard-trio-widgets-layout-grid">
+                        
+                        <div class="co-dashboard-widget-card-surface">
+                            <div class="widget-header-row">
+                                <h3 class="widget-title-lbl">📅 Academic Chrono Calendar</h3>
+                                <span class="current-month-badge" id="calendar-current-month-year">June 2026</span>
+                            </div>
+                            <div class="calendar-grid-wrapper-node">
+                                <div class="calendar-weekdays-row">
+                                    <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                                </div>
+                                <div class="calendar-days-grid-matrix" id="co-calendar-days-injector">
+                                    <span class="day-cell pad-blank"></span><span class="day-cell">1</span><span class="day-cell">2</span><span class="day-cell">3</span><span class="day-cell">4</span><span class="day-cell">5</span><span class="day-cell">6</span>
+                                    <span class="day-cell">7</span><span class="day-cell">8</span><span class="day-cell">9</span><span class="day-cell">10</span><span class="day-cell">11</span><span class="day-cell">12</span><span class="day-cell">13</span>
+                                    <span class="day-cell">14</span><span class="day-cell">15</span><span class="day-cell">16</span><span class="day-cell">17</span><span class="day-cell">18</span><span class="day-cell">19</span><span class="day-cell active-today">20</span>
+                                    <span class="day-cell event-marked marked-exam">21</span><span class="day-cell">22</span><span class="day-cell">23</span><span class="day-cell">24</span><span class="day-cell event-marked marked-ptm">25</span><span class="day-cell">26</span><span class="day-cell">27</span>
+                                    <span class="day-cell">28</span><span class="day-cell">29</span><span class="day-cell event-marked marked-exam">30</span>
+                                </div>
+                            </div>
+                            <div class="calendar-legend-guide-row">
+                                <span class="legend-dot dot-exam"></span> <span class="lbl">Exams</span>
+                                <span class="legend-dot dot-ptm"></span> <span class="lbl">PTM / Events</span>
+                            </div>
+                        </div>
+
+                        <div class="co-dashboard-widget-card-surface">
+                            <div class="widget-header-row">
+                                <h3 class="widget-title-lbl">📋 Upcoming Milestone Events</h3>
+                            </div>
+                            <div class="upcoming-events-vertical-stack-list" id="co-upcoming-events-stack-injector">
+                                <div class="event-milestone-item border-ptm">
+                                    <div class="date-badge"><span class="day">25</span><span class="month">Jun</span></div>
+                                    <div class="details"><p class="title-heading">Parent-Teacher Meeting (PTM)</p><p class="meta-sub">Timings: 09:00 AM · All Batches</p></div>
+                                </div>
+                                <div class="event-milestone-item border-exam">
+                                    <div class="date-badge"><span class="day">30</span><span class="month">Jun</span></div>
+                                    <div class="details"><p class="title-heading">End-Semester Exam Commencement</p><p class="meta-sub">Block-A & Main Auditorium</p></div>
+                                </div>
+                                <div class="event-milestone-item border-orientation">
+                                    <div class="date-badge"><span class="day">10</span><span class="month">Jul</span></div>
+                                    <div class="details"><p class="title-heading">New Batch Orientation Program</p><p class="meta-sub">Tech Campus Auditorium Hub</p></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="co-dashboard-widget-card-surface">
+                            <div class="widget-header-row">
+                                <h3 class="widget-title-lbl">⏳ Real-Time Activity Trace Timeline</h3>
+                            </div>
+                            
+                            <div class="co-activity-timeline" id="co-dashboard-activity-timeline-injector">
+                                <div class="co-log-entry">
+                                    <span class="timestamp-chrono">08:12 AM</span>
+                                    <div class="event-badge-icon badge-student">🎓</div>
+                                    <div class="content-block">
+                                        <p class="text-vector">New Student Profile Created</p>
+                                        <p class="sub-telemetry">Roll Code: CO-2026-0043</p>
+                                    </div>
+                                </div>
+                                <div class="co-log-entry">
+                                    <span class="timestamp-chrono">08:15 AM</span>
+                                    <div class="event-badge-icon badge-notice">📢</div>
+                                    <div class="content-block">
+                                        <p class="text-vector">Notice Bulletin Broadcast Transmitted</p>
+                                        <p class="sub-telemetry">Ref ID: NOT-8892-01</p>
+                                    </div>
+                                </div>
+                                <div class="co-log-entry">
+                                    <span class="timestamp-chrono">08:18 AM</span>
+                                    <div class="event-badge-icon badge-faculty">💼</div>
+                                    <div class="content-block">
+                                        <p class="text-vector">Faculty Node Provision Successful</p>
+                                        <p class="sub-telemetry">EMP ID: CO-EMP-9982</p>
+                                    </div>
+                                </div>
+                                
+                                <div id="co-timeline-empty-fallback-card" class="co-matrix-empty-state-container hidden" data-empty-context="dashboard-timeline">
+                                    <span class="empty-state-vector-icon">⏳</span>
+                                    <p class="empty-state-headline-msg">No Timeline Events</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section id="co-module-students" class="co-spa-view-panel-container" role="tabpanel">
+                    <div class="co-module-header-split-row">
+                        <h2 class="co-module-title-node">Students Registry Management</h2>
+                        <div class="co-module-utility-action-button-group">
+                            <button id="co-export-btn-students" class="co-action-utility-secondary-btn-outline">📥 Export Records (CSV)</button>
+                        </div>
+                    </div>
+                    
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">Onboard New Student Node</h3>
+                        <form id="co-student-creation-form" class="co-internal-embedded-form" novalidate>
+                            <div class="form-row-two-column-inputs">
+                                <div class="input-block-container">
+                                    <label for="co-stud-input-uid" class="label-token">Admission UID / Roll Number</label>
+                                    <input type="text" id="co-stud-input-uid" class="input-field-element" required placeholder="e.g., CO-2026-0043">
+                                </div>
+                                <div class="input-block-container">
+                                    <label for="co-stud-input-name" class="label-token">Full Legal Name</label>
+                                    <input type="text" id="co-stud-input-name" class="input-field-element" required placeholder="e.g., Aarav Sharma">
+                                </div>
+                            </div>
+                            <div class="form-row-two-column-inputs">
+                                <div class="input-block-container">
+                                    <label for="co-stud-input-batch" class="label-token">Batch Code / Academic Section</label>
+                                    <input type="text" id="co-stud-input-batch" class="input-field-element" required placeholder="e.g., BTech-CS-2028">
+                                </div>
+                                <div class="input-block-container">
+                                    <label for="co-stud-input-email" class="label-token">Primary Contact Email Address</label>
+                                    <input type="email" id="co-stud-input-email" class="input-field-element" required placeholder="e.g., student@campusone.edu">
+                                </div>
+                            </div>
+                            <button type="submit" class="co-cta-gradient-action-btn spacing-top-mini">Execute Registry Provisioning</button>
+                        </form>
+                    </div>
+
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">Active Student Database Ledger</h3>
+                        <div class="co-registry-filter-control-dock-bar">
+                            <label for="co-student-search-query-field" class="visually-hidden" style="display:none;">Filter Students</label>
+                            <input type="text" id="co-student-search-query-field" class="co-filter-search-input" placeholder="Filter by Admission UID, Name, or Batch Code...">
+                        </div>
+                        <div class="co-table-responsive-layer-overflow spacing-top-box">
+                            <table class="co-native-data-matrix-table">
+                                <thead>
+                                    <tr>
+                                        <th>Admission UID</th>
+                                        <th>Legal Name</th>
+                                        <th>Batch Vector</th>
+                                        <th>Contact Email</th>
+                                        <th>Actions Workspace Matrix</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="co-students-registry-tbody-hook">
+                                    <tr id="co-students-empty-state-row" class="table-fallback-empty-row">
+                                        <td colspan="5">
+                                            <div class="co-matrix-empty-state-container" data-empty-context="students">
+                                                <span class="empty-state-vector-icon">🎓</span>
+                                                <p class="empty-state-headline-msg">No Students Found</p>
+                                                <p class="empty-state-subtext-msg">The tenant database repository does not contain any student matrix allocations yet.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="co-module-faculty" class="co-spa-view-panel-container" role="tabpanel">
+                    <div class="co-module-header-split-row">
+                        <h2 class="co-module-title-node">Faculty Infrastructure Registry</h2>
+                        <div class="co-module-utility-action-button-group">
+                            <button id="co-export-btn-faculty" class="co-action-utility-secondary-btn-outline">📥 Export Records (CSV)</button>
+                        </div>
+                    </div>
+                    
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">Provision New Faculty Profile</h3>
+                        <form id="co-faculty-creation-form" class="co-internal-embedded-form" novalidate>
+                            <div class="form-row-two-column-inputs">
+                                <div class="input-block-container">
+                                    <label for="co-fac-input-id" class="label-token">Employee Unique System ID</label>
+                                    <input type="text" id="co-fac-input-id" class="input-field-element" required placeholder="e.g., CO-EMP-9982">
+                                </div>
+                                <div class="input-block-container">
+                                    <label for="co-fac-input-name" class="label-token">Academic Profile Full Name</label>
+                                    <input type="text" id="co-fac-input-name" class="input-field-element" required placeholder="e.g., Dr. Meera Nair">
+                                </div>
+                            </div>
+                            <div class="form-row-two-column-inputs">
+                                <div class="input-block-container">
+                                    <label for="co-fac-input-dept" class="label-token">Department Division</label>
+                                    <input type="text" id="co-fac-input-dept" class="input-field-element" required placeholder="e.g., Computer Science Engg.">
+                                </div>
+                                <div class="input-block-container">
+                                    <label for="co-fac-input-desig" class="label-token">Assigned System Designation</label>
+                                    <input type="text" id="co-fac-input-desig" class="input-field-element" required placeholder="e.g., Associate Professor">
+                                </div>
+                            </div>
+                            <button type="submit" class="co-cta-gradient-action-btn spacing-top-mini">Commit Faculty Node Credentials</button>
+                        </form>
+                    </div>
+
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">Active Faculty Ledger Index</h3>
+                        <div class="co-registry-filter-control-dock-bar">
+                            <label for="co-faculty-search-query-field" class="visually-hidden" style="display:none;">Search Faculty</label>
+                            <input type="text" id="co-faculty-search-query-field" class="co-filter-search-input" placeholder="Search by Employee ID, Name, Department...">
+                        </div>
+                        <div class="co-table-responsive-layer-overflow spacing-top-box">
+                            <table class="co-native-data-matrix-table">
+                                <thead>
+                                    <tr>
+                                        <th>Employee ID</th>
+                                        <th>Faculty Member Name</th>
+                                        <th>Department</th>
+                                        <th>Designation</th>
+                                        <th>Actions Workspace Matrix</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="co-faculty-registry-tbody-hook">
+                                    <tr id="co-faculty-empty-state-row" class="table-fallback-empty-row">
+                                        <td colspan="5">
+                                            <div class="co-matrix-empty-state-container" data-empty-context="faculty">
+                                                <span class="empty-state-vector-icon">💼</span>
+                                                <p class="empty-state-headline-msg">No Faculty Found</p>
+                                                <p class="empty-state-subtext-msg">No certified academic faculty profiles initialized inside the multi-tenant architecture track.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="co-module-parents" class="co-spa-view-panel-container" role="tabpanel">
+                    <div class="co-module-header-split-row">
+                        <h2 class="co-module-title-node">Parents & Guardian Registry</h2>
+                        <div class="co-module-utility-action-button-group">
+                            <button id="co-export-btn-parents" class="co-action-utility-secondary-btn-outline">📥 Export Guardian Index (CSV)</button>
+                        </div>
+                    </div>
+
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">Link Guardian Profile Account</h3>
+                        <form id="co-parent-registration-form" class="co-internal-embedded-form" novalidate>
+                            <div class="form-row-two-column-inputs">
+                                <div class="input-block-container">
+                                    <label for="co-parent-input-id" class="label-token">Parent Account Unique ID</label>
+                                    <input type="text" id="co-parent-input-id" class="input-field-element" required placeholder="e.g., CO-PAR-4431">
+                                </div>
+                                <div class="input-block-container">
+                                    <label for="co-parent-input-name" class="label-token">Full Guardian Name</label>
+                                    <input type="text" id="co-parent-input-name" class="input-field-element" required placeholder="e.g., Rajesh Sharma">
+                                </div>
+                            </div>
+                            <div class="form-row-two-column-inputs">
+                                <div class="input-block-container">
+                                    <label for="co-parent-input-child-uid" class="label-token">Associated Student Admission UID</label>
+                                    <input type="text" id="co-parent-input-child-uid" class="input-field-element" required placeholder="e.g., CO-2026-0043">
+                                </div>
+                                <div class="input-block-container">
+                                    <label for="co-parent-input-phone" class="label-token">Active Mobile Contact / SMS Endpoint</label>
+                                    <input type="tel" id="co-parent-input-phone" class="input-field-element" required placeholder="e.g., +91 9876543210">
+                                </div>
+                            </div>
+                            <button type="submit" class="co-cta-gradient-action-btn spacing-top-mini">Authorize Guardian Dynamic Account Node</button>
+                        </form>
+                    </div>
+
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">Active Linked Guardians Multi-Tenant Store</h3>
+                        <div class="co-table-responsive-layer-overflow">
+                            <table class="co-native-data-matrix-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parent UID</th>
+                                        <th>Guardian Full Name</th>
+                                        <th>Child Target Connection</th>
+                                        <th>SMS Telemetry Endpoint</th>
+                                        <th>Actions Workspace Matrix</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="co-parents-matrix-tbody-hook">
+                                    <tr id="co-parents-empty-state-row" class="table-fallback-empty-row">
+                                        <td colspan="5">
+                                            <div class="co-matrix-empty-state-container" data-empty-context="parents">
+                                                <span class="empty-state-vector-icon">👪</span>
+                                                <p class="empty-state-headline-msg">No Guardian Records Found</p>
+                                                <p class="empty-state-subtext-msg">No parent accounts mapped to structural student roll coordinates in this tenant array.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="co-module-classes" class="co-spa-view-panel-container" role="tabpanel">
+                    <div class="co-module-header-split-row">
+                        <h2 class="co-module-title-node">Academic Allocation & Classes Matrix</h2>
+                        <div class="co-module-utility-action-button-group">
+                            <button id="co-export-btn-classes" class="co-action-utility-secondary-btn-outline">📥 Export Classes Schema (CSV)</button>
+                        </div>
+                    </div>
+
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">Initialize New Section Workspace</h3>
+                        <form id="co-classes-provisioning-form" class="co-internal-embedded-form" novalidate>
+                            <div class="form-row-two-column-inputs">
+                                <div class="input-block-container">
+                                    <label for="co-class-input-id" class="label-token">Class Identifier Name Code</label>
+                                    <input type="text" id="co-class-input-id" class="input-field-element" required placeholder="e.g., CS-6A-2026">
+                                </div>
+                                <div class="input-block-container">
+                                    <label for="co-class-input-subject" class="label-token">Subject Allocation Stream</label>
+                                    <input type="text" id="co-class-input-subject" class="input-field-element" required placeholder="e.g., Artificial Intelligence Protocols">
+                                </div>
+                            </div>
+                            <div class="form-row-two-column-inputs">
+                                <div class="input-block-container">
+                                    <label for="co-class-input-timetable" class="label-token">Assigned Timetable Chrono Slot</label>
+                                    <input type="text" id="co-class-input-timetable" class="input-field-element" required placeholder="e.g., Mon/Wed/Fri - 09:00 AM">
+                                </div>
+                                <div class="input-block-container">
+                                    <label for="co-class-input-room" class="label-token">Assigned Section / Room Vector</label>
+                                    <input type="text" id="co-class-input-room" class="input-field-element" required placeholder="e.g., Lab Block-04 / Room-402">
+                                </div>
+                            </div>
+                            <button type="submit" class="co-cta-gradient-action-btn spacing-top-mini">Establish Academic Class Cluster</button>
+                        </form>
+                    </div>
+
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">Operational Class Matrices Register</h3>
+                        <div class="co-table-responsive-layer-overflow">
+                            <table class="co-native-data-matrix-table">
+                                <thead>
+                                    <tr>
+                                        <th>Class Code</th>
+                                        <th>Subject Stream</th>
+                                        <th>Chrono Timetable</th>
+                                        <th>Assigned Block/Room</th>
+                                        <th>Actions Workspace Matrix</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="co-classes-matrix-tbody-hook">
+                                    <tr id="co-classes-empty-state-row" class="table-fallback-empty-row">
+                                        <td colspan="5">
+                                            <div class="co-matrix-empty-state-container" data-empty-context="classes">
+                                                <span class="empty-state-vector-icon">🏫</span>
+                                                <p class="empty-state-headline-msg">No Course Allocations Found</p>
+                                                <p class="empty-state-subtext-msg">Institutional room grids or timetable chronos blocks have not been registered yet.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="co-module-notices" class="co-spa-view-panel-container" role="tabpanel">
+                    <div class="co-module-header-split-row">
+                        <h2 class="co-module-title-node">Broadcast Bulletin Control Desk</h2>
+                        <div class="co-module-utility-action-button-group">
+                            <button id="co-export-btn-notices" class="co-action-utility-secondary-btn-outline">📥 Export Archive (CSV)</button>
+                        </div>
+                    </div>
+                    
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">Draft & Publish New Bulletin Broadcast</h3>
+                        <form id="co-notice-broadcast-form" class="co-internal-embedded-form" novalidate>
+                            <div class="form-row-two-column-inputs">
+                                <div class="input-block-container">
+                                    <label for="co-notice-input-title" class="label-token">Notice Core Title / Reference Heading</label>
+                                    <input type="text" id="co-notice-input-title" class="input-field-element" required placeholder="e.g., End-Semester Examination Matrix">
+                                </div>
+                                <div class="input-block-container">
+                                    <label for="co-notice-input-audience" class="label-token">Target Audience Selector Filtering</label>
+                                    <select id="co-notice-input-audience" class="co-filter-select-element" required>
+                                        <option value="all">Global Multi-Tenancy Audience (All)</option>
+                                        <option value="students">Students Node Only</option>
+                                        <option value="faculty">Faculty Ecosystem Members Only</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-block-container">
+                                <label for="co-notice-input-body" class="label-token">Notice Body Content Description Markdown</label>
+                                <textarea id="co-notice-input-body" class="input-field-element text-area-resize-lock" required rows="4" placeholder="Enter detailed operational text vectors here..."></textarea>
+                            </div>
+                            <button type="submit" class="co-cta-gradient-action-btn spacing-top-mini">Transmit Notice Broadcast Payload</button>
+                        </form>
+                    </div>
+
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">Historical Transmission Audit Index</h3>
+                        <div class="co-table-responsive-layer-overflow">
+                            <table class="co-native-data-matrix-table">
+                                <thead>
+                                    <tr>
+                                        <th>Notice Unique System Ref ID</th>
+                                        <th>Target Scope</th>
+                                        <th>Title Heading Context</th>
+                                        <th>Timestamp Channel Execution</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="co-notice-history-tbody-hook">
+                                    <tr id="co-notices-empty-state-row" class="table-fallback-empty-row">
+                                        <td colspan="4">
+                                            <div class="co-matrix-empty-state-container" data-empty-context="notices">
+                                                <span class="empty-state-vector-icon">📢</span>
+                                                <p class="empty-state-headline-msg">No Notices Published</p>
+                                                <p class="empty-state-subtext-msg">The broadcast telemetry arrays are clear. No institutional bulletins emitted.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="co-module-activity" class="co-spa-view-panel-container" role="tabpanel">
+                    <h2 class="co-module-title-node">Hardened Audit Log & Telemetry Matrix</h2>
+                    
+                    <div class="co-dashboard-telemetry-metrics-grid">
+                        <div class="co-metric-data-card security-border-orange">
+                            <div class="card-metric-header-row"><span class="label">Total System Logins</span> <span class="icon">🔑</span></div>
+                            <div class="card-metric-numeric-value" id="co-security-metric-total-logins">--</div>
+                        </div>
+                        <div class="co-metric-data-card security-border-blue">
+                            <div class="card-metric-header-row"><span class="label">Total Mutation Actions</span> <span class="icon">🔄</span></div>
+                            <div class="card-metric-numeric-value" id="co-security-metric-total-actions">--</div>
+                        </div>
+                        <div class="co-metric-data-card security-border-yellow">
+                            <div class="card-metric-header-row"><span class="label">Failed Login Anomalies</span> <span class="icon">⚠️</span></div>
+                            <div class="card-metric-numeric-value text-orange-pulse" id="co-security-metric-failed-logins">--</div>
+                        </div>
+                        <div class="co-metric-data-card security-border-red">
+                            <div class="card-metric-header-row"><span class="label">Security Violation Events</span> <span class="icon">🚨</span></div>
+                            <div class="card-metric-numeric-value text-red-pulse" id="co-security-metric-violation-events">--</div>
+                        </div>
+                    </div>
+
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <div class="table-header-context-row-box">
+                            <h3 class="panel-section-title-label text-red-highlight">Immutability System Security Ledger</h3>
+                        </div>
+                        <div class="co-table-responsive-layer-overflow spacing-top-box">
+                            <table class="co-native-data-matrix-table extreme-detailed-view">
+                                <thead>
+                                    <tr>
+                                        <th>Log Identifier Unique UUID</th>
+                                        <th>Timestamp Execution</th>
+                                        <th>Origin Identity Context</th>
+                                        <th>Event Vector Classification</th>
+                                        <th>Severity Level Matrix</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="co-security-audit-stream-tbody-hook">
+                                    <tr>
+                                        <td class="font-code-spec">LOG-8892-01</td>
+                                        <td>2026-06-20 05:22:11</td>
+                                        <td>auth_gateway_service</td>
+                                        <td>Multi-Tenant handshake verification successful</td>
+                                        <td><span class="co-severity-badge severity-info">INFO 🟢</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-code-spec">LOG-8892-02</td>
+                                        <td>2026-06-20 05:24:03</td>
+                                        <td>operator@campusone.io</td>
+                                        <td>Database mutation committed on target tenant</td>
+                                        <td><span class="co-severity-badge severity-warning">WARNING 🟡</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-code-spec">LOG-8892-03</td>
+                                        <td>2026-06-20 05:25:40</td>
+                                        <td>api_edge_router</td>
+                                        <td>CORS Origin blocked on unauthorized route request</td>
+                                        <td><span class="co-severity-badge severity-error">ERROR 🟠</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-code-spec">LOG-8892-04</td>
+                                        <td>2026-06-20 05:26:01</td>
+                                        <td>root_admin_pipeline</td>
+                                        <td>Brute force attack threshold limits crossed on admin node</td>
+                                        <td><span class="co-severity-badge severity-critical">CRITICAL 🔴</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="co-module-settings" class="co-spa-view-panel-container" role="tabpanel">
+                    <h2 class="co-module-title-node">Global Enterprise Core Settings Matrix</h2>
+
+                    <div class="co-dashboard-split-layout-grid-row">
+                        <div class="co-split-card-surface-panel">
+                            <h3 class="panel-section-title-label">Institution Settings Configuration</h3>
+                            <form id="co-settings-tenant-mutation-form" class="co-internal-embedded-form" novalidate>
+                                <div class="input-block-container">
+                                    <label for="co-settings-input-inst-name" class="label-token">Institution Legal Entity Corporate Name</label>
+                                    <input type="text" id="co-settings-input-inst-name" class="input-field-element" value="Massachusetts Institute of Technology, Delhi">
+                                </div>
+                                
+                                <div class="input-block-container spacing-top-mini">
+                                    <label for="institution-logo" class="label-token">Institutional Branding Vector Logo (.PNG / .SVG)</label>
+                                    <div class="co-custom-file-upload-dropzone-frame">
+                                        <input type="file" id="institution-logo" accept="image/png, image/jpeg, image/svg+xml" class="native-hidden-file-input">
+                                        <label for="institution-logo" class="custom-dropzone-facade-label">📁 Click to select file asset or drop branding layout vector here</label>
+                                    </div>
+                                    
+                                    <div id="co-logo-preview-container" class="co-branding-logo-preview-frame spacing-top-mini">
+                                        <span class="preview-stub-text">Asset Preview Placeholder</span>
+                                        <img id="co-logo-preview-element" src="../assets/logo-icon.png" alt="Dynamic Logo Preview" class="hidden">
+                                    </div>
+                                </div>
+
+                                <div class="form-row-two-column-inputs spacing-top-mini">
+                                    <div class="input-block-container">
+                                        <label for="co-settings-input-academic-year" class="label-token">Academic Session Deployment Cycle</label>
+                                        <input type="text" id="co-settings-input-academic-year" class="input-field-element" value="2026 - 2027">
+                                    </div>
+                                    <div class="input-block-container">
+                                        <label for="co-settings-input-support-email" class="label-token">System Primary Inbound Support Email</label>
+                                        <input type="email" id="co-settings-input-support-email" class="input-field-element" value="admin-support@mitdelhi.edu.in">
+                                    </div>
+                                </div>
+
+                                <div class="input-block-container spacing-top-mini">
+                                    <label for="co-settings-input-theme-palette" class="label-token">Ecosystem Default Theme State Override</label>
+                                    <select id="co-settings-input-theme-palette" class="co-filter-select-element">
+                                        <option value="dark">Luxury Dark Premium (Default)</option>
+                                        <option value="light">High-Contrast Arctic Light</option>
+                                        <option value="amoled">Pure AMOLED Pitch Black Matrix</option>
+                                        <option value="glass">Futuristic Glassmorphism Translucent</option>
+                                    </select>
+                                </div>
+
+                                <h3 class="panel-section-title-label spacing-top-box text-blue-glow">🔒 Secure SMTP Mail Server Relay Integration</h3>
+                                <div class="form-row-two-column-inputs">
+                                    <div class="input-block-container">
+                                        <label for="co-settings-smtp-host" class="label-token">SMTP Mail Relay Server Host</label>
+                                        <input type="text" id="co-settings-smtp-host" class="input-field-element" placeholder="smtp.sendgrid.net">
+                                    </div>
+                                    <div class="input-block-container">
+                                        <label for="co-settings-smtp-port" class="label-token">SMTP Gateway Port Token</label>
+                                        <input type="text" id="co-settings-smtp-port" class="input-field-element" placeholder="587">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="co-cta-gradient-action-btn spacing-top-mini">Commit Global Mutations Ledger</button>
+                            </form>
+                        </div>
+
+                        <div class="co-split-card-surface-panel">
+                            <h3 class="panel-section-title-label">System Backup & Recovery Control Matrix</h3>
+                            <div class="co-settings-backup-action-dock-bar">
+                                <p class="backup-sub-info-text text-small-dimmed">Generate local backups or restore full database state snapshots instantaneously.</p>
+                                <div class="backup-action-buttons-flex-wrap spacing-top-mini">
+                                    <button id="co-backup-btn-db" class="co-cta-gradient-action-btn-small">💾 Immediate Hot Database Backup</button>
+                                    <button id="co-backup-restore-btn" class="co-action-utility-secondary-btn-outline-small">🔄 Restore Database Snapshot</button>
+                                </div>
+                            </div>
+
+                            <h3 class="panel-section-title-label spacing-top-box">Multi-Tenant Cloud Infrastructure Services Stack</h3>
+                            
+                            <div class="co-settings-grid">
+                                
+                                <div class="co-status-card">
+                                    <div class="status-meta-info">
+                                        <h6>Firebase Auth</h6>
+                                        <p>Authentication Edge Gateway</p>
+                                    </div>
+                                    <span id="co-health-state-auth" class="co-status-indicator-pill co-status-online">Online</span>
+                                </div>
+
+                                <div class="co-status-card">
+                                    <div class="status-meta-info">
+                                        <h6>Cloud Firestore</h6>
+                                        <p>Realtime Shared Ledger Database</p>
+                                    </div>
+                                    <span id="co-health-state-firestore" class="co-status-indicator-pill co-status-online">Online</span>
+                                </div>
+
+                                <div class="co-status-card">
+                                    <div class="status-meta-info">
+                                        <h6>Firebase Storage</h6>
+                                        <p>Blob File Allocation Node</p>
+                                    </div>
+                                    <span id="co-health-state-storage" class="co-status-indicator-pill co-status-online">Connected</span>
+                                </div>
+
+                                <div class="co-status-card">
+                                    <div class="status-meta-info">
+                                        <h6>Firebase Hosting</h6>
+                                        <p>Production CDN Infrastructure Edge</p>
+                                    </div>
+                                    <span id="co-health-state-hosting" class="co-status-indicator-pill co-status-online">Active</span>
+                                </div>
+
+                                <div class="co-status-card">
+                                    <div class="status-meta-info">
+                                        <h6>Cloud Functions</h6>
+                                        <p>Isolated Serverless Runtimes</p>
+                                    </div>
+                                    <span id="co-health-state-functions" class="co-status-indicator-pill co-status-idle">Idle</span>
+                                </div>
+
+                                <div class="co-status-card">
+                                    <div class="status-meta-info">
+                                        <h6>Google Analytics</h6>
+                                        <p>Ecosystem Trace Pipeline Stream</p>
+                                    </div>
+                                    <span id="co-health-state-analytics" class="co-status-indicator-pill co-status-online">Streaming</span>
+                                </div>
+
+                                <div class="co-status-card">
+                                    <div class="status-meta-info">
+                                        <h6>FCM Gateway</h6>
+                                        <p>Push Notifications Polling Relay</p>
+                                    </div>
+                                    <span id="co-health-state-messaging" class="co-status-indicator-pill co-status-online">Polling</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="co-module-saas-tenants" class="co-spa-view-panel-container" role="tabpanel">
+                    <h2 class="co-module-title-node">Global Core Tenants Allocation Console</h2>
+                    <div class="co-dashboard-lone-table-block-surface-panel">
+                        <h3 class="panel-section-title-label">SaaS Onboarded Institution Nodes</h3>
+                        <div class="co-table-responsive-layer-overflow">
+                            <table class="co-native-data-matrix-table">
+                                <thead>
+                                    <tr><th>Tenant ID</th><th>Legal Entity Name</th><th>Current Cluster Load</th><th>Datacenter Node</th><th>Operational Status</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="font-code-spec">MIT-DELHI-2026</td><td>MIT, Delhi Cluster Node</td><td>4,210 Actives</td><td>asia-south1</td><td><span class="co-severity-badge severity-info">ACTIVE</span></td></tr>
+                                    <tr><td class="font-code-spec">STANFORD-MUM-2026</td><td>Stanford Computing Hub, Mumbai</td><td>1,050 Actives</td><td>asia-south2</td><td><span class="co-severity-badge severity-info">ACTIVE</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="co-module-saas-billing" class="co-spa-view-panel-container" role="tabpanel">
+                    <h2 class="co-module-title-node">SaaS Subscription Plans & Gateways Matrix</h2>
+                    <div class="co-dashboard-split-layout-grid-row">
+                        <div class="co-split-card-surface-panel">
+                            <h3 class="panel-section-title-label">Revenue Matrix Hub</h3>
+                            <p class="text-small-dimmed">Total Gross ARR Recurrent Stream Pipeline: <strong>₹2,45,21,000.00</strong></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="co-module-saas-subscriptions" class="co-spa-view-panel-container" role="tabpanel">
+                    <h2 class="co-module-title-node">Active Subscriptions Allocation Tracking</h2>
+                    <div class="co-dashboard-lone-table-block-surface-panel"><div class="co-matrix-empty-state-container"><p class="empty-state-headline-msg">No Lifecycle Deviations Found</p></div></div>
+                </section>
+
+                <section id="co-module-saas-admins" class="co-spa-view-panel-container" role="tabpanel">
+                    <h2 class="co-module-title-node">Global Roots & Super Admins Clearance Directory</h2>
+                    <div class="co-dashboard-lone-table-block-surface-panel"><div class="co-matrix-empty-state-container"><p class="empty-state-headline-msg">Super Root Configuration Locked</p></div></div>
+                </section>
+
+                <section id="co-module-saas-usage" class="co-spa-view-panel-container" role="tabpanel">
+                    <h2 class="co-module-title-node">Global Compute & IOps Telemetry Tracker</h2>
+                    <div class="co-dashboard-lone-table-block-surface-panel"><div class="co-matrix-empty-state-container"><p class="empty-state-headline-msg">CPU/RAM Resource Stream Clean</p></div></div>
+                </section>
+
+            </main>
+
+            <footer class="co-dashboard-telemetry-anchor-footer" role="contentinfo">
+                <div class="footer-left-meta-cluster">
+                    <span class="cloud-indicator-node">☁️ CampusOne Multi-Tenant Cloud Operating System Grid Matrix</span>
+                </div>
+                <div class="footer-right-meta-cluster">
+                    <span class="footer-metadata-string">Build Version: <span id="co-footer-build-version" class="build-neon-tag">v1.0.0-dev-hardened</span></span>
+                </div>
+            </footer>
+
+            <nav class="co-mobile-bottom-navigation-dockbar" aria-label="Mobile Navigation Quick Links Row">
+                <button class="mobile-nav-tab-trigger active" data-target-mobile-module="dashboard">
+                    <span class="icon">📊</span><span class="lbl">Dashboard</span>
+                </button>
+                <button class="mobile-nav-tab-trigger" data-target-mobile-module="students">
+                    <span class="icon">🎓</span><span class="lbl">Students</span>
+                </button>
+                <button class="mobile-nav-tab-trigger" data-target-mobile-module="notices">
+                    <span class="icon">📢</span><span class="lbl">Notices</span>
+                </button>
+                <button class="mobile-nav-tab-trigger" data-target-mobile-module="activity">
+                    <span class="icon">🛡️</span><span class="lbl">Activity</span>
+                </button>
+                <button class="mobile-nav-tab-trigger" data-target-mobile-module="settings">
+                    <span class="icon">⚙️</span><span class="lbl">Settings</span>
+                </button>
+            </nav>
+
+        </div>
+    </div>
+
+    <div id="co-global-modal" class="co-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="co-modal-title">
+        <div class="co-modal-window">
+            <div class="co-modal-header">
+                <h4 id="co-modal-title">System Modal Notice</h4>
+                <button class="co-modal-close-btn" id="co-global-modal-close-trigger" aria-label="Dismiss modal">✕</button>
+            </div>
+            <div id="co-modal-body" class="co-modal-body-viewport">
+                </div>
+            <div class="co-modal-footer-actions">
+                <button type="button" id="co-global-modal-cancel-btn" class="co-action-utility-secondary-btn-outline-small">Cancel</button>
+                <button type="button" id="co-global-modal-confirm-btn" class="co-cta-gradient-action-btn">Confirm Transaction</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="script.js"></script>
+    
+</body>
+</html>

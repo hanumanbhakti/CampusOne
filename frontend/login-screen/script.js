@@ -93,7 +93,31 @@ document.addEventListener('DOMContentLoaded', () => {
             sessionTimeoutTimer: null
         }
     };
+    const translations = {
+  en: {
+    welcome: "Welcome to CampusOne 👋",
+    subtitle: "Secure access to your digital campus workspace."
+  },
 
+  hi: {
+    welcome: "कैम्पसवन में आपका स्वागत है 👋",
+    subtitle: "अपने डिजिटल कैंपस कार्यक्षेत्र में सुरक्षित प्रवेश करें।"
+  }
+};
+
+function switchLanguage(lang) {
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+
+    const key = el.dataset.i18n;
+
+    if (translations[lang] && translations[lang][key]) {
+      el.textContent = translations[lang][key];
+    }
+
+  });
+
+}
     // --- 2. FAST INLINE CACHED REFERENCE DOM SELECTORS ---
     const DOM = {
         htmlRoot: document.documentElement,
@@ -133,6 +157,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+  function initializeLanguageEngine() {
+
+  const langButtons = document.querySelectorAll(".lang-node");
+
+  langButtons.forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+      const lang = btn.dataset.langTarget;
+
+      switchLanguage(lang);
+
+      langButtons.forEach(b =>
+        b.classList.remove("state-active")
+      );
+
+      btn.classList.add("state-active");
+
+      localStorage.setItem("campusone-language", lang);
+
+    });
+
+  });
+
+  const savedLang =
+    localStorage.getItem("campusone-language") || "en";
+
+  switchLanguage(savedLang);
+
+  }
+  
     function applySystemThemeContext(theme) {
         DOM.htmlRoot.setAttribute('data-theme', theme);
         CampusOS.state.currentTheme = theme;
@@ -534,6 +589,8 @@ console.log(userData);
         initializeAuthPipeline();
         initializeSessionLifecycleMonitor(); // Fire active token countdown sequence
         
+        initializeLanguageEngine();
+      
         console.log("[CampusOne Core Framework] Production Module Engine initialized cleanly to Gold v1.0. 🚀");
     }
 

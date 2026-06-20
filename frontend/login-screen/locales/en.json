@@ -1,12 +1,87 @@
 {
-  "welcome": "Welcome to CampusOne 👋",
+  "tagline": "Digital Campus Operating System",
+  "welcome": "Welcome to CampusOne",
   "subtitle": "Secure access to your digital campus workspace.",
+
+  "student": "Student",
+  "teacher": "Teacher",
+  "parent": "Parent",
+  "admin": "Admin",
+
   "campusCode": "Campus Code",
+  "institutionCodeHelp": "Enter your institution code",
+  "institutionCodePlaceholder": "Institution Code",
+  "switchCampus": "Switch Campus",
+
   "accountIdentification": "Account Identification",
+  "emailPlaceholder": "Enter Email Address",
+
   "password": "Password",
+  "passwordStrength": "Password Strength",
+  "capsLockActive": "CAPS LOCK ACTIVE",
+  "strengthNone": "Enter a password",
+  "strengthWeak": "Weak",
+  "strengthMedium": "Medium",
+  "strengthStrong": "Strong",
+
   "rememberMe": "Remember Me",
+  "lastAuthentication": "Last Authentication",
+  "neverLoggedIn": "Never Logged In",
   "forgotPassword": "Forgot Password?",
+
+  "secureIdentity": "Protected by CampusOne Secure Identity system",
+
   "loginButton": "Sign In to CampusOne",
+  "signingIn": "Signing In...",
+  "loginSuccess": "Login Successful",
+  "loginFailed": "Login Failed",
+
   "requestAccess": "Request Access / Contact Admin",
-  "statusConnecting": "Connecting to CampusOne Cloud..."
+  "noAccountPrompt": "Don't have an account or institutional access?",
+
+  "orDivider": "OR",
+  "continueGoogle": "Continue with Google",
+
+  "secureAuthentication": "Secure Authentication",
+  "secureAuthenticationSub": "256-bit encrypted access",
+  "cloudSync": "Cloud Sync",
+  "cloudSyncSub": "Instant institutional sync",
+  "realTimeUpdates": "Real-Time Updates",
+  "realTimeUpdatesSub": "Live campus notifications",
+
+  "checkingStatus": "Checking System Status...",
+
+  "privacyPolicy": "Privacy Policy",
+  "termsService": "Terms of Service",
+  "supportGateway": "Support Gateway",
+
+  "attendanceRate": "Attendance Rate",
+  "scholarsEnrolled": "Scholars Enrolled",
+  "educatorsOnline": "Educators Online",
+  "activeNotices": "Active Notices",
+
+  "awaitingCampusLink": "Awaiting Campus Link",
+  "enterpriseNode": "Enterprise Node Architecture",
+
+  "toastCampusLinked": "System linked successfully to node: {token}",
+  "toastCampusInvalid": "Please enter a valid Campus Code before signing in.",
+  "toastDemoActivated": "Sandbox Explorer environment activated successfully.",
+  "toastEmailInvalid": "Please enter a valid email address.",
+  "toastPasswordRequired": "Please enter your password.",
+  "toastProfileLoaded": "Profile loaded successfully.",
+  "toastNoProfile": "Signed in. No extended profile found yet.",
+  "toastAuthSuccess": "Authentication successful! Redirecting you now...",
+  "toastAuthInvalidCreds": "Incorrect email or password.",
+  "toastAuthFailedGeneric": "Sign-in failed. Please check your connection and try again.",
+  "toastIdleClear": "Password field cleared after inactivity for your security.",
+  "toastOnline": "You're back online.",
+  "toastOffline": "Connection lost. Some features may be unavailable.",
+  "toastGoogleFailed": "Google sign-in failed. Please try again.",
+
+  "roleGreetings": {
+    "student": { "greeting": "Welcome Back, Scholar!", "subtext": "Access your personalized learning dashboard, assignments, attendance and academic resources." },
+    "teacher": { "greeting": "Welcome, Educator!", "subtext": "Manage classes, attendance, examinations and student performance." },
+    "parent": { "greeting": "Greetings, Guardian!", "subtext": "Track attendance, progress reports and institutional updates." },
+    "admin": { "greeting": "System Console Active", "subtext": "Manage users, institutions, analytics and administration." }
+  }
 }

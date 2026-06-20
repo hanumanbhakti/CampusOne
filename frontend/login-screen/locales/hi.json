@@ -1,12 +1,87 @@
 {
-  "welcome": "CampusOne में आपका स्वागत है 👋",
+  "tagline": "डिजिटल कैंपस ऑपरेटिंग सिस्टम",
+  "welcome": "कैम्पसवन में आपका स्वागत है",
   "subtitle": "अपने डिजिटल कैंपस कार्यक्षेत्र में सुरक्षित प्रवेश करें।",
+
+  "student": "विद्यार्थी",
+  "teacher": "शिक्षक",
+  "parent": "अभिभावक",
+  "admin": "प्रशासक",
+
   "campusCode": "कैंपस कोड",
+  "institutionCodeHelp": "अपना संस्थान कोड दर्ज करें",
+  "institutionCodePlaceholder": "संस्थान कोड",
+  "switchCampus": "कैंपस बदलें",
+
   "accountIdentification": "खाता पहचान",
+  "emailPlaceholder": "ईमेल पता दर्ज करें",
+
   "password": "पासवर्ड",
+  "passwordStrength": "पासवर्ड स्ट्रेंथ",
+  "capsLockActive": "कैप्स लॉक सक्रिय है",
+  "strengthNone": "पासवर्ड दर्ज करें",
+  "strengthWeak": "कमज़ोर",
+  "strengthMedium": "मध्यम",
+  "strengthStrong": "मज़बूत",
+
   "rememberMe": "मुझे याद रखें",
+  "lastAuthentication": "पिछला लॉगिन",
+  "neverLoggedIn": "कभी लॉगिन नहीं किया",
   "forgotPassword": "पासवर्ड भूल गए?",
-  "loginButton": "CampusOne में प्रवेश करें",
-  "requestAccess": "प्रवेश का अनुरोध करें / एडमिन से संपर्क करें",
-  "statusConnecting": "CampusOne Cloud से कनेक्ट किया जा रहा है..."
+
+  "secureIdentity": "CampusOne सुरक्षित पहचान प्रणाली द्वारा सुरक्षित",
+
+  "loginButton": "कैंपसवन में लॉगिन करें",
+  "signingIn": "लॉगिन हो रहा है...",
+  "loginSuccess": "लॉगिन सफल",
+  "loginFailed": "लॉगिन विफल",
+
+  "requestAccess": "एक्सेस अनुरोध / एडमिन से संपर्क करें",
+  "noAccountPrompt": "खाता या संस्थागत एक्सेस नहीं है?",
+
+  "orDivider": "या",
+  "continueGoogle": "Google से जारी रखें",
+
+  "secureAuthentication": "सुरक्षित प्रमाणीकरण",
+  "secureAuthenticationSub": "256-बिट एन्क्रिप्टेड एक्सेस",
+  "cloudSync": "क्लाउड सिंक",
+  "cloudSyncSub": "तुरंत संस्थागत सिंक",
+  "realTimeUpdates": "रियल-टाइम अपडेट",
+  "realTimeUpdatesSub": "लाइव कैंपस सूचनाएँ",
+
+  "checkingStatus": "सिस्टम स्थिति जाँची जा रही है...",
+
+  "privacyPolicy": "गोपनीयता नीति",
+  "termsService": "सेवा की शर्तें",
+  "supportGateway": "सहायता केंद्र",
+
+  "attendanceRate": "उपस्थिति दर",
+  "scholarsEnrolled": "नामांकित विद्यार्थी",
+  "educatorsOnline": "ऑनलाइन शिक्षक",
+  "activeNotices": "सक्रिय सूचनाएँ",
+
+  "awaitingCampusLink": "कैंपस लिंक की प्रतीक्षा है",
+  "enterpriseNode": "एंटरप्राइज़ नोड आर्किटेक्चर",
+
+  "toastCampusLinked": "सिस्टम सफलतापूर्वक नोड से जुड़ा: {token}",
+  "toastCampusInvalid": "लॉगिन करने से पहले मान्य कैंपस कोड दर्ज करें।",
+  "toastDemoActivated": "सैंडबॉक्स एक्सप्लोरर वातावरण सफलतापूर्वक सक्रिय हुआ।",
+  "toastEmailInvalid": "कृपया एक मान्य ईमेल पता दर्ज करें।",
+  "toastPasswordRequired": "कृपया अपना पासवर्ड दर्ज करें।",
+  "toastProfileLoaded": "प्रोफ़ाइल सफलतापूर्वक लोड हुई।",
+  "toastNoProfile": "लॉगिन सफल। अभी तक कोई विस्तृत प्रोफ़ाइल नहीं मिली।",
+  "toastAuthSuccess": "प्रमाणीकरण सफल! अब रीडायरेक्ट किया जा रहा है...",
+  "toastAuthInvalidCreds": "गलत ईमेल या पासवर्ड।",
+  "toastAuthFailedGeneric": "लॉगिन विफल। कृपया अपना कनेक्शन जाँचें और पुनः प्रयास करें।",
+  "toastIdleClear": "सुरक्षा कारणों से निष्क्रियता के बाद पासवर्ड फ़ील्ड साफ़ कर दी गई।",
+  "toastOnline": "आप वापस ऑनलाइन हैं।",
+  "toastOffline": "कनेक्शन टूट गया। कुछ सुविधाएँ उपलब्ध नहीं हो सकतीं।",
+  "toastGoogleFailed": "Google लॉगिन विफल। कृपया पुनः प्रयास करें।",
+
+  "roleGreetings": {
+    "student": { "greeting": "वापसी पर स्वागत है, विद्यार्थी!", "subtext": "अपना लर्निंग डैशबोर्ड, असाइनमेंट्स, उपस्थिति और शैक्षणिक संसाधन देखें।" },
+    "teacher": { "greeting": "स्वागत है, शिक्षक!", "subtext": "कक्षाएँ, उपस्थिति, परीक्षाएँ और छात्र प्रदर्शन प्रबंधित करें।" },
+    "parent": { "greeting": "नमस्ते, अभिभावक!", "subtext": "उपस्थिति, प्रगति रिपोर्ट और संस्थागत अपडेट देखें।" },
+    "admin": { "greeting": "सिस्टम कंसोल सक्रिय", "subtext": "उपयोगकर्ता, संस्थान, एनालिटिक्स और प्रशासन प्रबंधित करें।" }
+  }
 }

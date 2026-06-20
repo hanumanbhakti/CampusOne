@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. ENCAPSULATED APPLICATION STATE STORAGE & DATA DICTIONARIES ---
     const CampusOS = {
-        // Multi-Tenant Institutional Database Directory (Firebase/REST Registry Hook Ready)
+        // TODO: Replace tenantRegistry with Firestore campuses collection
         tenantRegistry: {
             "MIT-DELHI-2026": { identity: "Massachusetts Institute of Technology, Delhi", isActive: true },
             "STANFORD-MUMBAI-2026": { identity: "Stanford Center for Advanced Computing, Mumbai", isActive: true }
@@ -343,11 +343,15 @@ document.addEventListener('DOMContentLoaded', () => {
 );
 
 const firebaseUser = userCredential.user;
-              const studentRef = doc(db, "students", "student001");
+              const studentRef = doc(db, "students", firebaseUser.uid);
 const studentSnap = await getDoc(studentRef);
 
 if (studentSnap.exists()) {
-    console.log(studentSnap.data());
+  const userData = studentSnap.data();
+
+CampusOS.state.currentRole = userData.role || "student";
+
+console.log(userData);
     showNotification(
         "Student profile loaded successfully.",
         "success"

@@ -106,9 +106,9 @@
 
             <section class="context-greeting-deck" aria-live="polite" aria-atomic="true">
                 <div id="greeting-hgroup" class="greeting-hgroup">
-                    <h2 id="dynamic-greeting" class="brand-title-wordmark">Welcome to CampusOne 👋</h2>
+                    <h2 id="dynamic-greeting"  class="brand-title-wordmark"   data-i18n="welcome">   Welcome to CampusOne 👋  </h2>
                 </div>
-                <p id="context-subtext" class="context-subtext">Secure access to your digital campus workspace.</p>
+                <p  id="context-subtext"  class="context-subtext"  data-i18n="subtitle">  Secure access to your digital campus workspace. </p>
             </section>
 
             <nav class="segmented-control-track" role="tablist" aria-label="Workspace Context Selector">
@@ -147,7 +147,7 @@
 
                     <div class="input-field-wrapper" data-field-focus="idle">
                         <div class="label-row-spacing">
-                            <label for="input-user-identity" class="field-label-text">Account Identification</label>
+                            <label for="input-user-identity" class="field-label-text" data-i18n="accountIdentification">Account Identification</label>
                         </div>
                         <div class="input-interactive-shell">
                             <span class="field-decorator-icon position-prefix icon-user" aria-hidden="true">👤</span>
@@ -168,7 +168,7 @@
 
                     <div class="input-field-wrapper" data-field-focus="idle">
                         <div class="label-row-spacing">
-                            <label for="input-secure-key" class="field-label-text">Password</label>
+                            <label for="input-secure-key" class="field-label-text" data-i18n="password">Password</label>
                             <span id="caps-lock-detector" class="field-helper-caption" style="display: none; color: var(--color-danger); font-weight: bold;">⚠️ CAPS LOCK ACTIVE</span>
                         </div>
                         <div class="input-interactive-shell">
@@ -200,7 +200,7 @@
                             <label class="hybrid-checkbox-root">
                                 <input type="checkbox" id="remember-me-checkbox" name="persistent_session" checked class="native-hidden-checkbox">
                                 <span class="custom-ui-checkbox" aria-hidden="true"></span>
-                                <span class="checkbox-caption-label">Remember Me</span>
+                                <span class="checkbox-caption-label" data-i18n="rememberMe">Remember Me</span>
                             </label>
                             <div class="session-history-stamp">
                                <span class="stamp-label">Last Authentication</span>

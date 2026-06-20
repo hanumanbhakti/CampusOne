@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="no-js" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>CampusOne Gateway – Enterprise Workspace Authentication</title>
+    <meta name="description" content="Secure gateway to the CampusOne Digital Campus Operating System. Managed cloud environment for institutional optimization.">
+    <meta name="theme-color" content="#0F172A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="co-layer-ambient-canvas" class="env-viewport" aria-hidden="true" role="presentation">
+        <div class="mesh-overlay-gradient"></div>
+        <div class="blur-matrix-orbs">
+            <div class="orb node-primary-glowing"></div>
+            <div class="orb node-secondary-glowing"></div>
+            <div class="orb node-accent-glowing"></div>
+        </div>
+    </div>
+
+    <div id="co-sys-utilities-rail">
+        <div class="lang-switcher-pod" aria-label="Language Localization">
+            <span class="global-lang-icon" aria-hidden="true">🌐</span>
+            <button type="button" class="lang-node state-active" data-lang-target="en" aria-current="true">EN</button>
+            <span class="rail-separator" aria-hidden="true">|</span>
+            <button type="button" class="lang-node" data-lang-target="hi">हि</button>
+        </div>
+
+        <div class="theme-switch-orchestrator">
+            <button type="button" id="theme-toggle-trigger" class="theme-toggle-trigger" aria-label="Toggle system color theme" data-current-theme="dark">
+                <span class="theme-icon mode-light" aria-hidden="true">☀️</span>
+                <span class="theme-icon mode-dark" aria-hidden="true">🌙</span>
+            </button>
+        </div>
+    </div>
+
+    <main id="co-auth-shell" class="viewport-centralizer">
+
+        <section class="campus-snapshot-orchestrator" aria-label="Live Institutional Operations Telemetry">
+            <div class="snapshot-grid-container">
+                <div class="snapshot-metric-card" data-metric-trend="optimal">
+                    <div class="metric-visual-accent">
+                        <span class="metric-icon-indicator" aria-hidden="true">📈</span>
+                        <span id="metric-attendance" class="metric-value-stream" data-source="analytics.attendance">--</span>
+                    </div>
+                    <p class="metric-caption-label" data-i18n="attendanceRate">Attendance Rate</p>
+                </div>
+                <div class="snapshot-metric-card" data-metric-trend="steady">
+                    <div class="metric-visual-accent">
+                        <span class="metric-icon-indicator" aria-hidden="true">🎓</span>
+                        <span id="metric-scholars" class="metric-value-stream" data-source="analytics.students">--</span>
+                    </div>
+                    <p class="metric-caption-label" data-i18n="scholarsEnrolled">Scholars Enrolled</p>
+                </div>
+                <div class="snapshot-metric-card" data-metric-trend="steady">
+                    <div class="metric-visual-accent">
+                        <span class="metric-icon-indicator" aria-hidden="true">👨‍🏫</span>
+                        <span id="metric-educators" class="metric-value-stream" data-source="analytics.teachers">--</span>
+                    </div>
+                    <p class="metric-caption-label" data-i18n="educatorsOnline">Educators Online</p>
+                </div>
+                <div class="snapshot-metric-card" data-metric-trend="alert">
+                    <div class="metric-visual-accent">
+                        <span class="metric-icon-indicator" aria-hidden="true">📢</span>
+                        <span id="metric-notices" class="metric-value-stream" data-source="analytics.notices">--</span>
+                    </div>
+                    <p class="metric-caption-label" data-i18n="activeNotices">Active Notices</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="glass-morph-card-frame">
+
+            <header class="brand-block-conductor" role="banner">
+                <div class="platform-identity-row">
+                    <div class="monogram-glass-pod-wrap">
+                      <img src="../../assets/logo-icon.png" alt="CampusOne Identity Logo" class="brand-embedded-image-asset">
+                    </div>
+                    <div class="platform-naming-stack">
+                        <h1 class="brand-title-wordmark">CampusOne</h1>
+                        <p class="brand-subtitle-tagline" data-i18n="tagline">Digital Campus Operating System</p>
+                    </div>
+                </div>
+
+                <div id="dynamic-tenant-branding-pod" style="display: none;" data-tenant-status="unlinked">
+                    <div class="tenant-separator" aria-hidden="true"></div>
+                    <div class="tenant-branding-profile">
+                        <div class="tenant-logo-placeholder"><span class="tenant-fallback-icon">🏫</span></div>
+                        <div class="tenant-text-stack">
+                            <span id="tenant-resolved-name" class="tenant-resolved-name">Awaiting Campus Link</span>
+                            <span class="tenant-resolved-meta">Enterprise Node Architecture</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="context-greeting-deck" aria-live="polite" aria-atomic="true">
+                <div id="greeting-hgroup" class="greeting-hgroup">
+                    <h2 id="dynamic-greeting" class="brand-title-wordmark">Welcome to CampusOne 👋</h2>
+                </div>
+                <p id="context-subtext" class="context-subtext">Secure access to your digital campus workspace.</p>
+            </section>
+
+            <nav class="segmented-control-track" role="tablist" aria-label="Workspace Context Selector">
+                <div class="sliding-highlight-node"></div>
+                <button type="button" role="tab" id="tab-student" aria-selected="true" aria-controls="panel-auth-fields" class="control-node state-active" data-role-context="student" data-i18n="student">Student</button>
+                <button type="button" role="tab" id="tab-teacher" aria-selected="false" aria-controls="panel-auth-fields" class="control-node" data-role-context="teacher" tabindex="-1" data-i18n="teacher">Teacher</button>
+                <button type="button" role="tab" id="tab-parent" aria-selected="false" aria-controls="panel-auth-fields" class="control-node" data-role-context="parent" tabindex="-1" data-i18n="parent">Parent</button>
+                <button type="button" role="tab" id="tab-admin" aria-selected="false" aria-controls="panel-auth-fields" class="control-node" data-role-context="admin" tabindex="-1" data-i18n="admin">Admin</button>
+            </nav>
+
+            <div role="tabpanel" id="panel-auth-fields" aria-labelledby="tab-student">
+                <form id="campusone-auth-form" class="form-grid-layout" method="POST" action="/api/v1/auth/session" autocomplete="on" novalidate>
+                    
+                    <div class="input-field-wrapper field-conditional-routing" data-flow-state="initial" data-field-focus="idle">
+                        <div class="label-row-spacing">
+                            <label for="input-institution-code" class="field-label-text" data-i18n="campusCode">Campus Code</label>
+                            <span class="field-helper-caption" data-i18n="institutionCodeHelp">Enter your institution code</span>
+                            <button type="button" class="btn-context-link action-clear-tenant" hidden>Switch Campus</button>
+                        </div>
+                        <div class="input-interactive-shell">
+                            <span class="field-decorator-icon position-prefix icon-globe" aria-hidden="true">🌐</span>
+                            <input 
+                                type="text" 
+                                id="input-institution-code" 
+                                name="campus_tenant_code" 
+                                required 
+                                placeholder="Institution Code"
+                                data-i18n-placeholder="institutionCodePlaceholder"
+                                autocorrect="off"
+                                autocapitalize="characters"
+                                aria-required="true"
+                                class="form-input-node character-caps-lock">
+                            <span class="field-decorator-status position-suffix icon-validation" aria-hidden="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-field-wrapper" data-field-focus="idle">
+                        <div class="label-row-spacing">
+                            <label for="input-user-identity" class="field-label-text" data-i18n="accountIdentification">Account Identification</label>
+                        </div>
+                        <div class="input-interactive-shell">
+                            <span class="field-decorator-icon position-prefix icon-user" aria-hidden="true">👤</span>
+                            <input 
+                                type="text" 
+                                id="input-user-identity" 
+                                name="campus_user_identity" 
+                                required 
+                                placeholder="Enter Email Address"
+                                data-i18n-placeholder="emailPlaceholder"
+                                autocomplete="username"
+                                autocorrect="off"
+                                autocapitalize="none"
+                                aria-required="true"
+                                class="form-input-node">
+                            <span class="field-decorator-status position-suffix icon-validation" aria-hidden="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-field-wrapper" data-field-focus="idle">
+                        <div class="label-row-spacing">
+                            <label for="input-secure-key" class="field-label-text" data-i18n="password">Password</label>
+                            <span id="caps-lock-detector" class="field-helper-caption" style="display: none; color: var(--color-danger); font-weight: bold;">⚠️ CAPS LOCK ACTIVE</span>
+                        </div>
+                        <div class="input-interactive-shell">
+                            <span class="field-decorator-icon position-prefix icon-lock" aria-hidden="true">🔒</span>
+                            <input 
+                                type="password" 
+                                id="input-secure-key" 
+                                name="campus_user_credentials" 
+                                required 
+                                placeholder="••••••••"
+                                autocomplete="current-password"
+                                autocorrect="off"
+                                autocapitalize="none"
+                                aria-required="true"
+                                class="form-input-node">
+                            <button type="button" id="btn-toggle-masking" class="suffix-action-trigger" aria-label="Reveal password" aria-pressed="false">👁️</button>
+                            <span class="field-decorator-status position-suffix icon-validation" aria-hidden="true"></span>
+                        </div>
+                        <div class="password-strength-wrapper">
+                        <div class="password-strength-bar">
+                        <div id="password-strength-meter"></div>
+                       </div>
+                          <span id="password-strength-label">Password Strength</span>
+                       </div>                       
+                    </div>
+
+                    <div class="utilities-flex-interceptor">
+                        <div class="persistence-telemetry-block">
+                            <label class="hybrid-checkbox-root">
+                                <input type="checkbox" id="remember-me-checkbox" name="persistent_session" checked class="native-hidden-checkbox">
+                                <span class="custom-ui-checkbox" aria-hidden="true"></span>
+                                <span class="checkbox-caption-label" data-i18n="rememberMe">Remember Me</span>
+                            </label>
+                            <div class="session-history-stamp">
+                               <span class="stamp-label" data-i18n="lastAuthentication">Last Authentication</span>
+                              <time id="last-auth-time" data-i18n="neverLoggedIn">Never Logged In</time>
+                            </div>
+                        </div>
+                        <div class="recovery-action-node">
+                            <a href="/auth/recovery" class="auth-link text-gradient-hover" tabindex="0" data-i18n="forgotPassword">Forgot Password?</a>
+                        </div>
+                    </div>
+
+                    <div class="vault-security-attribution-shield" aria-label="Security Assurance">
+                        <span class="shield-vector-mark" aria-hidden="true">🛡️</span>
+                        <p class="shield-caption-text" data-i18n="secureIdentity">Protected by <span class="monospaced-bold-token">CampusOne Secure Identity</span> system</p>
+                    </div>
+
+                    <button type="submit" id="cta-submit-node" class="cta-gradient-button" data-engine-state="idle">
+                        <span class="state-view-wrapper view-idle" data-i18n="loginButton">Sign In to CampusOne</span>
+                        <span class="state-view-wrapper view-submitting" aria-hidden="true"><span class="spinner-dot-ring-animation"></span></span>
+                        <span class="state-view-wrapper view-resolved" aria-hidden="true">Login Successful ✓</span>
+                        <span class="state-view-wrapper view-rejected" aria-hidden="true">Login Failed ✕</span>
+                    </button>
+
+                    <div class="onboarding-registration-interceptor">
+                        <p class="onboarding-prompt-text">
+                            Don't have an account or institutional access? 
+                            <a href="/access/request-gateway" class="auth-link action-request-link" data-i18n="requestAccess">Request Access / Contact Admin</a>
+                        </p>
+                    </div>
+
+                </form>
+            </div>
+
+            <section class="oauth-federation-bridge">
+                <div class="contextual-divider" role="separator"><span>OR</span></div>
+                <div class="oauth-action-grid">
+                    <button type="button" id="btn-oauth-google" class="glass-action-button" aria-label="Authenticate using Google">
+                        <svg class="vector-google-icon" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                            <path fill="#4285F4" d="M17.6 9.2c0-.6-.1-1.2-.2-1.8H9v3.4h4.8c-.2 1.1-.8 2-1.8 2.6v2.2h2.9c1.7-1.6 2.7-4 2.7-7.2z" />
+                            <path fill="#34A853" d="M9 18c2.4 0 4.5-.8 6-2.2l-2.9-2.2c-.8.5-1.8.8-3.1.8-2.4 0-4.4-1.6-5.1-3.8H.9v2.3C2.4 15.9 5.5 18 9 18z" />
+                            <path fill="#FBBC05" d="M3.9 10.6c-.2-.6-.3-1.2-.3-1.8s.1-1.2.3-1.8V4.7H.9C.3 6 .0 7.5.0 9s.3 3 .9 4.3l3-2.7z" />
+                            <path fill="#EA4335" d="M9 3.6c1.3 0 2.5.5 3.4 1.3l2.6-2.6C13.5.9 11.4.0 9 .0 5.5.0 2.4 2.1.9 5.1l3 2.3c.7-2.1 2.7-3.8 5.1-3.8z" />
+                        </svg>
+                        <span class="oauth-btn-text" data-i18n="continueGoogle">Continue with Google</span>
+                    </button>
+                </div>
+            </section>
+
+            <section class="trust-assurance-matrix" aria-label="System Security Baselines">
+                <div class="assurance-card-node" title="AES 256bit Cryptographic Security">
+                    <span class="node-badge-icon" aria-hidden="true">🔒</span>
+                    <div class="node-text-group">
+                        <span class="node-badge-title" data-i18n="secureAuthentication">Secure Authentication</span>
+                        <span class="node-badge-subtitle">256-bit encrypted access</span>
+                    </div>
+                </div>
+                <div class="assurance-card-node" title="Low latency Database Clustering">
+                    <span class="node-badge-icon" aria-hidden="true">☁️</span>
+                    <div class="node-text-group">
+                        <span class="node-badge-title" data-i18n="cloudSync">Cloud Sync</span>
+                        <span class="node-badge-subtitle">Instant institutional sync</span>
+                    </div>
+                </div>
+                <div class="assurance-card-node" title="WebSocket Synchronization Pipeline">
+                    <span class="node-badge-icon" aria-hidden="true">⚡</span>
+                    <div class="node-text-group">
+                        <span class="node-badge-title" data-i18n="realTimeUpdates">Real-Time Updates</span>
+                        <span class="node-badge-subtitle">Live campus notifications</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="telemetry-infrastructure-health" aria-label="Real-time Node Status Monitor">
+                <a href="#co-devops-status-dashboard" class="status-monitor-link-node">
+                    <span class="status-heartbeat-pulse" aria-hidden="true"></span>
+                    <span class="status-monitor-text" data-i18n="checkingStatus">Checking System Status...</span>
+                </a>
+            </section>
+
+            <nav class="legal-compliance-directory" aria-label="Legal Metadata Links">
+                <a href="/legal/privacy" class="auth-link" data-i18n="privacyPolicy">Privacy Policy</a>
+                <span class="directory-dot-separator" aria-hidden="true">•</span>
+                <a href="/legal/terms" class="auth-link" data-i18n="termsService">Terms of Service</a>
+                <span class="directory-dot-separator" aria-hidden="true">•</span>
+                <a href="/support/helpdesk" class="auth-link" data-i18n="supportGateway">Support Gateway</a>
+            </nav>
+
+            <footer class="telemetry-metadata-anchor" role="contentinfo">
+                <p class="copyright-notice">&copy; 2026 CampusOne Technologies. All rights reserved.</p>
+                <p class="service-attribution-text">Powered by <span class="brand-text-accent">CampusOne Cloud</span></p>
+                <p class="build-version-tag">Production Build <span class="build-matrix-log">1.0.0</span></p>
+            </footer>
+
+        </div>
+    </main>
+<script type="module" src="script.js"></script>
+</body>
+</html>
+    

@@ -1,0 +1,117 @@
+/* CampusOne Student Dashboard — extends style.css design tokens */
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-bg); color: var(--text-primary); font-family: 'Poppins', sans-serif; }
+
+.auth-gate {
+  position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px; background: var(--color-bg); color: var(--text-secondary); z-index: 9999;
+}
+.auth-gate[hidden] { display: none !important; }
+
+.app-shell { display: flex; min-height: 100vh; }
+.app-shell[hidden] { display: none !important; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px; flex-shrink: 0; background: var(--color-surface-solid); border-right: 1px solid var(--glass-border);
+  display: flex; flex-direction: column; padding: 24px 16px; position: sticky; top: 0; height: 100vh; z-index: 50;
+}
+.sidebar-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; margin-bottom: 32px; padding: 0 8px; }
+.brand-dot { font-size: 1.4rem; }
+.sidebar-nav { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow-y: auto; }
+.nav-item {
+  display: block; padding: 12px 14px; border-radius: var(--radius-md); color: var(--text-secondary);
+  text-decoration: none; font-size: 0.92rem; font-weight: 500; transition: background var(--t-fast) var(--ease-standard);
+}
+.nav-item:hover { background: var(--color-surface); color: var(--text-primary); }
+.nav-item.state-active { background: var(--brand-gradient); color: #fff; }
+.logout-btn {
+  margin-top: auto; background: transparent; border: 1px solid var(--glass-border); color: var(--color-danger);
+  padding: 12px 14px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; font-size: 0.9rem;
+}
+.logout-btn:hover { background: rgba(239,68,68,0.1); }
+
+.mobile-nav-toggle {
+  display: none; position: fixed; top: 16px; left: 16px; z-index: 70; background: var(--color-surface-solid);
+  border: 1px solid var(--glass-border); color: var(--text-primary); width: 42px; height: 42px; border-radius: var(--radius-md);
+  font-size: 1.1rem; cursor: pointer;
+}
+.sidebar-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; display: none;
+}
+.sidebar-overlay.show { display: block; }
+
+/* MAIN */
+.main-area { flex: 1; padding: 32px 40px; max-width: 100%; overflow-x: hidden; }
+.topbar { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+.topbar h1 { margin: 0 0 4px; font-size: 1.5rem; }
+.topbar-user { display: flex; align-items: center; gap: 12px; }
+.user-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--brand-accent); }
+.user-name { margin: 0; font-weight: 600; }
+.text-muted { color: var(--text-muted); }
+.small { font-size: 0.8rem; }
+
+.pill {
+  padding: 6px 14px; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 700; border: 1px solid var(--glass-border);
+}
+.pill-present { background: rgba(34,197,94,0.15); color: var(--color-success); border-color: rgba(34,197,94,0.3); }
+.pill-absent { background: rgba(239,68,68,0.15); color: var(--color-danger); border-color: rgba(239,68,68,0.3); }
+.pill-neutral { background: var(--color-surface); color: var(--text-muted); }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.stat-card {
+  background: var(--color-surface); border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+  padding: 20px; display: flex; align-items: center; gap: 14px; backdrop-filter: blur(10px);
+}
+.stat-icon { font-size: 1.8rem; }
+.stat-value { margin: 0; font-size: 1.3rem; font-weight: 700; }
+.stat-label { margin: 2px 0 0; font-size: 0.76rem; color: var(--text-muted); }
+
+/* PANELS */
+.panel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+.glass-panel {
+  background: var(--color-surface); border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+  padding: 22px; backdrop-filter: blur(10px); box-shadow: var(--shadow-sm);
+}
+.glass-panel h3 { margin-top: 0; font-size: 1rem; }
+.big-stat { font-size: 2.4rem; font-weight: 800; margin: 6px 0; background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.data-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; }
+.data-list li {
+  padding: 12px; border-radius: var(--radius-md); background: var(--color-surface-input);
+  border: 1px solid var(--glass-border); font-size: 0.88rem;
+}
+.data-list li.empty-row { text-align: center; color: var(--text-muted); }
+.data-list .row-title { font-weight: 600; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.data-list .row-meta { color: var(--text-muted); font-size: 0.78rem; margin: 0; }
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: var(--radius-full); font-size: 0.68rem; font-weight: 700; }
+.badge-present { background: rgba(34,197,94,0.15); color: var(--color-success); }
+.badge-absent { background: rgba(239,68,68,0.15); color: var(--color-danger); }
+.badge-pending { background: rgba(245,158,11,0.15); color: var(--color-warning); }
+.badge-submitted { background: rgba(34,197,94,0.15); color: var(--color-success); }
+.badge-paid { background: rgba(34,197,94,0.15); color: var(--color-success); }
+.badge-due { background: rgba(239,68,68,0.15); color: var(--color-danger); }
+
+/* TABS (assignments filter) */
+.tabs-row { display: flex; gap: 8px; margin-bottom: 16px; }
+.tab-btn {
+  background: var(--color-surface); border: 1px solid var(--glass-border); color: var(--text-secondary);
+  padding: 8px 16px; border-radius: var(--radius-full); cursor: pointer; font-size: 0.82rem; font-weight: 600;
+}
+.tab-btn.state-active { background: var(--brand-gradient); color: #fff; border-color: transparent; }
+
+/* PROFILE */
+.profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 18px; margin-top: 12px; }
+.profile-grid p { margin: 4px 0 0; font-weight: 600; }
+
+.dash-section[hidden] { display: none !important; }
+
+@media (max-width: 900px) {
+  .mobile-nav-toggle { display: flex; align-items: center; justify-content: center; }
+  .sidebar { position: fixed; left: -260px; top: 0; transition: left var(--t-normal) var(--ease-standard); box-shadow: var(--shadow-xl); }
+  .sidebar.mobile-open { left: 0; }
+  .main-area { padding: 80px 20px 20px; }
+}

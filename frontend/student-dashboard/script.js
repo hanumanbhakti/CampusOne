@@ -21,7 +21,9 @@ import {
 // Consider moving firebase-config.js into a shared folder (e.g. /assets/js/)
 // once you build the teacher/parent/admin dashboards too, so it's imported
 // from one place instead of duplicated/guessed per dashboard.
-import { auth, db } from "../login-screen/firebase-config.js";
+
+//import { auth, db } from "../login-screen/firebase-config.js";
+
 document.addEventListener("DOMContentLoaded", () => {
 
     // --- 1. SIDEBAR NAV DATA (data-driven so the 16-module tree stays
@@ -151,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
         admin: "../admin-dashboard/index.html"
     };
     // ⚠️ ADJUST to match your real login folder name.
-    const LOGIN_ROUTE = "../login/index.html";
+    const LOGIN_ROUTE = "../login-screen/index.html";
 
     const state = {
         currentLanguage: localStorage.getItem("campusone-language") || "en",

@@ -505,8 +505,6 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const studentSnap = await getDoc(doc(db, "students", firebaseUser.uid));
             if (studentSnap.exists()) studentData = studentSnap.data();
-
-          alert(studentData.identity.fullName);
           
           if (studentSnap.exists()) {
     studentData = studentSnap.data();

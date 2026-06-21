@@ -113,9 +113,10 @@ svg { width: 1.1em; height: 1.1em; stroke: currentColor; stroke-width: 2; fill: 
 .sidebar-brand-row { display: flex; align-items: center; justify-content: space-between; padding: 20px 18px; border-bottom: 1px solid var(--glass-border); }
 .sidebar-brand-identity { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .sidebar-logo-pod {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
+.sidebar-logo-pod {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
     background: transparent;
     display: flex;
     align-items: center;

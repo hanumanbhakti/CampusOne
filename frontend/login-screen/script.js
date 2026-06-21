@@ -81,11 +81,60 @@ document.addEventListener('DOMContentLoaded', () => {
     // source of truth; this is just an in-memory cache once they're fetched.
     // A tiny inline fallback keeps the screen readable even if the fetch
     // fails (e.g. opened directly from disk instead of a web server).
+    // --- TRANSLATIONS: Fully embedded — no fetch() required.
+    // Previously translations.hi was {} and loaded via fetch('./locales/hi.json').
+    // fetch() fails on file:// protocol and is never awaited at boot, so HI strings
+    // were never in memory when the button was clicked → language appeared to not switch.
+    // Fix: embed both packs here as the single source of truth. locales/*.json can stay
+    // as a backup reference but are no longer used at runtime.
     const translations = {
         en: {
+            tagline: "Digital Campus Operating System",
             welcome: "Welcome to CampusOne",
             subtitle: "Secure access to your digital campus workspace.",
+            student: "Student", teacher: "Teacher", parent: "Parent", admin: "Admin",
+            campusCode: "Campus Code",
+            institutionCodeHelp: "Enter your institution code",
+            institutionCodePlaceholder: "Institution Code",
+            switchCampus: "Switch Campus",
+            accountIdentification: "Account Identification",
+            emailPlaceholder: "Enter Email Address",
+            password: "Password",
+            passwordStrength: "Password Strength",
+            capsLockActive: "CAPS LOCK ACTIVE",
+            strengthNone: "Enter a password", strengthWeak: "Weak", strengthMedium: "Medium", strengthStrong: "Strong",
+            rememberMe: "Remember Me",
+            lastAuthentication: "Last Authentication",
+            neverLoggedIn: "Never Logged In",
+            forgotPassword: "Forgot Password?",
+            secureIdentity: "Protected by CampusOne Secure Identity system",
             loginButton: "Sign In to CampusOne",
+            signingIn: "Signing In...", loginSuccess: "Login Successful", loginFailed: "Login Failed",
+            requestAccess: "Request Access / Contact Admin",
+            noAccountPrompt: "Don't have an account or institutional access?",
+            orDivider: "OR",
+            continueGoogle: "Continue with Google",
+            secureAuthentication: "Secure Authentication", secureAuthenticationSub: "256-bit encrypted access",
+            cloudSync: "Cloud Sync", cloudSyncSub: "Instant institutional sync",
+            realTimeUpdates: "Real-Time Updates", realTimeUpdatesSub: "Live campus notifications",
+            checkingStatus: "Checking System Status...",
+            privacyPolicy: "Privacy Policy", termsService: "Terms of Service", supportGateway: "Support Gateway",
+            attendanceRate: "Attendance Rate", scholarsEnrolled: "Scholars Enrolled",
+            educatorsOnline: "Educators Online", activeNotices: "Active Notices",
+            awaitingCampusLink: "Awaiting Campus Link", enterpriseNode: "Enterprise Node Architecture",
+            toastCampusLinked: "System linked successfully to node: {token}",
+            toastCampusInvalid: "Please enter a valid Campus Code before signing in.",
+            toastDemoActivated: "Sandbox Explorer environment activated successfully.",
+            toastEmailInvalid: "Please enter a valid email address.",
+            toastPasswordRequired: "Please enter your password.",
+            toastProfileLoaded: "Profile loaded successfully.",
+            toastNoProfile: "Signed in. No extended profile found yet.",
+            toastAuthSuccess: "Authentication successful! Redirecting you now...",
+            toastAuthInvalidCreds: "Incorrect email or password.",
+            toastAuthFailedGeneric: "Sign-in failed. Please check your connection and try again.",
+            toastIdleClear: "Password field cleared after inactivity for your security.",
+            toastOnline: "You're back online.", toastOffline: "Connection lost. Some features may be unavailable.",
+            toastGoogleFailed: "Google sign-in failed. Please try again.",
             roleGreetings: {
                 student: { greeting: "Welcome Back, Scholar!", subtext: "Access your personalized learning dashboard, assignments, attendance and academic resources." },
                 teacher: { greeting: "Welcome, Educator!", subtext: "Manage classes, attendance, examinations and student performance." },
@@ -93,21 +142,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 admin: { greeting: "System Console Active", subtext: "Manage users, institutions, analytics and administration." }
             }
         },
-        hi: {}
+        hi: {
+            tagline: "डिजिटल कैंपस ऑपरेटिंग सिस्टम",
+            welcome: "कैम्पसवन में आपका स्वागत है",
+            subtitle: "अपने डिजिटल कैंपस कार्यक्षेत्र में सुरक्षित प्रवेश करें।",
+            student: "विद्यार्थी", teacher: "शिक्षक", parent: "अभिभावक", admin: "प्रशासक",
+            campusCode: "कैंपस कोड",
+            institutionCodeHelp: "अपना संस्थान कोड दर्ज करें",
+            institutionCodePlaceholder: "संस्थान कोड",
+            switchCampus: "कैंपस बदलें",
+            accountIdentification: "खाता पहचान",
+            emailPlaceholder: "ईमेल पता दर्ज करें",
+            password: "पासवर्ड",
+            passwordStrength: "पासवर्ड स्ट्रेंथ",
+            capsLockActive: "कैप्स लॉक सक्रिय है",
+            strengthNone: "पासवर्ड दर्ज करें", strengthWeak: "कमज़ोर", strengthMedium: "मध्यम", strengthStrong: "मज़बूत",
+            rememberMe: "मुझे याद रखें",
+            lastAuthentication: "पिछला लॉगिन",
+            neverLoggedIn: "कभी लॉगिन नहीं किया",
+            forgotPassword: "पासवर्ड भूल गए?",
+            secureIdentity: "CampusOne सुरक्षित पहचान प्रणाली द्वारा सुरक्षित",
+            loginButton: "कैंपसवन में लॉगिन करें",
+            signingIn: "लॉगिन हो रहा है...", loginSuccess: "लॉगिन सफल", loginFailed: "लॉगिन विफल",
+            requestAccess: "एक्सेस अनुरोध / एडमिन से संपर्क करें",
+            noAccountPrompt: "खाता या संस्थागत एक्सेस नहीं है?",
+            orDivider: "या",
+            continueGoogle: "Google से जारी रखें",
+            secureAuthentication: "सुरक्षित प्रमाणीकरण", secureAuthenticationSub: "256-बिट एन्क्रिप्टेड एक्सेस",
+            cloudSync: "क्लाउड सिंक", cloudSyncSub: "तुरंत संस्थागत सिंक",
+            realTimeUpdates: "रियल-टाइम अपडेट", realTimeUpdatesSub: "लाइव कैंपस सूचनाएँ",
+            checkingStatus: "सिस्टम स्थिति जाँची जा रही है...",
+            privacyPolicy: "गोपनीयता नीति", termsService: "सेवा की शर्तें", supportGateway: "सहायता केंद्र",
+            attendanceRate: "उपस्थिति दर", scholarsEnrolled: "नामांकित विद्यार्थी",
+            educatorsOnline: "ऑनलाइन शिक्षक", activeNotices: "सक्रिय सूचनाएँ",
+            awaitingCampusLink: "कैंपस लिंक की प्रतीक्षा है", enterpriseNode: "एंटरप्राइज़ नोड आर्किटेक्चर",
+            toastCampusLinked: "सिस्टम सफलतापूर्वक नोड से जुड़ा: {token}",
+            toastCampusInvalid: "लॉगिन करने से पहले मान्य कैंपस कोड दर्ज करें।",
+            toastDemoActivated: "सैंडबॉक्स एक्सप्लोरर वातावरण सफलतापूर्वक सक्रिय हुआ।",
+            toastEmailInvalid: "कृपया एक मान्य ईमेल पता दर्ज करें।",
+            toastPasswordRequired: "कृपया अपना पासवर्ड दर्ज करें।",
+            toastProfileLoaded: "प्रोफ़ाइल सफलतापूर्वक लोड हुई।",
+            toastNoProfile: "लॉगिन सफल। अभी तक कोई विस्तृत प्रोफ़ाइल नहीं मिली।",
+            toastAuthSuccess: "प्रमाणीकरण सफल! अब रीडायरेक्ट किया जा रहा है...",
+            toastAuthInvalidCreds: "गलत ईमेल या पासवर्ड।",
+            toastAuthFailedGeneric: "लॉगिन विफल। कृपया अपना कनेक्शन जाँचें और पुनः प्रयास करें।",
+            toastIdleClear: "सुरक्षा कारणों से निष्क्रियता के बाद पासवर्ड फ़ील्ड साफ़ कर दी गई।",
+            toastOnline: "आप वापस ऑनलाइन हैं।", toastOffline: "कनेक्शन टूट गया। कुछ सुविधाएँ उपलब्ध नहीं हो सकतीं।",
+            toastGoogleFailed: "Google लॉगिन विफल। कृपया पुनः प्रयास करें।",
+            roleGreetings: {
+                student: { greeting: "वापसी पर स्वागत है, विद्यार्थी!", subtext: "अपना लर्निंग डैशबोर्ड, असाइनमेंट्स, उपस्थिति और शैक्षणिक संसाधन देखें।" },
+                teacher: { greeting: "स्वागत है, शिक्षक!", subtext: "कक्षाएँ, उपस्थिति, परीक्षाएँ और छात्र प्रदर्शन प्रबंधित करें।" },
+                parent: { greeting: "नमस्ते, अभिभावक!", subtext: "उपस्थिति, प्रगति रिपोर्ट और संस्थागत अपडेट देखें।" },
+                admin: { greeting: "सिस्टम कंसोल सक्रिय", subtext: "उपयोगकर्ता, संस्थान, एनालिटिक्स और प्रशासन प्रबंधित करें।" }
+            }
+        }
     };
 
-    async function loadTranslationPack(lang) {
-        try {
-            const response = await fetch(`./locales/${lang}.json`, { cache: "no-cache" });
-            if (!response.ok) throw new Error(`Locale file responded with ${response.status}`);
-            const pack = await response.json();
-            translations[lang] = pack;
-            return true;
-        } catch (loadError) {
-            console.warn(`[CampusOne i18n] Could not load locales/${lang}.json, using fallback strings.`, loadError);
-            return false;
-        }
-    }
+    // fetch() based loader removed — translations are now fully embedded above.
+    // Keeping this as a no-op stub so any future call doesn't crash.
+    async function loadTranslationPack(lang) { return true; }
 
     function applyTranslationPack(lang) {
         CampusOS.state.currentLanguage = lang;
@@ -134,15 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         document.documentElement.setAttribute('lang', lang);
-
-        // Re-apply the current role's greeting in the new language so it never reverts to the generic text
+        // Re-apply role greeting in the new language
         updateGreetingDisplay(CampusOS.state.currentRole, false);
     }
 
+    // switchLanguage is now synchronous in effect — pack is always ready instantly.
     async function switchLanguage(lang) {
-        if (!translations[lang] || Object.keys(translations[lang]).length === 0) {
-            await loadTranslationPack(lang);
-        }
         applyTranslationPack(lang);
     }
 

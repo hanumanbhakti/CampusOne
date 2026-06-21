@@ -1,3 +1,9 @@
+// =========================================================================
+// CAMPUSONE — Shared Firebase Configuration
+// Fix v2: Added browserLocalPersistence so auth session survives page reload.
+// This is why dashboards were redirecting back to login immediately.
+// =========================================================================
+
 // Firebase Core
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
@@ -5,7 +11,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebas
 import {
   getAuth,
   GoogleAuthProvider,
-  onAuthStateChanged
+  onAuthStateChanged,
+  browserLocalPersistence,
+  setPersistence
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 // Firestore
@@ -37,12 +45,18 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 const googleProvider = new GoogleAuthProvider();
 
+// ✅ FIX: Set auth persistence to LOCAL so the session survives page reload.
+// Without this, Firebase loses the user on every navigation and dashboards
+// see user=null → immediately redirect back to login.
+setPersistence(auth, browserLocalPersistence).catch((err) => {
+  console.warn("[CampusOne] Could not set auth persistence:", err);
+});
+
 /**
  * waitForAuthReady()
- * Firebase's auth state takes a moment to initialize on page load.
- * This waits for that first check to complete and resolves with the
- * signed-in user (or null if nobody is signed in) — so dashboards know
- * for certain whether to show content or redirect to login.
+ * Waits for Firebase's first auth state check to complete and resolves with
+ * the signed-in user (or null). Dashboards call this on load to decide
+ * whether to show content or redirect to login.
  */
 function waitForAuthReady() {
   return new Promise((resolve) => {
@@ -55,12 +69,8 @@ function waitForAuthReady() {
 
 /**
  * getCurrentTenant()
- * Fallback tenant/institution code lookup, used when a user's Firestore
- * profile doesn't have a "tenant" field set yet. Reads whatever the
- * login screen stored locally when the institution code was verified.
- *
- * NOTE: adjust the localStorage key below ("campusone-tenant") if your
- * login-screen script.js saves it under a different key name.
+ * Reads the institution code that the login screen stored in localStorage
+ * when the campus code was verified.
  */
 function getCurrentTenant() {
   return localStorage.getItem("campusone-tenant") || null;

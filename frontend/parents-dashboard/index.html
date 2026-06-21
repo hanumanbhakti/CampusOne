@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0F172A">
+<meta name="description" content="CampusOne Parent Dashboard — track your child's attendance, results, fees and more.">
 <title>Parent Dashboard – CampusOne</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="parents-dashboard.css?v=1">
+<link rel="stylesheet" href="parents-dashboard.css">
 <style>
   /* Smooth transitions across the parent dashboard */
   .nav-item, .logout-btn, .stat-card, .glass-panel, .btn-primary, .btn-sos,
@@ -46,11 +50,13 @@
 </head>
 <body data-theme="dark">
 
+  <!-- AUTH GATE: shown while Firebase checks the session -->
   <div id="auth-gate" class="auth-gate">
     <div class="spinner-dot-ring-animation"></div>
     <p>Verifying your session...</p>
   </div>
 
+  <!-- APP SHELL: hidden until auth confirmed -->
   <div id="app-shell" class="app-shell" hidden>
 
     <button id="btn-mobile-nav" class="mobile-nav-toggle" aria-label="Open menu">
@@ -145,17 +151,36 @@
 
       <!-- ============ DASHBOARD HOME ============ -->
       <section id="section-dashboard" class="dash-section">
+
         <div class="stats-grid">
-          <div class="stat-card"><span class="stat-icon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span><div><p id="stat-attendance" class="stat-value">--%</p><p class="stat-label">Attendance Rate</p></div></div>
-          <div class="stat-card"><span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span><div><p id="stat-cgpa" class="stat-value">--</p><p class="stat-label">CGPA</p></div></div>
-          <div class="stat-card"><span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><div><p id="stat-assignments" class="stat-value">--</p><p class="stat-label">Pending Assignments</p></div></div>
-          <div class="stat-card"><span class="stat-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span><div><p id="stat-fees" class="stat-value">--</p><p class="stat-label">Fee Status</p></div></div>
-          <div class="stat-card"><span class="stat-icon"><svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span><div><p id="stat-notices" class="stat-value">--</p><p class="stat-label">Unread Notices</p></div></div>
+          <div class="stat-card">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+            <div><p id="stat-attendance" class="stat-value">--%</p><p class="stat-label">Attendance Rate</p></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span>
+            <div><p id="stat-cgpa" class="stat-value">--</p><p class="stat-label">CGPA</p></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+            <div><p id="stat-assignments" class="stat-value">--</p><p class="stat-label">Pending Assignments</p></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
+            <div><p id="stat-fees" class="stat-value">--</p><p class="stat-label">Fee Status</p></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+            <div><p id="stat-notices" class="stat-value">--</p><p class="stat-label">Unread Notices</p></div>
+          </div>
         </div>
 
         <div class="panel-grid">
           <div class="glass-panel">
-            <h3><svg class="heading-icon" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg> Top Insight</h3>
+            <h3>
+              <svg class="heading-icon" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>
+              Top Insight
+            </h3>
             <ul id="list-insights-preview" class="data-list"><li class="empty-row">Loading...</li></ul>
           </div>
           <div class="glass-panel">
@@ -163,6 +188,7 @@
             <ul id="list-notices-preview" class="data-list"><li class="empty-row">Loading...</li></ul>
           </div>
         </div>
+
       </section>
 
       <!-- ============ ATTENDANCE ============ -->
@@ -206,8 +232,14 @@
       <!-- ============ FEES ============ -->
       <section id="section-fees" class="dash-section" hidden>
         <div class="stats-grid">
-          <div class="stat-card"><span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span><div><p id="fees-paid" class="stat-value">₹--</p><p class="stat-label">Paid Amount</p></div></div>
-          <div class="stat-card"><span class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><div><p id="fees-pending" class="stat-value">₹--</p><p class="stat-label">Pending Amount</p></div></div>
+          <div class="stat-card">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+            <div><p id="fees-paid" class="stat-value">₹--</p><p class="stat-label">Paid Amount</p></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+            <div><p id="fees-pending" class="stat-value">₹--</p><p class="stat-label">Pending Amount</p></div>
+          </div>
         </div>
         <div class="glass-panel" style="margin-top:20px;">
           <h3>Payment History</h3>
@@ -226,7 +258,10 @@
       <!-- ============ TEACHER CHAT ============ -->
       <section id="section-chat" class="dash-section" hidden>
         <div class="glass-panel chat-panel">
-          <h3><svg class="heading-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Message Teacher</h3>
+          <h3>
+            <svg class="heading-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Message Teacher
+          </h3>
           <div id="chat-thread" class="chat-thread"><p class="empty-row">Loading conversation...</p></div>
           <form id="chat-form" class="chat-form">
             <input id="chat-input" type="text" placeholder="Type a message..." autocomplete="off" required>
@@ -238,7 +273,10 @@
       <!-- ============ LEAVE REQUESTS ============ -->
       <section id="section-leave" class="dash-section" hidden>
         <div class="glass-panel">
-          <h3><svg class="heading-icon" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Request Leave for Child</h3>
+          <h3>
+            <svg class="heading-icon" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Request Leave for Child
+          </h3>
           <form id="leave-form" class="leave-form">
             <div class="leave-form-row">
               <label>From<input id="leave-from" type="date" required></label>
@@ -257,7 +295,10 @@
       <!-- ============ SMART INSIGHTS ============ -->
       <section id="section-insights" class="dash-section" hidden>
         <div class="glass-panel">
-          <h3><svg class="heading-icon" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg> Smart Performance Insights</h3>
+          <h3>
+            <svg class="heading-icon" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>
+            Smart Performance Insights
+          </h3>
           <p class="text-muted small">Auto-generated from attendance &amp; marks data — not human-reviewed, use as a guide alongside teacher feedback.</p>
           <ul id="list-insights-full" class="data-list" style="margin-top:14px;"><li class="empty-row">Loading...</li></ul>
         </div>
@@ -266,7 +307,10 @@
       <!-- ============ BUS TRACKING ============ -->
       <section id="section-bus" class="dash-section" hidden>
         <div class="glass-panel">
-          <h3><svg class="heading-icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="11" rx="2"/><path d="M3 11h18"/><circle cx="7.5" cy="20" r="1.5"/><circle cx="16.5" cy="20" r="1.5"/></svg> Live Bus Tracking</h3>
+          <h3>
+            <svg class="heading-icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="11" rx="2"/><path d="M3 11h18"/><circle cx="7.5" cy="20" r="1.5"/><circle cx="16.5" cy="20" r="1.5"/></svg>
+            Live Bus Tracking
+          </h3>
           <div id="bus-info">
             <p class="empty-row">Loading...</p>
           </div>
@@ -276,7 +320,10 @@
       <!-- ============ ENTRY/EXIT ALERTS ============ -->
       <section id="section-entryexit" class="dash-section" hidden>
         <div class="glass-panel">
-          <h3><svg class="heading-icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Campus Entry / Exit Log</h3>
+          <h3>
+            <svg class="heading-icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Campus Entry / Exit Log
+          </h3>
           <ul id="list-entryexit" class="data-list"><li class="empty-row">Loading...</li></ul>
         </div>
       </section>
@@ -285,7 +332,10 @@
       <section id="section-health" class="dash-section" hidden>
         <div class="panel-grid">
           <div class="glass-panel">
-            <h3><svg class="heading-icon" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg> Medical Info</h3>
+            <h3>
+              <svg class="heading-icon" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+              Medical Info
+            </h3>
             <div class="profile-grid">
               <div><span class="text-muted small">Blood Group</span><p id="h-blood">—</p></div>
               <div><span class="text-muted small">Allergies</span><p id="h-allergies">—</p></div>
@@ -293,7 +343,10 @@
             </div>
           </div>
           <div class="glass-panel">
-            <h3><svg class="heading-icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Emergency Contacts</h3>
+            <h3>
+              <svg class="heading-icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              Emergency Contacts
+            </h3>
             <ul id="list-emergency-contacts" class="data-list"><li class="empty-row">Loading...</li></ul>
           </div>
         </div>
@@ -301,7 +354,10 @@
           <h3>Health Alerts</h3>
           <ul id="list-health-alerts" class="data-list"><li class="empty-row">Loading...</li></ul>
         </div>
-        <button id="btn-sos" class="btn-sos"><svg class="heading-icon" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg> Send Emergency SOS Alert</button>
+        <button id="btn-sos" class="btn-sos">
+          <svg class="heading-icon" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+          Send Emergency SOS Alert
+        </button>
       </section>
 
       <!-- ============ PROFILE ============ -->
@@ -314,7 +370,7 @@
             <div><span class="text-muted small">Mobile</span><p id="p-mobile">—</p></div>
             <div><span class="text-muted small">Child Name</span><p id="p-child-name">—</p></div>
             <div><span class="text-muted small">Child Class</span><p id="p-child-class">—</p></div>
-            <div><span class="text-muted small">Tenant</span><p id="p-tenant">—</p></div>
+            <div><span class="text-muted small">Tenant / Campus Code</span><p id="p-tenant">—</p></div>
           </div>
         </div>
       </section>
@@ -322,6 +378,10 @@
     </main>
   </div>
 
-  <script type="module" src="parents-dashboard.js?v=1"></script>
+  <!-- ✅ FIX: Removed ?v=1 cache-busting param from module script src.
+       Query strings on ES module imports can break resolution on some servers/CDNs
+       including GitHub Pages. Version busting for modules should be done via
+       filename (parents-dashboard.v2.js) not query strings. -->
+  <script type="module" src="parents-dashboard.js"></script>
 </body>
 </html>

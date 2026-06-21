@@ -1,5 +1,6 @@
 /**
  * CampusOne — Parent Dashboard Controller
+ * Fix v2: Firebase version corrected from 10.7.1 → 12.0.0 (was causing 404/crash)
  *
  * LINKING MODEL:
  *   users/{parentUid} → { role: "parent", name, email, mobile, tenant, childUid: studentUid }
@@ -16,10 +17,13 @@
  */
 
 import { auth, db, getCurrentTenant, waitForAuthReady } from "../shared/firebase-config.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+// ✅ FIX: Changed 10.7.1 → 12.0.0 to match firebase-config.js and login screen.
+// Version mismatch was causing a module import crash → page showed 404.
+import { signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import {
   doc, getDoc, collection, query, where, orderBy, limit, getDocs, addDoc, serverTimestamp, onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const $ = (id) => document.getElementById(id);
 let activeChildId = null;
@@ -287,7 +291,6 @@ async function loadResults(studentId, childProfile) {
       return `<li><p class="row-title">Semester ${r.semester || "—"} <span class="badge badge-submitted">SGPA ${r.sgpa ?? "—"}</span></p><p class="row-meta">${subjectsHtml}</p></li>`;
     }).join("");
 
-    // Comparison: latest vs previous semester, per subject
     if (semesters.length >= 2) {
       const latest = semesters[0], prev = semesters[1];
       const prevMap = {};
@@ -483,14 +486,13 @@ async function loadEntryExit(studentId) {
   }
 }
 
-// =================== SMART INSIGHTS (rule-based, not LLM) ===================
+// =================== SMART INSIGHTS ===================
 async function loadInsights(studentId, childProfile) {
   const previewList = $("list-insights-preview");
   const fullList = $("list-insights-full");
   const insights = [];
 
   try {
-    // Attendance-based insight
     const attQ = query(collection(db, "attendance"), where("studentId", "==", studentId), orderBy("date", "desc"), limit(30));
     const attSnap = await getDocs(attQ);
     if (!attSnap.empty) {
@@ -504,7 +506,6 @@ async function loadInsights(studentId, childProfile) {
       }
     }
 
-    // Marks trend insight
     const resQ = query(collection(db, "results"), where("studentId", "==", studentId), orderBy("semester", "desc"), limit(2));
     const resSnap = await getDocs(resQ);
     const semesters = [];
@@ -535,7 +536,6 @@ async function loadInsights(studentId, childProfile) {
       }
     }
 
-    // Fee insight
     const feeQ = query(collection(db, "fees"), where("studentId", "==", studentId), where("status", "==", "pending"), limit(10));
     const feeSnap = await getDocs(feeQ);
     if (!feeSnap.empty) {
@@ -558,6 +558,7 @@ async function loadInsights(studentId, childProfile) {
   }
 }
 
+// =================== HEALTH ===================
 async function loadHealth(studentId) {
   const contactsList = $("list-emergency-contacts");
   const alertsList = $("list-health-alerts");

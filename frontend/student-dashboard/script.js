@@ -505,6 +505,24 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const studentSnap = await getDoc(doc(db, "students", firebaseUser.uid));
             if (studentSnap.exists()) studentData = studentSnap.data();
+          if (studentSnap.exists()) {
+    studentData = studentSnap.data();
+
+    document.getElementById("profileFullName").textContent =
+        studentData.identity?.fullName || "-";
+
+    document.getElementById("profileStudentId").textContent =
+        studentData.identity?.studentId || "-";
+
+    document.getElementById("profileRollNumber").textContent =
+        studentData.identity?.rollNumber || "-";
+
+    document.getElementById("profileRegistrationNumber").textContent =
+        studentData.identity?.registrationNumber || "-";
+
+    document.getElementById("profileEnrollmentNumber").textContent =
+        studentData.identity?.enrollmentNumber || "-";
+          }
         } catch (err) {
             console.warn("[StudentDashboard] Could not read students/{uid}:", err);
         }

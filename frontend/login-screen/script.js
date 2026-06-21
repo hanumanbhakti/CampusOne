@@ -21,13 +21,23 @@ import { auth, db, googleProvider } from "../shared/firebase-config.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. ENCAPSULATED APPLICATION STATE STORAGE & DATA DICTIONARIES ---
-    const CampusOS = {
-        // TODO: Replace tenantRegistry with Firestore campuses collection
-        tenantRegistry: {
-            "MIT-DELHI-2026": { identity: "Massachusetts Institute of Technology, Delhi", isActive: true },
-            "STANFORD-MUMBAI-2026": { identity: "Stanford Center for Advanced Computing, Mumbai", isActive: true }
-        },
+// TODO: Replace tenantRegistry with Firestore campuses collection
+tenantRegistry: {
+    "MIT-DELHI-2026": {
+        identity: "Massachusetts Institute of Technology, Delhi",
+        isActive: true
+    },
+
+    "STANFORD-MUMBAI-2026": {
+        identity: "Stanford Center for Advanced Computing, Mumbai",
+        isActive: true
+    },
+
+    "SBU-RANCHI-2026": {
+        identity: "Sarla Birla University, Ranchi",
+        isActive: true
+    }
+},
 
         // Rigid Framework Configuration Metrics
         config: {

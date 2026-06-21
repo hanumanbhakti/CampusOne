@@ -283,3 +283,195 @@ svg { width: 1.1em; height: 1.1em; stroke: currentColor; stroke-width: 2; fill: 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
+
+/* =========================
+   CAMPUSONE PROFILE MODULE
+========================= */
+
+.profile-header{
+    position:relative;
+    overflow:hidden;
+    border:1px solid var(--glass-border);
+    border-radius:var(--radius-xl);
+    background:var(--glass-bg);
+    backdrop-filter:blur(20px);
+    margin-bottom:24px;
+}
+
+.profile-cover{
+    height:160px;
+    background:var(--brand-gradient);
+    opacity:.9;
+}
+
+.profile-top{
+    display:flex;
+    align-items:flex-end;
+    gap:24px;
+    padding:24px;
+    margin-top:-60px;
+}
+
+.profile-avatar{
+    width:120px;
+    height:120px;
+    border-radius:32px;
+    object-fit:cover;
+    border:4px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(12px);
+    box-shadow:0 0 30px var(--brand-glow-alpha);
+}
+
+.profile-info h2{
+    margin:0;
+    font-size:2rem;
+    font-weight:800;
+    color:var(--text-primary);
+}
+
+.profile-role{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 14px;
+    border-radius:999px;
+    margin-top:10px;
+    background:rgba(99,102,241,.18);
+    border:1px solid rgba(99,102,241,.35);
+    color:var(--brand-primary);
+    font-size:.85rem;
+    font-weight:700;
+}
+
+.profile-info p{
+    margin:6px 0;
+    color:var(--text-secondary);
+}
+
+/* Tabs */
+
+.profile-tabs{
+    display:flex;
+    gap:12px;
+    margin-bottom:24px;
+    flex-wrap:wrap;
+}
+
+.profile-tab{
+    border:1px solid var(--glass-border);
+    background:var(--glass-bg);
+    color:var(--text-secondary);
+    padding:12px 20px;
+    border-radius:14px;
+    cursor:pointer;
+    transition:.3s ease;
+}
+
+.profile-tab:hover{
+    transform:translateY(-2px);
+}
+
+.profile-tab.active{
+    background:var(--brand-gradient);
+    color:#fff;
+    box-shadow:0 0 20px var(--brand-glow-alpha);
+}
+
+/* Stats */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:18px;
+    margin-bottom:24px;
+}
+
+.stat-card{
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    border-radius:var(--radius-lg);
+    padding:24px;
+    backdrop-filter:blur(20px);
+    transition:.3s ease;
+}
+
+.stat-card:hover{
+    transform:translateY(-4px);
+}
+
+.stat-card h3{
+    margin:0;
+    font-size:2rem;
+    font-weight:800;
+    color:var(--brand-primary);
+}
+
+.stat-card p{
+    margin-top:8px;
+    color:var(--text-secondary);
+}
+
+/* Academic Snapshot */
+
+.profile-card{
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    border-radius:var(--radius-xl);
+    padding:24px;
+    backdrop-filter:blur(20px);
+}
+
+.profile-card h3{
+    margin-bottom:20px;
+    color:var(--text-primary);
+}
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
+
+.profile-grid > div{
+    padding:18px;
+    border-radius:16px;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.profile-grid label{
+    display:block;
+    margin-bottom:8px;
+    color:var(--text-muted);
+    font-size:.8rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+}
+
+.profile-grid p{
+    margin:0;
+    color:var(--text-primary);
+    font-weight:700;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .profile-top{
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+    }
+
+    .profile-avatar{
+        width:110px;
+        height:110px;
+    }
+
+    .profile-info h2{
+        font-size:1.6rem;
+    }
+
+}

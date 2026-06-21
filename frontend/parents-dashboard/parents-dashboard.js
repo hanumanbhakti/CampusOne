@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (gate && !gate.hidden) {
       gate.innerHTML = `<p style="color:#EF4444;font-weight:600;">⚠ Could not connect to Firebase.</p>
         <p style="color:#94A3B8;font-size:0.85rem;max-width:320px;text-align:center;">Check that firebase-config.js is in this folder and the console has no errors.</p>
-        <a href="../index.html" style="color:#3B82F6;margin-top:8px;">← Back to Login</a>`;
+        <a href="../login-screen/index.html" style="color:#3B82F6;margin-top:8px;">← Back to Login</a>`;
     }
   }, 8000);
 
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (gate) {
       gate.innerHTML = `<p style="color:#EF4444;font-weight:600;">⚠ Something went wrong.</p>
         <p style="color:#94A3B8;font-size:0.85rem;max-width:320px;text-align:center;">${err?.message || err}</p>
-        <a href="../index.html" style="color:#3B82F6;margin-top:8px;">← Back to Login</a>`;
+        <a href="../login-screen/index.html" style="color:#3B82F6;margin-top:8px;">← Back to Login</a>`;
       gate.hidden = false;
     }
   }).then(() => clearTimeout(safetyTimer));
@@ -60,13 +60,13 @@ async function initDashboard() {
   const shell = $("app-shell");
 
   const user = await waitForAuthReady();
-  if (!user) { window.location.href = "../index.html"; return; }
+  if (!user) { window.location.href = "../login-screen/index.html"; return; }
 
   const parentSnap = await getDoc(doc(db, "users", user.uid));
   const parentProfile = parentSnap.exists() ? parentSnap.data() : null;
 
   if (parentProfile && parentProfile.role && parentProfile.role !== "parent") {
-    window.location.href = "../index.html";
+    window.location.href = "../login-screen/index.html";
     return;
   }
 
@@ -126,7 +126,7 @@ async function initDashboard() {
 
   $("btn-logout").addEventListener("click", async () => {
     if (unsubscribeChat) unsubscribeChat();
-    try { await signOut(auth); window.location.href = "../index.html"; }
+    try { await signOut(auth); window.location.href = "../login-screen/index.html"; }
     catch (e) { console.error("Sign-out failed:", e); }
   });
 

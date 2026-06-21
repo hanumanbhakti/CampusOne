@@ -1191,6 +1191,7 @@ body { margin: 0; background: var(--color-bg); color: var(--text-primary); font-
   display: none; position: fixed; top: 16px; left: 16px; z-index: 80; background: var(--brand-gradient);
   border: none; color: #fff; width: 42px; height: 42px; border-radius: var(--radius-md);
   align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-md);
+  transition: left var(--t-normal) var(--ease-standard), top var(--t-normal) var(--ease-standard);
 }
 .hamburger-icon { width: 20px; height: 20px; }
 .hamburger-icon .bar {
@@ -1201,6 +1202,8 @@ body { margin: 0; background: var(--color-bg); color: var(--text-primary); font-
 .mobile-nav-toggle.is-open .bar-top { transform: translateY(6px) rotate(45deg); }
 .mobile-nav-toggle.is-open .bar-mid { opacity: 0; }
 .mobile-nav-toggle.is-open .bar-bot { transform: translateY(-6px) rotate(-45deg); }
+/* When sidebar is open, move the toggle into the brand row instead of overlapping the logo */
+.mobile-nav-toggle.is-open { left: calc(240px - 16px - 42px); top: 24px; }
 .sidebar-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; display: none;
 }

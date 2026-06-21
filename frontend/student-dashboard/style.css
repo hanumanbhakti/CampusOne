@@ -113,16 +113,15 @@ svg { width: 1.1em; height: 1.1em; stroke: currentColor; stroke-width: 2; fill: 
 .sidebar-brand-row { display: flex; align-items: center; justify-content: space-between; padding: 20px 18px; border-bottom: 1px solid var(--glass-border); }
 .sidebar-brand-identity { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .sidebar-logo-pod {
-.sidebar-logo-pod {
-    width: 80px;
-    height: 80px;
-    border-radius: 16px;
-    background: transparent;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: var(--brand-gradient);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: none;
+    box-shadow: 0 0 20px var(--brand-glow-alpha);
 }
 .sidebar-logo-img { width: 100%; height: 100%; object-fit: contain; border-radius: var(--radius-md); }
 .sidebar-logo-fallback { display: none; color: #fff; font-weight: 800; font-size: .85rem; letter-spacing: .03em; }

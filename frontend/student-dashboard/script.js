@@ -452,8 +452,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 7. AUTH GUARD + PROFILE LOADING ---
     function initAuthGuard() {
         onAuthStateChanged(auth, async (user) => {
-
-          alert("Auth Triggered");
           
             if (!user) {
                 window.location.href = LOGIN_ROUTE;

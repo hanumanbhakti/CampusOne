@@ -113,7 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
         CampusOS.state.currentLanguage = lang;
         const pack = translations[lang] || translations.en;
 
+        // #dynamic-greeting and #context-subtext are managed exclusively by
+        // updateGreetingDisplay() called below — skipping them here prevents
+        // the generic "welcome" string from overwriting the role-specific greeting.
+        const GREETING_MANAGED_IDS = new Set(['dynamic-greeting', 'context-subtext']);
+
         document.querySelectorAll("[data-i18n]").forEach(el => {
+            if (GREETING_MANAGED_IDS.has(el.id)) return;
             const key = el.dataset.i18n;
             if (pack[key]) {
                 el.textContent = pack[key];

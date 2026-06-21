@@ -503,10 +503,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // aggregation queries over attendance/submissions/fees, to match your schema.
         let studentData = {};
         try {
-            const studentSnap = await getDoc(doc(db, "students", firebaseUser.uid));
-            if (studentSnap.exists()) studentData = studentSnap.data();
-          
-          if (studentSnap.exists()) {
+
+          const studentSnap = await getDoc(
+    doc(db, "students", firebaseUser.uid)
+);
+
+if (studentSnap.exists()) {
     studentData = studentSnap.data();
 
     document.getElementById("profileFullName").textContent =
@@ -523,7 +525,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("profileEnrollmentNumber").textContent =
         studentData.identity?.enrollmentNumber || "-";
-          }
+}
+
+          
         } catch (err) {
             console.warn("[StudentDashboard] Could not read students/{uid}:", err);
         }

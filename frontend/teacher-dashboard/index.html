@@ -16,6 +16,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+    <style>
+      /* Smooth transitions across the teacher dashboard */
+      .sidebar-nav-list a, .icon-btn, .sidebar-logout-btn, .stat-card, .module-placeholder-back-btn,
+      .lang-node, .profile-tab, .theme-toggle-trigger, button {
+        transition: background-color .25s ease, color .25s ease, transform .2s ease,
+                    box-shadow .25s ease, border-color .25s ease, opacity .25s ease;
+      }
+      .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.18); }
+      .sidebar-logo-img { transition: transform .3s ease; }
+      .sidebar-logo-img:hover { transform: scale(1.05); }
+
+      @keyframes co-view-fade-in {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .dashboard-view.is-active-view { animation: co-view-fade-in .35s ease; }
+
+      .app-sidebar { transition: transform .3s ease, width .3s ease; }
+      .sidebar-scrim { transition: opacity .25s ease; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .sidebar-nav-list a, .icon-btn, .sidebar-logout-btn, .stat-card,
+        .app-sidebar, .sidebar-scrim, .sidebar-logo-img, .dashboard-view {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
 </head>
 <body>
 

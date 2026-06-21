@@ -552,6 +552,13 @@ document.addEventListener('DOMContentLoaded', () => {
             showNotification(t('toastNoProfile', 'Signed in. No extended profile found yet.'), "warning");
         }
 
+        // ✅ FIX: Save verified tenant to localStorage before redirecting.
+        // firebase-config.js getCurrentTenant() reads "campusone-tenant".
+        // Without this, tenant-scoped Firestore queries in dashboards always get null.
+        if (CampusOS.state.activeTenant) {
+            localStorage.setItem('campusone-tenant', CampusOS.state.activeTenant);
+        }
+
         setButtonSubmissionEngineState('resolved');
         showNotification(t('toastAuthSuccess', 'Authentication successful! Redirecting you now...'), "success");
 

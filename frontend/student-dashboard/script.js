@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
         statFees: document.getElementById("stat-fees-value"),
         statNotifications: document.getElementById("stat-notifications-value"),
         chartMount: document.getElementById("progress-chart-mount"),
-        activityList: document.getElementById("recent-activity-list")
+        activityList: document.getElementById("recent-activity-list"),
         profileView: document.getElementById("view-profile"),
     };
 
@@ -389,6 +389,7 @@ document.addEventListener("DOMContentLoaded", () => {
         activeViewKey = "dashboard-home";
         DOM.homeView.classList.add("is-active-view");
         DOM.genericView.classList.remove("is-active-view");
+        DOM.profileView.classList.remove("is-active-view");
         DOM.pageTitle.textContent = t("sidebarDashboard", "Dashboard Home");
         history.replaceState(null, "", "#dashboard-home");
         highlightActiveNav();

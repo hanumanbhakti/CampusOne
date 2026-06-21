@@ -46,6 +46,50 @@
       animation: none !important;
     }
   }
+
+  /* ===== LAYOUT EMERGENCY FIXES ===== */
+  /* Logo size — stops it from overflowing the sidebar */
+  .sidebar-logo-img { width: 40px !important; height: 40px !important; object-fit: contain !important; flex-shrink: 0; }
+  .sidebar-logo-pod { width: 40px; height: 40px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 20px 16px 16px; }
+  .brand-name { font-weight: 700; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Sidebar layout */
+  .sidebar { position: fixed; top: 0; left: 0; height: 100vh; width: 240px; background: var(--color-surface, #1E293B); 
+             display: flex; flex-direction: column; z-index: 100; overflow-y: auto; overflow-x: hidden; }
+  .sidebar-nav { display: flex; flex-direction: column; gap: 2px; padding: 0 10px; flex: 1; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; 
+              text-decoration: none; color: var(--text-secondary, #94A3B8); font-size: 0.875rem; font-weight: 500; }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .nav-item.state-active { background: var(--color-primary, #3B82F6); color: #fff; }
+
+  /* Main area offset */
+  .app-shell { display: flex; min-height: 100vh; }
+  .main-area { flex: 1; margin-left: 240px; padding: 24px; box-sizing: border-box; min-width: 0; }
+
+  /* Mobile: sidebar hidden by default */
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.mobile-open { transform: translateX(0); }
+    .main-area { margin-left: 0; padding: 16px; padding-top: 60px; }
+    .mobile-nav-toggle { display: flex; }
+  }
+
+  /* Mobile nav toggle button */
+  .mobile-nav-toggle { display: none; position: fixed; top: 12px; left: 12px; z-index: 200;
+                       background: var(--color-surface, #1E293B); border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
+                       border-radius: 8px; width: 40px; height: 40px; align-items: center; justify-content: center; cursor: pointer; }
+  .mobile-nav-toggle svg { width: 20px; height: 20px; stroke: var(--text-primary, #F8FAFC); stroke-width: 2; fill: none; }
+
+  /* Sidebar overlay */
+  .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; opacity: 0; }
+  .sidebar-overlay.show { opacity: 1; }
+
+  /* Logout button */
+  .logout-btn { display: flex; align-items: center; gap: 8px; margin: 12px; padding: 10px 12px;
+                border-radius: 8px; border: none; background: transparent; color: var(--color-danger, #EF4444);
+                cursor: pointer; font-size: 0.875rem; font-weight: 500; width: calc(100% - 24px); }
+  .logout-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; flex-shrink: 0; }
 </style>
 </head>
 <body data-theme="dark">
@@ -67,7 +111,7 @@
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
         <div class="sidebar-logo-pod">
-          <img src="/CampusOne/assets/app-icon.png" alt="CampusOne" class="sidebar-logo-img">
+          <img src="/CampusOne/assets/app-icon.png" alt="CampusOne" class="sidebar-logo-img" style="width:40px;height:40px;object-fit:contain;border-radius:10px;flex-shrink:0;">
         </div>
         <span class="brand-name">CampusOne</span>
       </div>

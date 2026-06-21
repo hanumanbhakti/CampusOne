@@ -475,3 +475,16 @@ svg { width: 1.1em; height: 1.1em; stroke: currentColor; stroke-width: 2; fill: 
     }
 
 }
+
+.profile-section{
+    display:none;
+}
+
+.profile-section.active{
+    display:block;
+}
+
+.profile-tab.active{
+    background:#2563eb;
+    color:#fff;
+}

@@ -631,3 +631,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     boot();
 });
+
+document.querySelectorAll(".profile-tab").forEach(tab => {
+
+    tab.addEventListener("click", () => {
+
+        document.querySelectorAll(".profile-tab")
+            .forEach(t => t.classList.remove("active"));
+
+        document.querySelectorAll(".profile-section")
+            .forEach(s => s.classList.remove("active"));
+
+        tab.classList.add("active");
+
+        document
+            .getElementById(
+                `profile-${tab.dataset.tab}`
+            )
+            .classList.add("active");
+    });
+
+});

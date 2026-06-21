@@ -15,7 +15,7 @@
  * Nothing is mocked. Empty collections show "No records yet".
  */
 
-import { auth, db, getCurrentTenant, waitForAuthReady } from "./firebase-config.js";
+import { auth, db, getCurrentTenant, waitForAuthReady } from "../shared/firebase-config.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
   doc, getDoc, collection, query, where, orderBy, limit, getDocs, addDoc, serverTimestamp, onSnapshot

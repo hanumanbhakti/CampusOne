@@ -20,24 +20,26 @@ import {
 import { auth, db, googleProvider } from "../shared/firebase-config.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-// TODO: Replace tenantRegistry with Firestore campuses collection
-tenantRegistry: {
-    "MIT-DELHI-2026": {
-        identity: "Massachusetts Institute of Technology, Delhi",
-        isActive: true
-    },
 
-    "STANFORD-MUMBAI-2026": {
-        identity: "Stanford Center for Advanced Computing, Mumbai",
-        isActive: true
-    },
+    // ✅ FIX: CampusOS was never declared as an object.
+    // tenantRegistry: and roleContexts: were JS labeled statements (no-ops),
+    // not object keys — so CampusOS was undefined everywhere, crashing the whole script.
+    const CampusOS = {
 
-    "SBU-RANCHI-2026": {
-        identity: "Sarla Birla University, Ranchi",
-        isActive: true
-    }
-},
+        tenantRegistry: {
+            "MIT-DELHI-2026": {
+                identity: "Massachusetts Institute of Technology, Delhi",
+                isActive: true
+            },
+            "STANFORD-MUMBAI-2026": {
+                identity: "Stanford Center for Advanced Computing, Mumbai",
+                isActive: true
+            },
+            "SBU-RANCHI-2026": {
+                identity: "Sarla Birla University, Ranchi",
+                isActive: true
+            }
+        },
 
         // Rigid Framework Configuration Metrics
         config: {
@@ -45,20 +47,19 @@ tenantRegistry: {
             sessionTimeoutDuration: 15 * 60 * 1000, // 15 Minutes Inactivity Lifecycle Limit
             maxAnalyticsLogSize: 100,              // FIFO Heap Boundary Protection
             
-            // Enterprise Grade Regex Registries
             // NOTE: this strict complexity policy is for account REGISTRATION, not for login —
             // applying it at login time would lock out real users with valid-but-simpler existing passwords.
             passwordPolicyRegex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
             emailRegex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         },
-        
-        // Role → dashboard route mapping (greetings now live in translations.roleGreetings)
-roleContexts: {
-    student: { targetRoute: "../student-dashboard/index.html" },
-    teacher: { targetRoute: "../teacher-dashboard/index.html" },
-    parent: { targetRoute: "../parents-dashboard/index.html" },
-    admin: { targetRoute: "../admin-panel/index.html" }
-},
+
+        // Role → dashboard route mapping
+        roleContexts: {
+            student: { targetRoute: "../student-dashboard/index.html" },
+            teacher: { targetRoute: "../teacher-dashboard/index.html" },
+            parent: { targetRoute: "../parents-dashboard/index.html" },
+            admin: { targetRoute: "../admin-panel/index.html" }
+        },
 
         // Global Dynamic State Variable Nodes
         state: {

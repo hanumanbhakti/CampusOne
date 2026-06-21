@@ -333,6 +333,10 @@ svg { width: 1.1em; height: 1.1em; stroke: currentColor; stroke-width: 2; fill: 
     background:linear-gradient(135deg,#2563EB,#0EA5E9);
 }
 
+.profile-avatar-initials[hidden]{
+    display:none;
+}
+
 .profile-info h2{
     margin:0;
     font-size:2rem;

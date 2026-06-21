@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         roleContexts: {
             student: { targetRoute: "../student-dashboard/index.html" },
             teacher: { targetRoute: "../teacher-dashboard/index.html" },
-            parent: { targetRoute: "../parent-dashboard/index.html" },
+            parent: { targetRoute: "../parents-dashboard/index.html" }
             admin: { targetRoute: "../admin-dashboard/index.html" }
         },
 

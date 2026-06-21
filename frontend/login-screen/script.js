@@ -43,12 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         
         // Role → dashboard route mapping (greetings now live in translations.roleGreetings)
-        roleContexts: {
-            student: { targetRoute: "../student-dashboard/index.html" },
-            teacher: { targetRoute: "../teacher-dashboard/index.html" },
-            parent: { targetRoute: "../parents-dashboard/index.html" }
-            admin: { targetRoute: "../admin-dashboard/index.html" }
-        },
+roleContexts: {
+    student: { targetRoute: "../student-dashboard/index.html" },
+    teacher: { targetRoute: "../teacher-dashboard/index.html" },
+    parent: { targetRoute: "../parents-dashboard/index.html" },
+    admin: { targetRoute: "../admin-dashboard/index.html" }
+},
 
         // Global Dynamic State Variable Nodes
         state: {

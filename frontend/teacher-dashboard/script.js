@@ -35,7 +35,7 @@ import {
 // teacher-dashboard/ in your real project tree. It currently assumes:
 //   /<login-folder>/firebase-config.js
 //   /teacher-dashboard/index.html  (this file's folder)
-import { auth, db } from "../login-screen/firebase-config.js";
+import { auth, db } from "../shared/firebase-config.js";
 
 document.addEventListener("DOMContentLoaded", () => {
 

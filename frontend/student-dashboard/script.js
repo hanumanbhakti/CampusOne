@@ -158,7 +158,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const state = {
         currentLanguage: localStorage.getItem("campusone-language") || "en",
         currentUid: null,
-        currentRole: "student"
+        currentRole: "student",
+        currentDisplayName: null
     };
 
     const translations = {
@@ -252,6 +253,8 @@ document.addEventListener("DOMContentLoaded", () => {
         chartMount: document.getElementById("progress-chart-mount"),
         activityList: document.getElementById("recent-activity-list"),
         profileView: document.getElementById("view-profile"),
+        profileAvatarImg: document.getElementById("profileAvatarImg"),
+        profileAvatarInitials: document.getElementById("profileAvatarInitials"),
     };
 
     // --- 3. THEME (shares the same localStorage key as the login screen) ---
@@ -406,7 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     DOM.profileView.classList.add("is-active-view");
 
-    DOM.pageTitle.textContent = "Student Profile";
+    DOM.pageTitle.textContent = state.currentDisplayName || t("sidebarProfile", "Profile");
 
     highlightActiveNav();
     closeMobileSidebar();
@@ -484,62 +487,84 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const displayName = userData.name || firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Student";
+        // "students" collection: holds the real identity block (fullName, studentId,
+        // rollNumber, registrationNumber, enrollmentNumber, photoURL) plus a
+        // denormalized summary (cgpa, attendancePercent, pendingAssignmentsCount,
+        // feesStatus, semesterHistory[]). Read it before touching any avatar/name
+        // UI so every student sees their own data instead of a hardcoded fallback.
+        let studentData = {};
+        try {
+            const studentSnap = await getDoc(doc(db, "students", firebaseUser.uid));
+            if (studentSnap.exists()) studentData = studentSnap.data();
+        } catch (err) {
+            console.warn("[StudentDashboard] Could not read students/{uid}:", err);
+        }
+
+        const identity = studentData.identity || {};
+
+        const displayName = identity.fullName || userData.name || firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Student";
+        state.currentDisplayName = displayName;
+
         DOM.userName.textContent = displayName;
-        DOM.userMeta.textContent = userData.rollNumber ? `#${userData.rollNumber}` : (firebaseUser.email || "");
+        DOM.userMeta.textContent = identity.rollNumber || userData.rollNumber ? `#${identity.rollNumber || userData.rollNumber}` : (firebaseUser.email || "");
         DOM.greeting.textContent = `${t("welcomeBackName", "Welcome back")}, ${displayName.split(" ")[0]}!`;
 
-        const photo = userData.photoURL || firebaseUser.photoURL;
-        if (photo) {
-            DOM.userAvatar.innerHTML = `<img src="${photo}" alt="${escapeHtml(displayName)}">`;
-        } else {
-            DOM.userAvatar.textContent = displayName.charAt(0).toUpperCase();
+        // Single source of truth for "does this student have a photo on file?" —
+        // checked once, then applied to both the topbar avatar and the big
+        // profile-page avatar so they never disagree with each other.
+        const photo = identity.photoURL || userData.photoURL || firebaseUser.photoURL;
+        applyAvatar(DOM.userAvatar, photo, displayName);
+        applyProfileAvatar(photo, displayName);
+
+        // If the profile view happens to already be open (e.g. deep-linked via
+        // #profile/personal-details on refresh), the title was set before we
+        // knew the student's name — refresh it now that we do.
+        if (DOM.pageTitle.textContent === "Student Profile" || activeViewKey?.startsWith("profile")) {
+            DOM.pageTitle.textContent = displayName;
         }
+
+        document.getElementById("profileFullName").textContent = identity.fullName || "-";
+        document.getElementById("profileStudentId").textContent = identity.studentId || "-";
+        document.getElementById("profileRollNumber").textContent = identity.rollNumber || "-";
+        document.getElementById("profileRegistrationNumber").textContent = identity.registrationNumber || "-";
+        document.getElementById("profileEnrollmentNumber").textContent = identity.enrollmentNumber || "-";
 
         DOM.bannerDate.textContent = new Intl.DateTimeFormat(state.currentLanguage === "hi" ? "hi-IN" : "en-IN", {
             weekday: "long", day: "numeric", month: "long"
         }).format(new Date());
 
-        // "students" collection: assumed to hold a denormalized summary doc keyed
-        // by uid (cgpa, attendancePercent, pendingAssignmentsCount, feesStatus,
-        // semesterHistory[]). Adjust field names below, or replace with real
-        // aggregation queries over attendance/submissions/fees, to match your schema.
-        let studentData = {};
-        try {
-
-          const studentSnap = await getDoc(
-    doc(db, "students", firebaseUser.uid)
-);
-
-if (studentSnap.exists()) {
-    studentData = studentSnap.data();
-
-    document.getElementById("profileFullName").textContent =
-        studentData.identity?.fullName || "-";
-
-    document.getElementById("profileStudentId").textContent =
-        studentData.identity?.studentId || "-";
-
-    document.getElementById("profileRollNumber").textContent =
-        studentData.identity?.rollNumber || "-";
-
-    document.getElementById("profileRegistrationNumber").textContent =
-        studentData.identity?.registrationNumber || "-";
-
-    document.getElementById("profileEnrollmentNumber").textContent =
-        studentData.identity?.enrollmentNumber || "-";
-  document.getElementById("profileAvatar").src =
-        studentData.identity?.photoURL || "../../assets/khushi.png";
-}
-
-          
-        } catch (err) {
-            console.warn("[StudentDashboard] Could not read students/{uid}:", err);
-        }
-
         renderStatCards(studentData);
         renderProgressChart(studentData.semesterHistory || []);
         loadRecentActivity(firebaseUser.uid);
+    }
+
+    // Applies a photo (if present) or initials (fallback) to a topbar-style
+    // avatar element that's just a container — used for the small circular
+    // avatar in the topbar.
+    function applyAvatar(el, photoUrl, displayName) {
+        if (photoUrl) {
+            el.innerHTML = `<img src="${photoUrl}" alt="${escapeHtml(displayName)}">`;
+        } else {
+            el.textContent = displayName.charAt(0).toUpperCase();
+        }
+    }
+
+    // Applies a photo (if present) or initials (fallback) to the big profile
+    // avatar on the Profile page, which uses a separate <img> + initials <div>
+    // pair (rather than one container) so the image keeps its own border/shadow
+    // styling instead of being rebuilt via innerHTML every time.
+    function applyProfileAvatar(photoUrl, displayName) {
+        if (!DOM.profileAvatarImg || !DOM.profileAvatarInitials) return;
+        if (photoUrl) {
+            DOM.profileAvatarImg.src = photoUrl;
+            DOM.profileAvatarImg.alt = displayName;
+            DOM.profileAvatarImg.hidden = false;
+            DOM.profileAvatarInitials.hidden = true;
+        } else {
+            DOM.profileAvatarImg.hidden = true;
+            DOM.profileAvatarInitials.hidden = false;
+            DOM.profileAvatarInitials.textContent = displayName.charAt(0).toUpperCase();
+        }
     }
 
     function renderStatCards(s) {

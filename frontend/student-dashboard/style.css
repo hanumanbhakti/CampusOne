@@ -323,6 +323,16 @@ svg { width: 1.1em; height: 1.1em; stroke: currentColor; stroke-width: 2; fill: 
     box-shadow:0 0 30px var(--brand-glow-alpha);
 }
 
+.profile-avatar-initials{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:3rem;
+    font-weight:800;
+    color:#fff;
+    background:linear-gradient(135deg,#2563EB,#0EA5E9);
+}
+
 .profile-info h2{
     margin:0;
     font-size:2rem;

@@ -1188,10 +1188,19 @@ body { margin: 0; background: var(--color-bg); color: var(--text-primary); font-
 .logout-btn:hover { background: rgba(239,68,68,0.1); }
 
 .mobile-nav-toggle {
-  display: none; position: fixed; top: 16px; left: 16px; z-index: 70; background: var(--color-surface-solid);
-  border: 1px solid var(--glass-border); color: var(--text-primary); width: 42px; height: 42px; border-radius: var(--radius-md);
-  font-size: 1.1rem; cursor: pointer;
+  display: none; position: fixed; top: 16px; left: 16px; z-index: 80; background: var(--brand-gradient);
+  border: none; color: #fff; width: 42px; height: 42px; border-radius: var(--radius-md);
+  align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-md);
 }
+.hamburger-icon { width: 20px; height: 20px; }
+.hamburger-icon .bar {
+  stroke: currentColor; stroke-width: 2.2; stroke-linecap: round;
+  transform-origin: center;
+  transition: transform var(--t-normal) var(--ease-standard), opacity var(--t-normal) var(--ease-standard);
+}
+.mobile-nav-toggle.is-open .bar-top { transform: translateY(6px) rotate(45deg); }
+.mobile-nav-toggle.is-open .bar-mid { opacity: 0; }
+.mobile-nav-toggle.is-open .bar-bot { transform: translateY(-6px) rotate(-45deg); }
 .sidebar-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; display: none;
 }
@@ -1364,14 +1373,12 @@ body { margin: 0; background: var(--color-bg); color: var(--text-primary); font-
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--brand-gradient);
+  flex-shrink: 0;
 }
 .sidebar-logo-img {
   width: 100%;
   height: 100%;
-  padding: 7px;
-  box-sizing: border-box;
-  object-fit: contain;
+  object-fit: cover;
 }
 /* Loading spinner for auth gate */
 .spinner-dot-ring-animation {

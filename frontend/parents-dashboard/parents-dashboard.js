@@ -118,9 +118,12 @@ async function initDashboard() {
   });
 
   $("btn-mobile-nav").addEventListener("click", () => {
-    $("sidebar").classList.toggle("mobile-open");
+    const isOpen = $("sidebar").classList.toggle("mobile-open");
     $("sidebar-overlay").classList.toggle("show");
     $("sidebar-overlay").hidden = !$("sidebar-overlay").classList.contains("show");
+    $("btn-mobile-nav").classList.toggle("is-open", isOpen);
+    $("btn-mobile-nav").setAttribute("aria-expanded", String(isOpen));
+    $("btn-mobile-nav").setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
   });
   $("sidebar-overlay").addEventListener("click", closeMobileSidebar);
 
@@ -199,6 +202,9 @@ function closeMobileSidebar() {
   $("sidebar").classList.remove("mobile-open");
   $("sidebar-overlay").classList.remove("show");
   $("sidebar-overlay").hidden = true;
+  $("btn-mobile-nav").classList.remove("is-open");
+  $("btn-mobile-nav").setAttribute("aria-expanded", "false");
+  $("btn-mobile-nav").setAttribute("aria-label", "Open menu");
 }
 
 // =================== ATTENDANCE ===================

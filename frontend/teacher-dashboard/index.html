@@ -1,1 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="no-js" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    <title>Teacher Dashboard – CampusOne</title>
+    <meta name="description" content="CampusOne Teacher Dashboard — attendance, marks, assignments, results, leave approval, notices and more, all in one workspace.">
+    <meta name="theme-color" content="#0F172A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ambient background — same visual language as the login screen / student dashboard -->
+    <div id="co-layer-ambient-canvas" class="env-viewport" aria-hidden="true" role="presentation">
+        <div class="mesh-overlay-gradient"></div>
+        <div class="blur-matrix-orbs">
+            <div class="orb node-primary-glowing"></div>
+            <div class="orb node-secondary-glowing"></div>
+        </div>
+    </div>
+
+    <!-- Mobile sidebar scrim -->
+    <div id="sidebar-scrim" class="sidebar-scrim" hidden></div>
+
+    <div id="app-shell" class="app-shell">
+
+        <!-- ============================= SIDEBAR ============================= -->
+        <aside id="app-sidebar" class="app-sidebar">
+            <div class="sidebar-brand-row">
+                <div class="sidebar-brand-identity">
+                    <div class="sidebar-logo-pod">
+                        <img src="/CampusOne/assets/app-icon.png" alt="CampusOne" class="sidebar-logo-img">
+                    </div>
+                    <div class="sidebar-brand-text">
+                        <span class="sidebar-brand-name">CampusOne</span>
+                        <span class="sidebar-brand-sub" data-i18n="teacherWorkspace">Teacher Workspace</span>
+                    </div>
+                </div>
+                <button type="button" id="sidebar-collapse-btn" class="sidebar-collapse-btn" aria-label="Collapse sidebar">
+                    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-search-wrap">
+                <span class="sidebar-search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+                <input type="text" id="sidebar-nav-filter" class="sidebar-search-input" placeholder="Search menu" data-i18n-placeholder="searchMenu">
+            </div>
+
+            <!-- Nav is rendered by script.js from NAV_CONFIG — data-driven, same pattern as student dashboard -->
+            <nav id="sidebar-nav-list" class="sidebar-nav-list" aria-label="Teacher dashboard navigation"></nav>
+
+            <div class="sidebar-footer">
+                <button type="button" id="sidebar-logout-btn" class="sidebar-logout-btn">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    <span data-i18n="logout">Log Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ============================= MAIN ============================= -->
+        <div id="app-main" class="app-main">
+
+            <!-- ----------------------------- TOPBAR ----------------------------- -->
+            <header class="app-topbar">
+                <button type="button" id="sidebar-toggle-btn" class="icon-btn sidebar-toggle-btn" aria-label="Toggle menu">
+                    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+
+                <div class="topbar-breadcrumb">
+                    <h1 id="page-title" class="topbar-page-title" data-i18n="sidebarDashboard">Dashboard Home</h1>
+                </div>
+
+                <div class="topbar-actions">
+                    <div class="lang-switcher-pod topbar-lang-pod" aria-label="Language Localization">
+                        <button type="button" class="lang-node state-active" data-lang-target="en" aria-current="true">EN</button>
+                        <span class="rail-separator" aria-hidden="true">|</span>
+                        <button type="button" class="lang-node" data-lang-target="hi">हि</button>
+                    </div>
+
+                    <button type="button" id="theme-toggle-trigger" class="icon-btn theme-toggle-trigger" aria-label="Toggle color theme" data-current-theme="dark">
+                        <span class="theme-icon mode-light" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+                        <span class="theme-icon mode-dark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+                    </button>
+
+                    <button type="button" id="notif-bell-btn" class="icon-btn notif-bell-btn" aria-label="Notifications">
+                        <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span id="notif-bell-badge" class="notif-bell-badge" hidden>0</span>
+                    </button>
+
+                    <div class="topbar-user-pod" id="topbar-user-pod">
+                        <div class="topbar-user-avatar" id="topbar-user-avatar">T</div>
+                        <div class="topbar-user-text">
+                            <span id="topbar-user-name" class="topbar-user-name">—</span>
+                            <span id="topbar-user-meta" class="topbar-user-meta">—</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ----------------------------- CONTENT ----------------------------- -->
+            <main id="app-content" class="app-content">
+
+                <!-- ======================= DASHBOARD HOME VIEW ======================= -->
+                <section id="view-dashboard-home" class="dashboard-view is-active-view" data-view-id="dashboard-home">
+
+                    <section class="welcome-banner-card">
+                        <div class="welcome-banner-text">
+                            <h2 id="welcome-banner-greeting" class="welcome-banner-greeting" data-i18n="welcomeBackName">Welcome back!</h2>
+                            <p id="welcome-banner-sub" class="welcome-banner-sub" data-i18n="welcomeBannerSub">Here's what's happening with your classes today.</p>
+                            <div class="welcome-banner-meta">
+                                <span id="welcome-banner-date" class="welcome-banner-date">—</span>
+                                <span class="welcome-banner-dot" aria-hidden="true">•</span>
+                                <span id="welcome-banner-role-pill" class="welcome-banner-role-pill" data-i18n="teacher">Teacher</span>
+                            </div>
+                        </div>
+                        <div class="welcome-banner-art" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        </div>
+                    </section>
+
+                    <section class="stats-grid" aria-label="Quick stats">
+                        <article class="stat-card" data-stat="students">
+                            <div class="stat-card-icon icon-tone-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                            <div class="stat-card-body">
+                                <span id="stat-students-value" class="stat-card-value">--</span>
+                                <span class="stat-card-label" data-i18n="totalStudents">Total Students</span>
+                            </div>
+                        </article>
+                        <article class="stat-card" data-stat="classes">
+                            <div class="stat-card-icon icon-tone-sky" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+                            <div class="stat-card-body">
+                                <span id="stat-classes-value" class="stat-card-value">--</span>
+                                <span class="stat-card-label" data-i18n="totalClasses">Total Classes</span>
+                            </div>
+                        </article>
+                        <article class="stat-card" data-stat="attendance-pending">
+                            <div class="stat-card-icon icon-tone-amber" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+                            <div class="stat-card-body">
+                                <span id="stat-attendance-pending-value" class="stat-card-value">--</span>
+                                <span class="stat-card-label" data-i18n="attendancePending">Attendance Pending</span>
+                            </div>
+                        </article>
+                        <article class="stat-card" data-stat="assignments">
+                            <div class="stat-card-icon icon-tone-green" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/></svg></div>
+                            <div class="stat-card-body">
+                                <span id="stat-assignments-value" class="stat-card-value">--</span>
+                                <span class="stat-card-label" data-i18n="assignmentsCreated">Assignments Created</span>
+                            </div>
+                        </article>
+                        <article class="stat-card" data-stat="notifications">
+                            <div class="stat-card-icon icon-tone-rose" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
+                            <div class="stat-card-body">
+                                <span id="stat-notifications-value" class="stat-card-value">--</span>
+                                <span class="stat-card-label" data-i18n="newNotifications">New Notifications</span>
+                            </div>
+                        </article>
+                    </section>
+
+                    <section class="content-split-grid">
+                        <article class="glass-panel chart-panel">
+                            <div class="glass-panel-head">
+                                <h3 data-i18n="feedbackRating">Feedback Rating</h3>
+                                <span class="glass-panel-head-sub" data-i18n="ratingBySemester">Average rating trend</span>
+                            </div>
+                            <div id="progress-chart-mount" class="progress-chart-mount">
+                                <p class="empty-state-text" data-i18n="noProgressData">No feedback history yet — this will populate once student feedback is collected.</p>
+                            </div>
+                        </article>
+
+                        <article class="glass-panel activity-panel">
+                            <div class="glass-panel-head">
+                                <h3 data-i18n="recentActivities">Recent Activities</h3>
+                            </div>
+                            <ul id="recent-activity-list" class="recent-activity-list">
+                                <li class="activity-skeleton"></li>
+                                <li class="activity-skeleton"></li>
+                                <li class="activity-skeleton"></li>
+                            </ul>
+                        </article>
+                    </section>
+
+                </section>
+
+                <!-- ======================= GENERIC PLACEHOLDER VIEW ======================= -->
+                <!-- Filled in dynamically by script.js whenever a not-yet-built module is opened -->
+                <section id="view-generic-module" class="dashboard-view" data-view-id="generic-module">
+                    <div class="module-placeholder-card">
+                        <div class="module-placeholder-icon" id="module-placeholder-icon" aria-hidden="true"></div>
+                        <h2 id="module-placeholder-title" class="module-placeholder-title">—</h2>
+                        <p id="module-placeholder-desc" class="module-placeholder-desc"></p>
+                        <span id="module-placeholder-phase" class="module-placeholder-phase"></span>
+                        <ul id="module-placeholder-sublist" class="module-placeholder-sublist"></ul>
+                        <button type="button" class="module-placeholder-back-btn" data-action="go-home" data-i18n="backToDashboard">Back to Dashboard</button>
+                    </div>
+                </section>
+
+                <!-- ======================= PROFILE VIEW ======================= -->
+                <!-- Mapped directly to the teachers/{uid} enterprise schema:
+                     identity{} + professional{} + contact{} + academic{} -->
+                <section id="view-profile" class="dashboard-view" data-view-id="profile">
+
+                    <!-- Profile Header -->
+                    <div class="profile-header">
+
+                        <div class="profile-cover"></div>
+
+                        <div class="profile-top">
+
+                            <img id="profileAvatarImg" src="" alt="Teacher Photo" class="profile-avatar" hidden>
+                            <div id="profileAvatarInitials" class="profile-avatar profile-avatar-initials">T</div>
+
+                            <div class="profile-info">
+
+                                <h2 id="profileFullName">Loading...</h2>
+
+                                <span class="profile-role" id="profileDesignation">
+                                    Teacher
+                                </span>
+
+                                <p>
+                                    Employee ID:
+                                    <strong id="profileEmployeeId">Loading...</strong>
+                                </p>
+
+                                <p>
+                                    Teacher Code:
+                                    <strong id="profileTeacherCode">Loading...</strong>
+                                </p>
+
+                                <p>
+                                    Department:
+                                    <strong id="profileDepartment">Loading...</strong>
+                                </p>
+
+                                <p>
+                                    Status:
+                                    <strong id="profileStatus">Loading...</strong>
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="profile-tabs">
+
+                        <button class="profile-tab active" data-tab="overview" type="button">
+                            Overview
+                        </button>
+
+                        <button class="profile-tab" data-tab="professional" type="button">
+                            Professional
+                        </button>
+
+                        <button class="profile-tab" data-tab="contact" type="button">
+                            Contact
+                        </button>
+
+                        <button class="profile-tab" data-tab="academic" type="button">
+                            Academic Load
+                        </button>
+
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="profile-content">
+
+                        <!-- Overview Section -->
+                        <div id="profile-overview" class="profile-section active">
+
+                            <div class="profile-grid">
+
+                                <div class="profile-stat-card">
+                                    <div class="profile-stat-value" id="profileStatStudents">--</div>
+                                    <div class="profile-stat-label">Students</div>
+                                </div>
+
+                                <div class="profile-stat-card">
+                                    <div class="profile-stat-value" id="profileStatClasses">--</div>
+                                    <div class="profile-stat-label">Classes</div>
+                                </div>
+
+                                <div class="profile-stat-card">
+                                    <div class="profile-stat-value" id="profileStatRating">--</div>
+                                    <div class="profile-stat-label">Avg. Rating</div>
+                                </div>
+
+                                <div class="profile-stat-card">
+                                    <div class="profile-stat-value" id="profileStatNotices">--</div>
+                                    <div class="profile-stat-label">Notices</div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Professional Section -->
+                        <div id="profile-professional" class="profile-section">
+
+                            <div class="academic-card">
+
+                                <div class="academic-row">
+                                    <span>Designation</span>
+                                    <strong id="profProfDesignation">-</strong>
+                                </div>
+
+                                <div class="academic-row">
+                                    <span>Department</span>
+                                    <strong id="profProfDepartment">-</strong>
+                                </div>
+
+                                <div class="academic-row">
+                                    <span>Specialization</span>
+                                    <strong id="profProfSpecialization">-</strong>
+                                </div>
+
+                                <div class="academic-row">
+                                    <span>Qualification</span>
+                                    <strong id="profProfQualification">-</strong>
+                                </div>
+
+                                <div class="academic-row">
+                                    <span>Experience</span>
+                                    <strong id="profProfExperience">-</strong>
+                                </div>
+
+                                <div class="academic-row">
+                                    <span>Employment Type</span>
+                                    <strong id="profProfEmploymentType">-</strong>
+                                </div>
+
+                                <div class="academic-row">
+                                    <span>Office Location</span>
+                                    <strong id="profProfOffice">-</strong>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Contact Section -->
+                        <div id="profile-contact" class="profile-section">
+
+                            <div class="academic-card">
+
+                                <div class="academic-row">
+                                    <span>Email</span>
+                                    <strong id="profContactEmail">-</strong>
+                                </div>
+
+                                <div class="academic-row">
+                                    <span>Phone</span>
+                                    <strong id="profContactPhone">-</strong>
+                                </div>
+
+                                <div class="academic-row">
+                                    <span>Alternate Phone</span>
+                                    <strong id="profContactAltPhone">-</strong>
+                                </div>
+
+                                <div class="academic-row">
+                                    <span>Address</span>
+                                    <strong id="profContactAddress">-</strong>
+                                </div>
+
+                                <div class="academic-row">
+                                    <span>Emergency Contact</span>
+                                    <strong id="profContactEmergency">-</strong>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Academic Load Section -->
+                        <div id="profile-academic" class="profile-section">
+
+                            <div id="academicLoadEmpty" class="empty-state-text" style="padding:18px 0;">
+                                No class assignments yet — this will populate once courses/sections are assigned.
+                            </div>
+
+                            <div id="academicLoadList" class="academic-load-grid" hidden></div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

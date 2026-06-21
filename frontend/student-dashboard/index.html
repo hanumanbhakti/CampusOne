@@ -257,87 +257,81 @@
     <!-- Tabs -->
     <div class="profile-tabs">
 
-        <button class="profile-tab active">
+        <button class="profile-tab active" data-tab="overview" type="button">
             Overview
         </button>
 
-        <button class="profile-tab">
+        <button class="profile-tab" data-tab="academic" type="button">
             Academic
         </button>
 
     </div>
 
-    <!-- Overview Section -->
+    <!-- Tab Content -->
     <div class="profile-content">
 
-        <!-- Quick Stats -->
-        <div class="stats-grid">
+        <!-- Overview Section -->
+        <div id="profile-overview" class="profile-section active">
 
-            <div class="stat-card">
-                <h3>92%</h3>
-                <p>Attendance</p>
-            </div>
+            <div class="profile-grid">
 
-            <div class="stat-card">
-                <h3>9.4</h3>
-                <p>CGPA</p>
-            </div>
+                <div class="profile-stat-card">
+                    <div class="profile-stat-value">92%</div>
+                    <div class="profile-stat-label">Attendance</div>
+                </div>
 
-            <div class="stat-card">
-                <h3>3</h3>
-                <p>Assignments</p>
-            </div>
+                <div class="profile-stat-card">
+                    <div class="profile-stat-value">9.4</div>
+                    <div class="profile-stat-label">CGPA</div>
+                </div>
 
-            <div class="stat-card">
-                <h3>Paid</h3>
-                <p>Fees</p>
+                <div class="profile-stat-card">
+                    <div class="profile-stat-value">Paid</div>
+                    <div class="profile-stat-label">Fees</div>
+                </div>
+
+                <div class="profile-stat-card">
+                    <div class="profile-stat-value">5</div>
+                    <div class="profile-stat-label">Notices</div>
+                </div>
+
             </div>
 
         </div>
 
-        <div id="profile-overview" class="profile-section active">
-    <!-- Overview cards -->
-</div>
+        <!-- Academic Section -->
+        <div id="profile-academic" class="profile-section">
 
-<div id="profile-academic" class="profile-section">
-    <!-- Academic cards -->
-</div>
+            <div class="academic-card">
 
-        <!-- Academic Snapshot -->
-        <div class="profile-card">
-
-            <h3>Academic Snapshot</h3>
-
-            <div class="profile-grid">
-
-                <div>
-                    <label>Course</label>
-                    <p>BCA</p>
+                <div class="academic-row">
+                    <span>Course</span>
+                    <strong>BCA</strong>
                 </div>
 
-                <div>
-                    <label>Department</label>
-                    <p>Computer Applications</p>
+                <div class="academic-row">
+                    <span>Department</span>
+                    <strong>Computer Applications</strong>
                 </div>
 
-                <div>
-                    <label>Semester</label>
-                    <p>IV</p>
+                <div class="academic-row">
+                    <span>Semester</span>
+                    <strong>IV</strong>
                 </div>
 
-                <div>
-                    <label>Section</label>
-                    <p>A</p>
+                <div class="academic-row">
+                    <span>Section</span>
+                    <strong>A</strong>
                 </div>
 
-                <div>
-                    <label>Batch</label>
-                    <p>2025-2028</p>
+                <div class="academic-row">
+                    <span>Batch</span>
+                    <strong>2024–2027</strong>
                 </div>
 
-                <div>
-                    <label>Status</label>
-                    <p>Active</p>
+                <div class="academic-row">
+                    <span>Status</span>
+                    <strong>Active</strong>
                 </div>
 
             </div>
@@ -347,7 +341,6 @@
     </div>
 
                         </section>
-                </section>
 
             </main>
         </div>

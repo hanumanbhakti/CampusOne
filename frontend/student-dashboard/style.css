@@ -378,79 +378,78 @@ svg { width: 1.1em; height: 1.1em; stroke: currentColor; stroke-width: 2; fill: 
     box-shadow:0 0 20px var(--brand-glow-alpha);
 }
 
-/* Stats */
-
-.stats-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:18px;
-    margin-bottom:24px;
+.profile-content{
+    margin-top:4px;
 }
 
-.stat-card{
-    background:var(--glass-bg);
-    border:1px solid var(--glass-border);
-    border-radius:var(--radius-lg);
-    padding:24px;
-    backdrop-filter:blur(20px);
-    transition:.3s ease;
-}
-
-.stat-card:hover{
-    transform:translateY(-4px);
-}
-
-.stat-card h3{
-    margin:0;
-    font-size:2rem;
-    font-weight:800;
-    color:var(--brand-primary);
-}
-
-.stat-card p{
-    margin-top:8px;
-    color:var(--text-secondary);
-}
-
-/* Academic Snapshot */
-
-.profile-card{
-    background:var(--glass-bg);
-    border:1px solid var(--glass-border);
-    border-radius:var(--radius-xl);
-    padding:24px;
-    backdrop-filter:blur(20px);
-}
-
-.profile-card h3{
-    margin-bottom:20px;
-    color:var(--text-primary);
-}
+/* Quick Stats — premium glass cards (scoped to profile, no name clash with dashboard .stat-card) */
 
 .profile-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:18px;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:16px;
 }
 
-.profile-grid > div{
-    padding:18px;
-    border-radius:16px;
-    background:rgba(255,255,255,.03);
-    border:1px solid rgba(255,255,255,.05);
+.profile-stat-card{
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    border-radius:20px;
+    padding:20px 18px;
+    text-align:center;
+    backdrop-filter:blur(20px);
+    box-shadow:var(--shadow-sm);
+    transition:transform var(--t-fast), box-shadow var(--t-fast);
 }
 
-.profile-grid label{
-    display:block;
-    margin-bottom:8px;
+.profile-stat-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 14px 30px rgba(0,0,0,.12);
+}
+
+.profile-stat-value{
+    font-size:1.7rem;
+    font-weight:800;
+    color:var(--brand-primary);
+    line-height:1.2;
+}
+
+.profile-stat-label{
+    margin-top:6px;
+    color:var(--text-secondary);
+    font-size:.85rem;
+}
+
+/* Academic Snapshot — premium row card */
+
+.academic-card{
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    border-radius:24px;
+    padding:8px 24px;
+    backdrop-filter:blur(20px);
+    box-shadow:var(--shadow-sm);
+}
+
+.academic-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 0;
+    border-bottom:1px solid var(--glass-border);
+}
+
+.academic-row:last-child{
+    border-bottom:none;
+}
+
+.academic-row span{
     color:var(--text-muted);
     font-size:.8rem;
     text-transform:uppercase;
-    letter-spacing:.08em;
+    letter-spacing:.06em;
 }
 
-.profile-grid p{
-    margin:0;
+.academic-row strong{
     color:var(--text-primary);
     font-weight:700;
 }
@@ -474,6 +473,12 @@ svg { width: 1.1em; height: 1.1em; stroke: currentColor; stroke-width: 2; fill: 
         font-size:1.6rem;
     }
 
+    .academic-row{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:4px;
+    }
+
 }
 
 .profile-section{
@@ -482,9 +487,4 @@ svg { width: 1.1em; height: 1.1em; stroke: currentColor; stroke-width: 2; fill: 
 
 .profile-section.active{
     display:block;
-}
-
-.profile-tab.active{
-    background:#2563eb;
-    color:#fff;
 }

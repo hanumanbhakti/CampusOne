@@ -636,6 +636,11 @@ document.querySelectorAll(".profile-tab").forEach(tab => {
 
     tab.addEventListener("click", () => {
 
+        const targetId = `profile-${tab.dataset.tab}`;
+        const targetSection = document.getElementById(targetId);
+
+        if (!targetSection) return;
+
         document.querySelectorAll(".profile-tab")
             .forEach(t => t.classList.remove("active"));
 
@@ -643,12 +648,7 @@ document.querySelectorAll(".profile-tab").forEach(tab => {
             .forEach(s => s.classList.remove("active"));
 
         tab.classList.add("active");
-
-        document
-            .getElementById(
-                `profile-${tab.dataset.tab}`
-            )
-            .classList.add("active");
+        targetSection.classList.add("active");
     });
 
 });

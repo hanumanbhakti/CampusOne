@@ -528,6 +528,8 @@ if (studentSnap.exists()) {
 
     document.getElementById("profileEnrollmentNumber").textContent =
         studentData.identity?.enrollmentNumber || "-";
+  document.getElementById("profileAvatar").src =
+        studentData.identity?.photoURL || "../../assets/khushi.png";
 }
 
           

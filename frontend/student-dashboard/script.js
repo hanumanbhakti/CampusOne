@@ -452,6 +452,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 7. AUTH GUARD + PROFILE LOADING ---
     function initAuthGuard() {
         onAuthStateChanged(auth, async (user) => {
+
+          alert("Auth Triggered");
+          
             if (!user) {
                 window.location.href = LOGIN_ROUTE;
                 return;
@@ -463,7 +466,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loadUserProfile(firebaseUser) {
 
-      alert(firebaseUser.uid);
       
         // "users" doc carries the role + shared identity fields, same pattern
         // the login screen relies on for role routing.

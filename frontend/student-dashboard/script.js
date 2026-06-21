@@ -462,6 +462,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function loadUserProfile(firebaseUser) {
+
+      alert(firebaseUser.uid);
+      
         // "users" doc carries the role + shared identity fields, same pattern
         // the login screen relies on for role routing.
         let userData = {};

@@ -2,8 +2,8 @@
  * CampusOne — Parent Dashboard Controller
  *
  * LINKING MODEL:
- *   users/{parentUid} → { role: "parent", name, email, mobile, tenant, childUids: [studentUid, ...] }
- * The dashboard reads the parent's own user doc, takes childUids[0] as the
+ *   users/{parentUid} → { role: "parent", name, email, mobile, tenant, childUid: studentUid }
+ * The dashboard reads the parent's own user doc, takes childUid as the
  * active child (multi-child switcher can be added later), then scopes every
  * query below to that studentId. Matching security rules are in firestore.rules
  * at the project root — deploy those or this data is NOT actually protected.
@@ -66,8 +66,7 @@ async function initDashboard() {
     return;
   }
 
-  const childUids = parentProfile?.childUids || [];
-  activeChildId = childUids[0] || null;
+  activeChildId = parentProfile?.childUid || null;
   activeTenant = parentProfile?.tenant || getCurrentTenant() || "—";
 
   gate.hidden = true;
@@ -83,7 +82,7 @@ async function initDashboard() {
 
   if (!activeChildId) {
     document.querySelectorAll(".dash-section").forEach((s) => {
-      s.innerHTML = `<div class="glass-panel"><p class="empty-row">No child linked to this account yet. Ask the school admin to add your child's student ID to your profile (childUids field).</p></div>`;
+      s.innerHTML = `<div class="glass-panel"><p class="empty-row">No child linked to this account yet. Ask the school admin to add your child's student ID to your profile (childUid field).</p></div>`;
     });
     return;
   }

@@ -251,6 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
         statNotifications: document.getElementById("stat-notifications-value"),
         chartMount: document.getElementById("progress-chart-mount"),
         activityList: document.getElementById("recent-activity-list")
+        profileView: document.getElementById("view-profile"),
     };
 
     // --- 3. THEME (shares the same localStorage key as the login screen) ---
@@ -395,6 +396,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function openModuleView(group, child) {
+      if (group.id === "profile") {
+
+    activeViewKey = `${group.id}/${child.id}`;
+
+    DOM.homeView.classList.remove("is-active-view");
+    DOM.genericView.classList.remove("is-active-view");
+
+    DOM.profileView.classList.add("is-active-view");
+
+    DOM.pageTitle.textContent = "Student Profile";
+
+    highlightActiveNav();
+    closeMobileSidebar();
+
+    return;
+      }
         activeViewKey = `${group.id}/${child.id}`;
         DOM.homeView.classList.remove("is-active-view");
         DOM.genericView.classList.add("is-active-view");

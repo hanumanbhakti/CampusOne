@@ -340,7 +340,7 @@ async function verifyInstitution() {
 
   if (db) {
     try {
-      const snap = await getDoc(doc(db, "institutions", code.toUpperCase()));
+      const snap = await getDoc(doc(db, "institutes", code.toUpperCase()));
       if (snap.exists()) {
         const data = snap.data();
         result.className = "verify-result success";
@@ -415,7 +415,7 @@ async function submitRequest(e) {
 
   try {
     if (db) {
-      await setDoc(doc(collection(db, "accessRequests"), requestId), payload);
+      await setDoc(doc(collection(db, "access_requests"), requestId), payload);
     } else {
       localStorage.setItem("co_last_request", JSON.stringify({ ...payload, createdAt: new Date().toISOString() }));
     }

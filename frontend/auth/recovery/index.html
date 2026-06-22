@@ -213,6 +213,11 @@
             width: 48px; height: 48px;
             fill: none; stroke: none;
         }
+        .brand-logo-img {
+            width: 72px; height: 72px;
+            object-fit: contain;
+            border-radius: var(--radius-lg);
+        }
         .brand-title-wordmark {
             font-size: 1.7rem; font-weight: 700;
             letter-spacing: -0.02em;
@@ -539,15 +544,16 @@
             <!-- Brand -->
             <div class="brand-block-conductor">
                 <div class="monogram-glass-pod-wrap" aria-hidden="true">
-                    <!-- CampusOne logo — blue gradient "co" mark -->
-                    <div class="brand-logo-icon">
+                    <img
+                        src="../../assets/app-icon.png"
+                        alt="CampusOne"
+                        class="brand-logo-img"
+                        onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                    />
+                    <!-- Fallback if image fails to load -->
+                    <div class="brand-logo-fallback" style="display:none;align-items:center;justify-content:center;">
                         <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="52" height="52">
-                            <defs>
-                                <linearGradient id="lg1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-                                    <stop stop-color="#2563EB"/>
-                                    <stop offset="1" stop-color="#0EA5E9"/>
-                                </linearGradient>
-                            </defs>
+                            <defs><linearGradient id="lg1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop stop-color="#2563EB"/><stop offset="1" stop-color="#0EA5E9"/></linearGradient></defs>
                             <rect width="64" height="64" rx="16" fill="url(#lg1)"/>
                             <text x="32" y="44" text-anchor="middle" font-family="Poppins,sans-serif" font-size="28" font-weight="700" fill="white">co</text>
                         </svg>
@@ -600,7 +606,7 @@
                     <span class="shield-caption-text" data-i18n="securityNote">Protected by CampusOne Secure Identity system</span>
                 </div>
 
-                <a class="back-nav-link" href="../login-screen/index.html">
+                <a class="back-nav-link" href="../../login-screen/index.html">
                     <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
                     <span data-i18n="backToLogin">Back to Login</span>
                 </a>
@@ -652,7 +658,7 @@
                     <span class="countdown-chip" id="countdown-display">30s</span>
                 </div>
 
-                <a class="back-nav-link" href="../login-screen/index.html" style="margin-top:18px;">
+                <a class="back-nav-link" href="../../login-screen/index.html" style="margin-top:18px;">
                     <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
                     <span data-i18n="backToLogin">Back to Login</span>
                 </a>
@@ -670,7 +676,7 @@
                 <button class="cta-gradient-button" id="btn-try-again" type="button">
                     <span class="btn-label-text" data-i18n="tryAgainBtn">Try Again</span>
                 </button>
-                <a class="btn-secondary" href="../login-screen/index.html" style="text-decoration:none!important;">
+                <a class="btn-secondary" href="../../login-screen/index.html" style="text-decoration:none!important;">
                     <span data-i18n="backToLogin">Back to Login</span>
                 </a>
             </div>
@@ -689,7 +695,7 @@
          SCRIPT
          ============================================================ -->
     <script type="module">
-        import { auth } from "../shared/firebase-config.js";
+        import { auth } from "../../shared/firebase-config.js";
         import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
         // ── i18n ────────────────────────────────────────────────────

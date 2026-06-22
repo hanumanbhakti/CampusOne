@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn: document.getElementById('cta-submit-node'),
         googleOAuthBtn: document.getElementById('btn-oauth-google'),
         capsLockWarning: document.getElementById('caps-lock-detector'),
-        demoTriggerLink: document.querySelector('.action-request-link'),
+        demoTriggerLink: document.getElementById('demo-sandbox-trigger'),
         
         // Newly Synchronized Runtime Nodes
         strengthMeterTrack: document.getElementById('password-strength-meter'),

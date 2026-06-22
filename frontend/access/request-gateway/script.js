@@ -3,17 +3,28 @@
 //  script.js — Firebase + UI Logic + i18n + Theme Engine
 // ============================================================
 
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import {
   getFirestore, doc, setDoc, getDoc, collection, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-// ---- Firebase Config (relative to project root) ----
+// ---- Firebase Config — directly embedded (no relative path issues on GitHub Pages) ----
+const firebaseConfig = {
+  apiKey: "AIzaSyDEIn2c2kgyMwwwSMyQg3DDZrNLoJF_fGw",
+  authDomain: "campusone-bd5c5.firebaseapp.com",
+  projectId: "campusone-bd5c5",
+  storageBucket: "campusone-bd5c5.firebasestorage.app",
+  messagingSenderId: "1056457840584",
+  appId: "1:1056457840584:web:313eb137ebd5aedab912fd"
+};
+
 let db;
 async function initFirebase() {
   try {
-    const mod = await import("../../login/firebase-config.js");
-    db = mod.db; // ✅ FIX: Use already-initialized db from firebase-config.js
-    console.log("[Gateway] Firebase initialised ✅");
+    // Agar app already initialized hai to reuse karo, naya mat banao
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    console.log("[Gateway] Firebase initialised ✅", app.name);
   } catch (e) {
     console.error("[Gateway] Firebase init failed:", e);
     showToast("Offline mode — submissions will be saved locally", "info");

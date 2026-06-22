@@ -429,11 +429,12 @@ async function submitRequest(e) {
       localStorage.setItem("co_last_request", JSON.stringify({ ...payload, createdAt: new Date().toISOString() }));
     }
     showSuccessScreen(requestId, fullName, role);
-  } catch (err) {
+  } } catch (err) {
   console.error("SUBMIT ERROR:", err);
   alert(err.message);
   showToast("Submission failed. Please try again.", "error");
-  }
+  btn.disabled = false;
+  btn.textContent = "Submit Request";
 }
 
 function showSuccessScreen(requestId, name, role) {

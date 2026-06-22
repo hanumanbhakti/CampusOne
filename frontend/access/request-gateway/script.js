@@ -430,10 +430,10 @@ async function submitRequest(e) {
     }
     showSuccessScreen(requestId, fullName, role);
   } catch (err) {
-console.error("SUBMIT ERROR:", err);
-alert(err.message);
-showToast("Submission failed. Please try again.", "error");
-}
+    console.error("SUBMIT ERROR:", err);
+    alert(err.message);
+    showToast("Submission failed. Please try again.", "error");
+  }
 }
 
 function showSuccessScreen(requestId, name, role) {
@@ -444,6 +444,18 @@ function showSuccessScreen(requestId, name, role) {
   document.getElementById("success-req-id").textContent = requestId;
   document.getElementById("success-name").textContent = name;
   document.getElementById("success-role").textContent = role;
+
+  // ✅ Submitted time set karo
+  document.getElementById("success-time").textContent =
+    new Date().toLocaleString();
+
+  // ✅ Institution field se value lo aur set karo
+  const institutionField = document.getElementById("form-institution");
+  if (institutionField) {
+    document.getElementById("success-institution").textContent =
+      institutionField.value;
+  }
+
   successScreen.scrollIntoView({ behavior: "smooth" });
   showToast("Request submitted successfully!", "success");
 }

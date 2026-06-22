@@ -340,36 +340,21 @@ async function verifyInstitution() {
 
   if (db) {
     try  {
-  const docRef = doc(db, "institutes", code.toUpperCase());
-
-  console.log("Searching:", code.toUpperCase());
-  console.log("Path:", docRef.path);
-
-  const snap = await getDoc(docRef);
-
-  console.log("Exists:", snap.exists());
-
-  if (snap.exists()) {
-    const data = snap.data();
-
-    console.log("Data:", data);
-
-    result.className = "verify-result success";
-    result.innerHTML = `<svg class="icon"><use href="#icon-check"/></svg> ${data.name || name} — Verified Campus Node`;
-    result.style.display = "flex";
-
-    document.getElementById("form-institution").value = data.name || name;
-
-    showToast("Institution verified successfully", "success");
-  } else {
-    console.log("Document NOT FOUND");
-    showNotFound(result, name);
-  }
-} catch (e) {
-  console.error("Firestore Error:", e);
-  alert(e.message);
-  showNotFound(result, name);
-    }
+  const d{
+const snap = await getDoc(doc(db, "institutes", code.toUpperCase()));
+if (snap.exists()) {
+const data = snap.data();
+result.className = "verify-result success";
+result.innerHTML = <svg class="icon"><use href="#icon-check"/></svg> ${data.name || name} — Verified Campus Node;
+result.style.display = "flex";
+document.getElementById("form-institution").value = data.name || name;
+showToast("Institution verified successfully", "success");
+} else {
+showNotFound(result, name);
+}
+} catch {
+showNotFound(result, name);
+}
   } else {
     if (code.toUpperCase() === "MIT2026" || code.toUpperCase() === "DEMO") {
       result.className = "verify-result success";

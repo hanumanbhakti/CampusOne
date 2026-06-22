@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             student: { targetRoute: "../student-dashboard/index.html" },
             teacher: { targetRoute: "../teacher-dashboard/index.html" },
             parent: { targetRoute: "../parents-dashboard/index.html" },
-            admin: { targetRoute: "../admin-panel/index.html" }
+            admin: { targetRoute: "../admin-dashboard/index.html" }
         },
 
         // Global Dynamic State Variable Nodes

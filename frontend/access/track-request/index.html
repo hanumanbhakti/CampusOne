@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Track Request · CampusOne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <main class="page">
+
+    <!-- Logo -->
+    <div class="brand">
+      <div class="brand-mark">CO</div>
+      <span class="brand-name">CampusOne</span>
+    </div>
+
+    <!-- Track Request Card -->
+    <section class="card glass" id="trackCard">
+      <div class="card-header">
+        <h1>Track Request</h1>
+        <p>Enter your Request ID and the email you applied with.</p>
+      </div>
+
+      <form id="trackForm" class="form">
+        <div class="field">
+          <label for="requestId">Request ID</label>
+          <input type="text" id="requestId" name="requestId" placeholder="CO-REQ-2026-8081" autocomplete="off" />
+        </div>
+
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="off" />
+        </div>
+
+        <div class="error-box" id="errorBox" hidden>
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+            <path d="M12 3.5 21 19H3L12 3.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M12 9.5v4M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span id="errorText">Something went wrong.</span>
+        </div>
+
+        <button type="submit" class="btn-primary" id="trackBtn">
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span>Track Request</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Result Card (hidden until lookup succeeds) -->
+    <section class="card glass result-card" id="resultCard" hidden>
+
+      <div class="result-top">
+        <div class="result-id-block">
+          <span class="eyebrow">Request ID</span>
+          <div class="id-row">
+            <span class="id-value" id="resultRequestId">CO-REQ-2026-8081</span>
+            <button class="icon-btn" id="copyBtn" title="Copy Request ID" type="button">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16" id="copyIcon">
+                <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M5 15V6a2 2 0 0 1 2-2h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <span class="status-badge" id="statusBadge">Pending Review</span>
+      </div>
+
+      <div class="result-details">
+        <div class="detail-row">
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16" class="detail-icon">
+            <path d="M4 21V7l8-4 8 4v14" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M9 21v-6h6v6M9 10h.01M15 10h.01M9 14h.01M15 14h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span class="detail-label">Institution</span>
+          <span class="detail-value" id="resultInstitution">—</span>
+        </div>
+
+        <div class="detail-row">
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16" class="detail-icon">
+            <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span class="detail-label">Role</span>
+          <span class="detail-value" id="resultRole">—</span>
+        </div>
+
+        <div class="detail-row">
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16" class="detail-icon">
+            <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span class="detail-label">Submitted</span>
+          <span class="detail-value" id="resultDate">—</span>
+        </div>
+      </div>
+
+      <div class="timeline" id="timeline">
+        <div class="timeline-step" data-step="submitted">
+          <span class="step-dot"></span>
+          <span class="step-label">Submitted</span>
+        </div>
+        <div class="timeline-step" data-step="under_review">
+          <span class="step-dot"></span>
+          <span class="step-label">Under Review</span>
+        </div>
+        <div class="timeline-step" data-step="documents_requested">
+          <span class="step-dot"></span>
+          <span class="step-label">Documents Requested</span>
+        </div>
+        <div class="timeline-step" data-step="approved">
+          <span class="step-dot"></span>
+          <span class="step-label">Approved</span>
+        </div>
+        <div class="timeline-step" data-step="account_created">
+          <span class="step-dot"></span>
+          <span class="step-label">Account Created</span>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

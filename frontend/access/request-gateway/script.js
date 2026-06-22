@@ -424,16 +424,15 @@ async function submitRequest(e) {
 
   try {
     if (db) {
-      await setDoc(doc(collection(db, "accessRequests"), requestId), payload);
+      await setDoc(doc(collection(db, "access_requests"), requestId), payload);
     } else {
       localStorage.setItem("co_last_request", JSON.stringify({ ...payload, createdAt: new Date().toISOString() }));
     }
     showSuccessScreen(requestId, fullName, role);
   } catch (err) {
-    console.error(err);
-    showToast("Submission failed. Please try again.", "error");
-    btn.disabled = false;
-    btn.textContent = "Submit Request";
+  console.error("SUBMIT ERROR:", err);
+  alert(err.message);
+  showToast("Submission failed. Please try again.", "error");
   }
 }
 

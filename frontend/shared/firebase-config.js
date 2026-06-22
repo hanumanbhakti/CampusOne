@@ -76,8 +76,9 @@ function getCurrentTenant() {
   return localStorage.getItem("campusone-tenant") || null;
 }
 
-// Export
+//Export 
 export {
+  firebaseConfig,
   app,
   auth,
   db,

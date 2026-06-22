@@ -337,7 +337,7 @@ async function verifyInstitution() {
   result.style.display = "none";
 
   await new Promise(r => setTimeout(r, 1800)); // Simulate network
-
+alert("DB Status = " + !!db);
   if (db) {
     try {
       const snap = await getDoc(doc(db, "institutes", code.toUpperCase()));

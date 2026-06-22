@@ -12,7 +12,7 @@ import {
 let db;
 async function initFirebase() {
   try {
-    const mod = await import("../../login/firebase-config.js");
+    const mod = await import("../../shared/firebase-config.js");
     const app = initializeApp(mod.firebaseConfig, "gateway");
     db = getFirestore(app);
     console.log("[Gateway] Firebase initialised");

@@ -1,1 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request Access — CampusOne Network</title>
+  <meta name="description" content="Request institutional access to CampusOne — the enterprise academic management platform for students, faculty and parents." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
+<!-- Neural Network Background -->
+<canvas id="neural-canvas"></canvas>
+
+<!-- Toast -->
+<div class="toast-container" id="toast-container"></div>
+
+<div class="page-wrapper">
+
+  <!-- ═══════════════ TOP BAR ═══════════════ -->
+  <nav class="topbar">
+    <a href="../../login-screen/index.html" class="logo">
+      <div class="logo-icon">C¹</div>
+      <div>
+        <div class="logo-name">CampusOne</div>
+        <div class="logo-sub">Secure Identity Platform</div>
+      </div>
+    </a>
+    <div class="topbar-badge">All Systems Operational</div>
+  </nav>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section class="hero">
+    <div class="hero-tag">🔐 Institutional Onboarding Gateway</div>
+    <h1 class="hero-title">
+      Access the<br><span>CampusOne Network</span>
+    </h1>
+    <p class="hero-sub">
+      Secure, role-based institutional onboarding for students,
+      faculty and parents. Trusted by educational institutions
+      across the network.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-pill"><span class="stat-icon">⚡</span> 99.9% Uptime</div>
+      <div class="stat-pill"><span class="stat-icon">🔒</span> 256-bit Encryption</div>
+      <div class="stat-pill"><span class="stat-icon">👥</span> Multi-Role Access</div>
+      <div class="stat-pill"><span class="stat-icon">🏫</span> Institution-Verified</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ ROLE SELECTION ═══════════════ -->
+  <section class="role-section" id="role-section">
+    <div class="section-label">Step 1 — Identify Your Role</div>
+    <h2 class="section-title">Who are you?</h2>
+    <p class="section-desc">Select your role to get a tailored access request experience.</p>
+
+    <div class="role-grid">
+      <!-- Student -->
+      <div class="role-card" data-role="Student">
+        <div class="role-check">✓</div>
+        <span class="role-emoji">🎓</span>
+        <div class="role-title">Student Access</div>
+        <div class="role-desc">Join your classroom and academic workspace. Access grades, assignments, timetable and more.</div>
+        <div class="role-cta">Select Student</div>
+      </div>
+
+      <!-- Faculty -->
+      <div class="role-card" data-role="Faculty">
+        <div class="role-check">✓</div>
+        <span class="role-emoji">👨‍🏫</span>
+        <div class="role-title">Faculty Access</div>
+        <div class="role-desc">Manage classes, attendance, assignments and communication. Full academic control panel.</div>
+        <div class="role-cta">Select Faculty</div>
+      </div>
+
+      <!-- Parent -->
+      <div class="role-card" data-role="Parent">
+        <div class="role-check">✓</div>
+        <span class="role-emoji">👨‍👩‍👧</span>
+        <div class="role-title">Parent Access</div>
+        <div class="role-desc">Track student performance, receive notices and stay connected with institution updates.</div>
+        <div class="role-cta">Select Parent</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ INSTITUTION VERIFICATION ═══════════════ -->
+  <section class="verify-section" id="verify-section">
+    <div class="section-label">Step 2 — Institution Verification</div>
+    <h2 class="section-title">Verify your institution</h2>
+    <p class="section-desc">Enter your campus details to verify institutional membership before proceeding.</p>
+
+    <div class="glass-card verify-card">
+      <div class="verify-grid">
+        <div class="field-group" style="margin-bottom:0">
+          <input type="text" id="inst-name" placeholder=" " />
+          <label for="inst-name">Institution Name</label>
+        </div>
+        <div class="field-group" style="margin-bottom:0">
+          <input type="text" id="inst-code" placeholder=" " />
+          <label for="inst-code">Campus Code</label>
+        </div>
+        <div class="field-group" style="margin-bottom:0">
+          <input type="email" id="inst-email" placeholder=" " />
+          <label for="inst-email">Institution Email</label>
+        </div>
+        <button class="btn-verify" id="btn-verify">Verify Institution</button>
+      </div>
+      <div class="verify-result" id="verify-result"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ REQUEST FORM + SECURITY ═══════════════ -->
+  <section class="form-section" id="form-section">
+    <div class="section-label">Step 3 — Personal Information</div>
+    <h2 class="section-title">Complete your request</h2>
+    <p class="section-desc">All information is encrypted and used solely for identity verification.</p>
+
+    <div class="form-layout">
+
+      <!-- Form -->
+      <div id="form-card">
+        <div class="glass-card">
+          <form id="access-form" novalidate>
+
+            <div class="form-cols">
+              <div class="field-group">
+                <input type="text" id="full-name" placeholder=" " required />
+                <label for="full-name">Full Name *</label>
+              </div>
+              <div class="field-group">
+                <input type="email" id="email" placeholder=" " required />
+                <label for="email">Email Address *</label>
+              </div>
+              <div class="field-group">
+                <input type="tel" id="phone" placeholder=" " />
+                <label for="phone">Phone Number</label>
+              </div>
+              <div class="field-group">
+                <input type="text" id="form-institution" placeholder=" " required />
+                <label for="form-institution">Institution Name *</label>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <select id="role-select" required>
+                <option value="" disabled selected></option>
+                <option value="Student">Student</option>
+                <option value="Faculty">Faculty / Teacher</option>
+                <option value="Parent">Parent / Guardian</option>
+              </select>
+              <label for="role-select">Your Role *</label>
+            </div>
+
+            <!-- Dynamic role-specific fields -->
+            <div id="dynamic-fields" class="dynamic-fields"></div>
+
+            <div class="field-group">
+              <textarea id="reason" placeholder=" " rows="3"></textarea>
+              <label for="reason">Reason for Access</label>
+            </div>
+
+            <button type="submit" class="btn-primary" id="btn-submit" style="margin-top:8px">
+              Submit Access Request →
+            </button>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- Success Screen (hidden until submitted) -->
+      <div class="success-screen glass-card" id="success-screen" style="display:none">
+        <div class="success-icon">🎉</div>
+        <h3 style="font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:10px">
+          Request Submitted
+        </h3>
+        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px">
+          Your access request has been received and is pending institutional review.
+        </p>
+        <div class="req-id-display" id="success-req-id">CO-REQ-2026-0000</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-top:16px">
+          Save this ID to track your request status.<br>
+          <strong id="success-name" style="color:var(--text-primary)"></strong> — 
+          <span id="success-role" style="color:var(--teal)"></span>
+        </p>
+        <button class="btn-secondary" style="margin-top:28px;max-width:260px"
+          onclick="document.getElementById('status-section').scrollIntoView({behavior:'smooth'})">
+          Track Request Status ↓
+        </button>
+      </div>
+
+      <!-- Security Card -->
+      <div>
+        <div class="security-card">
+          <div class="security-card-title">🛡️ Identity Verification</div>
+          <div class="security-feature">
+            <div class="sf-icon">✉️</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--text-primary)">Email Verification</div>
+              <div style="font-size:12px;color:var(--text-secondary)">OTP confirmation on approval</div>
+            </div>
+            <div class="sf-check">✓</div>
+          </div>
+          <div class="security-feature">
+            <div class="sf-icon">🔍</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--text-primary)">Duplicate Detection</div>
+              <div style="font-size:12px;color:var(--text-secondary)">Single account per identity</div>
+            </div>
+            <div class="sf-check">✓</div>
+          </div>
+          <div class="security-feature">
+            <div class="sf-icon">🏫</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--text-primary)">Institution Validation</div>
+              <div style="font-size:12px;color:var(--text-secondary)">Campus code cross-reference</div>
+            </div>
+            <div class="sf-check">✓</div>
+          </div>
+          <div class="security-feature">
+            <div class="sf-icon">👁️</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--text-primary)">Role-Based Access</div>
+              <div style="font-size:12px;color:var(--text-secondary)">Scoped permissions per role</div>
+            </div>
+            <div class="sf-check">✓</div>
+          </div>
+          <div class="security-feature">
+            <div class="sf-icon">🔒</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--text-primary)">256-bit Encryption</div>
+              <div style="font-size:12px;color:var(--text-secondary)">End-to-end data protection</div>
+            </div>
+            <div class="sf-check">✓</div>
+          </div>
+
+          <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--glass-border);
+                      font-size:12px;color:var(--text-muted);line-height:1.6">
+            Your data is stored securely on Firebase and never shared with third parties.
+            Access is granted only after institutional verification.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════ STATUS TRACKER ═══════════════ -->
+  <section class="status-section" id="status-section">
+    <div class="section-label">Request Portal</div>
+    <h2 class="section-title">Track Existing Request</h2>
+    <p class="section-desc">Already submitted? Check the current status of your access request.</p>
+
+    <div class="glass-card" style="max-width:580px">
+      <div class="form-cols" style="gap:16px">
+        <div class="field-group" style="margin-bottom:0">
+          <input type="email" id="track-email" placeholder=" " />
+          <label for="track-email">Email Address</label>
+        </div>
+        <div class="field-group" style="margin-bottom:0">
+          <input type="text" id="track-id" placeholder=" " style="text-transform:uppercase;letter-spacing:1px" />
+          <label for="track-id">Request ID (CO-REQ-...)</label>
+        </div>
+      </div>
+      <button class="btn-secondary" id="btn-track" style="margin-top:16px">Track Status</button>
+      <div class="status-result" id="track-result"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SUPPORT GATEWAY ═══════════════ -->
+  <section class="support-section">
+    <div class="section-label">Support</div>
+    <h2 class="section-title">Support Gateway</h2>
+    <p class="section-desc">Need help? Reach out through any channel below.</p>
+
+    <div class="support-grid">
+      <a href="mailto:support@campusone.edu" class="support-card">
+        <span class="support-icon">📧</span>
+        <div class="support-title">Email Support</div>
+        <div class="support-desc">support@campusone.edu</div>
+      </a>
+      <a href="#" class="support-card">
+        <span class="support-icon">🏢</span>
+        <div class="support-title">Institution Admin</div>
+        <div class="support-desc">Contact your campus administrator</div>
+      </a>
+      <a href="#" class="support-card">
+        <span class="support-icon">💬</span>
+        <div class="support-title">Live Support</div>
+        <div class="support-desc">Available Mon–Fri, 9 AM – 6 PM</div>
+      </a>
+      <a href="#" class="support-card">
+        <span class="support-icon">📚</span>
+        <div class="support-title">Help Center</div>
+        <div class="support-desc">Guides, FAQs and documentation</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════ WHY CAMPUSONE ═══════════════ -->
+  <section class="why-section">
+    <div class="section-label">Platform</div>
+    <h2 class="section-title">Why CampusOne?</h2>
+    <p class="section-desc">Enterprise-grade infrastructure built for modern educational institutions.</p>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🔐</div>
+        <div class="why-title">End-to-End Encryption</div>
+        <div class="why-desc">All data encrypted at rest and in transit using AES-256. Zero-knowledge architecture.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">☁️</div>
+        <div class="why-title">Cloud Synchronisation</div>
+        <div class="why-desc">Real-time sync across all devices. Access your workspace from anywhere, anytime.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏗️</div>
+        <div class="why-title">Multi-Tenant Architecture</div>
+        <div class="why-desc">Complete data isolation between institutions. Each campus is a secure, independent node.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔔</div>
+        <div class="why-title">Real-Time Notifications</div>
+        <div class="why-desc">Push alerts for grades, attendance, assignments and announcements.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⚙️</div>
+        <div class="why-title">Academic Workflow Automation</div>
+        <div class="why-desc">Automated timetables, exam schedules, fee reminders and report generation.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤝</div>
+        <div class="why-title">Parent Communication Hub</div>
+        <div class="why-desc">Seamless parent–teacher communication with structured progress tracking.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">CampusOne Secure Identity Platform</div>
+        <div class="footer-sub">Institutional access management for the modern campus</div>
+      </div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Security Center</a>
+        <a href="#">Status Page</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 CampusOne. All rights reserved.</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="version-tag">v1.0</span>
+        <span style="color:var(--success);font-size:11px">● Secure Connection</span>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-wrapper -->
+
+<script type="module" src="script.js"></script>
+</body>
+</html>

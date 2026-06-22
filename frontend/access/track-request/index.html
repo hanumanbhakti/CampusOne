@@ -6,133 +6,994 @@
 <title>Track Request · CampusOne</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css" />
+
+<style>
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --brand:       #3B6BF7;
+  --brand-light: #6B93FF;
+  --brand-dim:   rgba(59,107,247,.12);
+  --surface:     rgba(255,255,255,.07);
+  --surface-hov: rgba(255,255,255,.11);
+  --border:      rgba(255,255,255,.10);
+  --text-1:      #F1F3FF;
+  --text-2:      #9BA4C0;
+  --text-3:      #6B7494;
+  --danger:      #FF5370;
+  --danger-bg:   rgba(255,83,112,.10);
+  --success:     #2DD4A0;
+  --success-bg:  rgba(45,212,160,.10);
+  --warn:        #F9A825;
+  --warn-bg:     rgba(249,168,37,.10);
+  --info:        #38BDF8;
+  --info-bg:     rgba(56,189,248,.10);
+  --radius:      16px;
+  --radius-sm:   10px;
+  --transition:  .2s cubic-bezier(.4,0,.2,1);
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #080C1A;
+  color: var(--text-1);
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px 80px;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   BACKGROUND GLOW
+   ============================================================ */
+.bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-glow-1 {
+  width: 520px; height: 520px;
+  background: radial-gradient(circle, rgba(59,107,247,.22) 0%, transparent 70%);
+  top: -120px; left: -160px;
+}
+.bg-glow-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(45,212,160,.10) 0%, transparent 70%);
+  bottom: 0; right: -100px;
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.page {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ============================================================
+   BRAND
+   ============================================================ */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px;
+}
+.brand-mark {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; letter-spacing: .5px;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(59,107,247,.4);
+}
+.brand-name {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -.3px;
+  color: var(--text-1);
+}
+
+/* ============================================================
+   GLASS CARD
+   ============================================================ */
+.card {
+  border-radius: var(--radius);
+  padding: 28px 24px;
+}
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 40px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* ============================================================
+   CARD HEADER
+   ============================================================ */
+.card-header { margin-bottom: 24px; }
+.card-header h1 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+  color: var(--text-1);
+  line-height: 1.2;
+}
+.card-header p {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   FORM
+   ============================================================ */
+.form { display: flex; flex-direction: column; gap: 14px; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: .2px;
+}
+.field input {
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  color: var(--text-1);
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+  width: 100%;
+}
+.field input::placeholder { color: var(--text-3); }
+.field input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(59,107,247,.18);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 20px;
+  margin-top: 4px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 4px 18px rgba(59,107,247,.38);
+  letter-spacing: -.1px;
+}
+.btn-primary:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(59,107,247,.45); }
+.btn-primary:active:not(:disabled) { transform: translateY(0); }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+  letter-spacing: -.1px;
+}
+.btn-secondary:hover {
+  background: var(--surface-hov);
+  color: var(--text-1);
+  border-color: rgba(255,255,255,.18);
+}
+
+.icon-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+  flex-shrink: 0;
+}
+.icon-btn:hover { background: var(--surface-hov); color: var(--text-1); }
+
+/* ============================================================
+   ERROR BOX
+   ============================================================ */
+.error-box {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-bg);
+  border: 1px solid rgba(255,83,112,.22);
+  color: var(--danger);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.error-box[hidden] { display: none; }
+
+/* ============================================================
+   RESULT CARD
+   ============================================================ */
+.result-card[hidden] { display: none; }
+
+/* Top row: ID + badge */
+.result-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.result-id-block { display: flex; flex-direction: column; gap: 4px; }
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.id-row { display: flex; align-items: center; gap: 8px; }
+.id-value {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  color: var(--brand-light);
+}
+
+/* Applicant name */
+.applicant-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.applicant-name[hidden] { display: none; }
+.applicant-name svg { color: var(--text-3); flex-shrink: 0; }
+
+/* Status badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.status-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .8;
+  flex-shrink: 0;
+}
+.badge-pending   { background: var(--warn-bg);    color: var(--warn);    border: 1px solid rgba(249,168,37,.22); }
+.badge-review    { background: var(--info-bg);     color: var(--info);    border: 1px solid rgba(56,189,248,.22); }
+.badge-docs      { background: var(--warn-bg);     color: var(--warn);    border: 1px solid rgba(249,168,37,.22); }
+.badge-approved  { background: var(--success-bg);  color: var(--success); border: 1px solid rgba(45,212,160,.22); }
+.badge-created   { background: var(--brand-dim);   color: var(--brand-light); border: 1px solid rgba(59,107,247,.22); }
+.badge-rejected  { background: var(--danger-bg);   color: var(--danger);  border: 1px solid rgba(255,83,112,.22); }
+
+/* ============================================================
+   DETAIL ROWS
+   ============================================================ */
+.result-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-icon { color: var(--text-3); flex-shrink: 0; }
+.detail-label {
+  font-size: 13px;
+  color: var(--text-2);
+  flex: 0 0 90px;
+}
+.detail-value {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-left: auto;
+  text-align: right;
+}
+
+/* ============================================================
+   TIMELINE
+   ============================================================ */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 22px;
+  position: relative;
+}
+
+.timeline-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 10px 0;
+  position: relative;
+}
+
+/* Vertical line between dots */
+.timeline-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 28px;
+  width: 2px;
+  height: calc(100% - 10px);
+  background: var(--border);
+  border-radius: 1px;
+  transition: background var(--transition);
+}
+.timeline-step.done:not(:last-child)::after,
+.timeline-step.active:not(:last-child)::after {
+  background: var(--brand);
+}
+
+.step-dot {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: transparent;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-step.done .step-dot {
+  background: var(--brand);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(59,107,247,.2);
+}
+.timeline-step.active .step-dot {
+  background: var(--brand-light);
+  border-color: var(--brand-light);
+  box-shadow: 0 0 0 4px rgba(107,147,255,.25);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 4px rgba(107,147,255,.25); }
+  50%      { box-shadow: 0 0 0 7px rgba(107,147,255,.10); }
+}
+
+.step-content { display: flex; flex-direction: column; gap: 2px; }
+.step-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+  line-height: 1.3;
+}
+.timeline-step.done .step-label,
+.timeline-step.active .step-label { color: var(--text-1); }
+.step-meta {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0 18px;
+}
+
+/* ============================================================
+   ACTION BUTTONS AREA
+   ============================================================ */
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+}
+.action-row .btn-secondary { flex: 1; }
+
+/* Support link */
+.support-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-3);
+  text-decoration: none;
+  padding: 8px;
+  border-radius: 8px;
+  transition: color var(--transition);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit;
+  width: 100%;
+}
+.support-link:hover { color: var(--brand-light); }
+
+/* ============================================================
+   LOADING SPINNER
+   ============================================================ */
+.spinner {
+  width: 17px; height: 17px;
+  border: 2px solid rgba(255,255,255,.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .65s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============================================================
+   PRINT STYLES (PDF Receipt)
+   ============================================================ */
+@media print {
+  body { background: #fff !important; color: #111 !important; padding: 0; display: block; }
+  .bg-glow, .brand, #trackCard, .result-actions, .btn-primary, .btn-secondary, .support-link, .icon-btn { display: none !important; }
+  .result-card { background: #fff !important; border: 1px solid #ddd !important; box-shadow: none !important; backdrop-filter: none !important; max-width: 100% !important; color: #111 !important; }
+  .card { padding: 24px !important; }
+  .id-value { color: #1a3fa0 !important; }
+  .eyebrow { color: #555 !important; }
+  .detail-label { color: #555 !important; }
+  .detail-value { color: #111 !important; }
+  .step-label { color: #111 !important; }
+  .step-meta { color: #555 !important; }
+  .status-badge { border: 1px solid #ccc !important; color: #333 !important; }
+  .text-2, .text-3 { color: #555 !important; }
+  .applicant-name { color: #111 !important; }
+
+  .print-header { display: block !important; }
+}
+
+.print-header {
+  display: none;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #1a3fa0;
+  padding-bottom: 14px;
+}
+.print-header h2 { font-size: 20px; color: #1a3fa0; font-weight: 800; }
+.print-header p { font-size: 12px; color: #777; margin-top: 4px; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 500px) {
+  body { padding: 24px 12px 60px; }
+  .card { padding: 22px 18px; }
+  .result-top { flex-direction: column; align-items: flex-start; }
+  .action-row { flex-direction: column; }
+}
+</style>
 </head>
 <body>
 
-  <div class="bg-glow bg-glow-1"></div>
-  <div class="bg-glow bg-glow-2"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
 
-  <main class="page">
+<main class="page">
 
-    <!-- Logo -->
-    <div class="brand">
-      <div class="brand-mark">CO</div>
-      <span class="brand-name">CampusOne</span>
+  <!-- Brand -->
+  <div class="brand">
+    <div class="brand-mark">CO</div>
+    <span class="brand-name">CampusOne</span>
+  </div>
+
+  <!-- Track Form Card -->
+  <section class="card glass" id="trackCard">
+    <div class="card-header">
+      <h1>Track Request</h1>
+      <p>Enter your Request ID and the email you used when applying.</p>
     </div>
 
-    <!-- Track Request Card -->
-    <section class="card glass" id="trackCard">
-      <div class="card-header">
-        <h1>Track Request</h1>
-        <p>Enter your Request ID and the email you applied with.</p>
+    <div class="form" id="trackForm">
+      <div class="field">
+        <label for="requestId">Request ID</label>
+        <input type="text" id="requestId" placeholder="CO-REQ-2026-8081" autocomplete="off" />
       </div>
 
-      <form id="trackForm" class="form">
-        <div class="field">
-          <label for="requestId">Request ID</label>
-          <input type="text" id="requestId" name="requestId" placeholder="CO-REQ-2026-8081" autocomplete="off" />
-        </div>
-
-        <div class="field">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="off" />
-        </div>
-
-        <div class="error-box" id="errorBox" hidden>
-          <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-            <path d="M12 3.5 21 19H3L12 3.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-            <path d="M12 9.5v4M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-          <span id="errorText">Something went wrong.</span>
-        </div>
-
-        <button type="submit" class="btn-primary" id="trackBtn">
-          <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
-            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-          <span>Track Request</span>
-        </button>
-      </form>
-    </section>
-
-    <!-- Result Card (hidden until lookup succeeds) -->
-    <section class="card glass result-card" id="resultCard" hidden>
-
-      <div class="result-top">
-        <div class="result-id-block">
-          <span class="eyebrow">Request ID</span>
-          <div class="id-row">
-            <span class="id-value" id="resultRequestId">CO-REQ-2026-8081</span>
-            <button class="icon-btn" id="copyBtn" title="Copy Request ID" type="button">
-              <svg viewBox="0 0 24 24" fill="none" width="16" height="16" id="copyIcon">
-                <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
-                <path d="M5 15V6a2 2 0 0 1 2-2h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <span class="status-badge" id="statusBadge">Pending Review</span>
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="off" />
       </div>
 
-      <div class="result-details">
-        <div class="detail-row">
-          <svg viewBox="0 0 24 24" fill="none" width="16" height="16" class="detail-icon">
-            <path d="M4 21V7l8-4 8 4v14" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-            <path d="M9 21v-6h6v6M9 10h.01M15 10h.01M9 14h.01M15 14h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-          <span class="detail-label">Institution</span>
-          <span class="detail-value" id="resultInstitution">—</span>
-        </div>
-
-        <div class="detail-row">
-          <svg viewBox="0 0 24 24" fill="none" width="16" height="16" class="detail-icon">
-            <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-          <span class="detail-label">Role</span>
-          <span class="detail-value" id="resultRole">—</span>
-        </div>
-
-        <div class="detail-row">
-          <svg viewBox="0 0 24 24" fill="none" width="16" height="16" class="detail-icon">
-            <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-          <span class="detail-label">Submitted</span>
-          <span class="detail-value" id="resultDate">—</span>
-        </div>
+      <div class="error-box" id="errorBox" hidden>
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+          <path d="M12 3.5 21 19H3L12 3.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M12 9.5v4M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span id="errorText">Something went wrong.</span>
       </div>
 
-      <div class="timeline" id="timeline">
-        <div class="timeline-step" data-step="submitted">
-          <span class="step-dot"></span>
+      <button class="btn-primary" id="trackBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span id="trackBtnText">Track Request</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Result Card -->
+  <section class="card glass result-card" id="resultCard" hidden>
+
+    <!-- Print-only header -->
+    <div class="print-header">
+      <h2>CampusOne — Access Request Receipt</h2>
+      <p>Generated on <span id="printDate"></span></p>
+    </div>
+
+    <div class="result-top">
+      <div class="result-id-block">
+        <span class="eyebrow">Request ID</span>
+        <div class="id-row">
+          <span class="id-value" id="resultRequestId">—</span>
+          <button class="icon-btn" id="copyBtn" title="Copy Request ID" type="button">
+            <svg viewBox="0 0 24 24" fill="none" width="15" height="15" id="copyIcon">
+              <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M5 15V6a2 2 0 0 1 2-2h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <span class="status-badge badge-pending" id="statusBadge">Pending Review</span>
+    </div>
+
+    <!-- Applicant Name -->
+    <div class="applicant-name" id="applicantName" hidden>
+      <svg viewBox="0 0 24 24" fill="none" width="15" height="15">
+        <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span id="applicantNameText">—</span>
+    </div>
+
+    <!-- Detail rows -->
+    <div class="result-details">
+      <div class="detail-row">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16" class="detail-icon">
+          <path d="M4 21V7l8-4 8 4v14" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M9 21v-6h6v6M9 10h.01M15 10h.01M9 14h.01M15 14h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <span class="detail-label">Institution</span>
+        <span class="detail-value" id="resultInstitution">—</span>
+      </div>
+      <div class="detail-row">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16" class="detail-icon">
+          <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <span class="detail-label">Role</span>
+        <span class="detail-value" id="resultRole">—</span>
+      </div>
+      <div class="detail-row">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16" class="detail-icon">
+          <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <span class="detail-label">Submitted</span>
+        <span class="detail-value" id="resultDate">—</span>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline" id="timeline">
+      <div class="timeline-step" data-step="submitted">
+        <span class="step-dot"></span>
+        <div class="step-content">
           <span class="step-label">Submitted</span>
-        </div>
-        <div class="timeline-step" data-step="under_review">
-          <span class="step-dot"></span>
-          <span class="step-label">Under Review</span>
-        </div>
-        <div class="timeline-step" data-step="documents_requested">
-          <span class="step-dot"></span>
-          <span class="step-label">Documents Requested</span>
-        </div>
-        <div class="timeline-step" data-step="approved">
-          <span class="step-dot"></span>
-          <span class="step-label">Approved</span>
-        </div>
-        <div class="timeline-step" data-step="account_created">
-          <span class="step-dot"></span>
-          <span class="step-label">Account Created</span>
+          <span class="step-meta" id="meta-submitted"></span>
         </div>
       </div>
+      <div class="timeline-step" data-step="under_review">
+        <span class="step-dot"></span>
+        <div class="step-content">
+          <span class="step-label">Under Review</span>
+          <span class="step-meta" id="meta-under_review"></span>
+        </div>
+      </div>
+      <div class="timeline-step" data-step="documents_requested">
+        <span class="step-dot"></span>
+        <div class="step-content">
+          <span class="step-label">Documents Requested</span>
+          <span class="step-meta" id="meta-documents_requested"></span>
+        </div>
+      </div>
+      <div class="timeline-step" data-step="approved">
+        <span class="step-dot"></span>
+        <div class="step-content">
+          <span class="step-label">Approved</span>
+          <span class="step-meta" id="meta-approved"></span>
+        </div>
+      </div>
+      <div class="timeline-step" data-step="account_created">
+        <span class="step-dot"></span>
+        <div class="step-content">
+          <span class="step-label">Account Created</span>
+          <span class="step-meta" id="meta-account_created"></span>
+        </div>
+      </div>
+    </div>
 
-    </section>
+    <div class="divider"></div>
 
-  </main>
+    <!-- Actions -->
+    <div class="result-actions">
+      <div class="action-row">
+        <button class="btn-secondary" id="downloadBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+            <path d="M12 3v12M7 11l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 20h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          Download Receipt
+        </button>
+        <button class="btn-secondary" id="trackAnotherBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+            <path d="M4 12h16M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Track Another
+        </button>
+      </div>
 
-  <script src="script.js"></script>
+      <button class="support-link" id="supportBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" width="15" height="15">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M9.5 9.5a2.5 2.5 0 0 1 5 .8c0 1.6-2.5 2.2-2.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="12" cy="17" r=".8" fill="currentColor"/>
+        </svg>
+        Need help? Raise a support ticket
+      </button>
+    </div>
+
+  </section>
+
+</main>
+
+<script type="module">
+// ============================================================
+//  FIREBASE SETUP — apna config yahan daalo
+// ============================================================
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyDEIn2c2kgyMwwwSMyQg3DDZrNLoJF_fGw",
+  authDomain:        "campusone-bd5c5.firebaseapp.com",
+  projectId:         "campusone-bd5c5",
+  storageBucket:     "campusone-bd5c5.firebasestorage.app",
+  messagingSenderId: "1056457840584",
+  appId:             "1:1056457840584:web:313eb137ebd5aedab912fd",
+  measurementId:     "G-QD0RL1B9EH"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ============================================================
+//  STATUS CONFIG
+// ============================================================
+const STATUS_CONFIG = {
+  pending:             { label: 'Pending Review',       cls: 'badge-pending'  },
+  under_review:        { label: 'Under Review',         cls: 'badge-review'   },
+  documents_requested: { label: 'Documents Requested',  cls: 'badge-docs'     },
+  approved:            { label: 'Approved',             cls: 'badge-approved' },
+  account_created:     { label: 'Account Created',      cls: 'badge-created'  },
+  rejected:            { label: 'Rejected',             cls: 'badge-rejected' },
+};
+
+// Step order for timeline (rejected skips to end)
+const STEP_ORDER = ['submitted','under_review','documents_requested','approved','account_created'];
+
+// ============================================================
+//  DOM REFS
+// ============================================================
+const trackCard    = document.getElementById('trackCard');
+const resultCard   = document.getElementById('resultCard');
+const trackBtn     = document.getElementById('trackBtn');
+const trackBtnText = document.getElementById('trackBtnText');
+const errorBox     = document.getElementById('errorBox');
+const errorText    = document.getElementById('errorText');
+
+const elReqId       = document.getElementById('resultRequestId');
+const elBadge       = document.getElementById('statusBadge');
+const elInstitution = document.getElementById('resultInstitution');
+const elRole        = document.getElementById('resultRole');
+const elDate        = document.getElementById('resultDate');
+const elApplicant   = document.getElementById('applicantName');
+const elApplicantTx = document.getElementById('applicantNameText');
+const elPrintDate   = document.getElementById('printDate');
+
+const copyBtn        = document.getElementById('copyBtn');
+const downloadBtn    = document.getElementById('downloadBtn');
+const trackAnotherBtn= document.getElementById('trackAnotherBtn');
+const supportBtn     = document.getElementById('supportBtn');
+
+// ============================================================
+//  TRACK BUTTON
+// ============================================================
+trackBtn.addEventListener('click', async () => {
+  const reqId = document.getElementById('requestId').value.trim();
+  const email = document.getElementById('email').value.trim();
+
+  // Basic validation
+  if (!reqId || !email) {
+    showError('Please enter both your Request ID and email address.');
+    return;
+  }
+  if (!email.includes('@')) {
+    showError('Please enter a valid email address.');
+    return;
+  }
+
+  setLoading(true);
+  hideError();
+
+  try {
+    const data = await fetchRequest(reqId);
+
+    if (!data) {
+      showError('No request found with that ID. Please check and try again.');
+      setLoading(false);
+      return;
+    }
+
+    // Email verification (client-side, as per Firestore rule design)
+    const storedEmail = (data.email || data.applicantEmail || '').toLowerCase().trim();
+    if (storedEmail && storedEmail !== email.toLowerCase()) {
+      showError('The email address doesn\'t match our records for this Request ID.');
+      setLoading(false);
+      return;
+    }
+
+    renderResult(reqId, data);
+    setLoading(false);
+
+  } catch (err) {
+    console.error(err);
+    showError('Unable to fetch your request right now. Please try again in a moment.');
+    setLoading(false);
+  }
+});
+
+// Also allow Enter key
+['requestId','email'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', e => {
+    if (e.key === 'Enter') trackBtn.click();
+  });
+});
+
+// ============================================================
+//  FETCH FROM FIRESTORE
+// ============================================================
+async function fetchRequest(reqId) {
+  const snap = await getDoc(doc(db, 'access_requests', reqId.toUpperCase()));
+  if (!snap.exists()) return null;
+
+  const d = snap.data();
+
+  // Firestore Timestamp → JS Date convert karo
+  if (d.createdAt?.toDate) d.createdAt = d.createdAt.toDate();
+  if (d.timeline) {
+    Object.keys(d.timeline).forEach(k => {
+      if (d.timeline[k]?.toDate) d.timeline[k] = d.timeline[k].toDate().toISOString();
+    });
+  }
+
+  return d;
+}
+
+// ============================================================
+//  RENDER RESULT
+// ============================================================
+function renderResult(reqId, data) {
+  // IDs & basics
+  elReqId.textContent       = reqId.toUpperCase();
+  elInstitution.textContent = data.campusName  || '—';
+  elRole.textContent        = data.role        || '—';
+  elDate.textContent        = data.createdAt
+    ? new Date(data.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })
+    : '—';
+
+  // Applicant name
+  if (data.applicantName) {
+    elApplicantTx.textContent = data.applicantName;
+    elApplicant.hidden = false;
+  } else {
+    elApplicant.hidden = true;
+  }
+
+  // Status badge
+  const status = data.status || 'pending';
+  const cfg    = STATUS_CONFIG[status] || STATUS_CONFIG.pending;
+  elBadge.textContent = cfg.label;
+  elBadge.className   = 'status-badge ' + cfg.cls;
+
+  // Timeline
+  renderTimeline(status, data.timeline || {});
+
+  // Print date
+  elPrintDate.textContent = new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+
+  // Show result, hide form
+  trackCard.hidden  = false;  // keep form visible above
+  resultCard.hidden = false;
+  resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ============================================================
+//  TIMELINE RENDERER
+// ============================================================
+function renderTimeline(status, timestamps) {
+  const steps   = document.querySelectorAll('.timeline-step');
+  const statusIdx = STEP_ORDER.indexOf(status);
+
+  steps.forEach(step => {
+    const key  = step.dataset.step;
+    const idx  = STEP_ORDER.indexOf(key);
+    const meta = document.getElementById('meta-' + key);
+
+    step.classList.remove('done', 'active');
+
+    if (idx < statusIdx) {
+      step.classList.add('done');
+    } else if (idx === statusIdx) {
+      step.classList.add('active');
+    }
+
+    // Timestamp label
+    if (meta) {
+      meta.textContent = timestamps[key]
+        ? new Date(timestamps[key]).toLocaleString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })
+        : '';
+    }
+  });
+}
+
+// ============================================================
+//  COPY BUTTON
+// ============================================================
+copyBtn.addEventListener('click', async () => {
+  const val = elReqId.textContent;
+  try {
+    await navigator.clipboard.writeText(val);
+    copyBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" width="15" height="15">
+        <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`;
+    setTimeout(() => {
+      copyBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" width="15" height="15" id="copyIcon">
+          <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M5 15V6a2 2 0 0 1 2-2h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>`;
+    }, 1800);
+  } catch {
+    // Fallback: select text
+  }
+});
+
+// ============================================================
+//  DOWNLOAD RECEIPT (print as PDF)
+// ============================================================
+downloadBtn.addEventListener('click', () => {
+  window.print();
+});
+
+// ============================================================
+//  TRACK ANOTHER REQUEST
+// ============================================================
+trackAnotherBtn.addEventListener('click', () => {
+  resultCard.hidden = true;
+  document.getElementById('requestId').value = '';
+  document.getElementById('email').value     = '';
+  hideError();
+  trackCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('requestId').focus();
+});
+
+// ============================================================
+//  SUPPORT BUTTON (open mail or link)
+// ============================================================
+supportBtn.addEventListener('click', () => {
+  const reqId = elReqId.textContent || '';
+  // Replace with your actual support URL or mailto
+  const subject = encodeURIComponent('Support: CampusOne Request ' + reqId);
+  window.location.href = `mailto:support@campusone.in?subject=${subject}`;
+});
+
+// ============================================================
+//  HELPERS
+// ============================================================
+function setLoading(on) {
+  trackBtn.disabled = on;
+  if (on) {
+    trackBtnText.textContent = 'Looking up…';
+    trackBtn.insertAdjacentHTML('afterbegin', '<span class="spinner"></span>');
+  } else {
+    trackBtnText.textContent = 'Track Request';
+    const sp = trackBtn.querySelector('.spinner');
+    if (sp) sp.remove();
+  }
+}
+
+function showError(msg) {
+  errorText.textContent = msg;
+  errorBox.hidden = false;
+}
+function hideError() {
+  errorBox.hidden = true;
+}
+</script>
 </body>
 </html>

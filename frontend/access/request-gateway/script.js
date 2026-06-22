@@ -339,7 +339,7 @@ async function verifyInstitution() {
   await new Promise(r => setTimeout(r, 1800)); // Simulate network
 
   if (db) {
-    try try {
+    try  {
   const docRef = doc(db, "institutes", code.toUpperCase());
 
   console.log("Searching:", code.toUpperCase());

@@ -439,7 +439,7 @@ async function submitRequest(e) {
 function showSuccessScreen(requestId, name, role) {
   const formCard = document.getElementById("form-card");
   const successScreen = document.getElementById("success-screen");
-  formCard.style.display = "none";
+  formCard.classList.add("hidden");
   successScreen.classList.add("active");
   document.getElementById("success-req-id").textContent = requestId;
   document.getElementById("success-name").textContent = name;
@@ -458,6 +458,48 @@ function showSuccessScreen(requestId, name, role) {
 
   successScreen.scrollIntoView({ behavior: "smooth" });
   showToast("Request submitted successfully!", "success");
+}
+
+function copyRequestId() {
+  const reqId = document.getElementById("success-req-id").textContent.trim();
+  if (!reqId) return;
+
+  const btn = document.getElementById("copy-request-id");
+  const label = btn ? btn.querySelector("span") : null;
+  const originalLabel = label ? label.textContent : "";
+
+  const fallbackCopy = () => {
+    const ta = document.createElement("textarea");
+    ta.value = reqId;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (_) {}
+    ta.remove();
+  };
+
+  const onCopied = () => {
+    showToast("Request ID copied to clipboard", "success");
+    if (btn && label) {
+      btn.classList.add("copied");
+      label.textContent = "Copied!";
+      setTimeout(() => {
+        btn.classList.remove("copied");
+        label.textContent = originalLabel;
+      }, 2000);
+    }
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(reqId).then(onCopied).catch(() => {
+      fallbackCopy();
+      onCopied();
+    });
+  } else {
+    fallbackCopy();
+    onCopied();
+  }
 }
 
 // ---- Status Tracker ----
@@ -537,6 +579,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("btn-verify").addEventListener("click", verifyInstitution);
   document.getElementById("access-form").addEventListener("submit", submitRequest);
   document.getElementById("btn-track").addEventListener("click", trackRequest);
+  document.getElementById("copy-request-id").addEventListener("click", copyRequestId);
 
   document.getElementById("role-select").addEventListener("change", e => {
     selectedRole = e.target.value;

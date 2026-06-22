@@ -648,6 +648,7 @@ body {
   padding: 60px 32px;
 }
 .success-screen.active { display: block; }
+.hidden { display: none !important; }
 .success-icon {
   width: 80px; height: 80px;
   background: var(--success-dim);
@@ -707,6 +708,29 @@ body {
 .success-status-badge .icon{
   width:18px;
   height:18px;
+}
+.success-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:24px;
+}
+.success-actions .btn-secondary{
+  flex:1 1 180px;
+  width:auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.success-actions .btn-secondary .icon{
+  width:16px;
+  height:16px;
+}
+.success-actions .btn-secondary.copied{
+  color: var(--success);
+  border-color: rgba(46,204,113,0.4);
+  background: var(--success-dim);
 }
 .success-meta-card{
   margin-top:20px;

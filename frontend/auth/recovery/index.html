@@ -1,1 +1,953 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Recovery — CampusOne</title>
+    <meta name="description" content="Recover access to your CampusOne digital campus workspace." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
+    <style>
+        /* =========================================================================
+           CAMPUSONE DESIGN SYSTEM — RECOVERY PAGE
+           Tokens copied 1:1 from style.css (Gold Master v4.5)
+           ========================================================================= */
+
+        /* --- TOKENS (same as login style.css) --- */
+        :root {
+            --brand-primary:    #2563EB;
+            --brand-secondary:  #0EA5E9;
+            --brand-accent:     #3B82F6;
+            --brand-gradient:   linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
+            --brand-glow-alpha: rgba(37, 99, 235, 0.15);
+            --brand-logo-glow:  0 0 30px rgba(37,99,235,0.45), 0 0 60px rgba(14,165,233,0.2);
+
+            --color-success: #22C55E;
+            --color-warning: #F59E0B;
+            --color-danger:  #EF4444;
+
+            --color-bg:           #0F172A;
+            --color-surface:      rgba(30, 41, 59, 0.45);
+            --color-surface-solid:#1E293B;
+            --color-surface-input:rgba(15, 23, 42, 0.5);
+
+            --text-primary:   #F8FAFC;
+            --text-secondary: #CBD5E1;
+            --text-muted:     #94A3B8;
+
+            --glass-border:       rgba(255,255,255,0.08);
+            --glass-border-focus: rgba(37,99,235,0.4);
+            --glass-reflection:   linear-gradient(120deg, rgba(255,255,255,0.05), transparent);
+
+            --shadow-sm: 0 2px 8px -2px rgba(0,0,0,0.5);
+            --shadow-md: 0 12px 24px -4px rgba(0,0,0,0.4);
+            --shadow-xl: 0 25px 50px -12px rgba(0,0,0,0.6), 0 0 80px -10px rgba(37,99,235,0.15);
+
+            --radius-sm:   8px;
+            --radius-md:   12px;
+            --radius-lg:   16px;
+            --radius-xl:   24px;
+            --radius-full: 9999px;
+
+            --t-fast:   150ms;
+            --t-normal: 250ms;
+            --t-slow:   400ms;
+            --ease-standard: cubic-bezier(0.4,0,0.2,1);
+            --ease-out-back: cubic-bezier(0.34,1.56,0.64,1);
+        }
+
+        [data-theme="light"] {
+            --color-bg:           #F8FAFC;
+            --color-surface:      rgba(255,255,255,0.7);
+            --color-surface-solid:#FFFFFF;
+            --color-surface-input:rgba(241,245,249,0.9);
+            --text-primary:   #0F172A;
+            --text-secondary: #334155;
+            --text-muted:     #64748B;
+            --glass-border:       rgba(15,23,42,0.08);
+            --glass-border-focus: rgba(37,99,235,0.5);
+            --shadow-xl: 0 25px 50px -12px rgba(15,23,42,0.1), 0 0 50px rgba(37,99,235,0.05);
+            --brand-logo-glow: 0 10px 25px rgba(37,99,235,0.15);
+        }
+
+        /* --- RESET --- */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: var(--color-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { text-decoration: none !important; color: inherit; transition: color var(--t-fast) var(--ease-standard); }
+        button, input { font-family: inherit; background: none; border: none; outline: none; }
+
+        /* --- BACKGROUND ORBS (same as login) --- */
+        .env-viewport {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1; overflow: hidden;
+            background-color: var(--color-bg);
+            pointer-events: none;
+        }
+        .mesh-overlay-gradient {
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 20%, var(--color-bg) 80%);
+            z-index: 2;
+        }
+        .blur-matrix-orbs {
+            position: absolute; inset: 0;
+            filter: blur(100px); opacity: 0.6; z-index: 1;
+        }
+        .orb { position: absolute; border-radius: var(--radius-full); mix-blend-mode: screen; }
+        .orb-primary {
+            top: 15%; left: 20%; width: 450px; height: 450px;
+            background: radial-gradient(circle, rgba(37,99,235,0.3) 0%, transparent 70%);
+            animation: rotateOrbTrack 25s infinite linear;
+        }
+        .orb-secondary {
+            bottom: 10%; right: 15%; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(14,165,233,0.25) 0%, transparent 70%);
+            animation: rotateOrbTrack 30s infinite linear reverse;
+        }
+        .orb-accent {
+            top: 40%; left: 50%; width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%);
+        }
+
+        /* --- UTILITIES RAIL (theme + lang) --- */
+        #co-sys-utilities-rail {
+            position: fixed;
+            top: 24px; right: 24px;
+            display: flex; align-items: center; gap: 14px;
+            z-index: 100;
+        }
+
+        .lang-switcher-pod {
+            background: var(--color-surface);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            padding: 8px 14px;
+            border-radius: var(--radius-full);
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+        .global-lang-icon { font-size: 0.9rem; display: flex; align-items: center; }
+        .global-lang-icon svg { width: 15px; height: 15px; fill: none; stroke: var(--text-muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .lang-node {
+            font-size: 0.75rem; font-weight: 600;
+            color: var(--text-muted); cursor: pointer;
+            transition: color var(--t-fast) var(--ease-standard);
+            background: none; border: none; padding: 0;
+        }
+        .lang-node.state-active { color: var(--brand-secondary); }
+        .lang-node:hover { color: var(--text-primary); }
+        .rail-separator { color: rgba(255,255,255,0.15); font-size: 0.72rem; }
+
+        [data-theme="light"] .rail-separator { color: rgba(0,0,0,0.12); }
+
+        .theme-switch-orchestrator .theme-toggle-trigger {
+            background: var(--color-surface);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            width: 40px; height: 40px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-sm);
+            transition: transform var(--t-fast) var(--ease-out-back);
+        }
+        .theme-switch-orchestrator .theme-toggle-trigger:hover { transform: scale(1.08); }
+        .theme-icon { font-size: 1rem; display: flex; align-items: center; }
+        .theme-icon svg { width: 17px; height: 17px; fill: none; stroke: var(--text-secondary); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        [data-theme="dark"] .mode-light { display: none; }
+        [data-theme="light"] .mode-dark  { display: none; }
+
+        /* --- PAGE SCAFFOLD --- */
+        .viewport-centralizer {
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 100px 20px 40px;
+            position: relative; z-index: 10; width: 100%;
+        }
+
+        /* --- GLASS CARD --- */
+        .glass-morph-card-frame {
+            width: 100%; max-width: 480px;
+            background: var(--color-surface);
+            background-image: var(--glass-reflection);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            box-shadow: var(--shadow-xl);
+            transition: border-color var(--t-normal) var(--ease-standard);
+        }
+
+        /* --- BRAND BLOCK --- */
+        .brand-block-conductor {
+            margin-bottom: 28px;
+            display: flex; flex-direction: column;
+            align-items: center; text-align: center;
+        }
+        .monogram-glass-pod-wrap {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            width: 80px; height: 80px;
+            border-radius: var(--radius-xl);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--brand-logo-glow);
+            margin-bottom: 14px;
+        }
+        .brand-logo-icon svg {
+            width: 48px; height: 48px;
+            fill: none; stroke: none;
+        }
+        .brand-title-wordmark {
+            font-size: 1.7rem; font-weight: 700;
+            letter-spacing: -0.02em;
+            background: var(--brand-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .brand-subtitle-tagline {
+            font-size: 0.75rem; font-weight: 500;
+            color: var(--text-muted); margin-top: 2px;
+        }
+
+        /* --- VIEWS --- */
+        .view { display: none; }
+        .view.active { display: block; animation: viewIn var(--t-normal) var(--ease-standard) both; }
+        @keyframes viewIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- VIEW HEADER --- */
+        .view-heading {
+            font-size: 1.25rem; font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 6px; text-align: center;
+        }
+        .view-subheading {
+            font-size: 0.8rem; color: var(--text-secondary);
+            line-height: 1.6; text-align: center;
+            margin-bottom: 28px;
+        }
+
+        /* --- INPUT FIELD (same as login) --- */
+        .input-field-wrapper { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .field-label-text {
+            font-size: 0.75rem; font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.04em; text-transform: uppercase;
+        }
+        .input-interactive-shell { position: relative; width: 100%; display: flex; align-items: center; }
+        .field-decorator-icon {
+            position: absolute; left: 16px; font-size: 0.9rem;
+            color: var(--text-muted); pointer-events: none; z-index: 3;
+            display: flex; align-items: center;
+        }
+        .field-decorator-icon svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .form-input-node {
+            width: 100%;
+            background-color: var(--color-surface-input);
+            border: 1px solid var(--glass-border);
+            padding: 14px 16px 14px 46px;
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.88rem; font-weight: 500;
+            transition: border-color var(--t-fast) var(--ease-standard),
+                        background-color var(--t-fast) var(--ease-standard),
+                        box-shadow var(--t-fast) var(--ease-standard);
+            -webkit-appearance: none;
+        }
+        .form-input-node::placeholder { color: var(--text-muted); }
+        .form-input-node:focus {
+            border-color: var(--brand-accent);
+            background-color: rgba(15,23,42,0.7);
+            box-shadow: 0 0 20px rgba(59,130,246,0.35);
+        }
+        .form-input-node.is-invalid { border-color: var(--color-danger); }
+
+        .field-error-msg {
+            font-size: 0.75rem; color: var(--color-danger);
+            display: none; align-items: center; gap: 5px; margin-top: -4px;
+        }
+        .field-error-msg.visible { display: flex; }
+        .field-error-msg svg { width: 12px; height: 12px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* --- CTA BUTTON (same as login) --- */
+        .cta-gradient-button {
+            width: 100%;
+            background: var(--brand-gradient);
+            border-radius: var(--radius-md);
+            padding: 15px 0;
+            font-size: 0.88rem; font-weight: 600;
+            color: #FFFFFF; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+            transition: transform var(--t-fast) var(--ease-standard),
+                        box-shadow var(--t-fast) var(--ease-standard);
+        }
+        .cta-gradient-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,0.45); }
+        .cta-gradient-button:active { transform: scale(0.98); }
+        .cta-gradient-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .btn-spinner {
+            width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+        .cta-gradient-button.loading .btn-spinner { display: block; }
+        .cta-gradient-button.loading .btn-label-text { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- BACK LINK (same style as auth-link) --- */
+        .back-nav-link {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            margin-top: 20px;
+            font-size: 0.78rem; font-weight: 600;
+            color: #60A5FA; cursor: pointer;
+            transition: color var(--t-fast) var(--ease-standard);
+        }
+        .back-nav-link:hover { color: #93C5FD; text-shadow: 0 0 8px rgba(147,197,253,0.3); }
+        .back-nav-link svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* --- SUCCESS VIEW --- */
+        .success-icon-ring {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.2);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+            animation: popIn 0.4s var(--ease-out-back) both 0.05s;
+        }
+        .success-icon-ring svg { width: 26px; height: 26px; fill: none; stroke: var(--color-success); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.4); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .email-badge {
+            text-align: center; margin-bottom: 20px;
+        }
+        .email-badge span {
+            display: inline-block;
+            font-size: 0.8rem; font-weight: 600;
+            color: var(--brand-secondary);
+            background: rgba(14,165,233,0.1);
+            border: 1px solid rgba(14,165,233,0.2);
+            border-radius: var(--radius-full);
+            padding: 4px 14px;
+        }
+
+        /* Steps panel */
+        .steps-panel {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            margin-bottom: 20px;
+        }
+        .steps-panel-title {
+            font-size: 0.68rem; font-weight: 700;
+            letter-spacing: 0.07em; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 12px;
+        }
+        .step-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 9px; }
+        .step-row:last-child { margin-bottom: 0; }
+        .step-num {
+            width: 19px; height: 19px; border-radius: 50%; flex-shrink: 0;
+            background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.25);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem; font-weight: 700; color: var(--brand-secondary);
+            margin-top: 1px;
+        }
+        .step-text { font-size: 0.79rem; color: var(--text-secondary); line-height: 1.5; }
+        .step-text strong { color: var(--text-primary); font-weight: 600; }
+
+        /* Gmail button */
+        .btn-glass {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            padding: 13px 0;
+            border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            cursor: pointer;
+            transition: background var(--t-fast), border-color var(--t-fast);
+            font-size: 0.82rem; font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none !important;
+            margin-bottom: 16px;
+        }
+        .btn-glass:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); }
+        .btn-glass svg { width: 17px; height: 17px; }
+
+        /* Resend row */
+        .resend-row {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-size: 0.78rem; color: var(--text-muted);
+        }
+        .btn-resend {
+            background: none; border: none; padding: 0; cursor: pointer;
+            font-size: 0.78rem; font-weight: 600;
+            color: #60A5FA;
+            transition: color var(--t-fast);
+        }
+        .btn-resend:disabled { color: var(--text-muted); cursor: not-allowed; }
+        .btn-resend:not(:disabled):hover { color: #93C5FD; }
+        .countdown-chip {
+            font-size: 0.72rem; font-weight: 700;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.05);
+            border-radius: var(--radius-full);
+            padding: 2px 9px; min-width: 36px; text-align: center;
+        }
+
+        /* --- ERROR VIEW --- */
+        .error-icon-ring {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.2);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+            animation: popIn 0.4s var(--ease-out-back) both 0.05s;
+        }
+        .error-icon-ring svg { width: 24px; height: 24px; fill: none; stroke: var(--color-danger); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+        .btn-secondary {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            padding: 13px 0;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem; font-weight: 600;
+            color: var(--text-primary); cursor: pointer;
+            transition: background var(--t-fast), border-color var(--t-fast);
+            display: flex; align-items: center; justify-content: center;
+            margin-top: 10px;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.15); }
+
+        /* --- VAULT SHIELD (same as login) --- */
+        .vault-security-attribution-shield {
+            background: rgba(34,197,94,0.06);
+            border: 1px solid rgba(34,197,94,0.15);
+            padding: 10px 14px; border-radius: var(--radius-md);
+            display: flex; align-items: center; gap: 10px;
+            margin-top: 20px;
+        }
+        .shield-icon { font-size: 0.95rem; display: flex; }
+        .shield-icon svg { width: 15px; height: 15px; fill: none; stroke: var(--color-success); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .shield-caption-text { font-size: 0.72rem; font-weight: 500; color: var(--text-secondary); }
+
+        /* --- FOOTER --- */
+        .telemetry-metadata-anchor {
+            margin-top: 24px; text-align: center;
+        }
+        .copyright-notice {
+            font-size: 0.68rem; color: var(--text-muted);
+        }
+
+        /* --- TOAST --- */
+        #co-toast-stack-container {
+            position: fixed; bottom: 24px; right: 24px;
+            display: flex; flex-direction: column; gap: 8px;
+            z-index: 99999; pointer-events: none;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 576px) {
+            #co-sys-utilities-rail { top: 16px; right: 16px; gap: 8px; }
+            .lang-switcher-pod { padding: 6px 10px; }
+            .viewport-centralizer { padding: 90px 12px 30px; }
+            .glass-morph-card-frame { padding: 28px 16px; border-radius: var(--radius-lg); }
+            .theme-switch-orchestrator .theme-toggle-trigger { width: 44px; height: 44px; }
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes rotateOrbTrack {
+            0%   { transform: scale(1) translate(0,0); opacity: 0.6; }
+            33%  { transform: scale(1.1) translate(30px,-50px); opacity: 0.75; }
+            66%  { transform: scale(0.95) translate(-20px,20px); opacity: 0.5; }
+            100% { transform: scale(1) translate(0,0); opacity: 0.6; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background -->
+    <div class="env-viewport" aria-hidden="true">
+        <div class="blur-matrix-orbs">
+            <div class="orb orb-primary"></div>
+            <div class="orb orb-secondary"></div>
+            <div class="orb orb-accent"></div>
+        </div>
+        <div class="mesh-overlay-gradient"></div>
+    </div>
+
+    <!-- Utilities Rail: Theme + Language -->
+    <div id="co-sys-utilities-rail">
+
+        <!-- Language Switcher -->
+        <div class="lang-switcher-pod" role="group" aria-label="Language selection">
+            <span class="global-lang-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>
+            </span>
+            <button class="lang-node state-active" data-lang="en" aria-pressed="true">EN</button>
+            <span class="rail-separator" aria-hidden="true">|</span>
+            <button class="lang-node" data-lang="hi" aria-pressed="false">HI</button>
+        </div>
+
+        <!-- Theme Toggle -->
+        <div class="theme-switch-orchestrator">
+            <button class="theme-toggle-trigger" id="theme-toggle-trigger" aria-label="Toggle theme">
+                <span class="theme-icon mode-dark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+                </span>
+                <span class="theme-icon mode-light" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Page -->
+    <div class="viewport-centralizer">
+        <div class="glass-morph-card-frame" role="main">
+
+            <!-- Brand -->
+            <div class="brand-block-conductor">
+                <div class="monogram-glass-pod-wrap" aria-hidden="true">
+                    <!-- CampusOne logo — blue gradient "co" mark -->
+                    <div class="brand-logo-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="52" height="52">
+                            <defs>
+                                <linearGradient id="lg1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#2563EB"/>
+                                    <stop offset="1" stop-color="#0EA5E9"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="64" height="64" rx="16" fill="url(#lg1)"/>
+                            <text x="32" y="44" text-anchor="middle" font-family="Poppins,sans-serif" font-size="28" font-weight="700" fill="white">co</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="brand-title-wordmark" data-i18n="brandName">CampusOne</div>
+                <div class="brand-subtitle-tagline" data-i18n="tagline">Digital Campus Operating System</div>
+            </div>
+
+            <!-- ── VIEW 1: EMAIL INPUT ── -->
+            <div class="view active" id="view-input">
+                <h1 class="view-heading" data-i18n="resetTitle">Reset your password</h1>
+                <p class="view-subheading" data-i18n="resetSubtitle">
+                    Enter the email linked to your CampusOne account. We'll send a secure reset link instantly.
+                </p>
+
+                <div class="input-field-wrapper">
+                    <label class="field-label-text" for="email-input" data-i18n="emailLabel">EMAIL ADDRESS</label>
+                    <div class="input-interactive-shell">
+                        <span class="field-decorator-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </span>
+                        <input
+                            class="form-input-node"
+                            type="email"
+                            id="email-input"
+                            data-i18n-placeholder="emailPlaceholder"
+                            placeholder="yourname@institution.edu"
+                            autocomplete="email"
+                            inputmode="email"
+                            aria-required="true"
+                            aria-describedby="email-error"
+                        />
+                    </div>
+                    <p class="field-error-msg" id="email-error" role="alert" aria-live="polite">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span id="email-error-text"></span>
+                    </p>
+                </div>
+
+                <button class="cta-gradient-button" id="btn-send" type="button">
+                    <div class="btn-spinner" aria-hidden="true"></div>
+                    <span class="btn-label-text" data-i18n="sendBtn">Send Reset Link</span>
+                </button>
+
+                <div class="vault-security-attribution-shield">
+                    <span class="shield-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </span>
+                    <span class="shield-caption-text" data-i18n="securityNote">Protected by CampusOne Secure Identity system</span>
+                </div>
+
+                <a class="back-nav-link" href="../login-screen/index.html">
+                    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                    <span data-i18n="backToLogin">Back to Login</span>
+                </a>
+            </div>
+
+            <!-- ── VIEW 2: SUCCESS ── -->
+            <div class="view" id="view-success">
+                <div class="success-icon-ring" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+                </div>
+                <h2 class="view-heading" data-i18n="successTitle">Reset link sent!</h2>
+                <p class="view-subheading" data-i18n="successSubtitle">
+                    Check your inbox. The link expires in 1 hour.
+                </p>
+                <div class="email-badge">
+                    <span id="sent-email-display"></span>
+                </div>
+
+                <div class="steps-panel">
+                    <div class="steps-panel-title" data-i18n="stepsTitle">WHAT TO DO NEXT</div>
+                    <div class="step-row">
+                        <div class="step-num">1</div>
+                        <div class="step-text"><strong data-i18n="step1bold">Open Inbox</strong> — <span data-i18n="step1rest">email arrives within 1–2 minutes.</span></div>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-num">2</div>
+                        <div class="step-text"><strong data-i18n="step2bold">Check Spam</strong> — <span data-i18n="step2rest">if you don't see it in inbox.</span></div>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-num">3</div>
+                        <div class="step-text"><strong data-i18n="step3bold">Click Reset Link</strong> — <span data-i18n="step3rest">valid for 1 hour only.</span></div>
+                    </div>
+                    <div class="step-row">
+                        <div class="step-num">4</div>
+                        <div class="step-text"><strong data-i18n="step4bold">Create New Password</strong> — <span data-i18n="step4rest">then sign back in.</span></div>
+                    </div>
+                </div>
+
+                <a class="btn-glass" href="https://mail.google.com" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 6c0-1.1-.9-2-2-2H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z" fill="#EA4335"/>
+                    </svg>
+                    <span data-i18n="openGmail">Open Gmail</span>
+                </a>
+
+                <div class="resend-row">
+                    <span data-i18n="didntReceive">Didn't receive it?</span>
+                    <button class="btn-resend" id="btn-resend" disabled type="button" data-i18n="resendBtn">Resend</button>
+                    <span class="countdown-chip" id="countdown-display">30s</span>
+                </div>
+
+                <a class="back-nav-link" href="../login-screen/index.html" style="margin-top:18px;">
+                    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                    <span data-i18n="backToLogin">Back to Login</span>
+                </a>
+            </div>
+
+            <!-- ── VIEW 3: ERROR ── -->
+            <div class="view" id="view-error">
+                <div class="error-icon-ring" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <h2 class="view-heading" data-i18n="errorTitle">Something went wrong</h2>
+                <p class="view-subheading" id="error-message-text" data-i18n="errorMsg">
+                    We couldn't send the reset email. Please check your connection and try again.
+                </p>
+                <button class="cta-gradient-button" id="btn-try-again" type="button">
+                    <span class="btn-label-text" data-i18n="tryAgainBtn">Try Again</span>
+                </button>
+                <a class="btn-secondary" href="../login-screen/index.html" style="text-decoration:none!important;">
+                    <span data-i18n="backToLogin">Back to Login</span>
+                </a>
+            </div>
+
+        </div><!-- /.glass-morph-card-frame -->
+
+        <div class="telemetry-metadata-anchor">
+            <p class="copyright-notice">© 2026 CampusOne · <span data-i18n="tagline">Digital Campus Operating System</span></p>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="co-toast-stack-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- ============================================================
+         SCRIPT
+         ============================================================ -->
+    <script type="module">
+        import { auth } from "../shared/firebase-config.js";
+        import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+        // ── i18n ────────────────────────────────────────────────────
+        const translations = {
+            en: {
+                brandName: "CampusOne",
+                tagline: "Digital Campus Operating System",
+                resetTitle: "Reset your password",
+                resetSubtitle: "Enter the email linked to your CampusOne account. We'll send a secure reset link instantly.",
+                emailLabel: "EMAIL ADDRESS",
+                emailPlaceholder: "yourname@institution.edu",
+                sendBtn: "Send Reset Link",
+                securityNote: "Protected by CampusOne Secure Identity system",
+                backToLogin: "Back to Login",
+                successTitle: "Reset link sent!",
+                successSubtitle: "Check your inbox. The link expires in 1 hour.",
+                stepsTitle: "WHAT TO DO NEXT",
+                step1bold: "Open Inbox", step1rest: "email arrives within 1–2 minutes.",
+                step2bold: "Check Spam", step2rest: "if you don't see it in inbox.",
+                step3bold: "Click Reset Link", step3rest: "valid for 1 hour only.",
+                step4bold: "Create New Password", step4rest: "then sign back in.",
+                openGmail: "Open Gmail",
+                didntReceive: "Didn't receive it?",
+                resendBtn: "Resend",
+                errorTitle: "Something went wrong",
+                errorMsg: "We couldn't send the reset email. Please check your connection and try again.",
+                tryAgainBtn: "Try Again",
+                errRequired: "Please enter your email address.",
+                errInvalid: "Please enter a valid email address.",
+                errTooMany: "Too many attempts. Wait a few minutes and try again.",
+                errGeneric: "Failed to send reset email. Please try again.",
+                toastResent: "Reset link resent successfully.",
+                toastResendFail: "Failed to resend. Please try again.",
+            },
+            hi: {
+                brandName: "कैम्पसवन",
+                tagline: "डिजिटल कैंपस ऑपरेटिंग सिस्टम",
+                resetTitle: "पासवर्ड रीसेट करें",
+                resetSubtitle: "अपने CampusOne खाते से जुड़ा ईमेल दर्ज करें। हम तुरंत एक सुरक्षित रीसेट लिंक भेजेंगे।",
+                emailLabel: "ईमेल पता",
+                emailPlaceholder: "yourname@institution.edu",
+                sendBtn: "रीसेट लिंक भेजें",
+                securityNote: "CampusOne सुरक्षित पहचान प्रणाली द्वारा सुरक्षित",
+                backToLogin: "लॉगिन पर वापस जाएं",
+                successTitle: "रीसेट लिंक भेजा गया!",
+                successSubtitle: "अपना इनबॉक्स जांचें। लिंक 1 घंटे में समाप्त हो जाएगा।",
+                stepsTitle: "आगे क्या करें",
+                step1bold: "इनबॉक्स खोलें", step1rest: "ईमेल 1–2 मिनट में आ जाएगा।",
+                step2bold: "स्पैम जांचें", step2rest: "अगर इनबॉक्स में नहीं दिखा।",
+                step3bold: "रीसेट लिंक पर क्लिक करें", step3rest: "केवल 1 घंटे के लिए वैध।",
+                step4bold: "नया पासवर्ड बनाएं", step4rest: "फिर लॉगिन करें।",
+                openGmail: "Gmail खोलें",
+                didntReceive: "प्राप्त नहीं हुआ?",
+                resendBtn: "फिर भेजें",
+                errorTitle: "कुछ गलत हुआ",
+                errorMsg: "रीसेट ईमेल नहीं भेज सके। कृपया अपना कनेक्शन जांचें और पुनः प्रयास करें।",
+                tryAgainBtn: "पुनः प्रयास करें",
+                errRequired: "कृपया अपना ईमेल पता दर्ज करें।",
+                errInvalid: "कृपया एक वैध ईमेल पता दर्ज करें।",
+                errTooMany: "बहुत अधिक प्रयास। कुछ मिनट प्रतीक्षा करें।",
+                errGeneric: "रीसेट ईमेल भेजने में विफल। पुनः प्रयास करें।",
+                toastResent: "रीसेट लिंक सफलतापूर्वक फिर से भेजा गया।",
+                toastResendFail: "पुनः भेजने में विफल। कृपया पुनः प्रयास करें।",
+            }
+        };
+
+        let currentLang = localStorage.getItem('co-gateway-language') || 'en';
+
+        function t(key) {
+            return (translations[currentLang] || translations.en)[key] || translations.en[key] || key;
+        }
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (translations[currentLang]?.[key]) el.textContent = translations[currentLang][key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.dataset.i18nPlaceholder;
+                if (translations[currentLang]?.[key]) el.placeholder = translations[currentLang][key];
+            });
+            document.documentElement.setAttribute('lang', currentLang);
+        }
+
+        // ── Theme ───────────────────────────────────────────────────
+        const savedTheme = localStorage.getItem('co-gateway-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        document.getElementById('theme-toggle-trigger').addEventListener('click', () => {
+            const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('co-gateway-theme', next);
+        });
+
+        // ── Language switcher ────────────────────────────────────────
+        document.querySelectorAll('.lang-node').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentLang = btn.dataset.lang;
+                localStorage.setItem('co-gateway-language', currentLang);
+                document.querySelectorAll('.lang-node').forEach(b => {
+                    const active = b.dataset.lang === currentLang;
+                    b.classList.toggle('state-active', active);
+                    b.setAttribute('aria-pressed', active ? 'true' : 'false');
+                });
+                applyTranslations();
+            });
+        });
+
+        // Mark saved lang button active on load
+        document.querySelectorAll('.lang-node').forEach(b => {
+            const active = b.dataset.lang === currentLang;
+            b.classList.toggle('state-active', active);
+            b.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        applyTranslations();
+
+        // ── DOM refs ─────────────────────────────────────────────────
+        const emailInput     = document.getElementById('email-input');
+        const btnSend        = document.getElementById('btn-send');
+        const btnResend      = document.getElementById('btn-resend');
+        const btnTryAgain    = document.getElementById('btn-try-again');
+        const sentEmailEl    = document.getElementById('sent-email-display');
+        const countdownEl    = document.getElementById('countdown-display');
+        const emailError     = document.getElementById('email-error');
+        const emailErrorText = document.getElementById('email-error-text');
+
+        const views = {
+            input:   document.getElementById('view-input'),
+            success: document.getElementById('view-success'),
+            error:   document.getElementById('view-error'),
+        };
+
+        let countdownTimer = null;
+        let lastEmail = '';
+        const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // ── View switcher ────────────────────────────────────────────
+        function showView(name) {
+            Object.entries(views).forEach(([k, el]) => el.classList.toggle('active', k === name));
+        }
+
+        // ── Validation ───────────────────────────────────────────────
+        function validateEmail(val) {
+            if (!val) return t('errRequired');
+            if (!EMAIL_RE.test(val)) return t('errInvalid');
+            return null;
+        }
+        function setEmailError(msg) {
+            if (msg) {
+                emailInput.classList.add('is-invalid');
+                emailErrorText.textContent = msg;
+                emailError.classList.add('visible');
+            } else {
+                emailInput.classList.remove('is-invalid');
+                emailError.classList.remove('visible');
+            }
+        }
+        emailInput.addEventListener('input', () => setEmailError(null));
+
+        // ── Countdown ────────────────────────────────────────────────
+        function startCountdown(sec = 30) {
+            btnResend.disabled = true;
+            let rem = sec;
+            countdownEl.style.display = 'inline-block';
+            countdownEl.textContent = rem + 's';
+            clearInterval(countdownTimer);
+            countdownTimer = setInterval(() => {
+                rem--;
+                countdownEl.textContent = rem + 's';
+                if (rem <= 0) {
+                    clearInterval(countdownTimer);
+                    btnResend.disabled = false;
+                    countdownEl.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        // ── Toast ────────────────────────────────────────────────────
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('co-toast-stack-container');
+            const toast = document.createElement('div');
+            const colors = { success: '#22C55E', danger: '#EF4444', warning: '#F59E0B' };
+            Object.assign(toast.style, {
+                background: 'var(--color-surface-solid, #1E293B)',
+                color: 'var(--text-primary, #F8FAFC)',
+                border: '1px solid var(--glass-border)',
+                borderLeft: `4px solid ${colors[type] || colors.success}`,
+                padding: '12px 18px',
+                borderRadius: '12px',
+                fontSize: '0.82rem', fontWeight: '500',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+                transform: 'translateY(16px)', opacity: '0',
+                transition: 'transform 250ms ease, opacity 250ms ease',
+                pointerEvents: 'auto', maxWidth: '320px',
+            });
+            toast.textContent = message;
+            container.appendChild(toast);
+            requestAnimationFrame(() => { toast.style.transform = 'translateY(0)'; toast.style.opacity = '1'; });
+            setTimeout(() => {
+                toast.style.opacity = '0'; toast.style.transform = 'translateY(-8px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // ── Firebase reset ────────────────────────────────────────────
+        async function sendReset(email) {
+            // Always show success regardless of whether email exists (anti-enumeration)
+            try {
+                await sendPasswordResetEmail(auth, email);
+            } catch (err) {
+                const surfaced = ['auth/invalid-api-key','auth/network-request-failed','auth/too-many-requests','auth/internal-error'];
+                if (surfaced.includes(err.code)) throw err;
+                // auth/user-not-found and others → silently succeed
+            }
+        }
+
+        // ── Handle send ───────────────────────────────────────────────
+        async function handleSend(email) {
+            const err = validateEmail(email);
+            if (err) { setEmailError(err); emailInput.focus(); return; }
+            setEmailError(null);
+
+            btnSend.classList.add('loading');
+            btnSend.disabled = true;
+            try {
+                await sendReset(email);
+                lastEmail = email;
+                sentEmailEl.textContent = email;
+                showView('success');
+                startCountdown(30);
+            } catch (e) {
+                let msg = t('errGeneric');
+                if (e.code === 'auth/too-many-requests') msg = t('errTooMany');
+                document.getElementById('error-message-text').textContent = msg;
+                showView('error');
+            } finally {
+                btnSend.classList.remove('loading');
+                btnSend.disabled = false;
+            }
+        }
+
+        // ── Events ────────────────────────────────────────────────────
+        btnSend.addEventListener('click', () => handleSend(emailInput.value.trim()));
+        emailInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleSend(emailInput.value.trim()); });
+
+        btnResend.addEventListener('click', async () => {
+            btnResend.disabled = true;
+            try {
+                await sendReset(lastEmail);
+                showToast(t('toastResent'), 'success');
+                startCountdown(30);
+            } catch {
+                showToast(t('toastResendFail'), 'danger');
+                btnResend.disabled = false;
+            }
+        });
+
+        btnTryAgain.addEventListener('click', () => { showView('input'); emailInput.focus(); });
+    </script>
+</body>
+</html>

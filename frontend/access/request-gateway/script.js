@@ -337,22 +337,38 @@ async function verifyInstitution() {
   result.style.display = "none";
 
   await new Promise(r => setTimeout(r, 1800)); // Simulate network
-alert("DB Status = " + !!db);
+
   if (db) {
-    try {
-      const snap = await getDoc(doc(db, "institutes", code.toUpperCase()));
-      if (snap.exists()) {
-        const data = snap.data();
-        result.className = "verify-result success";
-        result.innerHTML = `<svg class="icon"><use href="#icon-check"/></svg> ${data.name || name} — Verified Campus Node`;
-        result.style.display = "flex";
-        document.getElementById("form-institution").value = data.name || name;
-        showToast("Institution verified successfully", "success");
-      } else {
-        showNotFound(result, name);
-      }
-    } catch {
-      showNotFound(result, name);
+    try try {
+  const docRef = doc(db, "institutes", code.toUpperCase());
+
+  console.log("Searching:", code.toUpperCase());
+  console.log("Path:", docRef.path);
+
+  const snap = await getDoc(docRef);
+
+  console.log("Exists:", snap.exists());
+
+  if (snap.exists()) {
+    const data = snap.data();
+
+    console.log("Data:", data);
+
+    result.className = "verify-result success";
+    result.innerHTML = `<svg class="icon"><use href="#icon-check"/></svg> ${data.name || name} — Verified Campus Node`;
+    result.style.display = "flex";
+
+    document.getElementById("form-institution").value = data.name || name;
+
+    showToast("Institution verified successfully", "success");
+  } else {
+    console.log("Document NOT FOUND");
+    showNotFound(result, name);
+  }
+} catch (e) {
+  console.error("Firestore Error:", e);
+  alert(e.message);
+  showNotFound(result, name);
     }
   } else {
     if (code.toUpperCase() === "MIT2026" || code.toUpperCase() === "DEMO") {

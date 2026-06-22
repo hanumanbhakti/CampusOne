@@ -78,7 +78,6 @@ function getCurrentTenant() {
 
 //Export 
 export {
-  firebaseConfig,
   app,
   auth,
   db,

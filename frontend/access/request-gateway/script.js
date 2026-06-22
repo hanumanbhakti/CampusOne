@@ -430,11 +430,10 @@ async function submitRequest(e) {
     }
     showSuccessScreen(requestId, fullName, role);
   } } catch (err) {
-  console.error("SUBMIT ERROR:", err);
-  alert(err.message);
-  showToast("Submission failed. Please try again.", "error");
-  btn.disabled = false;
-  btn.textContent = "Submit Request";
+console.error("SUBMIT ERROR:", err);
+alert(err.message);
+showToast("Submission failed. Please try again.", "error");
+}
 }
 
 function showSuccessScreen(requestId, name, role) {

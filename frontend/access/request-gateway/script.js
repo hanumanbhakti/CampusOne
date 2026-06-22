@@ -3,19 +3,17 @@
 //  script.js — Firebase + UI Logic + i18n + Theme Engine
 // ============================================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getFirestore, doc, setDoc, getDoc, collection, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 // ---- Firebase Config (relative to project root) ----
 let db;
 async function initFirebase() {
   try {
     const mod = await import("../../login/firebase-config.js");
-    const app = initializeApp(mod.firebaseConfig, "gateway");
-    db = getFirestore(app);
-    console.log("[Gateway] Firebase initialised");
+    db = mod.db; // ✅ FIX: Use already-initialized db from firebase-config.js
+    console.log("[Gateway] Firebase initialised ✅");
   } catch (e) {
     console.error("[Gateway] Firebase init failed:", e);
     showToast("Offline mode — submissions will be saved locally", "info");
@@ -340,7 +338,7 @@ async function verifyInstitution() {
 
   if (db) {
     try {
-      const snap = await getDoc(doc(db, "institutions", code.toUpperCase()));
+      const snap = await getDoc(doc(db, "institutes", code.toUpperCase())); // ✅ FIX: was "institutions"
       if (snap.exists()) {
         const data = snap.data();
         result.className = "verify-result success";

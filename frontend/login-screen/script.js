@@ -7,6 +7,7 @@
 
 import {
   signInWithEmailAndPassword,
+  signInWithPopup,
   signInWithRedirect,
   getRedirectResult
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
@@ -616,14 +617,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 try {
                     DOM.googleOAuthBtn.setAttribute('disabled', 'true');
-                    // Save tenant + role before redirect — page reloads, localStorage survives
-                    localStorage.setItem('campusone-tenant', CampusOS.state.activeTenant);
-                    localStorage.setItem('campusone-pending-role', CampusOS.state.currentRole);
-                    await signInWithRedirect(auth, googleProvider);
-                    // Page will navigate away — execution stops here until user returns
+                    const selectedRole = CampusOS.state.currentRole;
+
+                    // Strategy: Try signInWithPopup first (works on desktop + most browsers).
+                    // On mobile Chrome / GitHub Pages, popups are often blocked, so we catch
+                    // that specific error and fall back to signInWithRedirect only then.
+                    // This avoids the "missing initial state" sessionStorage error that
+                    // signInWithRedirect triggers on cross-origin partitioned environments.
+                    try {
+                        const userCredential = await signInWithPopup(auth, googleProvider);
+                        await completeSuccessfulLogin(userCredential.user, selectedRole);
+                    } catch (popupError) {
+                        const isPopupBlocked = popupError?.code === 'auth/popup-blocked'
+                            || popupError?.code === 'auth/popup-closed-by-user'
+                            || popupError?.code === 'auth/cancelled-popup-request';
+
+                        if (isPopupBlocked) {
+                            // Popup was blocked — save state and fall back to redirect flow
+                            localStorage.setItem('campusone-tenant', CampusOS.state.activeTenant);
+                            localStorage.setItem('campusone-pending-role', selectedRole);
+                            await signInWithRedirect(auth, googleProvider);
+                            // Page navigates away — nothing runs after this
+                        } else {
+                            // Real error (network, config, etc.) — surface it to the user
+                            throw popupError;
+                        }
+                    }
                 } catch (oauthError) {
                     pushSystemTelemetryEvent('GOOGLE_AUTH_FAILED', `Google sign-in rejected: [${oauthError?.code || 'unknown'}].`);
                     showNotification(t('toastGoogleFailed', 'Google sign-in failed. Please try again.'), "danger");
+                } finally {
                     DOM.googleOAuthBtn.removeAttribute('disabled');
                 }
             });

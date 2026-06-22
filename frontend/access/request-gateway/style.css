@@ -673,6 +673,20 @@ body {
   font-size: 22px; font-weight: 700; color: var(--teal);
   letter-spacing: 2px; margin: 20px auto;
 }
+.success-logo{
+  overflow:hidden;
+}
+
+.success-logo-image{
+  width:58px;
+  height:58px;
+  object-fit:contain;
+  display:block;
+}
+
+.success-logo:hover{
+  transform:scale(1.03);
+}
 
 /* ---------- Status Tracker ---------- */
 .status-section { margin-bottom: 64px; }

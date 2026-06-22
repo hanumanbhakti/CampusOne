@@ -7,7 +7,8 @@
 
 import {
   signInWithEmailAndPassword,
-  signInWithPopup
+  signInWithRedirect,
+  getRedirectResult
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
@@ -615,13 +616,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 try {
                     DOM.googleOAuthBtn.setAttribute('disabled', 'true');
-                    const selectedRole = CampusOS.state.currentRole;
-                    const userCredential = await signInWithPopup(auth, googleProvider);
-                    await completeSuccessfulLogin(userCredential.user, selectedRole);
+                    // Save tenant + role before redirect — page reloads, localStorage survives
+                    localStorage.setItem('campusone-tenant', CampusOS.state.activeTenant);
+                    localStorage.setItem('campusone-pending-role', CampusOS.state.currentRole);
+                    await signInWithRedirect(auth, googleProvider);
+                    // Page will navigate away — execution stops here until user returns
                 } catch (oauthError) {
                     pushSystemTelemetryEvent('GOOGLE_AUTH_FAILED', `Google sign-in rejected: [${oauthError?.code || 'unknown'}].`);
                     showNotification(t('toastGoogleFailed', 'Google sign-in failed. Please try again.'), "danger");
-                } finally {
                     DOM.googleOAuthBtn.removeAttribute('disabled');
                 }
             });
@@ -797,6 +799,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         initializeLanguageEngine();
         updateGreetingDisplay(CampusOS.state.currentRole, false); // Sync greeting with default active tab
+
+        // --- REDIRECT RESULT HANDLER ---
+        // signInWithRedirect() sends the user to Google and back. On return, Firebase
+        // delivers the credential here. We restore tenant + role from localStorage
+        // (saved just before the redirect) so the session continues seamlessly.
+        getRedirectResult(auth).then(async (result) => {
+            if (!result) return; // Normal page load — no redirect in progress
+            const pendingRole = localStorage.getItem('campusone-pending-role') || 'student';
+            localStorage.removeItem('campusone-pending-role');
+            CampusOS.state.currentRole = pendingRole;
+            await completeSuccessfulLogin(result.user, pendingRole);
+        }).catch((oauthError) => {
+            pushSystemTelemetryEvent('GOOGLE_REDIRECT_FAILED', `Google redirect result error: [${oauthError?.code || 'unknown'}].`);
+            showNotification(t('toastGoogleFailed', 'Google sign-in failed. Please try again.'), "danger");
+        });
 
         console.log("[CampusOne Core Framework] Login screen initialized.");
     }

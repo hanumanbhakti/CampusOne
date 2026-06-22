@@ -287,8 +287,13 @@
       </svg>
       <span>Copy Request ID</span>
     </button>
-    <button class="btn-secondary"
-      onclick="document.getElementById('status-section').scrollIntoView({behavior:'smooth'})">
+    <button class="btn-secondary" id="goto-track-request"
+      onclick="(function(){
+        var id=(document.getElementById('success-req-id')||{}).textContent||'';
+        var email=(document.getElementById('email')||{}).value||'';
+        var url='../track-request/index.html?id='+encodeURIComponent(id.trim())+'&email='+encodeURIComponent(email.trim());
+        window.location.href=url;
+      })()">
       <svg class="icon">
         <use href="#icon-search"></use>
       </svg>
@@ -415,6 +420,17 @@
     <div class="section-label" data-i18n="status.label">Request Portal</div>
     <h2 class="section-title" data-i18n="status.title">Track Existing Request</h2>
     <p class="section-desc" data-i18n="status.desc">Already submitted? Check the current status of your access request.</p>
+
+    <div class="glass-card" style="max-width:580px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+      <div>
+        <div class="footer-brand" style="margin-bottom:4px" data-i18n="status.full.title">Open the full Track Request Portal</div>
+        <div class="support-desc" data-i18n="status.full.desc">See your status timeline, applicant details and download a PDF receipt.</div>
+      </div>
+      <a class="btn-secondary" style="width:auto;display:inline-flex;align-items:center;gap:8px;white-space:nowrap" href="../track-request/index.html">
+        <svg class="icon"><use href="#icon-track"/></svg>
+        <span data-i18n="status.full.cta">Track Existing Request</span>
+      </a>
+    </div>
 
     <div class="glass-card" style="max-width:580px">
       <div class="form-cols" style="gap:16px">

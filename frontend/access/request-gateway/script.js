@@ -5,7 +5,7 @@
 
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import {
-  getFirestore, doc, setDoc, getDoc, collection, serverTimestamp
+  getFirestore, doc, setDoc, getDoc, getDocs, collection, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 // ---- Firebase Config — directly embedded (no relative path issues on GitHub Pages) ----
@@ -276,6 +276,12 @@ function initNeuralCanvas() {
 // ---- Role Selection ----
 let selectedRole = "";
 
+// ---- Dynamic Dropdown Engine: Firestore-backed state ----
+let institutesCache = [];      // [{ id: campusCode, name, ... }]
+let coursesCache = [];         // courses of the currently selected institution
+let reasonsCache = [];         // top-level access_reasons collection
+let selectedInstitution = null; // { id, name } of the chosen institution
+
 function initRoleCards() {
   document.querySelectorAll(".role-card").forEach(card => {
     card.addEventListener("click", () => {
@@ -301,9 +307,13 @@ function updateDynamicFields(role) {
         <label for="enrollment">Enrollment / Roll Number</label>
       </div>
       <div class="field-group">
-        <input type="text" id="course" placeholder=" " />
-        <label for="course">Course / Class</label>
+        <select id="course-select" required>
+          <option value="" disabled selected></option>
+        </select>
+        <label for="course-select">Course / Class</label>
       </div>`;
+    // Institution already chosen? Load its courses straight away.
+    if (selectedInstitution) loadCourses(selectedInstitution.id);
   } else if (role === "Faculty") {
     container.innerHTML = `
       <div class="field-group">
@@ -327,63 +337,95 @@ function updateDynamicFields(role) {
   }
 }
 
-// ---- Institution Verification ----
-async function verifyInstitution() {
-  const name  = document.getElementById("inst-name").value.trim();
-  const code  = document.getElementById("inst-code").value.trim();
-  const email = document.getElementById("inst-email").value.trim();
-  const result = document.getElementById("verify-result");
-  const btn  = document.getElementById("btn-verify");
+// ---- Dynamic Dropdown Engine ----
 
-  if (!name || !code || !email) {
-    showToast("Please fill all institution fields", "error");
+// Institution Dropdown — loads every doc in `institutes`
+async function loadInstitutions() {
+  const select = document.getElementById("inst-select");
+  if (!select) return;
+
+  if (!db) {
+    select.innerHTML = `<option value="" disabled selected></option><option value="DEMO">Demo Campus (offline)</option>`;
     return;
   }
 
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Verifying...';
-  result.className = "verify-result";
-  result.style.display = "none";
+  try {
+    const snap = await getDocs(collection(db, "institutes"));
+    institutesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (err) {
+    console.error("[Gateway] Failed to load institutions:", err);
+    institutesCache = [];
+    showToast("Could not load institutions", "error");
+  }
 
-  await new Promise(r => setTimeout(r, 1800)); // Simulate network
+  select.innerHTML = `<option value="" disabled selected></option>` +
+    institutesCache.map(i => `<option value="${i.id}">${i.name || i.id}</option>`).join("");
+}
 
-  if (db) {
+// Fires when the user picks an institution: auto-fill campus code + load its courses
+async function onInstitutionChange(e) {
+  const instId = e.target.value;
+  const codeField = document.getElementById("inst-code");
+  const formInstitution = document.getElementById("form-institution");
+  const result = document.getElementById("verify-result");
+  const inst = institutesCache.find(i => i.id === instId);
+
+  if (!inst) {
+    selectedInstitution = null;
+    codeField.value = "";
+    formInstitution.value = "";
+    result.style.display = "none";
+    return;
+  }
+
+  selectedInstitution = inst;
+  codeField.value = inst.id;
+  formInstitution.value = inst.name || inst.id;
+
+  result.className = "verify-result success";
+  result.innerHTML = `<svg class="icon"><use href="#icon-check"/></svg> ${inst.name || inst.id} — Verified Campus Node`;
+  result.style.display = "flex";
+  showToast(`${inst.name || inst.id} selected`, "success");
+
+  // Course dropdown only exists in the DOM once "Student" role is active
+  await loadCourses(inst.id);
+}
+
+// Course Dropdown — loads institutes/{instId}/courses
+async function loadCourses(instId) {
+  const select = document.getElementById("course-select");
+  if (!select) return; // not rendered unless role === "Student"
+
+  coursesCache = [];
+  if (db && instId) {
     try {
-      const snap = await getDoc(doc(db, "institutes", code.toUpperCase())); // ✅ FIX: was "institutions"
-      if (snap.exists()) {
-        const data = snap.data();
-        result.className = "verify-result success";
-        result.innerHTML = `<svg class="icon"><use href="#icon-check"/></svg> ${data.name || name} — Verified Campus Node`;
-        result.style.display = "flex";
-        document.getElementById("form-institution").value = data.name || name;
-        showToast("Institution verified successfully", "success");
-      } else {
-        showNotFound(result, name);
-      }
-    } catch {
-      showNotFound(result, name);
-    }
-  } else {
-    if (code.toUpperCase() === "MIT2026" || code.toUpperCase() === "DEMO") {
-      result.className = "verify-result success";
-      result.innerHTML = `<svg class="icon"><use href="#icon-check"/></svg> ${name} — Verified Campus Node`;
-      result.style.display = "flex";
-      document.getElementById("form-institution").value = name;
-      showToast("Institution verified (demo mode)", "success");
-    } else {
-      showNotFound(result, name);
+      const snap = await getDocs(collection(db, "institutes", instId, "courses"));
+      coursesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (err) {
+      console.error("[Gateway] Failed to load courses:", err);
     }
   }
 
-  btn.disabled = false;
-  btn.textContent = translations["verify.btn"] || "Verify Institution";
+  select.innerHTML = `<option value="" disabled selected></option>` +
+    coursesCache.map(c => `<option value="${c.id}">${c.name || c.id}</option>`).join("");
 }
 
-function showNotFound(result, name) {
-  result.className = "verify-result error";
-  result.innerHTML = `<svg class="icon"><use href="#icon-warn"/></svg> Campus not found — Contact institution administrator`;
-  result.style.display = "flex";
-  showToast(`"${name}" not found in network`, "error");
+// Reason Dropdown — loads the top-level access_reasons collection (independent of institution)
+async function loadReasons() {
+  const select = document.getElementById("reason-select");
+  if (!select) return;
+
+  if (!db) return;
+  try {
+    const snap = await getDocs(collection(db, "access_reasons"));
+    reasonsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (err) {
+    console.error("[Gateway] Failed to load access reasons:", err);
+    reasonsCache = [];
+  }
+
+  select.innerHTML = `<option value="" disabled selected></option>` +
+    reasonsCache.map(r => `<option value="${r.id}">${r.name || r.id}</option>`).join("");
 }
 
 // ---- Main Form Submit ----
@@ -395,15 +437,34 @@ async function submitRequest(e) {
   const email       = document.getElementById("email").value.trim();
   const phone       = document.getElementById("phone").value.trim();
   const institution = document.getElementById("form-institution").value.trim();
-  const campusCode = document.getElementById("inst-code").value.trim().toUpperCase();
-        console.log("Campus Code =", campusCode);
+  const campusCode  = document.getElementById("inst-code").value.trim().toUpperCase();
   const role        = document.getElementById("role-select").value;
-  const reason      = document.getElementById("reason").value.trim();
 
-  if (!fullName || !email || !institution || !role) {
+  const reasonSelect = document.getElementById("reason-select");
+  const reasonId   = reasonSelect ? reasonSelect.value : "";
+  const reasonObj  = reasonsCache.find(r => r.id === reasonId);
+  const reasonName = reasonObj ? (reasonObj.name || reasonObj.id) : "";
+
+  const courseSelect = document.getElementById("course-select"); // only present for Student
+  const courseId   = courseSelect ? courseSelect.value : "";
+  const courseObj  = coursesCache.find(c => c.id === courseId);
+  const courseName = courseObj ? (courseObj.name || courseObj.id) : "";
+
+  if (!fullName || !email || !institution || !campusCode || !role) {
     showToast("Please fill all required fields", "error");
     return;
   }
+  if (!reasonId) {
+    showToast("Please select a reason for access", "error");
+    return;
+  }
+  if (role === "Student" && !courseId) {
+    showToast("Please select your course / class", "error");
+    return;
+  }
+
+  const roleKeyMap = { Student: "student", Faculty: "faculty", Parent: "parent" };
+  const roleKey = roleKeyMap[role] || role.toLowerCase();
 
   const requestId = generateRequestId();
   const payload = {
@@ -411,10 +472,14 @@ async function submitRequest(e) {
     fullName,
     email,
     phone,
+    institutionId: selectedInstitution ? selectedInstitution.id : campusCode,
     institution,
     campusCode,
-    role,
-    reason,
+    courseId:  courseId  || null,
+    course:    courseName || null,
+    reasonId,
+    reason:    reasonName,
+    role:      roleKey,
     status:    "pending",
     createdAt: serverTimestamp ? serverTimestamp() : new Date().toISOString(),
     source:    "request-gateway"
@@ -434,6 +499,9 @@ async function submitRequest(e) {
     console.error("SUBMIT ERROR:", err);
     alert(err.message);
     showToast("Submission failed. Please try again.", "error");
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = translations["form.submit"] || "Submit Access Request →";
   }
 }
 
@@ -577,7 +645,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   initAccordion();
   initQuickActions();
 
-  document.getElementById("btn-verify").addEventListener("click", verifyInstitution);
+  await Promise.all([loadInstitutions(), loadReasons()]);
+
+  document.getElementById("inst-select").addEventListener("change", onInstitutionChange);
   document.getElementById("access-form").addEventListener("submit", submitRequest);
   document.getElementById("btn-track").addEventListener("click", trackRequest);
   document.getElementById("copy-request-id").addEventListener("click", copyRequestId);

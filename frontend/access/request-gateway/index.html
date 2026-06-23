@@ -177,23 +177,20 @@
   <section class="verify-section" id="verify-section">
     <div class="section-label" data-i18n="verify.label">Step 2 — Institution Verification</div>
     <h2 class="section-title" data-i18n="verify.title">Verify your institution</h2>
-    <p class="section-desc" data-i18n="verify.desc">Enter your campus details to verify institutional membership before proceeding.</p>
+    <p class="section-desc" data-i18n="verify.desc">Select your institution from our verified network — the campus code is filled in automatically.</p>
 
     <div class="glass-card verify-card">
       <div class="verify-grid">
         <div class="field-group" style="margin-bottom:0">
-          <input type="text" id="inst-name" placeholder=" " />
-          <label for="inst-name" data-i18n="verify.name">Institution Name</label>
+          <select id="inst-select" required>
+            <option value="" disabled selected></option>
+          </select>
+          <label for="inst-select" data-i18n="verify.name">Institution</label>
         </div>
         <div class="field-group" style="margin-bottom:0">
-          <input type="text" id="inst-code" placeholder=" " />
+          <input type="text" id="inst-code" placeholder=" " readonly />
           <label for="inst-code" data-i18n="verify.code">Campus Code</label>
         </div>
-        <div class="field-group" style="margin-bottom:0">
-          <input type="email" id="inst-email" placeholder=" " />
-          <label for="inst-email" data-i18n="verify.email">Institution Email</label>
-        </div>
-        <button class="btn-verify" id="btn-verify" data-i18n="verify.btn">Verify Institution</button>
       </div>
       <div class="verify-result" id="verify-result"></div>
     </div>
@@ -226,7 +223,7 @@
                 <label for="phone" data-i18n="form.phone">Phone Number</label>
               </div>
               <div class="field-group">
-                <input type="text" id="form-institution" placeholder=" " required />
+                <input type="text" id="form-institution" placeholder=" " required readonly />
                 <label for="form-institution" data-i18n="form.institution">Institution Name *</label>
               </div>
             </div>
@@ -245,8 +242,10 @@
             <div id="dynamic-fields" class="dynamic-fields"></div>
 
             <div class="field-group">
-              <textarea id="reason" placeholder=" " rows="3"></textarea>
-              <label for="reason" data-i18n="form.reason">Reason for Access</label>
+              <select id="reason-select" required>
+                <option value="" disabled selected></option>
+              </select>
+              <label for="reason-select" data-i18n="form.reason">Reason for Access *</label>
             </div>
 
             <button type="submit" class="btn-primary" id="btn-submit" style="margin-top:8px" data-i18n="form.submit">

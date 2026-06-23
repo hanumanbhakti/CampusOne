@@ -432,7 +432,7 @@ body {
 .verify-card { position: relative; }
 .verify-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr;
   gap: 14px; align-items: end;
   margin-top: 24px;
 }
@@ -461,6 +461,10 @@ body {
 }
 .field-group select option { background: var(--bg-surface); color: var(--text-primary); }
 .field-group textarea { resize: vertical; min-height: 90px; }
+.field-group input[readonly] {
+  cursor: default;
+  opacity: 0.75;
+}
 .field-group input:focus,
 .field-group select:focus,
 .field-group textarea:focus {

@@ -136,31 +136,10 @@
       </nav>
     </aside>
   </div>
-  <!-- ═══════════════ INSTITUTION VERIFICATION ═══════════════ -->
-  <section class="verify-section" id="verify-section">
-    <div class="section-label" data-i18n="verify.label">Step 1 — Institution Verification</div>
-    <h2 class="section-title" data-i18n="verify.title">Verify your institution</h2>
-    <p class="section-desc" data-i18n="verify.desc">Select your institution from our verified network — the campus code is filled in automatically.</p>
 
-    <div class="glass-card verify-card">
-      <div class="verify-grid">
-        <div class="field-group" style="margin-bottom:0">
-          <select id="inst-select" required>
-            <option value="" disabled selected></option>
-          </select>
-          <label for="inst-select" data-i18n="verify.name">Institution</label>
-        </div>
-        <div class="field-group" style="margin-bottom:0">
-          <input type="text" id="inst-code" placeholder=" " readonly />
-          <label for="inst-code" data-i18n="verify.code">Campus Code</label>
-        </div>
-      </div>
-      <div class="verify-result" id="verify-result"></div>
-    </div>
-  </section>
   <!-- ═══════════════ ROLE SELECTION ═══════════════ -->
   <section class="role-section" id="role-section">
-    <div class="section-label" data-i18n="role.label">Step 2 — Identify Your Role</div>
+    <div class="section-label" data-i18n="role.label">Identify Your Role</div>
     <h2 class="section-title" data-i18n="role.title">Who are you?</h2>
     <p class="section-desc" data-i18n="role.desc">Select your role to get a tailored access request experience.</p>
 
@@ -194,9 +173,32 @@
     </div>
   </section>
 
+  <!-- ═══════════════ INSTITUTION VERIFICATION ═══════════════ -->
+  <section class="verify-section" id="verify-section">
+    <div class="section-label" data-i18n="verify.label">Step 1 — Institution Verification</div>
+    <h2 class="section-title" data-i18n="verify.title">Verify your institution</h2>
+    <p class="section-desc" data-i18n="verify.desc">Select your institution from our verified network — the campus code is filled in automatically.</p>
+
+    <div class="glass-card verify-card">
+      <div class="verify-grid">
+        <div class="field-group" style="margin-bottom:0">
+          <select id="inst-select" required>
+            <option value="" disabled selected></option>
+          </select>
+          <label for="inst-select" data-i18n="verify.name">Institution</label>
+        </div>
+        <div class="field-group" style="margin-bottom:0">
+          <input type="text" id="inst-code" placeholder=" " readonly />
+          <label for="inst-code" data-i18n="verify.code">Campus Code</label>
+        </div>
+      </div>
+      <div class="verify-result" id="verify-result"></div>
+    </div>
+  </section>
+
   <!-- ═══════════════ REQUEST FORM + SECURITY ═══════════════ -->
   <section class="form-section" id="form-section">
-    <div class="section-label" data-i18n="form.label">Step 3 — Personal Information</div>
+    <div class="section-label" data-i18n="form.label">Step 2 — Personal Information</div>
     <h2 class="section-title" data-i18n="form.title">Complete your request</h2>
     <p class="section-desc" data-i18n="form.desc">All information is encrypted and used solely for identity verification.</p>
 
@@ -348,6 +350,39 @@
     Save this Request ID to track your application status.
   </p>
 </div>
+      <!-- ═══════════════ STATUS TRACKER ═══════════════ -->
+      <section class="status-section" id="status-section">
+        <div class="section-label" data-i18n="status.label">Request Portal</div>
+        <h2 class="section-title" data-i18n="status.title">Track Existing Request</h2>
+        <p class="section-desc" data-i18n="status.desc">Already submitted? Check the current status of your access request.</p>
+
+        <div class="glass-card" style="max-width:580px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+          <div>
+            <div class="footer-brand" style="margin-bottom:4px" data-i18n="status.full.title">Open the full Track Request Portal</div>
+            <div class="support-desc" data-i18n="status.full.desc">See your status timeline, applicant details and download a PDF receipt.</div>
+          </div>
+          <a class="btn-secondary" style="width:auto;display:inline-flex;align-items:center;gap:8px;white-space:nowrap" href="../track-request/index.html">
+            <svg class="icon"><use href="#icon-track"/></svg>
+            <span data-i18n="status.full.cta">Track Existing Request</span>
+          </a>
+        </div>
+
+        <div class="glass-card" style="max-width:580px">
+          <div class="form-cols" style="gap:16px">
+            <div class="field-group" style="margin-bottom:0">
+              <input type="email" id="track-email" placeholder=" " />
+              <label for="track-email" data-i18n="status.email">Email Address</label>
+            </div>
+            <div class="field-group" style="margin-bottom:0">
+              <input type="text" id="track-id" placeholder=" " style="text-transform:uppercase;letter-spacing:1px" />
+              <label for="track-id" data-i18n="status.id">Request ID (CO-REQ-...)</label>
+            </div>
+          </div>
+          <button class="btn-secondary" id="btn-track" style="margin-top:16px" data-i18n="status.btn">Track Status</button>
+          <div class="status-result" id="track-result"></div>
+        </div>
+      </section>
+
       <!-- Security Center (Accordion) -->
       <div>
         <div class="security-card" id="security-card">
@@ -425,38 +460,7 @@
     </div>
   </section>
 
-  <!-- ═══════════════ STATUS TRACKER ═══════════════ -->
-  <section class="status-section" id="status-section">
-    <div class="section-label" data-i18n="status.label">Request Portal</div>
-    <h2 class="section-title" data-i18n="status.title">Track Existing Request</h2>
-    <p class="section-desc" data-i18n="status.desc">Already submitted? Check the current status of your access request.</p>
 
-    <div class="glass-card" style="max-width:580px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
-      <div>
-        <div class="footer-brand" style="margin-bottom:4px" data-i18n="status.full.title">Open the full Track Request Portal</div>
-        <div class="support-desc" data-i18n="status.full.desc">See your status timeline, applicant details and download a PDF receipt.</div>
-      </div>
-      <a class="btn-secondary" style="width:auto;display:inline-flex;align-items:center;gap:8px;white-space:nowrap" href="../track-request/index.html">
-        <svg class="icon"><use href="#icon-track"/></svg>
-        <span data-i18n="status.full.cta">Track Existing Request</span>
-      </a>
-    </div>
-
-    <div class="glass-card" style="max-width:580px">
-      <div class="form-cols" style="gap:16px">
-        <div class="field-group" style="margin-bottom:0">
-          <input type="email" id="track-email" placeholder=" " />
-          <label for="track-email" data-i18n="status.email">Email Address</label>
-        </div>
-        <div class="field-group" style="margin-bottom:0">
-          <input type="text" id="track-id" placeholder=" " style="text-transform:uppercase;letter-spacing:1px" />
-          <label for="track-id" data-i18n="status.id">Request ID (CO-REQ-...)</label>
-        </div>
-      </div>
-      <button class="btn-secondary" id="btn-track" style="margin-top:16px" data-i18n="status.btn">Track Status</button>
-      <div class="status-result" id="track-result"></div>
-    </div>
-  </section>
 
   <!-- ═══════════════ SUPPORT GATEWAY ═══════════════ -->
   <section class="support-section" id="support-section">

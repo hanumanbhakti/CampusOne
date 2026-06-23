@@ -280,6 +280,7 @@ let selectedRole = "";
 let institutesCache = [];      // [{ id: campusCode, name, ... }]
 let coursesCache = [];         // courses of the currently selected institution
 let reasonsCache = [];         // top-level access_reasons collection
+let identityCache = [];        // top-level identity_verification collection
 let selectedInstitution = null; // { id, name } of the chosen institution
 
 function initRoleCards() {
@@ -428,6 +429,24 @@ async function loadReasons() {
     reasonsCache.map(r => `<option value="${r.id}">${r.name || r.id}</option>`).join("");
 }
 
+// Identity Verification Dropdown — loads the top-level identity_verification collection
+async function loadIdentityVerification() {
+  const select = document.getElementById("identity-select");
+  if (!select) return;
+
+  if (!db) return;
+  try {
+    const snap = await getDocs(collection(db, "identity_verification"));
+    identityCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (err) {
+    console.error("[Gateway] Failed to load identity verification types:", err);
+    identityCache = [];
+  }
+
+  select.innerHTML = `<option value="" disabled selected></option>` +
+    identityCache.map(i => `<option value="${i.id}">${i.name || i.id}</option>`).join("");
+}
+
 // ---- Main Form Submit ----
 async function submitRequest(e) {
   e.preventDefault();
@@ -450,12 +469,22 @@ async function submitRequest(e) {
   const courseObj  = coursesCache.find(c => c.id === courseId);
   const courseName = courseObj ? (courseObj.name || courseObj.id) : "";
 
+  const identitySelect = document.getElementById("identity-select");
+  const identityType   = identitySelect ? identitySelect.value : "";
+  const identityObj    = identityCache.find(i => i.id === identityType);
+  const identityTypeName = identityObj ? (identityObj.name || identityObj.id) : "";
+  const identityValue  = document.getElementById("identity-value").value.trim();
+
   if (!fullName || !email || !institution || !campusCode || !role) {
     showToast("Please fill all required fields", "error");
     return;
   }
   if (!reasonId) {
     showToast("Please select a reason for access", "error");
+    return;
+  }
+  if (!identityType || !identityValue) {
+    showToast("Please complete identity verification", "error");
     return;
   }
   if (role === "Student" && !courseId) {
@@ -479,6 +508,9 @@ async function submitRequest(e) {
     course:    courseName || null,
     reasonId,
     reason:    reasonName,
+    identityType:     identityType || null,
+    identityTypeName: identityTypeName || null,
+    identityValue:    identityValue || null,
     role:      roleKey,
     status:    "pending",
     createdAt: serverTimestamp ? serverTimestamp() : new Date().toISOString(),
@@ -645,7 +677,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initAccordion();
   initQuickActions();
 
-  await Promise.all([loadInstitutions(), loadReasons()]);
+  await Promise.all([loadInstitutions(), loadReasons(), loadIdentityVerification()]);
 
   document.getElementById("inst-select").addEventListener("change", onInstitutionChange);
   document.getElementById("access-form").addEventListener("submit", submitRequest);

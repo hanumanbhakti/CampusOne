@@ -241,6 +241,19 @@
             <!-- Dynamic role-specific fields -->
             <div id="dynamic-fields" class="dynamic-fields"></div>
 
+            <div class="form-cols">
+              <div class="field-group">
+                <select id="identity-select" required>
+                  <option value="" disabled selected></option>
+                </select>
+                <label for="identity-select" data-i18n="form.identityType">Identity Verification *</label>
+              </div>
+              <div class="field-group">
+                <input type="text" id="identity-value" placeholder=" " required />
+                <label for="identity-value" data-i18n="form.identityValue">Verification ID / Value *</label>
+              </div>
+            </div>
+
             <div class="field-group">
               <select id="reason-select" required>
                 <option value="" disabled selected></option>

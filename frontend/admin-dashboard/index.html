@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0F172A">
-<meta name="description" content="CampusOne Admin Dashboard — manage students, teachers and parents.">
+<meta name="description" content="CampusOne Admin Dashboard — SaaS Edition">
 <title>Admin Dashboard – CampusOne</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,13 +12,13 @@
 </head>
 <body data-theme="dark">
 
-  <!-- AUTH GATE: shown while Firebase checks the session -->
+  <!-- AUTH GATE -->
   <div id="auth-gate" class="auth-gate">
     <div class="spinner-dot-ring-animation"></div>
     <p>Verifying your session...</p>
   </div>
 
-  <!-- APP SHELL: hidden until auth confirmed -->
+  <!-- APP SHELL -->
   <div id="app-shell" class="app-shell" hidden>
 
     <button id="btn-mobile-nav" class="mobile-nav-toggle" aria-label="Open menu" aria-expanded="false">
@@ -32,19 +30,44 @@
     </button>
     <div id="sidebar-overlay" class="sidebar-overlay" hidden></div>
 
+    <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
         <div class="sidebar-logo-pod">
-        <img src="../../assets/app-icon.png" alt="CampusOne" class="sidebar-logo-img">  
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:36px;height:36px;">
+            <rect width="36" height="36" rx="10" fill="url(#logoGrad)"/>
+            <path d="M18 8 L28 14 L28 22 L18 28 L8 22 L8 14 Z" stroke="#fff" stroke-width="2" fill="none"/>
+            <circle cx="18" cy="18" r="4" fill="#fff" opacity="0.9"/>
+            <defs><linearGradient id="logoGrad" x1="0" y1="0" x2="36" y2="36"><stop stop-color="#2563EB"/><stop offset="1" stop-color="#0EA5E9"/></linearGradient></defs>
+          </svg>
         </div>
-        <span class="brand-name">CampusOne</span>
+        <div>
+          <span class="brand-name">CampusOne</span>
+          <span class="brand-tagline">Admin Portal</span>
+        </div>
+      </div>
+
+      <!-- Campus Selector -->
+      <div class="campus-selector-pod">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span id="sidebar-campus-name">SBU-RANCHI-2026</span>
       </div>
 
       <nav class="sidebar-nav">
+        <!-- PRIMARY -->
+        <div class="nav-section-label">Main</div>
         <a href="#" class="nav-item state-active" data-section="dashboard">
           <svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
           <span>Dashboard</span>
         </a>
+        <a href="#" class="nav-item nav-item-requests" data-section="requests">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span>Requests</span>
+          <span class="nav-badge" id="nav-requests-badge">0</span>
+        </a>
+
+        <!-- MEMBERS -->
+        <div class="nav-section-label">Members</div>
         <a href="#" class="nav-item" data-section="students">
           <svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
           <span>Students</span>
@@ -54,58 +77,221 @@
           <span>Teachers</span>
         </a>
         <a href="#" class="nav-item" data-section="parents">
-          <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           <span>Parents</span>
+        </a>
+
+        <!-- TOOLS -->
+        <div class="nav-section-label">Tools</div>
+        <a href="#" class="nav-item nav-item-soon" data-section="notices">
+          <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>Notices</span>
+          <span class="nav-coming-soon">Soon</span>
+        </a>
+        <a href="#" class="nav-item nav-item-soon" data-section="campus-id">
+          <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <span>Campus ID</span>
+          <span class="nav-coming-soon">Soon</span>
+        </a>
+        <a href="#" class="nav-item nav-item-soon" data-section="attendance">
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span>Attendance</span>
+          <span class="nav-coming-soon">Soon</span>
+        </a>
+        <a href="#" class="nav-item" data-section="settings">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings</span>
         </a>
       </nav>
 
-      <button id="btn-logout" class="logout-btn">
-        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Logout</span>
-      </button>
+      <div class="sidebar-footer">
+        <div class="sidebar-admin-chip" id="sidebar-admin-chip">
+          <div class="admin-chip-avatar" id="sidebar-avatar-initials">SA</div>
+          <div>
+            <p id="sidebar-admin-name" class="admin-chip-name">SBU Admin</p>
+            <p class="admin-chip-role">Institution Admin</p>
+          </div>
+        </div>
+        <button id="btn-logout" class="logout-btn">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Logout</span>
+        </button>
+      </div>
     </aside>
 
+    <!-- ===== MAIN ===== -->
     <main class="main-area">
 
       <header class="topbar">
         <div>
-          <h1 id="greeting-text">Welcome back</h1>
-          <p class="text-muted">Campus: <span id="admin-campus">—</span></p>
+          <h1 id="greeting-text">Welcome back 👋</h1>
+          <p class="text-muted" style="margin:0;font-size:0.85rem;">Here's what's happening at your institution today.</p>
         </div>
-        <div class="topbar-user">
-          <div>
-            <p id="user-name" class="user-name">Loading...</p>
-            <p id="user-meta" class="text-muted small">—</p>
+        <div class="topbar-right">
+          <div class="topbar-campus-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            <span id="topbar-campus">SBU-RANCHI-2026</span>
+          </div>
+          <div class="topbar-user">
+            <div class="user-avatar-ring" id="topbar-avatar-initials">SA</div>
+            <div>
+              <p id="user-name" class="user-name">SBU Admin</p>
+              <p class="text-muted small">Institution Admin</p>
+            </div>
           </div>
         </div>
       </header>
 
       <!-- ============ DASHBOARD HOME ============ -->
       <section id="section-dashboard" class="dash-section">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></span>
-            <div><p id="stat-students" class="stat-value">--</p><p class="stat-label">Total Students</p></div>
+
+        <!-- Stats Row -->
+        <div class="stats-grid stats-grid-4">
+          <div class="stat-card stat-card-blue">
+            <span class="stat-icon">
+              <svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
+            </span>
+            <div>
+              <p id="stat-students" class="stat-value">--</p>
+              <p class="stat-label">Total Students</p>
+              <p class="stat-delta delta-up" id="stat-students-delta">↑ 12 this month</p>
+            </div>
           </div>
-          <div class="stat-card">
-            <span class="stat-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8" cy="11" r="2.5"/><path d="M4.5 17c.7-2 2.3-3 3.5-3s2.8 1 3.5 3"/><line x1="14" y1="9" x2="19" y2="9"/><line x1="14" y1="13" x2="19" y2="13"/></svg></span>
-            <div><p id="stat-teachers" class="stat-value">--</p><p class="stat-label">Total Teachers</p></div>
+          <div class="stat-card stat-card-green">
+            <span class="stat-icon stat-icon-green">
+              <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8" cy="11" r="2.5"/><path d="M4.5 17c.7-2 2.3-3 3.5-3s2.8 1 3.5 3"/><line x1="14" y1="9" x2="19" y2="9"/><line x1="14" y1="13" x2="19" y2="13"/></svg>
+            </span>
+            <div>
+              <p id="stat-teachers" class="stat-value">--</p>
+              <p class="stat-label">Total Teachers</p>
+              <p class="stat-delta delta-up">↑ 3 this month</p>
+            </div>
           </div>
-          <div class="stat-card">
-            <span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
-            <div><p id="stat-parents" class="stat-value">--</p><p class="stat-label">Total Parents</p></div>
+          <div class="stat-card stat-card-purple">
+            <span class="stat-icon stat-icon-purple">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
+            <div>
+              <p id="stat-parents" class="stat-value">--</p>
+              <p class="stat-label">Total Parents</p>
+              <p class="stat-delta delta-up">↑ 18 this month</p>
+            </div>
+          </div>
+          <div class="stat-card stat-card-warning">
+            <span class="stat-icon stat-icon-warning">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </span>
+            <div>
+              <p id="stat-pending" class="stat-value">--</p>
+              <p class="stat-label">Pending Requests</p>
+              <button class="stat-action-link" id="btn-view-requests">View &amp; review →</button>
+            </div>
           </div>
         </div>
 
-        <div class="glass-panel">
-          <h3>Recent Activity</h3>
-          <ul id="list-recent-activity" class="data-list"><li class="empty-row">Loading...</li></ul>
+        <!-- Dashboard 2-col grid -->
+        <div class="dash-two-col">
+
+          <!-- Pending Requests Preview -->
+          <div class="glass-panel panel-requests-preview">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title">Pending Access Requests</h3>
+                <p class="panel-subtitle">Review and take action on new access requests</p>
+              </div>
+              <button class="btn-outline-sm" id="btn-view-all-requests">View All</button>
+            </div>
+            <div class="requests-mini-list" id="dash-requests-list">
+              <div class="empty-row">Loading...</div>
+            </div>
+            <button class="panel-footer-link" id="btn-view-all-requests-2">View all requests →</button>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="glass-panel panel-activity">
+            <div class="panel-header">
+              <h3 class="panel-title">Recent Activity</h3>
+              <button class="btn-outline-sm">View All</button>
+            </div>
+            <ul id="list-recent-activity" class="activity-list">
+              <li class="empty-row">Loading...</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Announcement Banner -->
+        <div class="announcement-banner">
+          <div class="announcement-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div class="announcement-text">
+            <p class="announcement-title">Important Announcement</p>
+            <p class="announcement-body">System maintenance is scheduled on 25th May 2026 from 02:00 AM to 04:00 AM.</p>
+          </div>
+          <button class="btn-outline-sm">View Details</button>
+        </div>
+
+      </section>
+
+      <!-- ============ REQUESTS MODULE ============ -->
+      <section id="section-requests" class="dash-section" hidden>
+        <div class="section-page-header">
+          <div>
+            <h2 class="section-title">Access Requests</h2>
+            <p class="section-subtitle">Review, approve or reject incoming registration requests</p>
+          </div>
+        </div>
+
+        <!-- Status Tabs -->
+        <div class="tabs-row" id="requests-tabs">
+          <button class="tab-btn state-active" data-tab="pending">
+            Pending
+            <span class="tab-count" id="tab-count-pending">0</span>
+          </button>
+          <button class="tab-btn" data-tab="under_review">
+            Under Review
+            <span class="tab-count" id="tab-count-review">0</span>
+          </button>
+          <button class="tab-btn" data-tab="approved">
+            Approved
+            <span class="tab-count" id="tab-count-approved">0</span>
+          </button>
+          <button class="tab-btn" data-tab="rejected">
+            Rejected
+            <span class="tab-count" id="tab-count-rejected">0</span>
+          </button>
+        </div>
+
+        <!-- Requests Table -->
+        <div class="glass-panel" style="padding:0;overflow:hidden;">
+          <div class="requests-table-header">
+            <span>Applicant</span>
+            <span>Role</span>
+            <span>Campus</span>
+            <span>Requested On</span>
+            <span>Actions</span>
+          </div>
+          <div id="requests-list-container">
+            <div class="empty-row" style="padding:32px;text-align:center;">Loading requests...</div>
+          </div>
         </div>
       </section>
 
       <!-- ============ STUDENTS ============ -->
       <section id="section-students" class="dash-section" hidden>
-        <div class="glass-panel">
+        <div class="section-page-header">
+          <div>
+            <h2 class="section-title">Students</h2>
+            <p class="section-subtitle">Manage student profiles and records</p>
+          </div>
+          <button class="btn-primary" id="btn-open-create-student">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create Student
+          </button>
+        </div>
+
+        <div class="glass-panel" id="create-student-panel" style="margin-bottom:20px;display:none;">
           <h3>
             <svg class="heading-icon" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
             Create Student
@@ -120,12 +306,18 @@
               <label>Class<input id="student-class" type="text" required placeholder="e.g. BCA-III-A"></label>
             </div>
             <p id="student-form-error" class="form-error" hidden></p>
-            <button type="submit" class="btn-primary">Create Student</button>
+            <div style="display:flex;gap:10px;">
+              <button type="submit" class="btn-primary">Create Student</button>
+              <button type="button" class="btn-secondary" id="btn-cancel-create-student">Cancel</button>
+            </div>
           </form>
         </div>
 
-        <div class="glass-panel" style="margin-top:20px;">
-          <h3>All Students</h3>
+        <div class="glass-panel">
+          <div class="panel-header" style="margin-bottom:14px;">
+            <h3 style="margin:0;">All Students</h3>
+            <span class="count-chip" id="students-count-chip">0 records</span>
+          </div>
           <input id="search-students" type="text" class="admin-search" placeholder="Search by name, email, or class...">
           <ul id="list-students" class="data-list"><li class="empty-row">Loading...</li></ul>
         </div>
@@ -133,7 +325,18 @@
 
       <!-- ============ TEACHERS ============ -->
       <section id="section-teachers" class="dash-section" hidden>
-        <div class="glass-panel">
+        <div class="section-page-header">
+          <div>
+            <h2 class="section-title">Teachers</h2>
+            <p class="section-subtitle">Manage faculty profiles and subjects</p>
+          </div>
+          <button class="btn-primary" id="btn-open-create-teacher">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create Teacher
+          </button>
+        </div>
+
+        <div class="glass-panel" id="create-teacher-panel" style="margin-bottom:20px;display:none;">
           <h3>
             <svg class="heading-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8" cy="11" r="2.5"/><path d="M4.5 17c.7-2 2.3-3 3.5-3s2.8 1 3.5 3"/><line x1="14" y1="9" x2="19" y2="9"/><line x1="14" y1="13" x2="19" y2="13"/></svg>
             Create Teacher
@@ -145,12 +348,18 @@
             </div>
             <label>Subjects (comma-separated)<input id="teacher-subjects" type="text" placeholder="e.g. Mathematics, DBMS"></label>
             <p id="teacher-form-error" class="form-error" hidden></p>
-            <button type="submit" class="btn-primary">Create Teacher</button>
+            <div style="display:flex;gap:10px;">
+              <button type="submit" class="btn-primary">Create Teacher</button>
+              <button type="button" class="btn-secondary" id="btn-cancel-create-teacher">Cancel</button>
+            </div>
           </form>
         </div>
 
-        <div class="glass-panel" style="margin-top:20px;">
-          <h3>All Teachers</h3>
+        <div class="glass-panel">
+          <div class="panel-header" style="margin-bottom:14px;">
+            <h3 style="margin:0;">All Teachers</h3>
+            <span class="count-chip" id="teachers-count-chip">0 records</span>
+          </div>
           <input id="search-teachers" type="text" class="admin-search" placeholder="Search by name, email, or subject...">
           <ul id="list-teachers" class="data-list"><li class="empty-row">Loading...</li></ul>
         </div>
@@ -158,9 +367,20 @@
 
       <!-- ============ PARENTS ============ -->
       <section id="section-parents" class="dash-section" hidden>
-        <div class="glass-panel">
+        <div class="section-page-header">
+          <div>
+            <h2 class="section-title">Parents</h2>
+            <p class="section-subtitle">Manage parent accounts and child linkages</p>
+          </div>
+          <button class="btn-primary" id="btn-open-create-parent">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create Parent
+          </button>
+        </div>
+
+        <div class="glass-panel" id="create-parent-panel" style="margin-bottom:20px;display:none;">
           <h3>
-            <svg class="heading-icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <svg class="heading-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
             Create Parent
           </h3>
           <form id="form-create-parent" class="admin-form">
@@ -168,28 +388,91 @@
               <label>Full Name<input id="parent-name" type="text" required placeholder="e.g. Mr. Sharma"></label>
               <label>Email<input id="parent-email" type="email" required placeholder="parent@campusone.com"></label>
             </div>
-            <label>Mobile<input id="parent-mobile" type="tel" placeholder="e.g. 9876543210"></label>
-            <label>Child's Email (must already have a student profile)<input id="parent-child-email" type="email" placeholder="student@campusone.com"></label>
+            <div class="admin-form-row">
+              <label>Mobile<input id="parent-mobile" type="tel" placeholder="e.g. 9876543210"></label>
+              <label>Child's Email<input id="parent-child-email" type="email" placeholder="student@campusone.com"></label>
+            </div>
             <p id="parent-form-error" class="form-error" hidden></p>
-            <button type="submit" class="btn-primary">Create Parent</button>
+            <div style="display:flex;gap:10px;">
+              <button type="submit" class="btn-primary">Create Parent</button>
+              <button type="button" class="btn-secondary" id="btn-cancel-create-parent">Cancel</button>
+            </div>
           </form>
         </div>
 
-        <div class="glass-panel" style="margin-top:20px;">
-          <h3>All Parents</h3>
+        <div class="glass-panel">
+          <div class="panel-header" style="margin-bottom:14px;">
+            <h3 style="margin:0;">All Parents</h3>
+            <span class="count-chip" id="parents-count-chip">0 records</span>
+          </div>
           <input id="search-parents" type="text" class="admin-search" placeholder="Search by name or email...">
           <ul id="list-parents" class="data-list"><li class="empty-row">Loading...</li></ul>
+        </div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section id="section-settings" class="dash-section" hidden>
+        <div class="section-page-header">
+          <div>
+            <h2 class="section-title">Settings</h2>
+            <p class="section-subtitle">Institution and account preferences</p>
+          </div>
+        </div>
+        <div class="glass-panel" style="max-width:600px;">
+          <h3>Institution Info</h3>
+          <div class="settings-row">
+            <span class="settings-label">Campus Code</span>
+            <span class="settings-value" id="settings-campus">—</span>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Admin Name</span>
+            <span class="settings-value" id="settings-admin-name">—</span>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Email</span>
+            <span class="settings-value" id="settings-email">—</span>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Role</span>
+            <span class="settings-value"><span class="badge badge-submitted">Institution Admin</span></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ COMING SOON STUBS ============ -->
+      <section id="section-notices" class="dash-section" hidden>
+        <div class="coming-soon-screen">
+          <div class="coming-soon-icon">📢</div>
+          <h2>Notice Board</h2>
+          <p>Create and broadcast announcements to students, teachers, and parents.</p>
+          <span class="badge badge-pending" style="font-size:0.8rem;padding:6px 16px;">Coming in Sprint 2</span>
+        </div>
+      </section>
+      <section id="section-campus-id" class="dash-section" hidden>
+        <div class="coming-soon-screen">
+          <div class="coming-soon-icon">🪪</div>
+          <h2>Campus ID Cards</h2>
+          <p>Auto-generate QR-based Campus ID cards for approved members.</p>
+          <span class="badge badge-pending" style="font-size:0.8rem;padding:6px 16px;">Coming in Sprint 3</span>
+        </div>
+      </section>
+      <section id="section-attendance" class="dash-section" hidden>
+        <div class="coming-soon-screen">
+          <div class="coming-soon-icon">📊</div>
+          <h2>Attendance</h2>
+          <p>Track and manage daily attendance across all classes.</p>
+          <span class="badge badge-pending" style="font-size:0.8rem;padding:6px 16px;">Coming in Sprint 4</span>
         </div>
       </section>
 
     </main>
   </div>
 
-  <!-- Edit modal, shared across Students/Teachers/Parents -->
+  <!-- ===== EDIT MODAL ===== -->
   <div id="edit-modal" class="modal-overlay" hidden>
     <div class="modal-card">
       <h3 id="edit-modal-title">Edit Record</h3>
-      <form id="edit-modal-form"></form>
+      <form id="edit-modal-form" class="admin-form" style="margin-top:12px;"></form>
       <div class="modal-actions">
         <button id="edit-modal-cancel" type="button" class="btn-secondary">Cancel</button>
         <button id="edit-modal-save" type="button" class="btn-primary">Save Changes</button>
@@ -197,6 +480,42 @@
     </div>
   </div>
 
-  <script type="module" src="admin-dashboard.js"></script>
+  <!-- ===== REQUEST DETAIL MODAL ===== -->
+  <div id="request-modal" class="modal-overlay" hidden>
+    <div class="modal-card modal-card-wide">
+      <div class="request-modal-header">
+        <div class="request-modal-avatar" id="req-modal-avatar">?</div>
+        <div>
+          <h3 id="req-modal-name" style="margin:0 0 4px;">—</h3>
+          <p id="req-modal-email" class="text-muted small" style="margin:0;">—</p>
+        </div>
+        <button class="modal-close-btn" id="req-modal-close">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="request-detail-grid">
+        <div class="request-detail-item"><span class="detail-label">Role</span><span id="req-modal-role" class="detail-value">—</span></div>
+        <div class="request-detail-item"><span class="detail-label">Campus</span><span id="req-modal-campus" class="detail-value">—</span></div>
+        <div class="request-detail-item"><span class="detail-label">Requested On</span><span id="req-modal-date" class="detail-value">—</span></div>
+        <div class="request-detail-item"><span class="detail-label">Status</span><span id="req-modal-status" class="detail-value">—</span></div>
+      </div>
+      <div class="modal-actions" id="req-modal-actions">
+        <button class="btn-secondary" id="req-modal-cancel-btn">Close</button>
+        <button class="btn-danger" id="req-modal-reject-btn">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Reject
+        </button>
+        <button class="btn-success" id="req-modal-approve-btn">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><polyline points="20 6 9 17 4 12"/></svg>
+          Approve
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast" hidden></div>
+
+  <script type="module" src="./admin-dashboard.js"></script>
 </body>
 </html>

@@ -169,8 +169,6 @@ async function initDashboard() {
   const shell = $("app-shell");
 
   const user = await waitForAuthReady();
-
-  alert("USER = " + (user ? user.uid : "NULL"));
   
   if (!user) { window.location.href = "../login-screen/index.html"; return; }
   currentUser = user;

@@ -395,7 +395,8 @@ async function submitRequest(e) {
   const email       = document.getElementById("email").value.trim();
   const phone       = document.getElementById("phone").value.trim();
   const institution = document.getElementById("form-institution").value.trim();
-  const campusCode  = document.getElementById("inst-code").value.trim().toUpperCase();
+  const campusCode = document.getElementById("inst-code").value.trim().toUpperCase();
+        console.log("Campus Code =", campusCode);
   const role        = document.getElementById("role-select").value;
   const reason      = document.getElementById("reason").value.trim();
 

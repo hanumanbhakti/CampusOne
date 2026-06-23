@@ -676,9 +676,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     DOM.authForm.reset();
                     clearTenantVerificationState();
                     updateStrengthMeterUI(0, t('passwordStrength', 'Password Strength'), 'transparent');
-                    const route = CampusOS.roleContexts["admin"]?.targetRoute || CampusOS.roleContexts.student.targetRoute;
-                    pushSystemTelemetryEvent('REDIRECT_FORCED', `Staff admin redirect: [${route}].`);
-                    window.location.href = route;
+                    if (staffData.role === "super_admin") {
+    pushSystemTelemetryEvent(
+        'REDIRECT_FORCED',
+        'Super Admin redirect.'
+    );
+    window.location.href = "../super-admin-dashboard/index.html";
+    return;
+}
+
+if (staffData.role === "institution_admin") {
+    pushSystemTelemetryEvent(
+        'REDIRECT_FORCED',
+        'Institution Admin redirect.'
+    );
+    window.location.href = "../admin-dashboard/index.html";
+    return;
+}
                 }, 1500);
                 return; // Skip users collection lookup entirely
             }

@@ -661,12 +661,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // override the role to "admin" immediately — no need to look in "users".
         const staffRef = doc(db, "staff", firebaseUser.uid);
         const staffSnap = await getDoc(staffRef);
-
-      console.log("UID:", firebaseUser.uid);
-console.log("STAFF EXISTS:", staffSnap.exists());
-console.log("STAFF DATA:", staffSnap.data());
-
-alert("STAFF EXISTS = " + staffSnap.exists());
       
         if (staffSnap.exists()) {
             const staffData = staffSnap.data();

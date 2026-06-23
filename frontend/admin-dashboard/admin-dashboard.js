@@ -346,10 +346,7 @@ const q = query(
 );
     const snap = await getDocs(q);
 
-console.log("Requests Found:", snap.size);
-
-requestsCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    const snap = await getDocs(q);
+    console.log("Requests Found:", snap.size);
     requestsCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
   } catch (err) {
     console.warn("Could not load requests (collection may not exist yet):", err.message);

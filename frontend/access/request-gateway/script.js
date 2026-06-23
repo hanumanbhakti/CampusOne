@@ -283,6 +283,55 @@ let reasonsCache = [];         // top-level access_reasons collection
 let identityCache = [];        // top-level identity_verification collection
 let selectedInstitution = null; // { id, name } of the chosen institution
 
+// Role-wise filtering for Reason & Identity dropdowns.
+// Preferred: each Firestore doc carries a `roles: ["Student", ...]` array —
+// if present anywhere in the collection, that data drives the filter.
+// Fallback: a hardcoded id map (matches the doc IDs already in Firestore)
+// so filtering works today even before the `roles` field is added.
+const ROLE_REASON_FALLBACK = {
+  Student: ["new_admission", "existing_student", "other"],
+  Faculty: ["faculty_access", "other"],
+  Parent:  ["parent_access", "other"]
+};
+const ROLE_IDENTITY_FALLBACK = {
+  Student: ["student_id", "admission_number", "other"],
+  Faculty: ["employee_id", "other"],
+  Parent:  ["guardian_id", "other"]
+};
+
+function filterByRole(cache, role, fallbackMap) {
+  if (!role) return cache; // no role chosen yet — show everything
+  const hasRoleField = cache.some(item => Array.isArray(item.roles));
+  if (hasRoleField) {
+    return cache.filter(item => !Array.isArray(item.roles) || item.roles.length === 0 || item.roles.includes(role));
+  }
+  const allowed = fallbackMap[role];
+  if (!allowed) return cache;
+  return cache.filter(item => allowed.includes(item.id));
+}
+
+// Re-renders <select id="reason-select"> using reasonsCache, filtered by role
+function renderReasonSelect(role) {
+  const select = document.getElementById("reason-select");
+  if (!select) return;
+  const filtered = filterByRole(reasonsCache, role, ROLE_REASON_FALLBACK);
+  const prevValue = select.value;
+  select.innerHTML = `<option value="" disabled selected></option>` +
+    filtered.map(r => `<option value="${r.id}">${r.name || r.id}</option>`).join("");
+  if (filtered.some(r => r.id === prevValue)) select.value = prevValue;
+}
+
+// Re-renders <select id="identity-select"> using identityCache, filtered by role
+function renderIdentitySelect(role) {
+  const select = document.getElementById("identity-select");
+  if (!select) return;
+  const filtered = filterByRole(identityCache, role, ROLE_IDENTITY_FALLBACK);
+  const prevValue = select.value;
+  select.innerHTML = `<option value="" disabled selected></option>` +
+    filtered.map(i => `<option value="${i.id}">${i.name || i.id}</option>`).join("");
+  if (filtered.some(i => i.id === prevValue)) select.value = prevValue;
+}
+
 function initRoleCards() {
   document.querySelectorAll(".role-card").forEach(card => {
     card.addEventListener("click", () => {
@@ -336,6 +385,10 @@ function updateDynamicFields(role) {
         <label for="student-class">Ward's Class / Section</label>
       </div>`;
   }
+
+  // Role changed — re-filter Reason & Identity dropdowns to only show role-relevant options
+  renderReasonSelect(role);
+  renderIdentitySelect(role);
 }
 
 // ---- Dynamic Dropdown Engine ----
@@ -425,8 +478,7 @@ async function loadReasons() {
     reasonsCache = [];
   }
 
-  select.innerHTML = `<option value="" disabled selected></option>` +
-    reasonsCache.map(r => `<option value="${r.id}">${r.name || r.id}</option>`).join("");
+  renderReasonSelect(selectedRole);
 }
 
 // Identity Verification Dropdown — loads the top-level identity_verification collection
@@ -443,8 +495,7 @@ async function loadIdentityVerification() {
     identityCache = [];
   }
 
-  select.innerHTML = `<option value="" disabled selected></option>` +
-    identityCache.map(i => `<option value="${i.id}">${i.name || i.id}</option>`).join("");
+  renderIdentitySelect(selectedRole);
 }
 
 // ---- Main Form Submit ----
@@ -495,7 +546,7 @@ async function submitRequest(e) {
   const roleKeyMap = { Student: "student", Faculty: "faculty", Parent: "parent" };
   const roleKey = roleKeyMap[role] || role.toLowerCase();
 
-  const requestId = generateRequestId();
+    const requestId = generateRequestId();
   const payload = {
     requestId,
     fullName,

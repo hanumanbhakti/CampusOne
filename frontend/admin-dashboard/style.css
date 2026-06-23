@@ -112,8 +112,17 @@ button, input { font-family: inherit; background: none; border: none; outline: n
     display: flex; align-items: center; justify-content: center;
 }
 
+.sidebar-logo-img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    display: block;
+}
+
 .brand-name {
-    font-weight: 700; font-size: 1rem;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     background: var(--brand-gradient);
     -webkit-background-clip: text; background-clip: text;
@@ -121,8 +130,9 @@ button, input { font-family: inherit; background: none; border: none; outline: n
 }
 
 .brand-tagline {
-    display: block; font-size: 0.65rem; color: var(--text-muted);
-    font-weight: 500; margin-top: 1px;
+    margin: 0;
+    display: block; font-size: 11px; color: var(--text-muted);
+    font-weight: 500; opacity: .7;
 }
 
 /* Campus Selector Pod */

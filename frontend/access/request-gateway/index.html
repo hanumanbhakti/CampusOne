@@ -136,10 +136,31 @@
       </nav>
     </aside>
   </div>
+  <!-- ═══════════════ INSTITUTION VERIFICATION ═══════════════ -->
+  <section class="verify-section" id="verify-section">
+    <div class="section-label" data-i18n="verify.label">Step 1 — Institution Verification</div>
+    <h2 class="section-title" data-i18n="verify.title">Verify your institution</h2>
+    <p class="section-desc" data-i18n="verify.desc">Select your institution from our verified network — the campus code is filled in automatically.</p>
 
+    <div class="glass-card verify-card">
+      <div class="verify-grid">
+        <div class="field-group" style="margin-bottom:0">
+          <select id="inst-select" required>
+            <option value="" disabled selected></option>
+          </select>
+          <label for="inst-select" data-i18n="verify.name">Institution</label>
+        </div>
+        <div class="field-group" style="margin-bottom:0">
+          <input type="text" id="inst-code" placeholder=" " readonly />
+          <label for="inst-code" data-i18n="verify.code">Campus Code</label>
+        </div>
+      </div>
+      <div class="verify-result" id="verify-result"></div>
+    </div>
+  </section>
   <!-- ═══════════════ ROLE SELECTION ═══════════════ -->
   <section class="role-section" id="role-section">
-    <div class="section-label" data-i18n="role.label">Step 1 — Identify Your Role</div>
+    <div class="section-label" data-i18n="role.label">Step 2 — Identify Your Role</div>
     <h2 class="section-title" data-i18n="role.title">Who are you?</h2>
     <p class="section-desc" data-i18n="role.desc">Select your role to get a tailored access request experience.</p>
 
@@ -170,29 +191,6 @@
         <div class="role-desc" data-i18n="role.parent.desc">Track student performance, receive notices and stay connected with institution updates.</div>
         <div class="role-cta" data-i18n="role.parent.cta">Select Parent</div>
       </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════ INSTITUTION VERIFICATION ═══════════════ -->
-  <section class="verify-section" id="verify-section">
-    <div class="section-label" data-i18n="verify.label">Step 2 — Institution Verification</div>
-    <h2 class="section-title" data-i18n="verify.title">Verify your institution</h2>
-    <p class="section-desc" data-i18n="verify.desc">Select your institution from our verified network — the campus code is filled in automatically.</p>
-
-    <div class="glass-card verify-card">
-      <div class="verify-grid">
-        <div class="field-group" style="margin-bottom:0">
-          <select id="inst-select" required>
-            <option value="" disabled selected></option>
-          </select>
-          <label for="inst-select" data-i18n="verify.name">Institution</label>
-        </div>
-        <div class="field-group" style="margin-bottom:0">
-          <input type="text" id="inst-code" placeholder=" " readonly />
-          <label for="inst-code" data-i18n="verify.code">Campus Code</label>
-        </div>
-      </div>
-      <div class="verify-result" id="verify-result"></div>
     </div>
   </section>
 

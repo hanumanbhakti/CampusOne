@@ -69,8 +69,73 @@ function showToast(msg, type = "info") {
   toastTimer = setTimeout(() => { toast.hidden = true; }, 3200);
 }
 
+// ============ THEME (DARK / LIGHT) ============
+function initTheme() {
+  const themeBtn = $("theme-toggle");
+  if (!themeBtn) return;
+
+  const savedTheme = localStorage.getItem("campusone-theme") || "dark";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  document.body.setAttribute("data-theme", savedTheme);
+  themeBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
+
+  themeBtn.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme");
+    const next = current === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    document.body.setAttribute("data-theme", next);
+    localStorage.setItem("campusone-theme", next);
+    themeBtn.textContent = next === "dark" ? "☀️" : "🌙";
+  });
+}
+
+// ============ LANGUAGE ENGINE ============
+const translations = {
+  en: {
+    dashboard: "Dashboard",
+    requests: "Requests",
+    students: "Students",
+    teachers: "Teachers",
+    parents: "Parents",
+    settings: "Settings"
+  },
+  hi: {
+    dashboard: "डैशबोर्ड",
+    requests: "रिक्वेस्ट्स",
+    students: "विद्यार्थी",
+    teachers: "शिक्षक",
+    parents: "अभिभावक",
+    settings: "सेटिंग्स"
+  }
+};
+
+function applyLanguage(lang) {
+  const dict = translations[lang] || translations.en;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.dataset.i18n;
+    if (dict[key]) el.textContent = dict[key];
+  });
+  localStorage.setItem("campusone-language", lang);
+}
+
+function initLanguage() {
+  const langSwitcher = $("language-switcher");
+  if (!langSwitcher) return;
+
+  const savedLang = localStorage.getItem("campusone-language") || "en";
+  langSwitcher.value = savedLang;
+  applyLanguage(savedLang);
+
+  langSwitcher.addEventListener("change", (e) => applyLanguage(e.target.value));
+}
+
 // ============ BOOT ============
 document.addEventListener("DOMContentLoaded", () => {
+  // Apply saved theme/language immediately — don't wait on auth/Firebase,
+  // otherwise the UI flashes the wrong theme while login resolves.
+  initTheme();
+  initLanguage();
+
   const safetyTimer = setTimeout(() => {
     const gate = $("auth-gate");
     if (gate && !gate.hidden) {

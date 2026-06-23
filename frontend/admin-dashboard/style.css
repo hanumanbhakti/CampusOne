@@ -44,6 +44,30 @@
 }
 
 /* =========================================================================
+   LIGHT THEME OVERRIDES
+   Activated via [data-theme="light"] on <html>. Dark values above remain
+   the default (data-theme="dark").
+   ========================================================================= */
+[data-theme="light"] {
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-surface-solid: #FFFFFF;
+    --color-surface-input: #F1F5F9;
+
+    --text-primary: #0F172A;
+    --text-secondary: #334155;
+    --text-muted: #64748B;
+
+    --glass-border: rgba(15, 23, 42, .08);
+}
+
+html, body {
+    transition: background-color var(--t-normal) var(--ease-standard),
+                color var(--t-normal) var(--ease-standard);
+}
+
+
+/* =========================================================================
    RESET & BASE
    ========================================================================= */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -535,6 +559,16 @@ button, input { font-family: inherit; background: none; border: none; outline: n
     transition: all var(--t-fast) var(--ease-standard);
 }
 .btn-secondary:hover { background: var(--color-surface); color: var(--text-primary); }
+
+#theme-toggle {
+    padding: 8px 10px; font-size: 1rem; line-height: 1;
+}
+
+#language-switcher {
+    padding: 8px 10px; font-size: 0.82rem;
+    background-color: var(--color-surface-input);
+    color: var(--text-secondary);
+}
 
 .btn-outline-sm {
     background: transparent; color: var(--brand-accent);

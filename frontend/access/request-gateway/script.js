@@ -37,6 +37,17 @@ function generateRequestId() {
   return `CO-REQ-2026-${n}`;
 }
 
+// Firestore docs across collections (institutes, courses, access_reasons,
+// identity_verification, request_statuses) may use different field names
+// for the human-readable text — some use `name`, some `label`, some `title`.
+// This tries all of them before falling back to the raw doc id, so the UI
+// never shows a raw id like "student_id" just because a doc used `label`
+// instead of `name`.
+function displayName(item) {
+  if (!item) return "";
+  return item.name || item.label || item.title || item.id || "";
+}
+
 function showToast(msg, type = "info") {
   const container = document.getElementById("toast-container");
   const t = document.createElement("div");
@@ -317,7 +328,7 @@ function renderReasonSelect(role) {
   const filtered = filterByRole(reasonsCache, role, ROLE_REASON_FALLBACK);
   const prevValue = select.value;
   select.innerHTML = `<option value="" disabled selected></option>` +
-    filtered.map(r => `<option value="${r.id}">${r.name || r.id}</option>`).join("");
+    filtered.map(r => `<option value="${r.id}">${displayName(r)}</option>`).join("");
   if (filtered.some(r => r.id === prevValue)) select.value = prevValue;
 }
 
@@ -328,7 +339,7 @@ function renderIdentitySelect(role) {
   const filtered = filterByRole(identityCache, role, ROLE_IDENTITY_FALLBACK);
   const prevValue = select.value;
   select.innerHTML = `<option value="" disabled selected></option>` +
-    filtered.map(i => `<option value="${i.id}">${i.name || i.id}</option>`).join("");
+    filtered.map(i => `<option value="${i.id}">${displayName(i)}</option>`).join("");
   if (filtered.some(i => i.id === prevValue)) select.value = prevValue;
 }
 
@@ -413,7 +424,7 @@ async function loadInstitutions() {
   }
 
   select.innerHTML = `<option value="" disabled selected></option>` +
-    institutesCache.map(i => `<option value="${i.id}">${i.name || i.id}</option>`).join("");
+    institutesCache.map(i => `<option value="${i.id}">${displayName(i)}</option>`).join("");
 }
 
 // Fires when the user picks an institution: auto-fill campus code + load its courses
@@ -434,12 +445,12 @@ async function onInstitutionChange(e) {
 
   selectedInstitution = inst;
   codeField.value = inst.id;
-  formInstitution.value = inst.name || inst.id;
+  formInstitution.value = displayName(inst);
 
   result.className = "verify-result success";
-  result.innerHTML = `<svg class="icon"><use href="#icon-check"/></svg> ${inst.name || inst.id} — Verified Campus Node`;
+  result.innerHTML = `<svg class="icon"><use href="#icon-check"/></svg> ${displayName(inst)} — Verified Campus Node`;
   result.style.display = "flex";
-  showToast(`${inst.name || inst.id} selected`, "success");
+  showToast(`${displayName(inst)} selected`, "success");
 
   // Course dropdown only exists in the DOM once "Student" role is active
   await loadCourses(inst.id);
@@ -461,7 +472,7 @@ async function loadCourses(instId) {
   }
 
   select.innerHTML = `<option value="" disabled selected></option>` +
-    coursesCache.map(c => `<option value="${c.id}">${c.name || c.id}</option>`).join("");
+    coursesCache.map(c => `<option value="${c.id}">${displayName(c)}</option>`).join("");
 }
 
 // Reason Dropdown — loads the top-level access_reasons collection (independent of institution)
@@ -513,17 +524,17 @@ async function submitRequest(e) {
   const reasonSelect = document.getElementById("reason-select");
   const reasonId   = reasonSelect ? reasonSelect.value : "";
   const reasonObj  = reasonsCache.find(r => r.id === reasonId);
-  const reasonName = reasonObj ? (reasonObj.name || reasonObj.id) : "";
+  const reasonName = displayName(reasonObj);
 
   const courseSelect = document.getElementById("course-select"); // only present for Student
   const courseId   = courseSelect ? courseSelect.value : "";
   const courseObj  = coursesCache.find(c => c.id === courseId);
-  const courseName = courseObj ? (courseObj.name || courseObj.id) : "";
+  const courseName = displayName(courseObj);
 
   const identitySelect = document.getElementById("identity-select");
   const identityType   = identitySelect ? identitySelect.value : "";
   const identityObj    = identityCache.find(i => i.id === identityType);
-  const identityTypeName = identityObj ? (identityObj.name || identityObj.id) : "";
+  const identityTypeName = displayName(identityObj);
   const identityValue  = document.getElementById("identity-value").value.trim();
 
   if (!fullName || !email || !institution || !campusCode || !role) {
@@ -546,7 +557,7 @@ async function submitRequest(e) {
   const roleKeyMap = { Student: "student", Faculty: "faculty", Parent: "parent" };
   const roleKey = roleKeyMap[role] || role.toLowerCase();
 
-    const requestId = generateRequestId();
+  const requestId = generateRequestId();
   const payload = {
     requestId,
     fullName,

@@ -656,47 +656,80 @@ document.addEventListener('DOMContentLoaded', () => {
     // Shared by both email/password and Google sign-in — looks up the user's
     // profile doc, resolves their real role, and redirects to the matching dashboard.
     async function completeSuccessfulLogin(firebaseUser, selectedRole) {
-        // --- STAFF / ADMIN PRIORITY CHECK ---
-        // Check "staff" collection first. If the UID exists there and is active,
-        // override the role to "admin" immediately — no need to look in "users".
-        const staffRef = doc(db, "staff", firebaseUser.uid);
-        const staffSnap = await getDoc(staffRef);
-      
-        if (staffSnap.exists()) {
-            const staffData = staffSnap.data();
-            if (staffData.active === true) {
-                CampusOS.state.currentRole = "admin";
-                showNotification(t('toastProfileLoaded', 'Profile loaded successfully.'), "success");
-                if (CampusOS.state.activeTenant) {
-                    localStorage.setItem('campusone-tenant', CampusOS.state.activeTenant);
-                }
-                setButtonSubmissionEngineState('resolved');
-                showNotification(t('toastAuthSuccess', 'Authentication successful! Redirecting you now...'), "success");
-                setTimeout(() => {
-                    DOM.authForm.reset();
-                    clearTenantVerificationState();
-                    updateStrengthMeterUI(0, t('passwordStrength', 'Password Strength'), 'transparent');
-                    if (staffData.role === "super_admin") {
-    pushSystemTelemetryEvent(
-        'REDIRECT_FORCED',
-        'Super Admin redirect.'
-    );
-    window.location.href = "../super-admin-dashboard/index.html";
-    return;
-}
+// --- STAFF / ADMIN PRIORITY CHECK ---
+const staffRef = doc(db, "staff", firebaseUser.uid);
+const staffSnap = await getDoc(staffRef);
 
-if (staffData.role === "institution_admin") {
-    pushSystemTelemetryEvent(
-        'REDIRECT_FORCED',
-        'Institution Admin redirect.'
-    );
-    window.location.href = "../admin-dashboard/index.html";
-    return;
-}
-                }, 1500);
-                return; // Skip users collection lookup entirely
-            }
+if (staffSnap.exists()) {
+    const staffData = staffSnap.data();
+
+    if (staffData.active === true) {
+        CampusOS.state.currentRole = "admin";
+
+        showNotification(
+            t('toastProfileLoaded', 'Profile loaded successfully.'),
+            "success"
+        );
+
+        if (CampusOS.state.activeTenant) {
+            localStorage.setItem(
+                'campusone-tenant',
+                CampusOS.state.activeTenant
+            );
         }
+
+        setButtonSubmissionEngineState('resolved');
+
+        showNotification(
+            t(
+                'toastAuthSuccess',
+                'Authentication successful! Redirecting you now...'
+            ),
+            "success"
+        );
+
+        setTimeout(() => {
+            DOM.authForm.reset();
+            clearTenantVerificationState();
+            updateStrengthMeterUI(
+                0,
+                t('passwordStrength', 'Password Strength'),
+                'transparent'
+            );
+
+            console.log("STAFF ROLE:", staffData.role);
+
+            if (staffData.role === "super_admin") {
+                pushSystemTelemetryEvent(
+                    'REDIRECT_FORCED',
+                    'Super Admin redirect.'
+                );
+
+                window.location.href =
+                    "../super-admin-dashboard/index.html";
+                return;
+            }
+
+            if (staffData.role === "institution_admin") {
+                pushSystemTelemetryEvent(
+                    'REDIRECT_FORCED',
+                    'Institution Admin redirect.'
+                );
+
+                window.location.href =
+                    "../admin-dashboard/index.html";
+                return;
+            }
+
+            // fallback
+            window.location.href =
+                "../admin-dashboard/index.html";
+
+        }, 1500);
+
+        return; // Skip users collection lookup entirely
+    }
+}
 
         // Look up the profile in a single shared "users" collection, keyed by uid,
         // with each document carrying its own `role` field. This works for every

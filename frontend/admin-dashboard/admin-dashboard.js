@@ -71,10 +71,14 @@ async function initDashboard() {
   const user = await waitForAuthReady();
   if (!user) { window.location.href = "../login-screen/index.html"; return; }
 
-  const adminSnap = await getDoc(doc(db, "users", user.uid));
+  const adminSnap = await getDoc(doc(db, "staff", user.uid));
   const adminProfile = adminSnap.exists() ? adminSnap.data() : null;
 
-  if (!adminProfile || adminProfile.role !== "admin") {
+  if (
+    !adminProfile ||
+    adminProfile.active !== true ||
+    !["super_admin", "institution_admin"].includes(adminProfile.role)
+  ) {
     window.location.href = "../login-screen/index.html";
     return;
   }

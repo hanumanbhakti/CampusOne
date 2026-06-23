@@ -224,10 +224,7 @@ async function initDashboard() {
 
   // ---- NAVIGATION ----
   setupNavigation();
-
-document.getElementById("stat-pending").textContent = "999";
-
-await loadPendingRequestsCount();
+   await loadPendingRequestsCount();
   
   // ---- MOBILE SIDEBAR ----
   $("btn-mobile-nav").addEventListener("click", () => {

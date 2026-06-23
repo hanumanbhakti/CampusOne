@@ -343,7 +343,6 @@ async function loadRequests() {
 const q = query(
   collection(db, "access_requests"),
   where("campusCode", "==", activeCampus),
-  orderBy("createdAt", "desc")
 );
     const snap = await getDocs(q);
 

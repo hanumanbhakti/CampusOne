@@ -340,11 +340,16 @@ function closeMobileSidebar() {
 async function loadRequests() {
   try {
     // Query access_requests for this campus, newest first
-    const q = query(
-      collection(db, "access_requests"),
-      where("campusCode", "==", activeCampus),
-      orderBy("requestedAt", "desc")
-    );
+const q = query(
+  collection(db, "access_requests"),
+  where("campusCode", "==", activeCampus),
+  orderBy("createdAt", "desc")
+);
+    const snap = await getDocs(q);
+
+console.log("Requests Found:", snap.size);
+
+requestsCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     const snap = await getDocs(q);
     requestsCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
   } catch (err) {

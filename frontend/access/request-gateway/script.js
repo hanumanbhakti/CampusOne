@@ -290,8 +290,8 @@ let selectedRole = "";
 // ---- Dynamic Dropdown Engine: Firestore-backed state ----
 let institutesCache = [];      // [{ id: campusCode, name, ... }]
 let coursesCache = [];         // courses of the currently selected institution
-let reasonsCache = [];         // top-level access_reasons collection
-let identityCache = [];        // top-level identity_verification collection
+let reasonsCache = [];         // access_reasons of the currently selected institution
+let identityCache = [];        // identity_verification types of the currently selected institution
 let selectedInstitution = null; // { id, name } of the chosen institution
 
 // Role-wise filtering for Reason & Identity dropdowns.
@@ -440,6 +440,8 @@ async function onInstitutionChange(e) {
     codeField.value = "";
     formInstitution.value = "";
     result.style.display = "none";
+    // No institution selected — clear everything scoped to an institution
+    await Promise.all([loadCourses(null), loadReasons(null), loadIdentityVerification(null)]);
     return;
   }
 
@@ -452,8 +454,12 @@ async function onInstitutionChange(e) {
   result.style.display = "flex";
   showToast(`${displayName(inst)} selected`, "success");
 
-  // Course dropdown only exists in the DOM once "Student" role is active
-  await loadCourses(inst.id);
+  // Courses, Reasons and Identity types all live under institutes/{instId}/...
+  await Promise.all([
+    loadCourses(inst.id),
+    loadReasons(inst.id),
+    loadIdentityVerification(inst.id)
+  ]);
 }
 
 // Course Dropdown — loads institutes/{instId}/courses
@@ -475,35 +481,37 @@ async function loadCourses(instId) {
     coursesCache.map(c => `<option value="${c.id}">${displayName(c)}</option>`).join("");
 }
 
-// Reason Dropdown — loads the top-level access_reasons collection (independent of institution)
-async function loadReasons() {
+// Reason Dropdown — loads institutes/{instId}/access_reasons (scoped per institution)
+async function loadReasons(instId) {
   const select = document.getElementById("reason-select");
   if (!select) return;
 
-  if (!db) return;
-  try {
-    const snap = await getDocs(collection(db, "access_reasons"));
-    reasonsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch (err) {
-    console.error("[Gateway] Failed to load access reasons:", err);
-    reasonsCache = [];
+  reasonsCache = [];
+  if (db && instId) {
+    try {
+      const snap = await getDocs(collection(db, "institutes", instId, "access_reasons"));
+      reasonsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (err) {
+      console.error("[Gateway] Failed to load access reasons:", err);
+    }
   }
 
   renderReasonSelect(selectedRole);
 }
 
-// Identity Verification Dropdown — loads the top-level identity_verification collection
-async function loadIdentityVerification() {
+// Identity Verification Dropdown — loads institutes/{instId}/identity_verification (scoped per institution)
+async function loadIdentityVerification(instId) {
   const select = document.getElementById("identity-select");
   if (!select) return;
 
-  if (!db) return;
-  try {
-    const snap = await getDocs(collection(db, "identity_verification"));
-    identityCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  } catch (err) {
-    console.error("[Gateway] Failed to load identity verification types:", err);
-    identityCache = [];
+  identityCache = [];
+  if (db && instId) {
+    try {
+      const snap = await getDocs(collection(db, "institutes", instId, "identity_verification"));
+      identityCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (err) {
+      console.error("[Gateway] Failed to load identity verification types:", err);
+    }
   }
 
   renderIdentitySelect(selectedRole);
@@ -739,7 +747,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   initAccordion();
   initQuickActions();
 
-  await Promise.all([loadInstitutions(), loadReasons(), loadIdentityVerification()]);
+  // Reasons & Identity types are institution-scoped now (institutes/{id}/access_reasons,
+  // institutes/{id}/identity_verification) — they load once an institution is selected,
+  // see onInstitutionChange().
+  await loadInstitutions();
 
   document.getElementById("inst-select").addEventListener("change", onInstitutionChange);
   document.getElementById("access-form").addEventListener("submit", submitRequest);

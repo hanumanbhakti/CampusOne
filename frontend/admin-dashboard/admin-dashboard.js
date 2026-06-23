@@ -164,6 +164,22 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(() => clearTimeout(safetyTimer));
 });
 
+async function loadPendingRequestsCount() {
+
+  const q = query(
+    collection(db, "access_requests"),
+    where("status", "==", "pending")
+  );
+
+  const snapshot = await getDocs(q);
+
+  const el = document.getElementById("stat-pending");
+
+  if (el) {
+    el.textContent = snapshot.size;
+  }
+}
+
 async function initDashboard() {
   const gate  = $("auth-gate");
   const shell = $("app-shell");
@@ -208,7 +224,8 @@ async function initDashboard() {
 
   // ---- NAVIGATION ----
   setupNavigation();
-
+await loadPendingRequestsCount();
+  
   // ---- MOBILE SIDEBAR ----
   $("btn-mobile-nav").addEventListener("click", () => {
     const isOpen = $("sidebar").classList.toggle("mobile-open");

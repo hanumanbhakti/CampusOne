@@ -221,8 +221,10 @@ async function initDashboard() {
   shell.hidden = false;
   gate.hidden  = true;
 
-  // ---- NAVIGATION ----
-  setupNavigation();
+// ----- NAVIGATION -----
+setupNavigation();
+
+initNotices();
   
   // ---- MOBILE SIDEBAR ----
   $("btn-mobile-nav").addEventListener("click", () => {

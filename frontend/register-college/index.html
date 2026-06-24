@@ -4,108 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Register College | CampusOne</title>
-  <meta name="description" content="Register your college with CampusOne and create your digital campus in minutes.">
+  <title>Register Institution • CampusOne</title>
+
+  <meta name="description"
+        content="Register your institution with CampusOne and launch your digital campus.">
 
   <link rel="icon" href="../../assets/favicon.png">
-
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Poppins',sans-serif;
-    }
-
-    body{
-      min-height:100vh;
-      background:linear-gradient(135deg,#2563eb,#0ea5e9);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-    }
-
-    .card{
-      width:100%;
-      max-width:560px;
-      background:#fff;
-      border-radius:24px;
-      padding:32px;
-      box-shadow:0 20px 60px rgba(0,0,0,.15);
-    }
-
-    .brand{
-      text-align:center;
-      margin-bottom:28px;
-    }
-
-    .brand img{
-      width:72px;
-      margin-bottom:12px;
-    }
-
-    .brand h1{
-      color:#111827;
-      font-size:28px;
-      margin-bottom:8px;
-    }
-
-    .brand p{
-      color:#6b7280;
-      font-size:14px;
-      line-height:1.6;
-    }
-
-    .form-group{
-      margin-bottom:18px;
-    }
-
-    label{
-      display:block;
-      margin-bottom:8px;
-      font-weight:600;
-      color:#374151;
-    }
-
-    input{
-      width:100%;
-      padding:14px 16px;
-      border:1px solid #d1d5db;
-      border-radius:12px;
-      font-size:15px;
-      outline:none;
-    }
-
-    input:focus{
-      border-color:#2563eb;
-    }
-
-    button{
-      width:100%;
-      border:none;
-      border-radius:12px;
-      padding:15px;
-      background:linear-gradient(135deg,#2563eb,#0ea5e9);
-      color:#fff;
-      font-size:16px;
-      font-weight:600;
-      cursor:pointer;
-      margin-top:8px;
-    }
-
-    .footer{
-      margin-top:18px;
-      text-align:center;
-      font-size:13px;
-      color:#6b7280;
-    }
-  </style>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-  <!-- Background Layers -->
+  <!-- Background -->
   <div class="bg-grid"></div>
+
   <div class="bg-orb orb-1"></div>
   <div class="bg-orb orb-2"></div>
   <div class="bg-orb orb-3"></div>
@@ -113,26 +24,23 @@
   <main class="page-shell">
 
     <!-- LEFT PANEL -->
+
     <section class="hero-panel">
 
       <header class="hero-header">
 
-        <a href="/" class="brand">
-
-          <img
-            src="../../assets/logo-full.png"
-            alt="CampusOne"
-            class="brand-logo">
-
-        </a>
-
-        <div class="platform-badge">
-          Enterprise Education Platform
-        </div>
+        <img
+          src="../../assets/logo-full.png"
+          alt="CampusOne"
+          class="brand-logo">
 
       </header>
 
       <div class="hero-content">
+
+        <div class="platform-badge">
+          Enterprise Education Platform
+        </div>
 
         <div class="eyebrow">
           DIGITAL CAMPUS INFRASTRUCTURE
@@ -144,9 +52,9 @@
         </h1>
 
         <p class="hero-description">
-          Centralize academic operations, attendance,
-          communication and administration through a
-          secure cloud-native platform built for
+          Manage students, faculty, attendance,
+          communication and administration through
+          a secure cloud-native platform built for
           educational institutions.
         </p>
 
@@ -157,12 +65,32 @@
           <article class="feature-card">
 
             <div class="feature-icon">
+
               <!-- Building SVG -->
+
+              <svg width="24" height="24" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor"
+                   stroke-width="2">
+
+                <path d="M6 22V4h12v18"/>
+                <path d="M10 6h4"/>
+                <path d="M10 10h4"/>
+                <path d="M10 14h4"/>
+                <path d="M10 18h4"/>
+
+              </svg>
+
             </div>
 
             <div>
+
               <h3>Institution Management</h3>
-              <p>Centralized administration and governance.</p>
+
+              <p>
+                Centralized administration and
+                academic governance.
+              </p>
+
             </div>
 
           </article>
@@ -170,12 +98,32 @@
           <article class="feature-card">
 
             <div class="feature-icon">
+
               <!-- Users SVG -->
+
+              <svg width="24" height="24"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2">
+
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+
+              </svg>
+
             </div>
 
             <div>
+
               <h3>Faculty & Student Records</h3>
-              <p>Unified academic data management.</p>
+
+              <p>
+                Unified academic data management.
+              </p>
+
             </div>
 
           </article>
@@ -183,12 +131,30 @@
           <article class="feature-card">
 
             <div class="feature-icon">
+
               <!-- Shield SVG -->
+
+              <svg width="24" height="24"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2">
+
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+
+              </svg>
+
             </div>
 
             <div>
+
               <h3>Enterprise Security</h3>
-              <p>Tenant isolation and secure access control.</p>
+
+              <p>
+                Multi-tenant architecture with
+                role-based access control.
+              </p>
+
             </div>
 
           </article>
@@ -196,12 +162,30 @@
           <article class="feature-card">
 
             <div class="feature-icon">
+
               <!-- Activity SVG -->
+
+              <svg width="24" height="24"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2">
+
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+
+              </svg>
+
             </div>
 
             <div>
+
               <h3>Real-Time Operations</h3>
-              <p>Instant updates across campus workflows.</p>
+
+              <p>
+                Instant updates across campus
+                workflows.
+              </p>
+
             </div>
 
           </article>
@@ -250,9 +234,8 @@
           </h2>
 
           <p>
-            Start your CampusOne onboarding process.
-            Our team will review your request and
-            provision your digital campus.
+            Submit your institution details and
+            start your CampusOne onboarding process.
           </p>
 
         </div>
@@ -266,7 +249,17 @@
             <div class="input-wrapper">
 
               <span class="input-icon">
-                <!-- Building SVG -->
+
+                <svg width="20" height="20"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                  <path d="M6 22V4h12v18"/>
+
+                </svg>
+
               </span>
 
               <input
@@ -281,12 +274,23 @@
 
           <div class="input-group">
 
-            <label>Principal / Director</label>
+            <label>Principal / Director Name</label>
 
             <div class="input-wrapper">
 
               <span class="input-icon">
-                <!-- User SVG -->
+
+                <svg width="20" height="20"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                  <circle cx="12" cy="7" r="4"/>
+                  <path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>
+
+                </svg>
+
               </span>
 
               <input
@@ -301,12 +305,23 @@
 
           <div class="input-group">
 
-            <label>Official Email</label>
+            <label>Official Email Address</label>
 
             <div class="input-wrapper">
 
               <span class="input-icon">
-                <!-- Mail SVG -->
+
+                <svg width="20" height="20"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                  <path d="M4 4h16v16H4z"/>
+                  <path d="M4 7l8 6 8-6"/>
+
+                </svg>
+
               </span>
 
               <input
@@ -326,7 +341,17 @@
             <div class="input-wrapper">
 
               <span class="input-icon">
-                <!-- Phone SVG -->
+
+                <svg width="20" height="20"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                  <rect x="7" y="2" width="10" height="20" rx="2"/>
+
+                </svg>
+
               </span>
 
               <input
@@ -346,7 +371,18 @@
             <div class="input-wrapper">
 
               <span class="input-icon">
-                <!-- Users SVG -->
+
+                <svg width="20" height="20"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5"/>
+                  <circle cx="9" cy="7" r="4"/>
+
+                </svg>
+
               </span>
 
               <input
@@ -369,38 +405,18 @@
 
         </form>
 
-        <!-- Security Section -->
-
         <div class="security-strip">
 
           <div class="security-item">
-
-            <span class="security-icon">
-              <!-- Shield Check SVG -->
-            </span>
-
             <span>Secure Registration</span>
-
           </div>
 
           <div class="security-item">
-
-            <span class="security-icon">
-              <!-- Building SVG -->
-            </span>
-
-            <span>Built For Institutions</span>
-
+            <span>Institution Ready</span>
           </div>
 
           <div class="security-item">
-
-            <span class="security-icon">
-              <!-- Zap SVG -->
-            </span>
-
             <span>Fast Onboarding</span>
-
           </div>
 
         </div>
@@ -410,6 +426,8 @@
     </section>
 
   </main>
+
+  <script src="./script.js"></script>
 
 </body>
 </html>

@@ -1,12 +1,590 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr" class="no-js" data-theme="dark">
 <head>
-  <title>CampusOne Admin Console</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Super Admin Console – CampusOne</title>
+    <meta name="description" content="CampusOne Super Admin Console — institution management, access request approvals, user administration and platform analytics.">
+    <meta name="theme-color" content="#0F172A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>CampusOne Admin Console</h1>
-  <p>Super Admin Login Successful</p>
+    <div id="co-layer-ambient-canvas" class="env-viewport" aria-hidden="true" role="presentation">
+        <div class="mesh-overlay-gradient"></div>
+        <div class="blur-matrix-orbs">
+            <div class="orb node-primary-glowing"></div>
+            <div class="orb node-secondary-glowing"></div>
+            <div class="orb node-accent-glowing"></div>
+        </div>
+    </div>
 
+    <!-- ============================================================
+         MOBILE TOPBAR (visible <1024px)
+         ============================================================ -->
+    <header id="co-mobile-topbar">
+        <button type="button" id="sidebar-open-trigger" class="icon-btn" aria-label="Open navigation menu">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="mobile-brand-pod">
+            <span class="mobile-brand-mark">CampusOne</span>
+            <span class="mobile-brand-tag">Super Admin</span>
+        </div>
+        <button type="button" id="theme-toggle-trigger-mobile" class="icon-btn theme-toggle-trigger" data-current-theme="dark" aria-label="Toggle color theme">
+            <span class="theme-icon mode-light" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+            <span class="theme-icon mode-dark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+        </button>
+    </header>
+
+    <div id="sidebar-scrim" class="sidebar-scrim"></div>
+
+    <!-- ============================================================
+         SIDEBAR NAVIGATION
+         ============================================================ -->
+    <aside id="co-sidebar" class="co-sidebar">
+        <div class="sidebar-brand-row">
+            <div class="sidebar-logo-pod">
+                <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/></svg>
+            </div>
+            <div class="sidebar-brand-text">
+                <span class="sidebar-brand-name">CampusOne</span>
+                <span class="sidebar-brand-role">Super Admin</span>
+            </div>
+            <button type="button" id="sidebar-close-trigger" class="icon-btn sidebar-close-only" aria-label="Close navigation menu">
+                <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav-rail" aria-label="Primary navigation">
+            <button type="button" class="nav-item-link state-active" data-view="dashboard">
+                <span class="nav-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
+                <span class="nav-item-label">Dashboard</span>
+            </button>
+            <button type="button" class="nav-item-link" data-view="institutions">
+                <span class="nav-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></span>
+                <span class="nav-item-label">Institutions</span>
+            </button>
+            <button type="button" class="nav-item-link" data-view="requests">
+                <span class="nav-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+                <span class="nav-item-label">Access Requests</span>
+                <span class="nav-badge-pill" id="nav-badge-requests">8</span>
+            </button>
+            <button type="button" class="nav-item-link" data-view="users">
+                <span class="nav-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                <span class="nav-item-label">Users</span>
+            </button>
+            <button type="button" class="nav-item-link" data-view="verification">
+                <span class="nav-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5.25 3.4 9.74 8 11 4.6-1.26 8-5.75 8-11V5z"/><polyline points="9 12 11 14 15 10"/></svg></span>
+                <span class="nav-item-label">Verification</span>
+            </button>
+            <button type="button" class="nav-item-link" data-view="notices">
+                <span class="nav-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+                <span class="nav-item-label">Notices</span>
+            </button>
+            <button type="button" class="nav-item-link" data-view="roles">
+                <span class="nav-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span>
+                <span class="nav-item-label">Roles &amp; Permissions</span>
+            </button>
+            <button type="button" class="nav-item-link" data-view="analytics">
+                <span class="nav-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></span>
+                <span class="nav-item-label">Analytics</span>
+            </button>
+            <button type="button" class="nav-item-link" data-view="audit">
+                <span class="nav-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+                <span class="nav-item-label">Audit Logs</span>
+            </button>
+            <button type="button" class="nav-item-link" data-view="settings">
+                <span class="nav-item-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+                <span class="nav-item-label">Settings</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer-block">
+            <div class="theme-switch-orchestrator">
+                <button type="button" id="theme-toggle-trigger" class="theme-toggle-trigger" aria-label="Toggle system color theme" data-current-theme="dark">
+                    <span class="theme-icon mode-light" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+                    <span class="theme-icon mode-dark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+                </button>
+                <span class="theme-toggle-label">Appearance</span>
+            </div>
+            <button type="button" class="sidebar-profile-pod" id="sidebar-profile-trigger">
+                <span class="profile-avatar-initials" id="profile-avatar-initials">SA</span>
+                <span class="profile-text-stack">
+                    <span class="profile-name" id="profile-name-label">Super Admin</span>
+                    <span class="profile-email" id="profile-email-label">admin@campusone.app</span>
+                </span>
+                <svg class="profile-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="profile-popover-menu" id="profile-popover-menu">
+                <button type="button" class="popover-menu-item" data-view="settings">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>
+                    My Profile
+                </button>
+                <button type="button" class="popover-menu-item" id="logout-trigger">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ============================================================
+         MAIN APPLICATION SHELL
+         ============================================================ -->
+    <main id="co-app-shell">
+
+        <header class="view-topbar">
+            <div class="topbar-heading-stack">
+                <h1 id="view-title" class="view-title">Executive Dashboard</h1>
+                <p id="view-subtitle" class="view-subtitle">Platform-wide overview across every campus on CampusOne.</p>
+            </div>
+            <div class="topbar-action-row">
+                <div class="global-search-shell">
+                    <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="global-search-input" class="global-search-input" placeholder="Search institutions, requests, users…">
+                </div>
+                <button type="button" class="icon-btn topbar-icon-btn" id="notif-bell-trigger" aria-label="Notifications">
+                    <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span class="notif-dot"></span>
+                </button>
+            </div>
+        </header>
+
+        <div class="view-scroll-region" id="view-scroll-region">
+
+            <!-- ============================================================
+                 VIEW: DASHBOARD
+                 ============================================================ -->
+            <section class="view-panel state-active" id="view-dashboard" data-view-panel="dashboard">
+
+                <div class="kpi-grid" id="kpi-grid">
+                    <!-- KPI cards injected by script.js (live Firestore counts) -->
+                </div>
+
+                <div class="dash-content-grid">
+                    <div class="card-panel span-2">
+                        <div class="card-panel-head">
+                            <h3 class="card-panel-title">Daily Active Users</h3>
+                            <div class="segmented-mini-toggle" data-toggle-group="trend-range">
+                                <button type="button" class="segmented-mini-btn state-active" data-range="7d">7D</button>
+                                <button type="button" class="segmented-mini-btn" data-range="30d">30D</button>
+                                <button type="button" class="segmented-mini-btn" data-range="90d">90D</button>
+                            </div>
+                        </div>
+                        <div class="chart-canvas-shell">
+                            <svg id="trend-chart-svg" viewBox="0 0 600 220" preserveAspectRatio="none" class="trend-chart-svg"></svg>
+                        </div>
+                    </div>
+
+                    <div class="card-panel">
+                        <div class="card-panel-head">
+                            <h3 class="card-panel-title">System Health</h3>
+                        </div>
+                        <div class="health-ring-wrap">
+                            <svg viewBox="0 0 120 120" class="health-ring-svg">
+                                <circle cx="60" cy="60" r="52" class="health-ring-track"/>
+                                <circle cx="60" cy="60" r="52" class="health-ring-progress" id="health-ring-progress"/>
+                            </svg>
+                            <div class="health-ring-center">
+                                <span class="health-ring-value" id="health-ring-value">99.9%</span>
+                                <span class="health-ring-caption">Uptime</span>
+                            </div>
+                        </div>
+                        <ul class="health-status-list">
+                            <li><span class="status-heartbeat-pulse"></span> Firestore — Operational</li>
+                            <li><span class="status-heartbeat-pulse"></span> Auth — Operational</li>
+                            <li><span class="status-heartbeat-pulse"></span> Cloud Functions — Operational</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="dash-content-grid">
+                    <div class="card-panel">
+                        <div class="card-panel-head">
+                            <h3 class="card-panel-title">Top Active Campuses</h3>
+                            <a class="card-panel-link" data-view-link="institutions">View all</a>
+                        </div>
+                        <ul class="ranked-list" id="top-campuses-list"></ul>
+                    </div>
+
+                    <div class="card-panel">
+                        <div class="card-panel-head">
+                            <h3 class="card-panel-title">Latest Access Requests</h3>
+                            <a class="card-panel-link" data-view-link="requests">View all</a>
+                        </div>
+                        <ul class="ranked-list" id="latest-requests-list"></ul>
+                    </div>
+
+                    <div class="card-panel">
+                        <div class="card-panel-head">
+                            <h3 class="card-panel-title">Recent Audit Activity</h3>
+                            <a class="card-panel-link" data-view-link="audit">View all</a>
+                        </div>
+                        <ul class="ranked-list" id="recent-audit-list"></ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 VIEW: INSTITUTIONS
+                 ============================================================ -->
+            <section class="view-panel" id="view-institutions" data-view-panel="institutions">
+                <div class="panel-toolbar">
+                    <div class="toolbar-filter-row">
+                        <div class="pill-filter-track" data-filter-group="institute-status">
+                            <button type="button" class="pill-filter-btn state-active" data-filter="all">All</button>
+                            <button type="button" class="pill-filter-btn" data-filter="active">Active</button>
+                            <button type="button" class="pill-filter-btn" data-filter="suspended">Suspended</button>
+                            <button type="button" class="pill-filter-btn" data-filter="trial">Trial</button>
+                        </div>
+                    </div>
+                    <button type="button" class="cta-solid-button" id="open-add-institution-modal">
+                        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Add Institution
+                    </button>
+                </div>
+
+                <div class="institution-grid" id="institution-grid">
+                    <!-- Institution cards injected by script.js -->
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 VIEW: ACCESS REQUESTS
+                 ============================================================ -->
+            <section class="view-panel" id="view-requests" data-view-panel="requests">
+                <div class="panel-toolbar">
+                    <div class="toolbar-filter-row">
+                        <div class="pill-filter-track" data-filter-group="request-status">
+                            <button type="button" class="pill-filter-btn state-active" data-filter="all">All</button>
+                            <button type="button" class="pill-filter-btn" data-filter="new">New</button>
+                            <button type="button" class="pill-filter-btn" data-filter="review">Under Review</button>
+                            <button type="button" class="pill-filter-btn" data-filter="approved">Approved</button>
+                            <button type="button" class="pill-filter-btn" data-filter="rejected">Rejected</button>
+                            <button type="button" class="pill-filter-btn" data-filter="blocked">Blocked</button>
+                            <button type="button" class="pill-filter-btn" data-filter="expired">Expired</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="request-card-stack" id="request-card-stack">
+                    <!-- Request cards injected by script.js -->
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 VIEW: USERS
+                 ============================================================ -->
+            <section class="view-panel" id="view-users" data-view-panel="users">
+                <div class="panel-toolbar">
+                    <div class="toolbar-filter-row">
+                        <div class="pill-filter-track" data-filter-group="user-role">
+                            <button type="button" class="pill-filter-btn state-active" data-filter="all">All</button>
+                            <button type="button" class="pill-filter-btn" data-filter="super_admin">Super Admins</button>
+                            <button type="button" class="pill-filter-btn" data-filter="institute_admin">Institute Admins</button>
+                            <button type="button" class="pill-filter-btn" data-filter="faculty">Faculty</button>
+                            <button type="button" class="pill-filter-btn" data-filter="student">Students</button>
+                            <button type="button" class="pill-filter-btn" data-filter="parent">Parents</button>
+                        </div>
+                    </div>
+                    <div class="global-search-shell toolbar-search-shell">
+                        <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="user-search-input" class="global-search-input" placeholder="Search by name or email…">
+                    </div>
+                </div>
+
+                <div class="data-table-shell">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Institution</th>
+                                <th>Status</th>
+                                <th>Last Active</th>
+                                <th aria-label="Actions"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 VIEW: VERIFICATION CENTER
+                 ============================================================ -->
+            <section class="view-panel" id="view-verification" data-view-panel="verification">
+                <div class="verification-grid" id="verification-grid">
+                    <!-- Verification cards injected by script.js -->
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 VIEW: NOTICES
+                 ============================================================ -->
+            <section class="view-panel" id="view-notices" data-view-panel="notices">
+                <div class="notice-composer-grid">
+                    <div class="card-panel">
+                        <div class="card-panel-head">
+                            <h3 class="card-panel-title">Compose Notice</h3>
+                        </div>
+                        <form class="form-grid-layout" id="notice-compose-form">
+                            <div class="input-field-wrapper">
+                                <label class="field-label-text" for="notice-title-input">Title</label>
+                                <div class="input-interactive-shell">
+                                    <input type="text" id="notice-title-input" class="form-input-node no-icon-pad" placeholder="e.g. System Maintenance" required>
+                                </div>
+                            </div>
+                            <div class="input-field-wrapper">
+                                <label class="field-label-text" for="notice-body-input">Message</label>
+                                <textarea id="notice-body-input" class="form-input-node no-icon-pad textarea-node" placeholder="Notice details…" rows="4" required></textarea>
+                            </div>
+                            <div class="input-field-wrapper">
+                                <label class="field-label-text">Audience</label>
+                                <div class="segmented-control-track audience-segment-track">
+                                    <button type="button" class="control-node state-active" data-audience="all">All Campuses</button>
+                                    <button type="button" class="control-node" data-audience="selected">Selected Campuses</button>
+                                    <button type="button" class="control-node" data-audience="users">Selected Users</button>
+                                </div>
+                            </div>
+                            <button type="submit" class="cta-gradient-button">
+                                <span class="state-view-wrapper view-idle">Send Notice</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="card-panel">
+                        <div class="card-panel-head">
+                            <h3 class="card-panel-title">Notice History</h3>
+                        </div>
+                        <ul class="ranked-list" id="notice-history-list"></ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 VIEW: ROLES & PERMISSIONS
+                 ============================================================ -->
+            <section class="view-panel" id="view-roles" data-view-panel="roles">
+                <div class="card-panel">
+                    <div class="card-panel-head">
+                        <h3 class="card-panel-title">Permission Matrix</h3>
+                        <button type="button" class="cta-outline-button" id="add-custom-role-btn">
+                            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Add Custom Role
+                        </button>
+                    </div>
+                    <div class="data-table-shell">
+                        <table class="data-table permission-matrix-table" id="permission-matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>Permission</th>
+                                    <th>Super Admin</th>
+                                    <th>Institute Admin</th>
+                                    <th>Faculty</th>
+                                    <th>Student</th>
+                                    <th>Parent</th>
+                                </tr>
+                            </thead>
+                            <tbody id="permission-matrix-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 VIEW: ANALYTICS
+                 ============================================================ -->
+            <section class="view-panel" id="view-analytics" data-view-panel="analytics">
+                <div class="dash-content-grid">
+                    <div class="card-panel span-2">
+                        <div class="card-panel-head">
+                            <h3 class="card-panel-title">Monthly Campus Growth</h3>
+                        </div>
+                        <div class="chart-canvas-shell">
+                            <svg id="growth-chart-svg" viewBox="0 0 600 220" preserveAspectRatio="none" class="trend-chart-svg"></svg>
+                        </div>
+                    </div>
+                    <div class="card-panel">
+                        <div class="card-panel-head">
+                            <h3 class="card-panel-title">Request Trends</h3>
+                        </div>
+                        <div class="bar-chart-shell" id="request-trend-bars"></div>
+                    </div>
+                </div>
+                <div class="dash-content-grid">
+                    <div class="card-panel">
+                        <div class="card-panel-head"><h3 class="card-panel-title">Most Active Students</h3></div>
+                        <ul class="ranked-list" id="top-students-list"></ul>
+                    </div>
+                    <div class="card-panel">
+                        <div class="card-panel-head"><h3 class="card-panel-title">Most Active Faculty</h3></div>
+                        <ul class="ranked-list" id="top-faculty-list"></ul>
+                    </div>
+                    <div class="card-panel">
+                        <div class="card-panel-head"><h3 class="card-panel-title">Top Active Campus</h3></div>
+                        <ul class="ranked-list" id="top-campus-analytics-list"></ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 VIEW: AUDIT LOGS
+                 ============================================================ -->
+            <section class="view-panel" id="view-audit" data-view-panel="audit">
+                <div class="panel-toolbar">
+                    <div class="toolbar-filter-row">
+                        <div class="pill-filter-track" data-filter-group="audit-action">
+                            <button type="button" class="pill-filter-btn state-active" data-filter="all">All Actions</button>
+                            <button type="button" class="pill-filter-btn" data-filter="approve">Approvals</button>
+                            <button type="button" class="pill-filter-btn" data-filter="reject">Rejections</button>
+                            <button type="button" class="pill-filter-btn" data-filter="user">User Changes</button>
+                            <button type="button" class="pill-filter-btn" data-filter="settings">Settings</button>
+                        </div>
+                    </div>
+                    <button type="button" class="cta-outline-button" id="export-audit-btn">
+                        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Export CSV
+                    </button>
+                </div>
+                <div class="audit-timeline" id="audit-timeline"></div>
+            </section>
+
+            <!-- ============================================================
+                 VIEW: SETTINGS
+                 ============================================================ -->
+            <section class="view-panel" id="view-settings" data-view-panel="settings">
+                <div class="settings-nav-grid">
+                    <button type="button" class="settings-tile-btn state-active" data-settings-tab="request-rules">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <span>Request Rules</span>
+                    </button>
+                    <button type="button" class="settings-tile-btn" data-settings-tab="verification-rules">
+                        <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5.25 3.4 9.74 8 11 4.6-1.26 8-5.75 8-11V5z"/></svg>
+                        <span>Verification Rules</span>
+                    </button>
+                    <button type="button" class="settings-tile-btn" data-settings-tab="email-templates">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+                        <span>Email Templates</span>
+                    </button>
+                    <button type="button" class="settings-tile-btn" data-settings-tab="sms-templates">
+                        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        <span>SMS Templates</span>
+                    </button>
+                    <button type="button" class="settings-tile-btn" data-settings-tab="branding">
+                        <svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+                        <span>Campus Branding</span>
+                    </button>
+                </div>
+
+                <div class="card-panel" id="settings-panel-body">
+                    <!-- Settings content injected per tab by script.js -->
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ============================================================
+         MODAL: Institution Form (Add / Edit)
+         ============================================================ -->
+    <div class="modal-overlay" id="institution-modal-overlay">
+        <div class="modal-shell glass-morph-card-frame">
+            <div class="modal-head">
+                <h3 class="modal-title" id="institution-modal-title">Add Institution</h3>
+                <button type="button" class="icon-btn modal-close-btn" data-close-modal="institution-modal-overlay">
+                    <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form class="form-grid-layout" id="institution-form">
+                <input type="hidden" id="institution-form-campus-code">
+                <div class="input-field-wrapper">
+                    <label class="field-label-text" for="inst-name-input">Institution Name</label>
+                    <input type="text" id="inst-name-input" class="form-input-node no-icon-pad" placeholder="e.g. MIT Delhi" required>
+                </div>
+                <div class="form-row-split">
+                    <div class="input-field-wrapper">
+                        <label class="field-label-text" for="inst-code-input">Campus Code</label>
+                        <input type="text" id="inst-code-input" class="form-input-node no-icon-pad character-caps-lock" placeholder="MIT-DELHI-2026" required>
+                    </div>
+                    <div class="input-field-wrapper">
+                        <label class="field-label-text" for="inst-plan-input">Subscription Plan</label>
+                        <select id="inst-plan-input" class="form-input-node no-icon-pad select-node">
+                            <option value="trial">Trial</option>
+                            <option value="standard" selected>Standard</option>
+                            <option value="premium">Premium</option>
+                            <option value="enterprise">Enterprise</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-field-wrapper">
+                    <label class="field-label-text" for="inst-admin-email-input">Institute Admin Email</label>
+                    <input type="email" id="inst-admin-email-input" class="form-input-node no-icon-pad" placeholder="admin@institution.edu">
+                </div>
+                <div class="form-row-split">
+                    <div class="input-field-wrapper">
+                        <label class="field-label-text" for="inst-students-input">Student Capacity</label>
+                        <input type="number" id="inst-students-input" class="form-input-node no-icon-pad" placeholder="5000" min="0">
+                    </div>
+                    <div class="input-field-wrapper">
+                        <label class="field-label-text" for="inst-status-input">Status</label>
+                        <select id="inst-status-input" class="form-input-node no-icon-pad select-node">
+                            <option value="active" selected>Active</option>
+                            <option value="trial">Trial</option>
+                            <option value="suspended">Suspended</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-action-row">
+                    <button type="button" class="cta-outline-button" data-close-modal="institution-modal-overlay">Cancel</button>
+                    <button type="submit" class="cta-gradient-button modal-submit-btn">
+                        <span class="state-view-wrapper view-idle">Save Institution</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL: Request Detail / Verification
+         ============================================================ -->
+    <div class="modal-overlay" id="request-modal-overlay">
+        <div class="modal-shell glass-morph-card-frame modal-shell-wide">
+            <div class="modal-head">
+                <h3 class="modal-title">Request Details</h3>
+                <button type="button" class="icon-btn modal-close-btn" data-close-modal="request-modal-overlay">
+                    <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div id="request-modal-body" class="request-modal-body"></div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL: Confirm Action (generic)
+         ============================================================ -->
+    <div class="modal-overlay" id="confirm-modal-overlay">
+        <div class="modal-shell glass-morph-card-frame modal-shell-narrow">
+            <div class="modal-head">
+                <h3 class="modal-title" id="confirm-modal-title">Are you sure?</h3>
+            </div>
+            <p class="confirm-modal-text" id="confirm-modal-text">This action cannot be undone.</p>
+            <div class="modal-action-row">
+                <button type="button" class="cta-outline-button" data-close-modal="confirm-modal-overlay">Cancel</button>
+                <button type="button" class="cta-danger-button" id="confirm-modal-action-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+<script type="module" src="script.js"></script>
 </body>
 </html>

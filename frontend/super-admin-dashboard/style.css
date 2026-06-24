@@ -1,1 +1,897 @@
+/* =========================================================================
+   CAMPUSONE SUPER ADMIN CONSOLE — DESIGN SYSTEM (v2.0)
+   Extends the CampusOne Gateway Design Tokens (Pillars 1–3 reused verbatim)
+   ========================================================================= */
 
+/* =========================================================================
+   PILLAR 1 — ARCHITECTURE TOKENS (shared with Gateway — keep in sync)
+   ========================================================================= */
+:root {
+    --brand-primary: #2563EB;
+    --brand-secondary: #0EA5E9;
+    --brand-accent: #3B82F6;
+    --brand-gradient: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
+    --brand-glow-alpha: rgba(37, 99, 235, 0.15);
+    --brand-logo-glow: 0 0 30px rgba(37, 99, 235, 0.45), 0 0 60px rgba(14, 165, 233, 0.2);
+
+    --color-success: #22C55E;
+    --color-success-bg: rgba(34, 197, 94, 0.12);
+    --color-warning: #F59E0B;
+    --color-warning-bg: rgba(245, 158, 11, 0.12);
+    --color-danger: #EF4444;
+    --color-danger-bg: rgba(239, 68, 68, 0.12);
+    --color-info: #3B82F6;
+    --color-info-bg: rgba(59, 130, 246, 0.12);
+    --color-neutral-bg: rgba(148, 163, 184, 0.12);
+
+    --color-bg: #0F172A;
+    --color-surface: rgba(30, 41, 59, 0.45);
+    --color-surface-solid: #1E293B;
+    --color-surface-input: rgba(15, 23, 42, 0.5);
+    --color-sidebar-bg: rgba(15, 23, 42, 0.85);
+
+    --text-primary: #F8FAFC;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-border-focus: rgba(37, 99, 235, 0.4);
+    --glass-reflection: linear-gradient(120deg, rgba(255, 255, 255, 0.05), transparent);
+
+    --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 12px 24px -4px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 80px -10px rgba(37, 99, 235, 0.15);
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+
+    --t-fast: 150ms;
+    --t-normal: 250ms;
+    --t-slow: 400ms;
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --sidebar-width: 264px;
+    --topbar-height: 76px;
+    --mono-font: 'JetBrains Mono', monospace;
+}
+
+[data-theme="light"] {
+    --color-bg: #F8FAFC;
+    --color-surface: rgba(255, 255, 255, 0.7);
+    --color-surface-solid: #FFFFFF;
+    --color-surface-input: rgba(241, 245, 249, 0.9);
+    --color-sidebar-bg: rgba(255, 255, 255, 0.85);
+    --text-primary: #0F172A;
+    --text-secondary: #334155;
+    --text-muted: #64748B;
+    --glass-border: rgba(15, 23, 42, 0.08);
+    --glass-border-focus: rgba(37, 99, 235, 0.5);
+    --shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.1), 0 0 50px rgba(37, 99, 235, 0.05);
+    --brand-logo-glow: 0 10px 25px rgba(37, 99, 235, 0.15);
+}
+
+/* =========================================================================
+   PILLAR 2 — GLOBAL RESET
+   ========================================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a { text-decoration: none !important; color: inherit; }
+button, input, textarea, select { font-family: inherit; background: none; border: none; outline: none; color: inherit; }
+ul { list-style: none; }
+svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; display: block; }
+table { border-collapse: collapse; width: 100%; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.4); }
+
+/* =========================================================================
+   PILLAR 3 — AMBIENT BACKGROUND CANVAS
+   ========================================================================= */
+.env-viewport {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: -1; overflow: hidden; background-color: var(--color-bg);
+    pointer-events: none; transform: translateZ(0);
+}
+.mesh-overlay-gradient {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, transparent 30%, var(--color-bg) 85%);
+    z-index: 2;
+}
+.blur-matrix-orbs { position: absolute; inset: 0; filter: blur(110px); opacity: 0.45; z-index: 1; }
+.orb { position: absolute; border-radius: var(--radius-full); mix-blend-mode: screen; }
+.node-primary-glowing {
+    top: 10%; left: 15%; width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, transparent 70%);
+    animation: rotateOrbTrack 28s infinite linear;
+}
+.node-secondary-glowing {
+    bottom: 5%; right: 10%; width: 460px; height: 460px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%);
+    animation: rotateOrbTrack 34s infinite linear reverse;
+}
+.node-accent-glowing {
+    top: 45%; left: 60%; width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+}
+
+/* =========================================================================
+   ICON SYSTEM
+   ========================================================================= */
+.nav-item-icon svg, .icon-btn svg, .theme-icon svg, .field-decorator-icon svg,
+.search-icon svg, .card-panel-link svg, .cta-solid-button svg, .cta-outline-button svg,
+.popover-menu-item svg, .profile-chevron, .settings-tile-btn svg { width: 1em; height: 1em; }
+
+[data-theme="dark"] .mode-light { display: none; }
+[data-theme="light"] .mode-dark { display: none; }
+
+/* =========================================================================
+   PILLAR 4 — SIDEBAR NAVIGATION
+   ========================================================================= */
+.co-sidebar {
+    position: fixed; top: 0; left: 0; height: 100vh; width: var(--sidebar-width);
+    background: var(--color-sidebar-bg);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
+    display: flex; flex-direction: column;
+    z-index: 200;
+    transition: transform var(--t-normal) var(--ease-standard);
+}
+
+.sidebar-brand-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 22px 20px; border-bottom: 1px solid var(--glass-border);
+}
+
+.sidebar-logo-pod {
+    width: 38px; height: 38px; border-radius: var(--radius-md);
+    background: var(--brand-gradient);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1.1rem; flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.sidebar-brand-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.sidebar-brand-name { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em; }
+.sidebar-brand-role { font-size: 0.68rem; font-weight: 600; color: var(--brand-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.sidebar-close-only { display: none; }
+
+.sidebar-nav-rail {
+    flex: 1; overflow-y: auto;
+    display: flex; flex-direction: column;
+    gap: 2px; padding: 16px 14px;
+}
+
+.nav-item-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; border-radius: var(--radius-md);
+    font-size: 0.85rem; font-weight: 500; color: var(--text-secondary);
+    cursor: pointer; position: relative; text-align: left;
+    transition: background var(--t-fast) var(--ease-standard), color var(--t-fast) var(--ease-standard);
+}
+
+.nav-item-link:hover { background: rgba(255, 255, 255, 0.04); color: var(--text-primary); }
+
+.nav-item-link.state-active {
+    background: var(--brand-glow-alpha); color: var(--text-primary);
+}
+
+.nav-item-link.state-active::before {
+    content: ''; position: absolute; left: -14px; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 18px; border-radius: var(--radius-full);
+    background: var(--brand-gradient);
+}
+
+.nav-item-icon { font-size: 1.05rem; display: flex; flex-shrink: 0; }
+.nav-item-label { flex: 1; }
+
+.nav-badge-pill {
+    background: var(--color-danger); color: #fff;
+    font-size: 0.65rem; font-weight: 700;
+    padding: 2px 7px; border-radius: var(--radius-full);
+    line-height: 1.4;
+}
+
+.sidebar-footer-block {
+    padding: 16px 14px 18px; border-top: 1px solid var(--glass-border);
+    display: flex; flex-direction: column; gap: 14px;
+    position: relative;
+}
+
+.theme-switch-orchestrator { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
+.theme-toggle-label { font-size: 0.78rem; font-weight: 500; color: var(--text-muted); }
+
+.theme-switch-orchestrator .theme-toggle-trigger {
+    background: var(--color-surface-input);
+    border: 1px solid var(--glass-border);
+    width: 34px; height: 34px; border-radius: var(--radius-full);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: transform var(--t-fast) var(--ease-out-back);
+    flex-shrink: 0;
+}
+.theme-switch-orchestrator .theme-toggle-trigger:hover { transform: scale(1.08); }
+
+.sidebar-profile-pod {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px; border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);
+    cursor: pointer; width: 100%; text-align: left;
+    transition: background var(--t-fast);
+}
+.sidebar-profile-pod:hover { background: rgba(255, 255, 255, 0.06); }
+
+.profile-avatar-initials {
+    width: 34px; height: 34px; border-radius: var(--radius-full);
+    background: var(--brand-gradient); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 700; flex-shrink: 0;
+}
+
+.profile-text-stack { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.profile-name { font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.profile-email { font-size: 0.66rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.profile-chevron { font-size: 0.85rem; color: var(--text-muted); flex-shrink: 0; }
+
+.profile-popover-menu {
+    position: absolute; bottom: calc(100% + 6px); left: 14px; right: 14px;
+    background: var(--color-surface-solid); border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-xl);
+    padding: 6px; display: flex; flex-direction: column; gap: 2px;
+    opacity: 0; visibility: hidden; transform: translateY(6px);
+    transition: opacity var(--t-fast), transform var(--t-fast), visibility var(--t-fast);
+    z-index: 50;
+}
+.profile-popover-menu.state-open { opacity: 1; visibility: visible; transform: translateY(0); }
+
+.popover-menu-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px; border-radius: var(--radius-sm);
+    font-size: 0.8rem; font-weight: 500; color: var(--text-secondary);
+    cursor: pointer; width: 100%; text-align: left;
+    transition: background var(--t-fast), color var(--t-fast);
+}
+.popover-menu-item:hover { background: rgba(255, 255, 255, 0.06); color: var(--text-primary); }
+#logout-trigger:hover { color: var(--color-danger); }
+
+/* =========================================================================
+   MOBILE TOPBAR + SIDEBAR SCRIM
+   ========================================================================= */
+#co-mobile-topbar { display: none; }
+.sidebar-scrim {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 190; opacity: 0; visibility: hidden;
+    transition: opacity var(--t-normal), visibility var(--t-normal);
+}
+.sidebar-scrim.state-open { opacity: 1; visibility: visible; }
+
+.icon-btn {
+    width: 38px; height: 38px; border-radius: var(--radius-full);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-secondary); cursor: pointer; flex-shrink: 0;
+    transition: background var(--t-fast), color var(--t-fast);
+}
+.icon-btn:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+
+/* =========================================================================
+   PILLAR 5 — APP SHELL LAYOUT
+   ========================================================================= */
+#co-app-shell {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    position: relative; z-index: 10;
+}
+
+.view-topbar {
+    height: var(--topbar-height);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px; padding: 0 32px;
+    border-bottom: 1px solid var(--glass-border);
+    background: var(--color-surface);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    position: sticky; top: 0; z-index: 50;
+}
+
+.topbar-heading-stack { display: flex; flex-direction: column; min-width: 0; }
+.view-title { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; }
+.view-subtitle { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+.topbar-action-row { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+
+.global-search-shell {
+    position: relative; display: flex; align-items: center;
+    background: var(--color-surface-input); border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full); padding: 0 16px;
+    width: 280px; height: 40px;
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.global-search-shell:has(:focus) { border-color: var(--brand-accent); box-shadow: 0 0 16px rgba(59,130,246,0.25); }
+.search-icon { font-size: 0.9rem; color: var(--text-muted); margin-right: 10px; flex-shrink: 0; }
+.global-search-input { flex: 1; font-size: 0.82rem; color: var(--text-primary); height: 100%; }
+.global-search-input::placeholder { color: var(--text-muted); }
+
+.topbar-icon-btn { position: relative; background: var(--color-surface-input); border: 1px solid var(--glass-border); }
+.notif-dot {
+    position: absolute; top: 7px; right: 8px; width: 7px; height: 7px;
+    border-radius: var(--radius-full); background: var(--color-danger);
+    border: 2px solid var(--color-surface-solid);
+}
+
+.view-scroll-region { flex: 1; padding: 28px 32px 48px; }
+
+.view-panel { display: none; animation: fadeUpPanel var(--t-normal) var(--ease-standard); }
+.view-panel.state-active { display: block; }
+
+/* =========================================================================
+   PILLAR 6 — KPI GRID (Executive Dashboard)
+   ========================================================================= */
+.kpi-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 24px;
+}
+
+.kpi-card {
+    background: var(--color-surface); background-image: var(--glass-reflection);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+    padding: 18px; box-shadow: var(--shadow-md);
+    display: flex; flex-direction: column; gap: 10px;
+    transition: transform var(--t-fast) var(--ease-standard);
+}
+.kpi-card:hover { transform: translateY(-3px); }
+
+.kpi-card-head { display: flex; align-items: center; justify-content: space-between; }
+.kpi-icon-pod {
+    width: 32px; height: 32px; border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center; font-size: 0.95rem;
+}
+.kpi-icon-pod.tone-primary { background: var(--color-info-bg); color: var(--brand-secondary); }
+.kpi-icon-pod.tone-warning { background: var(--color-warning-bg); color: var(--color-warning); }
+.kpi-icon-pod.tone-success { background: var(--color-success-bg); color: var(--color-success); }
+.kpi-icon-pod.tone-danger  { background: var(--color-danger-bg); color: var(--color-danger); }
+
+.kpi-trend-chip {
+    font-size: 0.66rem; font-weight: 700; padding: 2px 7px; border-radius: var(--radius-full);
+    display: flex; align-items: center; gap: 3px;
+}
+.kpi-trend-chip.trend-up { background: var(--color-success-bg); color: var(--color-success); }
+.kpi-trend-chip.trend-down { background: var(--color-danger-bg); color: var(--color-danger); }
+.kpi-trend-chip.trend-flat { background: var(--color-neutral-bg); color: var(--text-muted); }
+
+.kpi-value { font-size: 1.55rem; font-weight: 700; letter-spacing: -0.02em; font-family: var(--mono-font); }
+.kpi-label { font-size: 0.74rem; font-weight: 500; color: var(--text-muted); }
+
+/* =========================================================================
+   PILLAR 7 — DASHBOARD CONTENT GRID + CARD PANELS
+   ========================================================================= */
+.dash-content-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 18px;
+}
+
+.card-panel {
+    background: var(--color-surface); background-image: var(--glass-reflection);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+    padding: 22px; box-shadow: var(--shadow-md);
+}
+.card-panel.span-2 { grid-column: span 2; }
+
+.card-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.card-panel-title { font-size: 0.92rem; font-weight: 600; }
+.card-panel-link { font-size: 0.74rem; font-weight: 600; color: var(--brand-secondary); cursor: pointer; }
+.card-panel-link:hover { color: #60A5FA; }
+
+.segmented-mini-toggle { display: flex; gap: 2px; background: var(--color-surface-input); border: 1px solid var(--glass-border); border-radius: var(--radius-full); padding: 3px; }
+.segmented-mini-btn { font-size: 0.68rem; font-weight: 600; color: var(--text-muted); padding: 4px 10px; border-radius: var(--radius-full); cursor: pointer; }
+.segmented-mini-btn.state-active { background: var(--brand-gradient); color: #fff; }
+
+.chart-canvas-shell { width: 100%; height: 220px; }
+.trend-chart-svg { width: 100%; height: 100%; overflow: visible; }
+
+/* Health ring */
+.health-ring-wrap { position: relative; width: 140px; height: 140px; margin: 6px auto 18px; }
+.health-ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.health-ring-track { fill: none; stroke: var(--glass-border); stroke-width: 8; }
+.health-ring-progress {
+    fill: none; stroke: url(#none); stroke: var(--color-success); stroke-width: 8;
+    stroke-linecap: round; stroke-dasharray: 327; stroke-dashoffset: 0.9;
+    transition: stroke-dashoffset 1s var(--ease-standard);
+}
+.health-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.health-ring-value { font-size: 1.3rem; font-weight: 700; font-family: var(--mono-font); }
+.health-ring-caption { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
+
+.health-status-list { display: flex; flex-direction: column; gap: 10px; }
+.health-status-list li { display: flex; align-items: center; gap: 10px; font-size: 0.78rem; color: var(--text-secondary); }
+
+.status-heartbeat-pulse {
+    width: 8px; height: 8px; background-color: var(--color-success); border-radius: var(--radius-full);
+    position: relative; flex-shrink: 0;
+}
+.status-heartbeat-pulse::after {
+    content: ''; position: absolute; inset: -4px; border-radius: var(--radius-full);
+    border: 2px solid var(--color-success); animation: heartbeatGlow 1.6s infinite cubic-bezier(0.4,0,0.6,1);
+}
+
+/* Ranked lists (used across dashboard / analytics) */
+.ranked-list { display: flex; flex-direction: column; gap: 4px; }
+.ranked-list li {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 8px; border-radius: var(--radius-md);
+    transition: background var(--t-fast);
+}
+.ranked-list li:hover { background: rgba(255,255,255,0.03); }
+.rank-index {
+    width: 24px; height: 24px; border-radius: var(--radius-sm);
+    background: var(--color-surface-input); border: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.68rem; font-weight: 700; color: var(--text-muted); flex-shrink: 0;
+}
+.rank-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.rank-title { font-size: 0.82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank-subtitle { font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank-value { font-size: 0.78rem; font-weight: 700; color: var(--brand-secondary); font-family: var(--mono-font); flex-shrink: 0; }
+.rank-empty { padding: 24px 8px; text-align: center; font-size: 0.78rem; color: var(--text-muted); }
+
+/* =========================================================================
+   PILLAR 8 — STATUS BADGES (shared)
+   ========================================================================= */
+.status-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.68rem; font-weight: 700; padding: 4px 10px;
+    border-radius: var(--radius-full); text-transform: capitalize;
+    white-space: nowrap;
+}
+.status-badge::before { content: ''; width: 6px; height: 6px; border-radius: var(--radius-full); background: currentColor; }
+.status-badge.tone-success { background: var(--color-success-bg); color: var(--color-success); }
+.status-badge.tone-warning { background: var(--color-warning-bg); color: var(--color-warning); }
+.status-badge.tone-danger  { background: var(--color-danger-bg); color: var(--color-danger); }
+.status-badge.tone-info    { background: var(--color-info-bg); color: var(--brand-secondary); }
+.status-badge.tone-neutral { background: var(--color-neutral-bg); color: var(--text-muted); }
+
+/* =========================================================================
+   PILLAR 9 — TOOLBAR + PILL FILTERS + BUTTONS
+   ========================================================================= */
+.panel-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+}
+
+.toolbar-filter-row { flex: 1; min-width: 0; }
+.toolbar-search-shell { width: 260px; }
+
+.pill-filter-track {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    background: var(--color-surface-input); border: 1px solid var(--glass-border);
+    padding: 5px; border-radius: var(--radius-full); width: fit-content;
+}
+.pill-filter-btn {
+    font-size: 0.76rem; font-weight: 600; color: var(--text-muted);
+    padding: 7px 15px; border-radius: var(--radius-full); cursor: pointer;
+    white-space: nowrap; transition: background var(--t-fast), color var(--t-fast);
+}
+.pill-filter-btn:hover { color: var(--text-primary); }
+.pill-filter-btn.state-active { background: var(--brand-gradient); color: #fff; box-shadow: var(--shadow-sm); }
+
+.cta-solid-button, .cta-outline-button, .cta-danger-button {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.82rem; font-weight: 600; padding: 11px 18px;
+    border-radius: var(--radius-md); cursor: pointer; white-space: nowrap;
+    transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
+}
+.cta-solid-button {
+    background: var(--brand-gradient); color: #fff;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+.cta-solid-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45); }
+.cta-outline-button {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-primary);
+}
+.cta-outline-button:hover { background: rgba(255,255,255,0.07); }
+.cta-danger-button {
+    background: var(--color-danger); color: #fff; box-shadow: 0 4px 14px rgba(239,68,68,0.3);
+}
+.cta-danger-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(239,68,68,0.45); }
+
+.cta-mini-btn {
+    font-size: 0.7rem; font-weight: 600; padding: 6px 12px;
+    border-radius: var(--radius-sm); cursor: pointer;
+    display: inline-flex; align-items: center; gap: 5px;
+    transition: background var(--t-fast), transform var(--t-fast);
+}
+.cta-mini-btn:hover { transform: translateY(-1px); }
+.cta-mini-btn.tone-success { background: var(--color-success-bg); color: var(--color-success); }
+.cta-mini-btn.tone-danger { background: var(--color-danger-bg); color: var(--color-danger); }
+.cta-mini-btn.tone-neutral { background: var(--color-neutral-bg); color: var(--text-secondary); }
+.cta-mini-btn.tone-info { background: var(--color-info-bg); color: var(--brand-secondary); }
+
+/* =========================================================================
+   PILLAR 10 — INSTITUTION CARDS GRID
+   ========================================================================= */
+.institution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+.institution-card {
+    background: var(--color-surface); background-image: var(--glass-reflection);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+    padding: 20px; box-shadow: var(--shadow-md);
+    display: flex; flex-direction: column; gap: 14px;
+    transition: transform var(--t-fast) var(--ease-standard), border-color var(--t-fast);
+}
+.institution-card:hover { transform: translateY(-4px); border-color: var(--glass-border-focus); }
+
+.institution-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.institution-name-block { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.institution-logo-pod {
+    width: 42px; height: 42px; border-radius: var(--radius-md);
+    background: var(--brand-gradient); color: #fff; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700;
+}
+.institution-name-text { display: flex; flex-direction: column; min-width: 0; }
+.institution-name { font-size: 0.92rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.institution-code { font-size: 0.68rem; color: var(--text-muted); font-family: var(--mono-font); }
+
+.institution-stats-row { display: flex; gap: 20px; }
+.institution-stat { display: flex; flex-direction: column; gap: 2px; }
+.institution-stat-value { font-size: 1.05rem; font-weight: 700; font-family: var(--mono-font); }
+.institution-stat-label { font-size: 0.68rem; color: var(--text-muted); }
+
+.institution-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* =========================================================================
+   PILLAR 11 — ACCESS REQUEST CARDS
+   ========================================================================= */
+.request-card-stack { display: flex; flex-direction: column; gap: 14px; }
+
+.request-card {
+    background: var(--color-surface); background-image: var(--glass-reflection);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+    padding: 20px; box-shadow: var(--shadow-md);
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr 1.2fr; gap: 18px; align-items: center;
+    transition: border-color var(--t-fast);
+}
+.request-card:hover { border-color: var(--glass-border-focus); }
+
+.request-field-stack { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.request-field-label { font-size: 0.64rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+.request-field-value { font-size: 0.84rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.request-field-value.mono { font-family: var(--mono-font); font-size: 0.78rem; color: var(--brand-secondary); }
+
+.request-card-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+
+/* =========================================================================
+   PILLAR 12 — DATA TABLE (Users / Permission Matrix)
+   ========================================================================= */
+.data-table-shell {
+    background: var(--color-surface); background-image: var(--glass-reflection);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md); overflow-x: auto;
+}
+
+.data-table { min-width: 100%; }
+.data-table thead th {
+    text-align: left; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.04em; color: var(--text-muted);
+    padding: 16px 20px; border-bottom: 1px solid var(--glass-border);
+    white-space: nowrap;
+}
+.data-table tbody td {
+    padding: 14px 20px; font-size: 0.82rem; color: var(--text-secondary);
+    border-bottom: 1px solid var(--glass-border); white-space: nowrap;
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr { transition: background var(--t-fast); }
+.data-table tbody tr:hover { background: rgba(255,255,255,0.025); }
+
+.table-user-cell { display: flex; align-items: center; gap: 10px; }
+.table-user-avatar {
+    width: 30px; height: 30px; border-radius: var(--radius-full);
+    background: var(--brand-gradient); color: #fff; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 0.66rem; font-weight: 700;
+}
+.table-user-text { display: flex; flex-direction: column; }
+.table-user-name { font-size: 0.83rem; font-weight: 600; color: var(--text-primary); }
+.table-user-email { font-size: 0.7rem; color: var(--text-muted); }
+
+.table-row-actions { display: flex; gap: 6px; justify-content: flex-end; }
+
+.permission-matrix-table th, .permission-matrix-table td { text-align: center; }
+.permission-matrix-table th:first-child, .permission-matrix-table td:first-child { text-align: left; }
+.permission-check-toggle {
+    width: 20px; height: 20px; border-radius: var(--radius-sm);
+    border: 1px solid var(--glass-border); background: var(--color-surface-input);
+    display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+    transition: background var(--t-fast), border-color var(--t-fast);
+}
+.permission-check-toggle.state-checked { background: var(--brand-gradient); border-color: transparent; color: #fff; }
+.permission-check-toggle.state-checked svg { width: 0.7em; height: 0.7em; }
+.permission-check-toggle.state-locked { opacity: 0.4; cursor: not-allowed; }
+
+/* =========================================================================
+   PILLAR 13 — VERIFICATION CENTER
+   ========================================================================= */
+.verification-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+
+.verification-card {
+    background: var(--color-surface); background-image: var(--glass-reflection);
+    backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-md);
+}
+
+.verification-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.verification-applicant { font-size: 0.88rem; font-weight: 700; }
+.verification-applicant-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+
+.verification-score-ring-wrap { position: relative; width: 56px; height: 56px; flex-shrink: 0; }
+.verification-score-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.verification-score-track { fill: none; stroke: var(--glass-border); stroke-width: 5; }
+.verification-score-progress { fill: none; stroke: var(--color-success); stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.8s var(--ease-standard); }
+.verification-score-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; font-family: var(--mono-font); }
+
+.verification-checklist { display: flex; flex-direction: column; gap: 10px; }
+.verification-check-item { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: var(--text-secondary); }
+.verification-check-icon {
+    width: 20px; height: 20px; border-radius: var(--radius-full); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 0.6rem;
+}
+.verification-check-icon.is-pass { background: var(--color-success-bg); color: var(--color-success); }
+.verification-check-icon.is-fail { background: var(--color-danger-bg); color: var(--color-danger); }
+.verification-check-icon svg { width: 0.75em; height: 0.75em; }
+
+.verification-card-actions { display: flex; gap: 8px; margin-top: 16px; }
+
+/* =========================================================================
+   PILLAR 14 — NOTICES (Composer + History)
+   ========================================================================= */
+.notice-composer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+
+.no-icon-pad { padding: 13px 16px; }
+.textarea-node { resize: vertical; min-height: 100px; line-height: 1.5; }
+.select-node { appearance: none; -webkit-appearance: none; cursor: pointer; }
+
+.audience-segment-track { margin-top: 4px; }
+
+.notice-history-item-meta { display: flex; align-items: center; gap: 8px; }
+
+/* =========================================================================
+   PILLAR 15 — AUDIT TIMELINE
+   ========================================================================= */
+.audit-timeline { display: flex; flex-direction: column; gap: 2px; position: relative; }
+.audit-timeline::before {
+    content: ''; position: absolute; left: 19px; top: 8px; bottom: 8px; width: 1px;
+    background: var(--glass-border);
+}
+
+.audit-entry { display: flex; gap: 16px; padding: 14px 8px; position: relative; }
+.audit-dot {
+    width: 38px; height: 38px; border-radius: var(--radius-full); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--color-surface-solid); border: 1px solid var(--glass-border);
+    font-size: 0.85rem; z-index: 2; position: relative;
+}
+.audit-dot.tone-success { color: var(--color-success); }
+.audit-dot.tone-danger { color: var(--color-danger); }
+.audit-dot.tone-info { color: var(--brand-secondary); }
+.audit-dot.tone-warning { color: var(--color-warning); }
+
+.audit-body { flex: 1; padding-top: 2px; }
+.audit-headline { font-size: 0.85rem; font-weight: 600; }
+.audit-meta { font-size: 0.74rem; color: var(--text-muted); margin-top: 3px; }
+.audit-target { font-family: var(--mono-font); color: var(--brand-secondary); }
+
+/* =========================================================================
+   PILLAR 16 — SETTINGS
+   ========================================================================= */
+.settings-nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 20px; }
+
+.settings-tile-btn {
+    background: var(--color-surface); border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg); padding: 18px 14px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    font-size: 0.78rem; font-weight: 600; color: var(--text-secondary);
+    cursor: pointer; transition: transform var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+}
+.settings-tile-btn svg { font-size: 1.3rem; }
+.settings-tile-btn:hover { transform: translateY(-2px); }
+.settings-tile-btn.state-active { border-color: var(--brand-accent); color: var(--text-primary); background: var(--brand-glow-alpha); }
+
+.settings-section-title { font-size: 0.92rem; font-weight: 600; margin-bottom: 16px; }
+.settings-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 14px 0; border-bottom: 1px solid var(--glass-border);
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-row-text { display: flex; flex-direction: column; gap: 2px; }
+.settings-row-title { font-size: 0.84rem; font-weight: 600; }
+.settings-row-desc { font-size: 0.74rem; color: var(--text-muted); }
+
+.toggle-switch-track {
+    width: 42px; height: 24px; border-radius: var(--radius-full);
+    background: var(--color-surface-input); border: 1px solid var(--glass-border);
+    cursor: pointer; position: relative; flex-shrink: 0; transition: background var(--t-fast);
+}
+.toggle-switch-knob {
+    width: 18px; height: 18px; border-radius: var(--radius-full); background: var(--text-muted);
+    position: absolute; top: 2px; left: 2px; transition: transform var(--t-fast) var(--ease-out-back), background var(--t-fast);
+}
+.toggle-switch-track.state-on { background: var(--brand-glow-alpha); border-color: var(--brand-accent); }
+.toggle-switch-track.state-on .toggle-switch-knob { transform: translateX(18px); background: var(--brand-secondary); }
+
+/* =========================================================================
+   PILLAR 17 — BAR CHART (Request Trends)
+   ========================================================================= */
+.bar-chart-shell { display: flex; align-items: flex-end; gap: 10px; height: 220px; padding-top: 10px; }
+.bar-chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+.bar-chart-fill { width: 100%; border-radius: 6px 6px 0 0; background: var(--brand-gradient); min-height: 4px; transition: height 0.8s var(--ease-standard); }
+.bar-chart-label { font-size: 0.66rem; color: var(--text-muted); }
+
+/* =========================================================================
+   PILLAR 18 — MODALS
+   ========================================================================= */
+.modal-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(2, 6, 23, 0.6); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    opacity: 0; visibility: hidden; transition: opacity var(--t-normal), visibility var(--t-normal);
+}
+.modal-overlay.state-open { opacity: 1; visibility: visible; }
+
+.modal-shell {
+    width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+    transform: scale(0.96) translateY(8px); transition: transform var(--t-normal) var(--ease-out-back);
+}
+.modal-overlay.state-open .modal-shell { transform: scale(1) translateY(0); }
+.modal-shell-wide { max-width: 680px; }
+.modal-shell-narrow { max-width: 380px; }
+
+.modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.modal-title { font-size: 1.05rem; font-weight: 700; }
+.modal-close-btn { background: var(--color-surface-input); border: 1px solid var(--glass-border); }
+
+.form-row-split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.modal-action-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+.modal-submit-btn { width: auto; padding: 13px 22px; }
+
+.confirm-modal-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 4px; }
+
+.request-modal-body { display: flex; flex-direction: column; gap: 18px; }
+
+/* Re-used Gateway field/input/button atoms */
+.input-field-wrapper { display: flex; flex-direction: column; gap: 8px; }
+.field-label-text { font-size: 0.74rem; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.02em; text-transform: uppercase; }
+.form-input-node {
+    width: 100%; background-color: var(--color-surface-input); border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.86rem; font-weight: 500;
+    transition: border-color var(--t-fast), box-shadow var(--t-fast); -webkit-appearance: none;
+}
+.form-input-node:focus { border-color: var(--brand-accent); box-shadow: 0 0 18px rgba(59,130,246,0.3); }
+.character-caps-lock { text-transform: uppercase; }
+
+.form-grid-layout { display: flex; flex-direction: column; gap: 18px; }
+
+.segmented-control-track {
+    position: relative; background: var(--color-surface-input); border: 1px solid var(--glass-border);
+    padding: 5px; border-radius: var(--radius-full); display: flex; align-items: center;
+}
+.control-node {
+    flex: 1; padding: 7px 0; font-size: 0.76rem; font-weight: 600; color: var(--text-muted);
+    text-align: center; cursor: pointer; border-radius: var(--radius-full);
+    transition: color var(--t-fast), background var(--t-fast);
+}
+.control-node.state-active { color: #fff; background: var(--brand-gradient); }
+
+.cta-gradient-button {
+    width: 100%; background: var(--brand-gradient); border-radius: var(--radius-md);
+    padding: 14px 0; font-size: 0.86rem; font-weight: 600; color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    transition: transform var(--t-fast), box-shadow var(--t-fast);
+}
+.cta-gradient-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,0.45); }
+.cta-gradient-button:active { transform: scale(0.98) !important; }
+
+/* =========================================================================
+   PILLAR 19 — TOAST NOTIFICATIONS
+   ========================================================================= */
+#co-toast-stack-container { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; pointer-events: none; }
+
+/* =========================================================================
+   PILLAR 20 — RESPONSIVE BREAKPOINTS
+   ========================================================================= */
+@media (max-width: 1280px) {
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    .dash-content-grid { grid-template-columns: repeat(2, 1fr); }
+    .card-panel.span-2 { grid-column: span 2; }
+    .institution-grid { grid-template-columns: repeat(2, 1fr); }
+    .request-card { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .request-card-actions { grid-column: 1 / -1; justify-content: flex-start; }
+    .settings-nav-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 1023px) {
+    :root { --topbar-height: 64px; }
+    #co-mobile-topbar {
+        display: flex; align-items: center; justify-content: space-between;
+        height: var(--topbar-height); padding: 0 14px;
+        background: var(--color-surface); backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--glass-border);
+        position: sticky; top: 0; z-index: 150;
+    }
+    .mobile-brand-pod { display: flex; flex-direction: column; align-items: center; }
+    .mobile-brand-mark { font-size: 0.88rem; font-weight: 700; }
+    .mobile-brand-tag { font-size: 0.62rem; color: var(--brand-secondary); font-weight: 600; text-transform: uppercase; }
+
+    .co-sidebar { transform: translateX(-100%); box-shadow: var(--shadow-xl); }
+    .co-sidebar.state-open { transform: translateX(0); }
+    .sidebar-close-only { display: flex; margin-left: auto; }
+    .sidebar-scrim { display: block; }
+
+    #co-app-shell { margin-left: 0; }
+    .view-topbar { display: none; }
+    .global-search-shell { display: none; }
+
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .dash-content-grid { grid-template-columns: 1fr; }
+    .card-panel.span-2 { grid-column: span 1; }
+    .institution-grid { grid-template-columns: 1fr; }
+    .request-card { grid-template-columns: 1fr 1fr; }
+    .verification-grid { grid-template-columns: 1fr; }
+    .notice-composer-grid { grid-template-columns: 1fr; }
+    .settings-nav-grid { grid-template-columns: repeat(3, 1fr); }
+    .view-scroll-region { padding: 20px 16px 40px; }
+}
+
+@media (max-width: 640px) {
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .request-card { grid-template-columns: 1fr; }
+    .settings-nav-grid { grid-template-columns: repeat(2, 1fr); }
+    .panel-toolbar { flex-direction: column; align-items: stretch; }
+    .toolbar-search-shell { width: 100%; }
+    .pill-filter-track { width: 100%; overflow-x: auto; }
+    .form-row-split { grid-template-columns: 1fr; }
+    .data-table thead th, .data-table tbody td { padding: 12px 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    .orb, .status-heartbeat-pulse::after { animation: none !important; }
+}
+
+/* =========================================================================
+   PILLAR 21 — KEYFRAMES
+   ========================================================================= */
+@keyframes rotateOrbTrack {
+    0% { transform: scale(1) translate(0px, 0px); opacity: 0.5; }
+    33% { transform: scale(1.1) translate(30px, -50px); opacity: 0.65; }
+    66% { transform: scale(0.95) translate(-20px, 20px); opacity: 0.4; }
+    100% { transform: scale(1) translate(0px, 0px); opacity: 0.5; }
+}
+@keyframes heartbeatGlow {
+    0% { transform: scale(0.6); opacity: 1; }
+    100% { transform: scale(2.4); opacity: 0; }
+}
+@keyframes fadeUpPanel {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}

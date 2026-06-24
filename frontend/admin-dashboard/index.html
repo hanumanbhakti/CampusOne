@@ -9,6 +9,202 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./style.css">
+<style>
+/* ===== CAMPUS STATUS CARD ===== */
+.campus-status-card {
+  margin: 0 12px 8px;
+  padding: 12px 14px;
+  background: var(--glass-bg, rgba(255,255,255,0.04));
+  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
+  border-radius: 12px;
+}
+.campus-status-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.campus-status-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-primary, #6366F1);
+  flex-shrink: 0;
+}
+.campus-status-inst {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-primary, #F8FAFC);
+  margin: 0;
+  line-height: 1.2;
+}
+.campus-status-code {
+  font-size: 0.64rem;
+  color: var(--text-muted, #94A3B8);
+  margin: 2px 0 0;
+  font-family: monospace;
+  letter-spacing: 0.04em;
+}
+.campus-status-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.campus-status-dot,
+.campus-status-members,
+.campus-status-notices {
+  font-size: 0.62rem;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-weight: 500;
+}
+.campus-status-dot {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22C55E;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.status-pulse {
+  width: 6px; height: 6px;
+  background: #22C55E;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse-green 2s infinite;
+}
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+.campus-status-members {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818CF8;
+}
+.campus-status-notices {
+  background: rgba(251, 191, 36, 0.12);
+  color: #FCD34D;
+}
+
+/* ===== NAV COUNTS (subtle, right-aligned) ===== */
+.nav-count {
+  margin-left: auto;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--text-muted, #94A3B8);
+  background: var(--glass-bg, rgba(255,255,255,0.06));
+  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
+  padding: 1px 7px;
+  border-radius: 99px;
+  min-width: 22px;
+  text-align: center;
+  transition: all 0.2s;
+}
+.nav-item.state-active .nav-count {
+  background: rgba(99,102,241,0.2);
+  color: #A5B4FC;
+  border-color: rgba(99,102,241,0.3);
+}
+
+/* ===== CAMPUS SNAPSHOT WIDGET ===== */
+.campus-snapshot-widget {
+  margin: 0 12px 4px;
+  padding: 10px 14px;
+  background: var(--glass-bg, rgba(255,255,255,0.03));
+  border: 1px solid var(--glass-border, rgba(255,255,255,0.07));
+  border-radius: 10px;
+}
+.snapshot-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted, #94A3B8);
+  margin: 0 0 8px;
+}
+.snapshot-row {
+  display: flex;
+  gap: 0;
+  justify-content: space-between;
+}
+.snapshot-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+.snapshot-item span:first-child {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary, #F8FAFC);
+  line-height: 1.1;
+}
+.snap-key {
+  font-size: 0.58rem;
+  color: var(--text-muted, #94A3B8);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+/* ===== ADMIN IDENTITY CARD ===== */
+.admin-identity-card {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--glass-bg, rgba(255,255,255,0.04));
+  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
+  border-radius: 10px;
+  margin-bottom: 6px;
+  gap: 10px;
+}
+.admin-identity-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.admin-identity-info {
+  flex: 1;
+  min-width: 0;
+}
+.admin-last-login {
+  font-size: 0.6rem;
+  color: var(--text-muted, #64748B);
+  margin: 2px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== SYSTEM HEALTH BAR ===== */
+.system-health-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: rgba(34, 197, 94, 0.07);
+  border: 1px solid rgba(34, 197, 94, 0.15);
+  margin-bottom: 8px;
+}
+.health-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.health-online  { background: #22C55E; box-shadow: 0 0 6px rgba(34,197,94,0.6); }
+.health-offline { background: #F59E0B; box-shadow: 0 0 6px rgba(245,158,11,0.6); }
+.health-label {
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: #4ADE80;
+}
+
+/* ===== TOPBAR SUBTITLE ===== */
+.topbar-subtitle {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted, #94A3B8);
+}
+</style>
 </head>
 <body data-theme="dark">
 
@@ -44,10 +240,20 @@
         </div>
       </div>
 
-      <!-- Campus Selector -->
-      <div class="campus-selector-pod">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-        <span id="sidebar-campus-name">SBU-RANCHI-2026</span>
+      <!-- Campus Status Card -->
+      <div class="campus-status-card">
+        <div class="campus-status-header">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="campus-status-icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <div>
+            <p id="sidebar-institution-name" class="campus-status-inst">Sarla Birla University</p>
+            <p id="sidebar-campus-name" class="campus-status-code">SBU-RANCHI-2026</p>
+          </div>
+        </div>
+        <div class="campus-status-meta">
+          <span class="campus-status-dot"><span class="status-pulse"></span>Active Campus</span>
+          <span class="campus-status-members"><span id="sidebar-total-members">—</span> Members</span>
+          <span class="campus-status-notices"><span id="sidebar-notice-count">—</span> Notices</span>
+        </div>
       </div>
 
       <nav class="sidebar-nav">
@@ -68,22 +274,25 @@
         <a href="#" class="nav-item" data-section="students">
           <svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
           <span data-i18n="students">Students</span>
+          <span class="nav-count" id="nav-students-count">—</span>
         </a>
         <a href="#" class="nav-item" data-section="teachers">
           <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8" cy="11" r="2.5"/><path d="M4.5 17c.7-2 2.3-3 3.5-3s2.8 1 3.5 3"/><line x1="14" y1="9" x2="19" y2="9"/><line x1="14" y1="13" x2="19" y2="13"/></svg>
           <span data-i18n="teachers">Teachers</span>
+          <span class="nav-count" id="nav-teachers-count">—</span>
         </a>
         <a href="#" class="nav-item" data-section="parents">
           <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           <span data-i18n="parents">Parents</span>
+          <span class="nav-count" id="nav-parents-count">—</span>
         </a>
 
         <!-- TOOLS -->
         <div class="nav-section-label">Tools</div>
-        <a href="#" class="nav-item nav-item-soon" data-section="notices">
+        <a href="#" class="nav-item" data-section="notices">
           <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span>Notices</span>
-          <span class="nav-coming-soon">Soon</span>
+          <span class="nav-count" id="nav-notices-count">—</span>
         </a>
         <a href="#" class="nav-item nav-item-soon" data-section="campus-id">
           <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
@@ -101,14 +310,35 @@
         </a>
       </nav>
 
+      <!-- Campus Snapshot Widget -->
+      <div class="campus-snapshot-widget">
+        <p class="snapshot-label">Campus Snapshot</p>
+        <div class="snapshot-row">
+          <span class="snapshot-item"><span id="snap-students">—</span><span class="snap-key">Students</span></span>
+          <span class="snapshot-item"><span id="snap-teachers">—</span><span class="snap-key">Teachers</span></span>
+          <span class="snapshot-item"><span id="snap-parents">—</span><span class="snap-key">Parents</span></span>
+        </div>
+      </div>
+
       <div class="sidebar-footer">
-        <div class="sidebar-admin-chip" id="sidebar-admin-chip">
-          <div class="admin-chip-avatar" id="sidebar-avatar-initials">SA</div>
-          <div>
-            <p id="sidebar-admin-name" class="admin-chip-name">SBU Admin</p>
-            <p class="admin-chip-role">Institution Admin</p>
+        <!-- Admin Identity Card -->
+        <div class="admin-identity-card" id="sidebar-admin-chip">
+          <div class="admin-identity-left">
+            <div class="admin-chip-avatar" id="sidebar-avatar-initials">SA</div>
+            <div class="admin-identity-info">
+              <p id="sidebar-admin-name" class="admin-chip-name">SBU Admin</p>
+              <p class="admin-chip-role">Institution Admin</p>
+              <p class="admin-last-login" id="sidebar-last-login">Last login: —</p>
+            </div>
           </div>
         </div>
+
+        <!-- System Health -->
+        <div class="system-health-bar" id="system-health-bar">
+          <span class="health-dot health-online" id="health-dot"></span>
+          <span id="health-label" class="health-label">System Healthy</span>
+        </div>
+
         <button id="btn-logout" class="logout-btn">
           <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           <span>Logout</span>
@@ -122,7 +352,7 @@
       <header class="topbar">
         <div>
           <h1 id="greeting-text">Welcome back 👋</h1>
-          <p class="text-muted" style="margin:0;font-size:0.85rem;">Here's what's happening at your institution today.</p>
+          <p class="topbar-subtitle" id="topbar-subtitle">—</p>
         </div>
         <div class="topbar-right">
           <select id="language-switcher" class="btn-secondary" aria-label="Language">

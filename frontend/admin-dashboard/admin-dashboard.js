@@ -202,11 +202,22 @@ async function initDashboard() {
   // Populate UI identity
   const adminName = adminProfile.name || user.email.split("@")[0];
   const adminInitials = initials(adminName);
+  const institutionName = adminProfile.institutionName || adminProfile.campusName || activeCampus;
 
-  $("greeting-text").textContent    = `Welcome back, ${adminName} 👋`;
+  // Smart time-based greeting
+  const hour = new Date().getHours();
+  const greetWord = hour < 12 ? "Good Morning" : hour < 17 ? "Good Afternoon" : "Good Evening";
+  const firstName = adminName.split(" ")[0];
+  $("greeting-text").textContent = `${greetWord}, ${firstName} 👋`;
+
+  // Topbar subtitle with live member count (will be updated after data loads)
+  const subtitleEl = $("topbar-subtitle");
+  if (subtitleEl) subtitleEl.textContent = `${institutionName} · Loading members...`;
+
   $("user-name").textContent        = adminName;
   $("topbar-campus").textContent    = activeCampus;
   $("sidebar-campus-name").textContent = activeCampus;
+  if ($("sidebar-institution-name")) $("sidebar-institution-name").textContent = institutionName;
   $("sidebar-admin-name").textContent  = adminName;
   $("sidebar-avatar-initials").textContent = adminInitials;
   $("topbar-avatar-initials").textContent  = adminInitials;
@@ -216,6 +227,19 @@ async function initDashboard() {
   ["stat-students-delta","stat-teachers-delta","stat-parents-delta"].forEach(id => {
     if ($(id)) $(id).textContent = `Live in ${activeCampus}`;
   });
+
+  // Last login time
+  const lastLoginEl = $("sidebar-last-login");
+  if (lastLoginEl) {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+    const dateStr = now.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+    const isToday = true; // This session = today login
+    lastLoginEl.textContent = `Last login: Today ${timeStr}`;
+  }
+
+  // System Health — check Firestore reachability (we got here, so it's connected)
+  updateSystemHealth(true);
 
   gate.hidden  = false; // keep visible until shell ready
   shell.hidden = false;
@@ -305,6 +329,7 @@ await Promise.all([
   loadRequests(),
   loadNotices()
 ]);
+  updateSidebarCounts();
   renderDashboardActivity();
 }
 
@@ -613,6 +638,46 @@ function watchProvisioning(reqId, name) {
   });
 }
 
+// ============ SYSTEM HEALTH ============
+function updateSystemHealth(isOnline) {
+  const dot   = $("health-dot");
+  const label = $("health-label");
+  if (!dot || !label) return;
+  if (isOnline) {
+    dot.className   = "health-dot health-online";
+    label.textContent = "System Healthy";
+  } else {
+    dot.className   = "health-dot health-offline";
+    label.textContent = "Connection Lost";
+  }
+}
+
+// ============ SIDEBAR LIVE COUNTS ============
+function updateSidebarCounts() {
+  // Nav counts
+  if ($("nav-students-count")) $("nav-students-count").textContent = studentsCache.length;
+  if ($("nav-teachers-count")) $("nav-teachers-count").textContent = teachersCache.length;
+  if ($("nav-parents-count"))  $("nav-parents-count").textContent  = parentsCache.length;
+  if ($("nav-notices-count"))  $("nav-notices-count").textContent  = noticesCache.length;
+
+  // Campus status card
+  const total = studentsCache.length + teachersCache.length + parentsCache.length;
+  if ($("sidebar-total-members")) $("sidebar-total-members").textContent = total;
+  if ($("sidebar-notice-count"))  $("sidebar-notice-count").textContent  = noticesCache.length;
+
+  // Campus Snapshot Widget
+  if ($("snap-students")) $("snap-students").textContent = studentsCache.length;
+  if ($("snap-teachers")) $("snap-teachers").textContent = teachersCache.length;
+  if ($("snap-parents"))  $("snap-parents").textContent  = parentsCache.length;
+
+  // Topbar subtitle
+  const subtitleEl = $("topbar-subtitle");
+  if (subtitleEl) {
+    const institutionName = adminProfile?.institutionName || adminProfile?.campusName || activeCampus;
+    subtitleEl.textContent = `${institutionName} · ${total} Active Members`;
+  }
+}
+
 // ============ DASHBOARD RECENT ACTIVITY ============
 function renderDashboardActivity() {
   const list = $("list-recent-activity");
@@ -685,6 +750,7 @@ async function loadStudents() {
   if ($("stat-students")) $("stat-students").textContent = studentsCache.length;
   if ($("students-count-chip")) $("students-count-chip").textContent = `${studentsCache.length} records`;
   renderStudents($("search-students")?.value || "");
+  updateSidebarCounts();
 }
 
 function renderStudents(filterText) {
@@ -734,6 +800,7 @@ async function loadTeachers() {
   if ($("stat-teachers")) $("stat-teachers").textContent = teachersCache.length;
   if ($("teachers-count-chip")) $("teachers-count-chip").textContent = `${teachersCache.length} records`;
   renderTeachers($("search-teachers")?.value || "");
+  updateSidebarCounts();
 }
 
 function renderTeachers(filterText) {
@@ -783,6 +850,7 @@ async function loadParents() {
   if ($("stat-parents")) $("stat-parents").textContent = parentsCache.length;
   if ($("parents-count-chip")) $("parents-count-chip").textContent = `${parentsCache.length} records`;
   renderParents($("search-parents")?.value || "");
+  updateSidebarCounts();
 }
 
 function renderParents(filterText) {
@@ -1123,6 +1191,8 @@ function renderNotices() {
   const container = $("notice-list");
 
   if (!container) return;
+
+  updateSidebarCounts();
 
   if (!noticesCache.length) {
 

@@ -113,7 +113,7 @@ button, input {
 }
 
 /* =========================================================================
-   PILLAR 3 — AMBIENT HIGH-PERFORMANCE BACKGROUND CANVAS
+   PILLAR 3 — AMBIENT HIGH-PERFORMANCE BACKGROUND CANVAS (ENHANCED)
    ========================================================================= */
 .env-viewport {
     position: fixed;
@@ -128,51 +128,199 @@ button, input {
     transform: translateZ(0);
 }
 
-.mesh-overlay-gradient {
+/* === AURORA NORTHERN LIGHTS LAYER === */
+.aurora-layer {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 50% 50%, transparent 20%, var(--color-bg) 80%);
-    z-index: 2;
+    z-index: 1;
+    overflow: hidden;
 }
 
+.aurora-band {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    mix-blend-mode: screen;
+    will-change: transform, opacity;
+}
+
+.aurora-band-1 {
+    width: 120vw;
+    height: 60vh;
+    top: -20vh;
+    left: -10vw;
+    background: linear-gradient(135deg,
+        rgba(37, 99, 235, 0.18) 0%,
+        rgba(14, 165, 233, 0.22) 30%,
+        rgba(59, 130, 246, 0.15) 60%,
+        transparent 100%
+    );
+    animation: auroraFlow1 18s ease-in-out infinite;
+    transform-origin: center center;
+}
+
+.aurora-band-2 {
+    width: 100vw;
+    height: 50vh;
+    bottom: -10vh;
+    right: -15vw;
+    background: linear-gradient(225deg,
+        rgba(14, 165, 233, 0.15) 0%,
+        rgba(37, 99, 235, 0.20) 40%,
+        rgba(99, 102, 241, 0.12) 70%,
+        transparent 100%
+    );
+    animation: auroraFlow2 22s ease-in-out infinite;
+    transform-origin: center center;
+}
+
+.aurora-band-3 {
+    width: 80vw;
+    height: 40vh;
+    top: 30vh;
+    left: 10vw;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(59, 130, 246, 0.10) 30%,
+        rgba(14, 165, 233, 0.16) 60%,
+        transparent 100%
+    );
+    animation: auroraFlow3 28s ease-in-out infinite;
+    transform-origin: center center;
+}
+
+/* === FLOATING PARTICLE STARS SYSTEM === */
+.particle-field {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.star-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    will-change: transform, opacity;
+}
+
+.star-particle:nth-child(1)  { width:2px; height:2px; top:8%;  left:12%; animation: starTwinkle 4.2s ease-in-out infinite, starDrift 20s linear infinite; }
+.star-particle:nth-child(2)  { width:1px; height:1px; top:18%; left:78%; animation: starTwinkle 3.1s ease-in-out infinite 0.8s, starDrift 25s linear infinite reverse; }
+.star-particle:nth-child(3)  { width:2px; height:2px; top:32%; left:55%; animation: starTwinkle 5.0s ease-in-out infinite 1.5s, starDrift 18s linear infinite; }
+.star-particle:nth-child(4)  { width:1px; height:1px; top:55%; left:23%; animation: starTwinkle 3.7s ease-in-out infinite 0.3s, starDrift 22s linear infinite reverse; }
+.star-particle:nth-child(5)  { width:2px; height:2px; top:70%; left:87%; animation: starTwinkle 4.8s ease-in-out infinite 2.1s, starDrift 30s linear infinite; }
+.star-particle:nth-child(6)  { width:1px; height:1px; top:85%; left:42%; animation: starTwinkle 3.5s ease-in-out infinite 1.0s, starDrift 16s linear infinite reverse; }
+.star-particle:nth-child(7)  { width:2px; height:2px; top:12%; left:65%; animation: starTwinkle 6.0s ease-in-out infinite 0.5s, starDrift 24s linear infinite; }
+.star-particle:nth-child(8)  { width:1px; height:1px; top:45%; left:91%; animation: starTwinkle 4.3s ease-in-out infinite 1.8s, starDrift 28s linear infinite reverse; }
+.star-particle:nth-child(9)  { width:2px; height:2px; top:62%; left:7%;  animation: starTwinkle 5.2s ease-in-out infinite 0.2s, starDrift 21s linear infinite; }
+.star-particle:nth-child(10) { width:1px; height:1px; top:25%; left:38%; animation: starTwinkle 3.9s ease-in-out infinite 2.5s, starDrift 19s linear infinite reverse; }
+.star-particle:nth-child(11) { width:2px; height:2px; top:78%; left:60%; animation: starTwinkle 4.6s ease-in-out infinite 0.7s, starDrift 26s linear infinite; }
+.star-particle:nth-child(12) { width:1px; height:1px; top:5%;  left:48%; animation: starTwinkle 5.8s ease-in-out infinite 1.3s, starDrift 32s linear infinite reverse; }
+
+/* === PRISMATIC GRID MESH === */
+.grid-mesh-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-image:
+        linear-gradient(rgba(37, 99, 235, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37, 99, 235, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridPulse 8s ease-in-out infinite;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
+
+/* === DEPTH ORB SYSTEM (UPGRADED) === */
 .blur-matrix-orbs {
     position: absolute;
     inset: 0;
-    filter: blur(100px);
-    opacity: 0.6;
-    z-index: 1;
+    filter: blur(120px);
+    opacity: 0.55;
+    z-index: 3;
 }
 
 .orb {
     position: absolute;
     border-radius: var(--radius-full);
     mix-blend-mode: screen;
+    will-change: transform, opacity;
 }
 
 .node-primary-glowing {
-    top: 15%;
-    left: 20%;
-    width: 450px;
-    height: 450px;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, transparent 70%);
-    animation: rotateOrbTrack 25s infinite linear;
+    top: 10%;
+    left: 15%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle,
+        rgba(37, 99, 235, 0.35) 0%,
+        rgba(59, 130, 246, 0.15) 50%,
+        transparent 70%
+    );
+    animation: orbPulseA 20s ease-in-out infinite;
 }
 
 .node-secondary-glowing {
-    bottom: 10%;
-    right: 15%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%);
-    animation: rotateOrbTrack 30s infinite linear reverse;
+    bottom: 5%;
+    right: 10%;
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle,
+        rgba(14, 165, 233, 0.30) 0%,
+        rgba(37, 99, 235, 0.12) 50%,
+        transparent 70%
+    );
+    animation: orbPulseB 26s ease-in-out infinite;
 }
 
 .node-accent-glowing {
-    top: 40%;
-    left: 50%;
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+    top: 38%;
+    left: 45%;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle,
+        rgba(99, 102, 241, 0.20) 0%,
+        rgba(59, 130, 246, 0.10) 50%,
+        transparent 70%
+    );
+    animation: orbPulseC 16s ease-in-out infinite;
+}
+
+/* === GLOWING BEAM LINES === */
+.beam-lines-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.beam-line {
+    position: absolute;
+    width: 1px;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(59, 130, 246, 0.15) 30%,
+        rgba(14, 165, 233, 0.25) 50%,
+        rgba(59, 130, 246, 0.15) 70%,
+        transparent 100%
+    );
+    animation: beamSlide 8s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+.beam-line-1 { left: 20%; height: 70%; top: 15%; animation-delay: 0s; animation-duration: 9s; }
+.beam-line-2 { left: 50%; height: 50%; top: 25%; animation-delay: 3s; animation-duration: 12s; }
+.beam-line-3 { left: 80%; height: 60%; top: 10%; animation-delay: 6s; animation-duration: 10s; }
+
+/* === DARK VIGNETTE OVERLAY === */
+.mesh-overlay-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at center, transparent 30%, rgba(15, 23, 42, 0.7) 100%),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.3) 0%, transparent 30%, transparent 70%, rgba(15, 23, 42, 0.4) 100%);
+    z-index: 4;
 }
 
 /* =========================================================================
@@ -1166,21 +1314,104 @@ button, input {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
-    .orb, .status-heartbeat-pulse::after { animation: none !important; }
+    .orb, .status-heartbeat-pulse::after,
+    .aurora-band, .star-particle, .beam-line,
+    .grid-mesh-layer, .glass-morph-card-frame,
+    .campus-snapshot-orchestrator { animation: none !important; }
     .snapshot-metric-card:hover, .cta-gradient-button:hover { transform: none !important; }
 }
 
 /* =========================================================================
-   PILLAR 16 — CORE ANIMATIONS SYSTEM KEYFRAMES PIPELINE
+   PILLAR 16 — CORE ANIMATIONS SYSTEM KEYFRAMES PIPELINE (ENHANCED)
    ========================================================================= */
-@keyframes rotateOrbTrack {
-    0% { transform: scale(1) translate(0px, 0px); opacity: 0.6; }
-    33% { transform: scale(1.1) translate(30px, -50px); opacity: 0.75; }
-    66% { transform: scale(0.95) translate(-20px, 20px); opacity: 0.5; }
-    100% { transform: scale(1) translate(0px, 0px); opacity: 0.6; }
+
+/* === ORB BREATHING ANIMATIONS === */
+@keyframes orbPulseA {
+    0%   { transform: translate(0px, 0px) scale(1);    opacity: 0.55; }
+    25%  { transform: translate(40px, -60px) scale(1.12); opacity: 0.7; }
+    50%  { transform: translate(-30px, 40px) scale(0.92); opacity: 0.45; }
+    75%  { transform: translate(20px, 30px) scale(1.08);  opacity: 0.65; }
+    100% { transform: translate(0px, 0px) scale(1);    opacity: 0.55; }
 }
 
+@keyframes orbPulseB {
+    0%   { transform: translate(0px, 0px) scale(1);    opacity: 0.5; }
+    30%  { transform: translate(-50px, 30px) scale(1.15); opacity: 0.65; }
+    60%  { transform: translate(40px, -50px) scale(0.88); opacity: 0.4; }
+    100% { transform: translate(0px, 0px) scale(1);    opacity: 0.5; }
+}
+
+@keyframes orbPulseC {
+    0%   { transform: translate(0px, 0px) scale(1);    opacity: 0.45; }
+    40%  { transform: translate(30px, 50px) scale(1.2);  opacity: 0.6; }
+    80%  { transform: translate(-40px, -20px) scale(0.9); opacity: 0.35; }
+    100% { transform: translate(0px, 0px) scale(1);    opacity: 0.45; }
+}
+
+/* === AURORA FLOW ANIMATIONS === */
+@keyframes auroraFlow1 {
+    0%   { transform: translateX(0%) translateY(0%) rotate(0deg) scaleX(1); opacity: 0.8; }
+    25%  { transform: translateX(5%) translateY(-4%) rotate(2deg) scaleX(1.05); opacity: 1; }
+    50%  { transform: translateX(-3%) translateY(5%) rotate(-1deg) scaleX(0.97); opacity: 0.7; }
+    75%  { transform: translateX(4%) translateY(-2%) rotate(1.5deg) scaleX(1.03); opacity: 0.9; }
+    100% { transform: translateX(0%) translateY(0%) rotate(0deg) scaleX(1); opacity: 0.8; }
+}
+
+@keyframes auroraFlow2 {
+    0%   { transform: translateX(0%) translateY(0%) rotate(0deg); opacity: 0.7; }
+    33%  { transform: translateX(-6%) translateY(4%) rotate(-2deg); opacity: 0.9; }
+    66%  { transform: translateX(4%) translateY(-5%) rotate(1.5deg); opacity: 0.6; }
+    100% { transform: translateX(0%) translateY(0%) rotate(0deg); opacity: 0.7; }
+}
+
+@keyframes auroraFlow3 {
+    0%   { transform: translateX(0%) scaleY(1); opacity: 0.5; }
+    50%  { transform: translateX(8%) scaleY(1.3); opacity: 0.8; }
+    100% { transform: translateX(0%) scaleY(1); opacity: 0.5; }
+}
+
+/* === STAR TWINKLE & DRIFT === */
+@keyframes starTwinkle {
+    0%, 100% { opacity: 0.1; transform: scale(0.8); }
+    50%       { opacity: 0.9; transform: scale(1.2); }
+}
+
+@keyframes starDrift {
+    0%   { transform: translate(0px, 0px); }
+    50%  { transform: translate(10px, -15px); }
+    100% { transform: translate(0px, 0px); }
+}
+
+/* === GRID PULSE === */
+@keyframes gridPulse {
+    0%, 100% { opacity: 0.6; }
+    50%       { opacity: 1; }
+}
+
+/* === BEAM SLIDE === */
+@keyframes beamSlide {
+    0%   { opacity: 0; transform: translateY(-100%); }
+    20%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(100%); }
+}
+
+/* === HEARTBEAT PULSE === */
 @keyframes heartbeatGlow {
     0% { transform: scale(0.6); opacity: 1; }
     100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* === CARD ENTRY ANIMATION === */
+@keyframes cardFadeIn {
+    0%   { opacity: 0; transform: translateY(24px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.glass-morph-card-frame {
+    animation: cardFadeIn 0.7s var(--ease-out-back) both;
+}
+
+.campus-snapshot-orchestrator {
+    animation: cardFadeIn 0.6s var(--ease-out-back) 0.1s both;
 }

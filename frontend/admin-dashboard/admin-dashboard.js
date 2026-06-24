@@ -28,9 +28,19 @@ import { auth, db, getCurrentTenant, waitForAuthReady } from "../shared/firebase
 
 import { signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import {
-  doc, getDoc, updateDoc,
-  collection, query, where, limit,
-  getDocs, serverTimestamp, onSnapshot
+  doc,
+  getDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  limit,
+  getDocs,
+  serverTimestamp,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 // ============ HELPERS ============

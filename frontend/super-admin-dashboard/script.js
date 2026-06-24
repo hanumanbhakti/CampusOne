@@ -24,27 +24,24 @@
  *   so the dashboard is never blocked during development.
  * ========================================================================= */
 
+// ── Firestore functions only (auth + db come from shared config) ──
 import {
-  getAuth,
+  collection, doc, getDoc, setDoc, updateDoc, deleteDoc,
+  query, orderBy, limit, onSnapshot, serverTimestamp, addDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import {
   onAuthStateChanged,
   signOut,
   sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import {
-  getFirestore,
-  collection, doc, getDoc, setDoc, updateDoc, deleteDoc,
-  query, orderBy, limit, onSnapshot, serverTimestamp, addDoc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import {
   getFunctions,
   httpsCallable
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js";
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-functions.js";
 
-// ── Shared Firebase app instance (same project as Gateway / login pages) ──
-import { app } from "../shared/firebase-config.js";
+// ── auth, db, app — all from shared config (already initialized there) ──
+import { app, auth, db } from "../shared/firebase-config.js";
 
-const auth      = getAuth(app);
-const db        = getFirestore(app);
 const functions = getFunctions(app);
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -787,8 +784,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showNotification('Could not save institution. Check your permissions.', 'danger');
     }
   });
-
-  // ===========================================================================
+    // ===========================================================================
   // 7. ACCESS REQUESTS + APPROVAL WORKFLOW
   // ===========================================================================
   function renderRequests() {
@@ -1008,6 +1004,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  
   async function updateRequestStatus(id, status) {
     try {
       await updateDoc(doc(db, 'access_requests', id), {
@@ -1349,7 +1346,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   });
 
-  document.getElementById('add-custom-role-btn')?.addEventListener('click', () => {
+   document.getElementById('add-custom-role-btn')?.addEventListener('click', () => {
     showNotification('Custom role creation requires a custom_roles Firestore collection. Say the word and it\'ll be wired up.', 'info');
   });
 
@@ -1724,3 +1721,5 @@ document.addEventListener('DOMContentLoaded', () => {
   boot();
 
 }); // end DOMContentLoaded
+                                                                          
+                          

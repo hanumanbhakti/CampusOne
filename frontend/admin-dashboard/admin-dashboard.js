@@ -1,34 +1,35 @@
 /**
  * CampusOne — Admin Dashboard Controller (SaaS Edition)
  *
- * NEW in this version:
- *  ✅ Sidebar reordered: Dashboard → Requests → Students → Teachers → Parents
- *  ✅ Requests Module with Pending / Under Review / Approved / Rejected tabs
- *  ✅ Approve / Reject actions with status update
- *  ✅ Request Detail Modal
- *  ✅ Dashboard pending count badge on nav + stat card
- *  ✅ Dashboard mini-requests preview panel
- *  ✅ Toast notifications
- *  ✅ Section-level Create panels (toggle, not always visible)
- *  ✅ Avatar initials auto-generated
+ * Real-data wiring (no mock/demo data anywhere):
+ *  ✅ Students / Teachers / Parents are read live from the top-level
+ *     `users` collection, filtered by role + campusCode — not a separate
+ *     per-institute subcollection. This is the single source of truth.
+ *  ✅ Requests Module with Pending / Under Review / Approved / Rejected tabs,
+ *     scoped to this campus via access_requests.campusCode
+ *  ✅ Approve / Reject actions update access_requests + drive dashboard stats
+ *  ✅ Stat cards (Students, Teachers, Parents, Pending, Approved) all derive
+ *     from the caches above — nothing hardcoded
+ *  ✅ "Delete" on a member un-links them from the campus (role/campusCode
+ *     cleared) instead of destroying their login account
+ *  ✅ Toast notifications, section-level Create panels, avatar initials
  *
- * SCHEMA (access_requests collection):
- *   access_requests/{id} → {
- *     name, email, role (student|teacher|parent),
- *     campusCode, requestedAt (timestamp),
- *     status (pending|under_review|approved|rejected),
- *     reviewedAt, reviewedBy
- *   }
+ * SCHEMA (access_requests/{id}):
+ *   { fullName, email, role (student|teacher|faculty|...),
+ *     campusCode, status (pending|under_review|approved|rejected),
+ *     createdAt, reviewedAt, reviewedBy }
  *
- * Existing schema (institutes/{campusCode}/students|teachers|parents) unchanged.
+ * SCHEMA (users/{uid}):
+ *   { name, email, role (student|teacher|parent|admin),
+ *     campusCode, ...role-specific fields (rollNo, classId, subjectIds, mobile, childIds) }
  */
 
 import { auth, db, getCurrentTenant, waitForAuthReady } from "../shared/firebase-config.js";
 
 import { signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 import {
-  doc, getDoc, setDoc, updateDoc, deleteDoc,
-  collection, query, where, orderBy, limit,
+  doc, getDoc, updateDoc,
+  collection, query, where, limit,
   getDocs, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
@@ -164,22 +165,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(() => clearTimeout(safetyTimer));
 });
 
-async function loadPendingRequestsCount() {
-
-  const q = query(
-    collection(db, "access_requests"),
-    where("status", "==", "pending")
-  );
-
-  const snapshot = await getDocs(q);
-
-  const el = document.getElementById("stat-pending");
-
-  if (el) {
-    el.textContent = snapshot.size;
-  }
-}
-
 async function initDashboard() {
   const gate  = $("auth-gate");
   const shell = $("app-shell");
@@ -217,6 +202,9 @@ async function initDashboard() {
   $("settings-campus").textContent  = activeCampus;
   $("settings-admin-name").textContent = adminName;
   $("settings-email").textContent   = user.email;
+  ["stat-students-delta","stat-teachers-delta","stat-parents-delta"].forEach(id => {
+    if ($(id)) $(id).textContent = `Live in ${activeCampus}`;
+  });
 
   gate.hidden  = false; // keep visible until shell ready
   shell.hidden = false;
@@ -224,7 +212,6 @@ async function initDashboard() {
 
   // ---- NAVIGATION ----
   setupNavigation();
-   await loadPendingRequestsCount();
   
   // ---- MOBILE SIDEBAR ----
   $("btn-mobile-nav").addEventListener("click", () => {
@@ -340,18 +327,21 @@ function closeMobileSidebar() {
 async function loadRequests() {
   try {
     // Query access_requests for this campus, newest first
-const q = query(
-  collection(db, "access_requests"),
-  where("campusCode", "==", activeCampus),
-);
+    const q = query(
+      collection(db, "access_requests"),
+      where("campusCode", "==", activeCampus)
+    );
     const snap = await getDocs(q);
-
-    console.log("Requests Found:", snap.size);
-    requestsCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    requestsCache = snap.docs.map((d) => {
+      const data = d.data();
+      return { id: d.id, ...data, name: data.fullName || data.name || "—" };
+    });
+    // Newest first (client-side sort avoids needing a composite index)
+    requestsCache.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
   } catch (err) {
-    console.warn("Could not load requests (collection may not exist yet):", err.message);
-    // Use sample data for demo if Firestore unavailable
-    requestsCache = getSampleRequests();
+    console.error("Could not load access_requests:", err.message);
+    requestsCache = [];
+    showToast("Could not load requests: " + (err?.message || err), "error");
   }
 
   updateRequestBadges();
@@ -359,20 +349,6 @@ const q = query(
   renderDashboardRequestsPreview();
 }
 
-function getSampleRequests() {
-  // Demo data shown when Firestore is empty / not configured
-  const now = { seconds: Math.floor(Date.now()/1000), toDate: () => new Date() };
-  const yesterday = { seconds: Math.floor(Date.now()/1000) - 86400, toDate: () => new Date(Date.now()-86400000) };
-  return [
-    { id: "r1", name: "Dilip Kumar",  email: "dilip.kumar@email.com",  role: "student", campusCode: activeCampus, status: "pending",  requestedAt: now },
-    { id: "r2", name: "Pooja Rani",   email: "pooja.rani@email.com",   role: "teacher", campusCode: activeCampus, status: "pending",  requestedAt: now },
-    { id: "r3", name: "Ramesh Kumar", email: "ramesh.k@email.com",     role: "parent",  campusCode: activeCampus, status: "pending",  requestedAt: yesterday },
-    { id: "r4", name: "Anjali Singh", email: "anjali.s@email.com",     role: "student", campusCode: activeCampus, status: "pending",  requestedAt: yesterday },
-    { id: "r5", name: "Vikash Kumar", email: "vikash.k@email.com",     role: "teacher", campusCode: activeCampus, status: "pending",  requestedAt: yesterday },
-    { id: "r6", name: "Neha Sharma",  email: "neha.sharma@email.com",  role: "teacher", campusCode: activeCampus, status: "approved", requestedAt: yesterday },
-    { id: "r7", name: "Aman Kumar",   email: "aman.kumar@email.com",   role: "student", campusCode: activeCampus, status: "rejected", requestedAt: yesterday },
-  ];
-}
 
 function updateRequestBadges() {
   const pending = requestsCache.filter(r => r.status === "pending").length;
@@ -387,6 +363,7 @@ function updateRequestBadges() {
 
   // Stat card
   if ($("stat-pending")) $("stat-pending").textContent = pending;
+  if ($("stat-approved")) $("stat-approved").textContent = approved;
 
   // Tab counts
   $("tab-count-pending").textContent  = pending;
@@ -419,7 +396,7 @@ function renderRequestsForTab(tabKey) {
 
   container.innerHTML = filtered.map((req, i) => {
     const color = avatarColor(i);
-    const date = req.requestedAt?.toDate ? req.requestedAt.toDate() : new Date();
+    const date = req.createdAt?.toDate ? req.createdAt.toDate() : new Date();
     const dateStr = date.toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric" });
     const timeStr = date.toLocaleTimeString("en-IN", { hour:"2-digit", minute:"2-digit" });
     const roleCls = `role-${req.role}`;
@@ -514,7 +491,7 @@ function openRequestModal(reqId) {
   const req = requestsCache.find(r => r.id === reqId);
   if (!req) return;
 
-  const date = req.requestedAt?.toDate ? req.requestedAt.toDate() : new Date();
+  const date = req.createdAt?.toDate ? req.createdAt.toDate() : new Date();
   const dateStr = date.toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
 
   $("req-modal-avatar").textContent = initials(req.name);
@@ -632,12 +609,14 @@ function renderDashboardActivity() {
 async function loadStudents() {
   try {
     const snap = await getDocs(query(
-      collection(db, "institutes", activeCampus, "students"),
-      orderBy("createdAt", "desc")
+      collection(db, "users"),
+      where("role", "==", "student"),
+      where("campusCode", "==", activeCampus)
     ));
     studentsCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    studentsCache.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
   } catch (err) {
-    console.warn("Load students failed:", err.message);
+    console.error("Load students failed:", err.message);
     studentsCache = [];
   }
   if ($("stat-students")) $("stat-students").textContent = studentsCache.length;
@@ -679,12 +658,14 @@ function renderStudents(filterText) {
 async function loadTeachers() {
   try {
     const snap = await getDocs(query(
-      collection(db, "institutes", activeCampus, "teachers"),
-      orderBy("createdAt", "desc")
+      collection(db, "users"),
+      where("role", "==", "teacher"),
+      where("campusCode", "==", activeCampus)
     ));
     teachersCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    teachersCache.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
   } catch (err) {
-    console.warn("Load teachers failed:", err.message);
+    console.error("Load teachers failed:", err.message);
     teachersCache = [];
   }
   if ($("stat-teachers")) $("stat-teachers").textContent = teachersCache.length;
@@ -726,12 +707,14 @@ function renderTeachers(filterText) {
 async function loadParents() {
   try {
     const snap = await getDocs(query(
-      collection(db, "institutes", activeCampus, "parents"),
-      orderBy("createdAt", "desc")
+      collection(db, "users"),
+      where("role", "==", "parent"),
+      where("campusCode", "==", activeCampus)
     ));
     parentsCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    parentsCache.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
   } catch (err) {
-    console.warn("Load parents failed:", err.message);
+    console.error("Load parents failed:", err.message);
     parentsCache = [];
   }
   if ($("stat-parents")) $("stat-parents").textContent = parentsCache.length;
@@ -803,8 +786,9 @@ async function handleCreateStudent(e) {
       errEl.textContent = `${email} is already registered as a ${account.role}.`;
       errEl.hidden = false; return;
     }
-    await setDoc(doc(db, "institutes", activeCampus, "students", account.uid), {
-      uid: account.uid, name, email: email.toLowerCase(), rollNo, classId, createdAt: serverTimestamp()
+    await updateDoc(doc(db, "users", account.uid), {
+      name, role: "student", campusCode: activeCampus, rollNo, classId,
+      updatedAt: serverTimestamp()
     });
     e.target.reset();
     $("create-student-panel").style.display = "none";
@@ -834,8 +818,9 @@ async function handleCreateTeacher(e) {
       errEl.textContent = `No account found for ${email}.`;
       errEl.hidden = false; return;
     }
-    await setDoc(doc(db, "institutes", activeCampus, "teachers", account.uid), {
-      uid: account.uid, name, email: email.toLowerCase(), subjectIds: subjects, createdAt: serverTimestamp()
+    await updateDoc(doc(db, "users", account.uid), {
+      name, role: "teacher", campusCode: activeCampus, subjectIds: subjects,
+      updatedAt: serverTimestamp()
     });
     e.target.reset();
     $("create-teacher-panel").style.display = "none";
@@ -875,8 +860,9 @@ async function handleCreateParent(e) {
       }
       childIds = [child.id];
     }
-    await setDoc(doc(db, "institutes", activeCampus, "parents", account.uid), {
-      uid: account.uid, name, email: email.toLowerCase(), mobile, childIds, createdAt: serverTimestamp()
+    await updateDoc(doc(db, "users", account.uid), {
+      name, role: "parent", campusCode: activeCampus, mobile, childIds,
+      updatedAt: serverTimestamp()
     });
     e.target.reset();
     $("create-parent-panel").style.display = "none";
@@ -892,7 +878,7 @@ async function handleCreateParent(e) {
 // ============ EDIT MODAL ============
 const ENTITY_CONFIG = {
   student: {
-    cache: () => studentsCache, collection: "students", reload: loadStudents,
+    cache: () => studentsCache, collection: "users", reload: loadStudents,
     fields: [
       { key: "name",    label: "Full Name", type: "text" },
       { key: "rollNo",  label: "Roll No",   type: "text" },
@@ -900,14 +886,14 @@ const ENTITY_CONFIG = {
     ]
   },
   teacher: {
-    cache: () => teachersCache, collection: "teachers", reload: loadTeachers,
+    cache: () => teachersCache, collection: "users", reload: loadTeachers,
     fields: [
       { key: "name",       label: "Full Name",                 type: "text" },
       { key: "subjectIds", label: "Subjects (comma-separated)", type: "text", isArray: true }
     ]
   },
   parent: {
-    cache: () => parentsCache, collection: "parents", reload: loadParents,
+    cache: () => parentsCache, collection: "users", reload: loadParents,
     fields: [
       { key: "name",   label: "Full Name", type: "text" },
       { key: "mobile", label: "Mobile",    type: "tel"  }
@@ -963,7 +949,7 @@ async function saveEditModal(entityType, id) {
   const saveBtn = $("edit-modal-save");
   saveBtn.disabled = true;
   try {
-    await updateDoc(doc(db, "institutes", activeCampus, config.collection, id), updates);
+    await updateDoc(doc(db, config.collection, id), updates);
     closeEditModal();
     await config.reload();
     showToast("✅ Changes saved!", "success");
@@ -973,21 +959,24 @@ async function saveEditModal(entityType, id) {
   } finally { saveBtn.disabled = false; }
 }
 
-// ============ DELETE ============
+// ============ DELETE / REMOVE FROM CAMPUS ============
+// We never hard-delete a `users/{uid}` document — that's a real login account.
+// "Remove" un-links the member from this campus (clears role + campusCode)
+// so they vanish from this institute's lists but keep their account.
 async function handleDelete(entityType, id) {
   const config = ENTITY_CONFIG[entityType];
   const record = config.cache().find(r => r.id === id);
   if (!record) return;
 
-  if (!window.confirm(`Delete ${record.name || "this record"}? This cannot be undone.`)) return;
+  if (!window.confirm(`Remove ${record.name || "this person"} from ${activeCampus}? Their account stays active and can be re-added later.`)) return;
 
   try {
-    await deleteDoc(doc(db, "institutes", activeCampus, config.collection, id));
+    await updateDoc(doc(db, "users", id), { role: null, campusCode: null });
     await config.reload();
     renderDashboardActivity();
-    showToast(`🗑 ${record.name} deleted.`, "info");
+    showToast(`🗑 ${record.name} removed from this campus.`, "info");
   } catch (err) {
-    console.error("Delete failed:", err);
-    showToast("Could not delete: " + (err?.message || err), "error");
+    console.error("Remove failed:", err);
+    showToast("Could not remove: " + (err?.message || err), "error");
   }
 }

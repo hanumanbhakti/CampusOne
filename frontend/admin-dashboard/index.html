@@ -150,7 +150,7 @@
       <section id="section-dashboard" class="dash-section">
 
         <!-- Stats Row -->
-        <div class="stats-grid stats-grid-4">
+        <div class="stats-grid stats-grid-auto">
           <div class="stat-card stat-card-blue">
             <span class="stat-icon">
               <svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
@@ -158,7 +158,7 @@
             <div>
               <p id="stat-students" class="stat-value">--</p>
               <p class="stat-label">Total Students</p>
-              <p class="stat-delta delta-up" id="stat-students-delta">↑ 12 this month</p>
+              <p class="stat-delta" id="stat-students-delta">Live in {{campus}}</p>
             </div>
           </div>
           <div class="stat-card stat-card-green">
@@ -168,7 +168,7 @@
             <div>
               <p id="stat-teachers" class="stat-value">--</p>
               <p class="stat-label">Total Teachers</p>
-              <p class="stat-delta delta-up">↑ 3 this month</p>
+              <p class="stat-delta" id="stat-teachers-delta">Live in {{campus}}</p>
             </div>
           </div>
           <div class="stat-card stat-card-purple">
@@ -178,7 +178,7 @@
             <div>
               <p id="stat-parents" class="stat-value">--</p>
               <p class="stat-label">Total Parents</p>
-              <p class="stat-delta delta-up">↑ 18 this month</p>
+              <p class="stat-delta" id="stat-parents-delta">Live in {{campus}}</p>
             </div>
           </div>
           <div class="stat-card stat-card-warning">
@@ -189,6 +189,16 @@
               <p id="stat-pending" class="stat-value">--</p>
               <p class="stat-label">Pending Requests</p>
               <button class="stat-action-link" id="btn-view-requests">View &amp; review →</button>
+            </div>
+          </div>
+          <div class="stat-card stat-card-success">
+            <span class="stat-icon stat-icon-success">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <div>
+              <p id="stat-approved" class="stat-value">--</p>
+              <p class="stat-label">Approved Requests</p>
+              <p class="stat-delta">All time</p>
             </div>
           </div>
         </div>

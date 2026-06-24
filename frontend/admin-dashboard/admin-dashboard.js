@@ -157,6 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
           Check that firebase-config.js is present and the console has no errors.
         </p>
         <a href="../login-screen/index.html" style="color:#3B82F6;margin-top:8px;">← Back to Login</a>`;
+      gate.hidden = false;
     }
   }, 8000);
 
@@ -171,6 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p style="color:#94A3B8;font-size:0.85rem;max-width:320px;text-align:center;">${err?.message || err}</p>
           <a href="../login-screen/index.html" style="color:#3B82F6;margin-top:8px;">← Back to Login</a>`;
         gate.hidden = false;
+        $("app-shell").hidden = true;
       }
     })
     .then(() => clearTimeout(safetyTimer));
@@ -182,7 +184,11 @@ async function initDashboard() {
 
   const user = await waitForAuthReady();
   
-  if (!user) { window.location.href = "../login-screen/index.html"; return; }
+  if (!user) {
+    gate.hidden = true;
+    window.location.href = "../login-screen/index.html";
+    return;
+  }
   currentUser = user;
 
   const adminSnap = await getDoc(doc(db, "staff", user.uid));
@@ -193,6 +199,7 @@ async function initDashboard() {
     adminProfile.active !== true ||
     !["super_admin", "institution_admin"].includes(adminProfile.role)
   ) {
+    gate.hidden = true;
     window.location.href = "../login-screen/index.html";
     return;
   }
@@ -241,7 +248,6 @@ async function initDashboard() {
   // System Health — check Firestore reachability (we got here, so it's connected)
   updateSystemHealth(true);
 
-  gate.hidden  = false; // keep visible until shell ready
   shell.hidden = false;
   gate.hidden  = true;
 
@@ -331,6 +337,12 @@ await Promise.all([
 ]);
   updateSidebarCounts();
   renderDashboardActivity();
+}
+
+// ============ NOTICES INIT ============
+function initNotices() {
+  // Notice form is wired in initDashboard via noticeForm listener
+  // Nothing extra needed here — loadNotices() is called in Promise.all
 }
 
 // ============ NAVIGATION ============
@@ -885,8 +897,6 @@ function renderParents(filterText) {
   }).join("");
   attachRowActions();
 }
-
-let noticesCache = [];
 
 // ============ CREATE FORMS ============
 async function findUserByEmail(email) {

@@ -1618,7 +1618,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function bootstrapDataLayer() {
+  async function bootstrapDataLayer() {
     // institutes
     attachSnapshot('institutes', 'createdAt',
       d => ({ id: d.id, campusCode: d.id, ...d.data() }),
@@ -1677,22 +1677,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     );
 
-    // roles — load all role permission docs at once
+    // roles — real-time listener (non-blocking, safe fallback)
     try {
-      const rolesSnap = await getDocs(collection(db, 'roles'));
-      rolesSnap.forEach(d => { State.rolesData[d.id] = d.data(); });
-      renderPermissionMatrix();
-
-      // Also listen for real-time changes
       const rolesUnsub = onSnapshot(collection(db, 'roles'), (snap) => {
         snap.docs.forEach(d => { State.rolesData[d.id] = d.data(); });
         if (State.currentView === 'roles') renderPermissionMatrix();
       }, (err) => {
-        console.warn('[Firestore] roles listener error:', err.message);
+        console.warn('[Firestore] roles listener error (using defaults):', err.message);
       });
       State.unsubscribers.push(rolesUnsub);
     } catch (err) {
-      console.warn('[Roles] Could not load roles collection — using defaults:', err.message);
+      console.warn('[Roles] Could not attach roles listener:', err.message);
     }
 
     // notices

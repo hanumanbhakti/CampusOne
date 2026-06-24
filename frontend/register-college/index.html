@@ -8,7 +8,7 @@
   <title>Register Institution • CampusOne</title>
 
   <meta name="description"
-        content="Join CampusOne and transform your institution into a modern digital campus.">
+        content="Onboard your college, university, school, coaching institute or training center onto CampusOne — a multi-tenant educational ERP and digital campus platform.">
 
   <link rel="icon" href="../../assets/favicon.png">
   <link rel="stylesheet" href="./style.css">
@@ -97,25 +97,26 @@
     <section class="hero-column">
 
       <div class="hero-badge">
-        Institution Onboarding Platform
+        Multi-Tenant Educational ERP
       </div>
 
       <h1 class="hero-title">
 
-        Transform Your Institution Into A
+        Built For Every Kind Of
 
         <span>
-          Modern Digital Campus
+          Educational Institution
         </span>
 
       </h1>
 
       <p class="hero-description">
 
-        CampusOne provides a unified platform
-        for academic operations, attendance,
-        communication, administration and
-        student lifecycle management.
+        Colleges, universities, schools, coaching
+        institutes, training centers, polytechnics,
+        ITIs and more — one platform for academic
+        operations, attendance, communication,
+        administration and the full student lifecycle.
 
       </p>
 
@@ -124,22 +125,22 @@
       <div class="hero-benefits">
 
         <div class="benefit-item">
-          <div class="benefit-icon"></div>
+          <div class="benefit-icon" data-icon="tenant"></div>
           <span>Multi-Tenant Architecture</span>
         </div>
 
         <div class="benefit-item">
-          <div class="benefit-icon"></div>
+          <div class="benefit-icon" data-icon="shield"></div>
           <span>Enterprise Security</span>
         </div>
 
         <div class="benefit-item">
-          <div class="benefit-icon"></div>
+          <div class="benefit-icon" data-icon="cloud"></div>
           <span>Cloud Native Infrastructure</span>
         </div>
 
         <div class="benefit-item">
-          <div class="benefit-icon"></div>
+          <div class="benefit-icon" data-icon="pulse"></div>
           <span>Real-Time Operations</span>
         </div>
 
@@ -177,7 +178,7 @@
         <div class="card-top">
 
           <div class="card-badge">
-            Institution Registration
+            Institution Onboarding
           </div>
 
           <h2>
@@ -185,107 +186,573 @@
           </h2>
 
           <p>
-            Submit your institution details to
-            begin the CampusOne onboarding process.
+            Tell us about your institution. Our team
+            will verify your request and set up your
+            dedicated digital campus.
           </p>
 
         </div>
 
+        <!-- PROGRESS -->
+
+        <div class="form-progress" id="formProgress">
+
+          <div class="progress-step is-active" data-step="1">
+            <span class="progress-dot">1</span>
+            <span class="progress-label">Institution</span>
+          </div>
+
+          <div class="progress-step" data-step="2">
+            <span class="progress-dot">2</span>
+            <span class="progress-label">Contact</span>
+          </div>
+
+          <div class="progress-step" data-step="3">
+            <span class="progress-dot">3</span>
+            <span class="progress-label">Location</span>
+          </div>
+
+          <div class="progress-step" data-step="4">
+            <span class="progress-dot">4</span>
+            <span class="progress-label">Compliance</span>
+          </div>
+
+        </div>
+
         <form
-          id="collegeRegistrationForm"
-          class="registration-form">
+          id="institutionRegistrationForm"
+          class="registration-form"
+          novalidate>
 
-          <!-- Institution -->
+          <!-- ================================================ -->
+          <!-- STEP 1 — INSTITUTION IDENTITY -->
+          <!-- ================================================ -->
 
-          <div class="input-group">
+          <fieldset class="form-step is-active" data-step="1">
 
-            <label>
-              Institution Name
-            </label>
+            <legend class="step-legend">Institution Identity</legend>
 
-            <input
-              type="text"
-              name="collegeName"
-              placeholder="ABC College"
-              required>
+            <div class="input-group">
 
-          </div>
+              <label for="institutionName">
+                Institution Name <span class="req">*</span>
+              </label>
 
-          <!-- Principal -->
+              <input
+                type="text"
+                id="institutionName"
+                name="institutionName"
+                placeholder="e.g. ABC Institute of Technology"
+                autocomplete="organization"
+                required>
 
-          <div class="input-group">
+              <span class="field-error" data-error-for="institutionName"></span>
 
-            <label>
-              Principal / Director Name
-            </label>
+            </div>
 
-            <input
-              type="text"
-              name="principalName"
-              placeholder="Rajesh Sharma"
-              required>
+            <div class="input-row">
 
-          </div>
+              <div class="input-group">
 
-          <!-- Email -->
+                <label for="institutionType">
+                  Institution Type <span class="req">*</span>
+                </label>
 
-          <div class="input-group">
+                <div class="select-wrap">
+                  <select id="institutionType" name="institutionType" required>
+                    <option value="" disabled selected>Select type</option>
+                    <option value="college">College</option>
+                    <option value="university">University</option>
+                    <option value="school">School</option>
+                    <option value="coaching">Coaching Institute</option>
+                    <option value="training-center">Training Center</option>
+                    <option value="polytechnic">Polytechnic</option>
+                    <option value="iti">ITI</option>
+                    <option value="nursing">Nursing College</option>
+                    <option value="management">Management Institute</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
 
-            <label>
-              Official Email Address
-            </label>
+                <span class="field-error" data-error-for="institutionType"></span>
 
-            <input
-              type="email"
-              name="email"
-              placeholder="admin@college.edu"
-              required>
+              </div>
 
-          </div>
+              <div class="input-group">
 
-          <!-- Mobile -->
+                <label for="institutionCategory">
+                  Institution Category <span class="req">*</span>
+                </label>
 
-          <div class="input-group">
+                <div class="select-wrap">
+                  <select id="institutionCategory" name="institutionCategory" required>
+                    <option value="" disabled selected>Select category</option>
+                    <option value="government">Government</option>
+                    <option value="private">Private</option>
+                    <option value="semi-government">Semi-Government</option>
+                    <option value="autonomous">Autonomous</option>
+                  </select>
+                </div>
 
-            <label>
-              Official Mobile Number
-            </label>
+                <span class="field-error" data-error-for="institutionCategory"></span>
 
-            <input
-              type="tel"
-              name="mobile"
-              placeholder="+91 XXXXX XXXXX"
-              required>
+              </div>
 
-          </div>
+            </div>
 
-          <!-- Strength -->
+            <div class="input-row">
 
-          <div class="input-group">
+              <div class="input-group">
 
-            <label>
-              Student Strength
-            </label>
+                <label for="institutionCode">
+                  Institution Code
+                </label>
 
-            <input
-              type="number"
-              name="studentStrength"
-              placeholder="2500"
-              required>
+                <input
+                  type="text"
+                  id="institutionCode"
+                  name="institutionCode"
+                  placeholder="e.g. AICTE/UGC assigned code">
 
-          </div>
+                <span class="field-hint">Optional — official code, if already assigned</span>
 
-          <!-- Submit -->
+              </div>
 
-          <button
-            type="submit"
-            class="submit-btn">
+              <div class="input-group">
 
-            Submit Registration Request
+                <label for="establishmentYear">
+                  Establishment Year <span class="req">*</span>
+                </label>
 
-          </button>
+                <input
+                  type="number"
+                  id="establishmentYear"
+                  name="establishmentYear"
+                  placeholder="e.g. 2005"
+                  min="1800"
+                  max="2026"
+                  required>
+
+                <span class="field-error" data-error-for="establishmentYear"></span>
+
+              </div>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="universityAffiliation">
+                University / Board Affiliation
+              </label>
+
+              <input
+                type="text"
+                id="universityAffiliation"
+                name="universityAffiliation"
+                placeholder="e.g. Affiliated to XYZ University (optional)">
+
+              <span class="field-hint">Leave blank if not applicable</span>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="institutionLogo">
+                Institution Logo
+              </label>
+
+              <div class="file-drop" id="logoDrop">
+                <input
+                  type="file"
+                  id="institutionLogo"
+                  name="institutionLogo"
+                  accept="image/png,image/jpeg,image/svg+xml"
+                  class="file-input">
+                <div class="file-drop-inner">
+                  <span class="file-drop-title">Upload logo</span>
+                  <span class="file-drop-hint">PNG, JPG or SVG — up to 2MB</span>
+                </div>
+                <span class="file-drop-filename" id="logoFilename"></span>
+              </div>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-next" data-next>
+                Continue
+              </button>
+            </div>
+
+          </fieldset>
+
+          <!-- ================================================ -->
+          <!-- STEP 2 — CONTACT & STRENGTH -->
+          <!-- ================================================ -->
+
+          <fieldset class="form-step" data-step="2">
+
+            <legend class="step-legend">Contact &amp; Strength</legend>
+
+            <div class="input-group">
+
+              <label for="principalName">
+                Principal / Director Name <span class="req">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="principalName"
+                name="principalName"
+                placeholder="e.g. Rajesh Sharma"
+                autocomplete="name"
+                required>
+
+              <span class="field-error" data-error-for="principalName"></span>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="email">
+                  Official Email Address <span class="req">*</span>
+                </label>
+
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="admin@institution.edu"
+                  autocomplete="email"
+                  required>
+
+                <span class="field-error" data-error-for="email"></span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="mobile">
+                  Official Mobile Number <span class="req">*</span>
+                </label>
+
+                <input
+                  type="tel"
+                  id="mobile"
+                  name="mobile"
+                  placeholder="+91 XXXXX XXXXX"
+                  autocomplete="tel"
+                  required>
+
+                <span class="field-error" data-error-for="mobile"></span>
+
+              </div>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="website">
+                Institution Website
+              </label>
+
+              <input
+                type="url"
+                id="website"
+                name="website"
+                placeholder="https://www.institution.edu"
+                autocomplete="url">
+
+              <span class="field-error" data-error-for="website"></span>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="studentStrength">
+                  Student Strength <span class="req">*</span>
+                </label>
+
+                <input
+                  type="number"
+                  id="studentStrength"
+                  name="studentStrength"
+                  placeholder="e.g. 2500"
+                  min="1"
+                  required>
+
+                <span class="field-error" data-error-for="studentStrength"></span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="facultyStrength">
+                  Faculty Strength <span class="req">*</span>
+                </label>
+
+                <input
+                  type="number"
+                  id="facultyStrength"
+                  name="facultyStrength"
+                  placeholder="e.g. 120"
+                  min="1"
+                  required>
+
+                <span class="field-error" data-error-for="facultyStrength"></span>
+
+              </div>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="academicSession">
+                Current Academic Session <span class="req">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="academicSession"
+                name="academicSession"
+                placeholder="e.g. 2026–2027"
+                required>
+
+              <span class="field-error" data-error-for="academicSession"></span>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-back" data-back>
+                Back
+              </button>
+              <button type="button" class="btn-next" data-next>
+                Continue
+              </button>
+            </div>
+
+          </fieldset>
+
+          <!-- ================================================ -->
+          <!-- STEP 3 — LOCATION -->
+          <!-- ================================================ -->
+
+          <fieldset class="form-step" data-step="3">
+
+            <legend class="step-legend">Location</legend>
+
+            <div class="input-group">
+
+              <label for="address">
+                Full Address <span class="req">*</span>
+              </label>
+
+              <textarea
+                id="address"
+                name="address"
+                placeholder="Building, street, area"
+                autocomplete="street-address"
+                required></textarea>
+
+              <span class="field-error" data-error-for="address"></span>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="city">
+                  City <span class="req">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  placeholder="e.g. Pune"
+                  autocomplete="address-level2"
+                  required>
+
+                <span class="field-error" data-error-for="city"></span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="state">
+                  State <span class="req">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  placeholder="e.g. Maharashtra"
+                  autocomplete="address-level1"
+                  required>
+
+                <span class="field-error" data-error-for="state"></span>
+
+              </div>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="country">
+                Country <span class="req">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="country"
+                name="country"
+                placeholder="e.g. India"
+                autocomplete="country-name"
+                value="India"
+                required>
+
+              <span class="field-error" data-error-for="country"></span>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-back" data-back>
+                Back
+              </button>
+              <button type="button" class="btn-next" data-next>
+                Continue
+              </button>
+            </div>
+
+          </fieldset>
+
+          <!-- ================================================ -->
+          <!-- STEP 4 — COMPLIANCE -->
+          <!-- ================================================ -->
+
+          <fieldset class="form-step" data-step="4">
+
+            <legend class="step-legend">Compliance &amp; Recognition</legend>
+
+            <div class="input-group">
+
+              <label for="accreditation">
+                Accreditation / Recognition
+              </label>
+
+              <input
+                type="text"
+                id="accreditation"
+                name="accreditation"
+                placeholder="e.g. NAAC, AICTE, UGC, CBSE, ICSE, State Board">
+
+              <span class="field-hint">Comma-separate if more than one applies</span>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="gstNumber">
+                  GST Number
+                </label>
+
+                <input
+                  type="text"
+                  id="gstNumber"
+                  name="gstNumber"
+                  placeholder="22AAAAA0000A1Z5">
+
+                <span class="field-hint">Optional</span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="panNumber">
+                  PAN Number
+                </label>
+
+                <input
+                  type="text"
+                  id="panNumber"
+                  name="panNumber"
+                  placeholder="AAAAA0000A">
+
+                <span class="field-hint">Optional</span>
+
+              </div>
+
+            </div>
+
+            <div class="consent-group">
+
+              <label class="checkbox-row" for="consent">
+
+                <input
+                  type="checkbox"
+                  id="consent"
+                  name="consent"
+                  required>
+
+                <span class="checkbox-box"></span>
+
+                <span class="checkbox-text">
+                  I confirm the details above are accurate and I am
+                  authorized to register this institution on behalf
+                  of the organization. I agree to CampusOne's
+                  <a href="/terms" target="_blank">Terms of Service</a>
+                  and
+                  <a href="/privacy" target="_blank">Privacy Policy</a>.
+                </span>
+
+              </label>
+
+              <span class="field-error" data-error-for="consent"></span>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-back" data-back>
+                Back
+              </button>
+              <button
+                type="submit"
+                class="submit-btn">
+
+                Submit Registration Request
+
+              </button>
+            </div>
+
+          </fieldset>
 
         </form>
+
+        <!-- SUCCESS STATE -->
+
+        <div class="submission-success" id="submissionSuccess" hidden>
+
+          <div class="success-icon"></div>
+
+          <h3>Registration request received</h3>
+
+          <p>
+            Your request is now pending verification.
+            Our Super Admin team will review the details
+            and email your official CampusOne login once
+            your tenant is provisioned.
+          </p>
+
+          <div class="reference-id" id="referenceId"></div>
+
+        </div>
 
         <div class="trust-strip">
 

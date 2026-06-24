@@ -454,14 +454,70 @@
       </section>
 
       <!-- ============ COMING SOON STUBS ============ -->
-      <section id="section-notices" class="dash-section" hidden>
-        <div class="coming-soon-screen">
-          <div class="coming-soon-icon">📢</div>
-          <h2>Notice Board</h2>
-          <p>Create and broadcast announcements to students, teachers, and parents.</p>
-          <span class="badge badge-pending" style="font-size:0.8rem;padding:6px 16px;">Coming in Sprint 2</span>
-        </div>
-      </section>
+<section id="section-notices" class="dash-section" hidden>
+
+  <div class="section-header">
+    <h2>Notice Board</h2>
+    <p>Create and broadcast announcements to students, teachers and parents.</p>
+  </div>
+
+  <div class="glass-card">
+
+    <form id="notice-form">
+
+      <div class="form-group">
+        <label>Notice Title</label>
+        <input
+          type="text"
+          id="notice-title"
+          placeholder="Enter notice title"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Audience</label>
+        <select id="notice-audience">
+          <option value="all">All</option>
+          <option value="students">Students</option>
+          <option value="teachers">Teachers</option>
+          <option value="parents">Parents</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Notice Message</label>
+        <textarea
+          id="notice-body"
+          rows="6"
+          placeholder="Write your notice..."
+          required
+        ></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        Publish Notice
+      </button>
+
+    </form>
+
+  </div>
+
+  <div class="glass-card" style="margin-top:24px;">
+
+    <h3>Published Notices</h3>
+
+    <div id="notice-list">
+
+      <div class="empty-state">
+        No notices published yet.
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
       <section id="section-campus-id" class="dash-section" hidden>
         <div class="coming-soon-screen">
           <div class="coming-soon-icon">🪪</div>

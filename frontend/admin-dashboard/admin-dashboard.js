@@ -54,7 +54,8 @@ let currentUser   = null;
 let studentsCache = [];
 let teachersCache = [];
 let parentsCache  = [];
-let requestsCache = [];  // all requests for this campus
+let requestsCache = []; 
+let noticesCache = []; // all requests for this campus
 
 // Active requests tab
 let activeRequestTab = "pending";

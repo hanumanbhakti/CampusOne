@@ -484,112 +484,349 @@ table { border-collapse: collapse; width: 100%; }
     color:var(--color-danger);
     background:rgba(239,68,68,.08);
 }
-/* =========================================================================
-   MOBILE TOPBAR + SIDEBAR SCRIM
-   ========================================================================= */
-#co-mobile-topbar { display: none; }
-.sidebar-scrim {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-    z-index: 190; opacity: 0; visibility: hidden;
-    transition: opacity var(--t-normal), visibility var(--t-normal);
-}
-.sidebar-scrim.state-open { opacity: 1; visibility: visible; }
 
-.icon-btn {
-    width: 38px; height: 38px; border-radius: var(--radius-full);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text-secondary); cursor: pointer; flex-shrink: 0;
-    transition: background var(--t-fast), color var(--t-fast);
-}
-.icon-btn:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
-
-/* =========================================================================
-   PILLAR 5 — APP SHELL LAYOUT
-   ========================================================================= */
-#co-app-shell {
-    margin-left: var(--sidebar-width);
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    position: relative; z-index: 10;
+./* =========================================================================
+MOBILE TOPBAR + SIDEBAR SCRIM
+========================================================================= */
+#co-mobile-topbar{
+display:none;
 }
 
-.view-topbar {
-    height: var(--topbar-height);
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 20px; padding: 0 32px;
-    border-bottom: 1px solid var(--glass-border);
-    background: var(--color-surface);
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    position: sticky; top: 0; z-index: 50;
+.sidebar-scrim{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+backdrop-filter:blur(4px);
+z-index:190;
+
+opacity:0;
+visibility:hidden;
+
+transition:
+    opacity .3s ease,
+    visibility .3s ease;
+
 }
 
-.topbar-heading-stack { display: flex; flex-direction: column; min-width: 0; }
-.view-title { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; }
-.view-subtitle { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
-
-.topbar-action-row { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
-
-.global-search-shell {
-    position: relative; display: flex; align-items: center;
-    background: var(--color-surface-input); border: 1px solid var(--glass-border);
-    border-radius: var(--radius-full); padding: 0 16px;
-    width: 280px; height: 40px;
-    transition: border-color var(--t-fast), box-shadow var(--t-fast);
-}
-.global-search-shell:has(:focus) { border-color: var(--brand-accent); box-shadow: 0 0 16px rgba(59,130,246,0.25); }
-.search-icon { font-size: 0.9rem; color: var(--text-muted); margin-right: 10px; flex-shrink: 0; }
-.global-search-input { flex: 1; font-size: 0.82rem; color: var(--text-primary); height: 100%; }
-.global-search-input::placeholder { color: var(--text-muted); }
-
-.topbar-icon-btn { position: relative; background: var(--color-surface-input); border: 1px solid var(--glass-border); }
-.notif-dot {
-    position: absolute; top: 7px; right: 8px; width: 7px; height: 7px;
-    border-radius: var(--radius-full); background: var(--color-danger);
-    border: 2px solid var(--color-surface-solid);
+.sidebar-scrim.state-open{
+opacity:1;
+visibility:visible;
 }
 
-.view-scroll-region { flex: 1; padding: 28px 32px 48px; }
+.icon-btn{
+width:40px;
+height:40px;
+border-radius:999px;
 
-.view-panel { display: none; animation: fadeUpPanel var(--t-normal) var(--ease-standard); }
-.view-panel.state-active { display: block; }
+display:flex;
+align-items:center;
+justify-content:center;
+
+color:var(--text-secondary);
+cursor:pointer;
+flex-shrink:0;
+
+transition:
+    background .25s ease,
+    color .25s ease,
+    transform .25s ease;
+
+}
+
+.icon-btn:hover{
+background:rgba(255,255,255,.06);
+color:var(--text-primary);
+transform:translateY(-1px);
+}
 
 /* =========================================================================
-   PILLAR 6 — KPI GRID (Executive Dashboard)
-   ========================================================================= */
-.kpi-grid {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 24px;
+PILLAR 5 — APP SHELL LAYOUT
+========================================================================= */
+#co-app-shell{
+margin-left:var(--sidebar-width);
+min-height:100vh;
+
+display:flex;
+flex-direction:column;
+
+position:relative;
+z-index:10;
+
 }
 
-.kpi-card {
-    background: var(--color-surface); background-image: var(--glass-reflection);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
-    padding: 18px; box-shadow: var(--shadow-md);
-    display: flex; flex-direction: column; gap: 10px;
-    transition: transform var(--t-fast) var(--ease-standard);
-}
-.kpi-card:hover { transform: translateY(-3px); }
+.view-topbar{
+height:var(--topbar-height);
 
-.kpi-card-head { display: flex; align-items: center; justify-content: space-between; }
-.kpi-icon-pod {
-    width: 32px; height: 32px; border-radius: var(--radius-md);
-    display: flex; align-items: center; justify-content: center; font-size: 0.95rem;
-}
-.kpi-icon-pod.tone-primary { background: var(--color-info-bg); color: var(--brand-secondary); }
-.kpi-icon-pod.tone-warning { background: var(--color-warning-bg); color: var(--color-warning); }
-.kpi-icon-pod.tone-success { background: var(--color-success-bg); color: var(--color-success); }
-.kpi-icon-pod.tone-danger  { background: var(--color-danger-bg); color: var(--color-danger); }
+display:flex;
+align-items:center;
+justify-content:space-between;
 
-.kpi-trend-chip {
-    font-size: 0.66rem; font-weight: 700; padding: 2px 7px; border-radius: var(--radius-full);
-    display: flex; align-items: center; gap: 3px;
-}
-.kpi-trend-chip.trend-up { background: var(--color-success-bg); color: var(--color-success); }
-.kpi-trend-chip.trend-down { background: var(--color-danger-bg); color: var(--color-danger); }
-.kpi-trend-chip.trend-flat { background: var(--color-neutral-bg); color: var(--text-muted); }
+gap:24px;
+padding:0 32px;
 
-.kpi-value { font-size: 1.55rem; font-weight: 700; letter-spacing: -0.02em; font-family: var(--mono-font); }
-.kpi-label { font-size: 0.74rem; font-weight: 500; color: var(--text-muted); }
+border-bottom:1px solid var(--glass-border);
+
+background:rgba(15,23,42,.72);
+backdrop-filter:blur(20px);
+-webkit-backdrop-filter:blur(20px);
+
+position:sticky;
+top:0;
+z-index:50;
+
+}
+
+.topbar-heading-stack{
+display:flex;
+flex-direction:column;
+min-width:0;
+}
+
+.view-title{
+font-size:1.45rem;
+font-weight:800;
+letter-spacing:-0.03em;
+line-height:1.15;
+}
+
+.view-subtitle{
+margin-top:4px;
+font-size:.80rem;
+color:var(--text-muted);
+line-height:1.5;
+}
+
+.topbar-action-row{
+display:flex;
+align-items:center;
+gap:16px;
+flex-shrink:0;
+}
+
+.global-search-shell{
+position:relative;
+display:flex;
+align-items:center;
+
+width:320px;
+height:42px;
+
+padding:0 18px;
+
+background:var(--color-surface-input);
+border:1px solid var(--glass-border);
+border-radius:999px;
+
+transition:
+    border-color .25s ease,
+    box-shadow .25s ease,
+    transform .25s ease;
+
+}
+
+.global-search-shell:hover{
+transform:translateY(-1px);
+}
+
+.global-search-shell:has(:focus){
+border-color:var(--brand-accent);
+box-shadow:0 0 18px rgba(59,130,246,.25);
+}
+
+.search-icon{
+color:var(--text-muted);
+margin-right:10px;
+flex-shrink:0;
+}
+
+.global-search-input{
+flex:1;
+height:100%;
+
+font-size:.84rem;
+color:var(--text-primary);
+
+}
+
+.global-search-input::placeholder{
+color:var(--text-muted);
+}
+
+.topbar-icon-btn{
+position:relative;
+
+background:var(--color-surface-input);
+border:1px solid var(--glass-border);
+
+transition:
+    transform .25s ease,
+    border-color .25s ease;
+
+}
+
+.topbar-icon-btn:hover{
+transform:translateY(-2px);
+border-color:rgba(59,130,246,.35);
+}
+
+.notif-dot{
+position:absolute;
+top:7px;
+right:8px;
+
+width:8px;
+height:8px;
+
+border-radius:999px;
+
+background:var(--color-danger);
+
+border:2px solid var(--color-surface-solid);
+
+box-shadow:0 0 12px rgba(239,68,68,.55);
+
+}
+
+.view-scroll-region{
+flex:1;
+padding:32px 32px 52px;
+}
+
+.view-panel{
+display:none;
+animation:fadeUpPanel var(--t-normal) var(--ease-standard);
+}
+
+.view-panel.state-active{
+display:block;
+}
+
+/* =========================================================================
+PILLAR 6 — KPI GRID (Executive Dashboard)
+========================================================================= */
+.kpi-grid{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:18px;
+margin-bottom:28px;
+}
+
+.kpi-card{
+background:var(--color-surface);
+background-image:var(--glass-reflection);
+
+backdrop-filter:blur(22px);
+-webkit-backdrop-filter:blur(22px);
+
+border:1px solid var(--glass-border);
+border-radius:20px;
+
+padding:20px;
+
+box-shadow:var(--shadow-md);
+
+display:flex;
+flex-direction:column;
+gap:12px;
+
+transition:
+    transform .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
+
+}
+
+.kpi-card:hover{
+transform:translateY(-4px);
+
+border-color:rgba(59,130,246,.18);
+
+box-shadow:
+    0 16px 32px rgba(0,0,0,.12),
+    0 6px 20px rgba(59,130,246,.08);
+
+}
+
+.kpi-card-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.kpi-icon-pod{
+width:36px;
+height:36px;
+
+border-radius:12px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+}
+
+.kpi-icon-pod.tone-primary{
+background:var(--color-info-bg);
+color:var(--brand-secondary);
+}
+
+.kpi-icon-pod.tone-warning{
+background:var(--color-warning-bg);
+color:var(--color-warning);
+}
+
+.kpi-icon-pod.tone-success{
+background:var(--color-success-bg);
+color:var(--color-success);
+}
+
+.kpi-icon-pod.tone-danger{
+background:var(--color-danger-bg);
+color:var(--color-danger);
+}
+
+.kpi-trend-chip{
+font-size:.68rem;
+font-weight:700;
+
+padding:3px 8px;
+
+border-radius:999px;
+
+display:flex;
+align-items:center;
+gap:4px;
+
+}
+
+.kpi-trend-chip.trend-up{
+background:var(--color-success-bg);
+color:var(--color-success);
+}
+
+.kpi-trend-chip.trend-down{
+background:var(--color-danger-bg);
+color:var(--color-danger);
+}
+
+.kpi-trend-chip.trend-flat{
+background:var(--color-neutral-bg);
+color:var(--text-muted);
+}
+
+.kpi-value{
+font-size:1.75rem;
+font-weight:800;
+letter-spacing:-0.03em;
+font-family:var(--mono-font);
+}
+
+.kpi-label{
+font-size:.78rem;
+font-weight:600;
+color:var(--text-muted);
+}
 
 /* =========================================================================
    PILLAR 7 — DASHBOARD CONTENT GRID + CARD PANELS

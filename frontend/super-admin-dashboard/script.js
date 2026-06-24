@@ -7,8 +7,8 @@
  * FIRESTORE SCHEMA:
  *   institutes/{campusCode}     → { name, status, plan, studentCount,
  *                                   facultyCount, adminEmail, createdAt }
- *   access_requests/{reqId}     → { campusCode, institutionName, applicantName,
- *                                   applicantEmail, role, identityType, phone,
+ *   access_requests/{reqId}     → { campusCode, institution, fullName,
+ *                                   email, role, identityType, phone,
  *                                   status, verification:{identity,email,phone,
  *                                   institution}, createdAt, resolvedAt }
  *   staff/{uid}                 → { name, email, role, campusCode, active }
@@ -451,8 +451,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .slice(0, 5);
     renderRankedList(DOM.latestRequestsList, sorted.map((req, i) => ({
       index:   i + 1,
-      title:   req.applicantName || 'Unknown applicant',
-      subtitle: req.institutionName || req.campusCode || '—',
+      title:   req.fullName || 'Unknown applicant',
+      subtitle: req.institution || req.campusCode || '—',
       value:   req.status || 'new',
       isBadge: true
     })), 'No access requests yet.');
@@ -784,7 +784,8 @@ document.addEventListener('DOMContentLoaded', () => {
       showNotification('Could not save institution. Check your permissions.', 'danger');
     }
   });
-    // ===========================================================================
+
+  // ===========================================================================
   // 7. ACCESS REQUESTS + APPROVAL WORKFLOW
   // ===========================================================================
   function renderRequests() {
@@ -813,11 +814,11 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="request-field-stack">
             <span class="request-field-label">Institution</span>
-            <span class="request-field-value">${escapeHtml(req.institutionName || req.campusCode || '—')}</span>
+            <span class="request-field-value">${escapeHtml(req.institution || req.campusCode || '—')}</span>
           </div>
           <div class="request-field-stack">
             <span class="request-field-label">Applicant</span>
-            <span class="request-field-value">${escapeHtml(req.applicantName || '—')}</span>
+            <span class="request-field-value">${escapeHtml(req.fullName || '—')}</span>
           </div>
           <div class="request-field-stack">
             <span class="request-field-label">Role</span>
@@ -866,14 +867,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn.dataset.action === 'approve-request') {
       openConfirmModal(
         'Approve this request?',
-        `An account will be created for ${req.applicantEmail || req.applicantName} and login access granted automatically.`,
+        `An account will be created for ${req.email || req.fullName} and login access granted automatically.`,
         () => approveRequest(req)
       );
     }
     if (btn.dataset.action === 'reject-request') {
       openConfirmModal(
         'Reject this request?',
-        `${req.applicantName || 'This applicant'} will be notified that their request was rejected.`,
+        `${req.fullName || 'This applicant'} will be notified that their request was rejected.`,
         () => updateRequestStatus(req.id, 'rejected')
       );
     }
@@ -885,10 +886,10 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="form-row-split">
         <div class="input-field-wrapper"><span class="field-label-text">Request ID</span><span class="request-field-value mono">${escapeHtml(req.id)}</span></div>
         <div class="input-field-wrapper"><span class="field-label-text">Status</span><span class="status-badge tone-${statusTone(req.status)}">${escapeHtml(req.status || 'new')}</span></div>
-        <div class="input-field-wrapper"><span class="field-label-text">Institution</span><span class="request-field-value">${escapeHtml(req.institutionName || '—')}</span></div>
+        <div class="input-field-wrapper"><span class="field-label-text">Institution</span><span class="request-field-value">${escapeHtml(req.institution || '—')}</span></div>
         <div class="input-field-wrapper"><span class="field-label-text">Campus Code</span><span class="request-field-value mono">${escapeHtml(req.campusCode || '—')}</span></div>
-        <div class="input-field-wrapper"><span class="field-label-text">Applicant Name</span><span class="request-field-value">${escapeHtml(req.applicantName || '—')}</span></div>
-        <div class="input-field-wrapper"><span class="field-label-text">Email</span><span class="request-field-value">${escapeHtml(req.applicantEmail || '—')}</span></div>
+        <div class="input-field-wrapper"><span class="field-label-text">Applicant Name</span><span class="request-field-value">${escapeHtml(req.fullName || '—')}</span></div>
+        <div class="input-field-wrapper"><span class="field-label-text">Email</span><span class="request-field-value">${escapeHtml(req.email || '—')}</span></div>
         <div class="input-field-wrapper"><span class="field-label-text">Phone</span><span class="request-field-value">${escapeHtml(req.phone || req.applicantPhone || '—')}</span></div>
         <div class="input-field-wrapper"><span class="field-label-text">Role Requested</span><span class="request-field-value">${escapeHtml((req.role || '—').replace(/_/g, ' '))}</span></div>
         <div class="input-field-wrapper"><span class="field-label-text">Identity Method</span><span class="request-field-value">${escapeHtml(req.identityType || '—')}</span></div>
@@ -956,11 +957,11 @@ document.addEventListener('DOMContentLoaded', () => {
       await provision({ requestId: req.id });
       await logAuditEvent(
         'Approved request & provisioned admin',
-        `${req.applicantName} (${req.applicantEmail})`,
+        `${req.fullName} (${req.email})`,
         'success'
       );
       showNotification(
-        `✅ Approved. Account created for ${req.applicantEmail || req.applicantName}.`,
+        `✅ Approved. Account created for ${req.email || req.fullName}.`,
         'success'
       );
     } catch (err) {
@@ -975,11 +976,11 @@ document.addEventListener('DOMContentLoaded', () => {
           await updateRequestStatus(req.id, 'approved');
 
           // Write a provisional staff doc so the user shows in the UI
-          if (req.applicantEmail && req.campusCode) {
+          if (req.email && req.campusCode) {
             const provisionalUid = `pending_${req.id}`;
             await setDoc(doc(db, 'staff', provisionalUid), {
-              name:          req.applicantName || req.applicantEmail,
-              email:         req.applicantEmail,
+              name:          req.fullName || req.email,
+              email:         req.email,
               role:          req.role || 'institute_admin',
               campusCode:    req.campusCode,
               active:        true,
@@ -1004,7 +1005,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  
   async function updateRequestStatus(id, status) {
     try {
       await updateDoc(doc(db, 'access_requests', id), {
@@ -1179,8 +1179,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="verification-card">
           <div class="verification-card-head">
             <div>
-              <div class="verification-applicant">${escapeHtml(req.applicantName || '—')}</div>
-              <div class="verification-applicant-sub">${escapeHtml(req.institutionName || req.campusCode || '—')} · ${escapeHtml((req.role || '—').replace(/_/g, ' '))}</div>
+              <div class="verification-applicant">${escapeHtml(req.fullName || '—')}</div>
+              <div class="verification-applicant-sub">${escapeHtml(req.institution || req.campusCode || '—')} · ${escapeHtml((req.role || '—').replace(/_/g, ' '))}</div>
             </div>
             <div class="verification-score-ring-wrap">
               <svg class="verification-score-svg" viewBox="0 0 56 56">
@@ -1224,14 +1224,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn.dataset.action === 'approve-from-verify') {
           openConfirmModal(
             'Approve this request?',
-            `Account will be created for ${req.applicantEmail || req.applicantName}.`,
+            `Account will be created for ${req.email || req.fullName}.`,
             () => approveRequest(req)
           );
         }
         if (btn.dataset.action === 'reject-from-verify') {
           openConfirmModal(
             'Reject this request?',
-            `${req.applicantName || 'This applicant'} will be notified.`,
+            `${req.fullName || 'This applicant'} will be notified.`,
             () => updateRequestStatus(req.id, 'rejected')
           );
         }
@@ -1346,7 +1346,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   });
 
-   document.getElementById('add-custom-role-btn')?.addEventListener('click', () => {
+  document.getElementById('add-custom-role-btn')?.addEventListener('click', () => {
     showNotification('Custom role creation requires a custom_roles Firestore collection. Say the word and it\'ll be wired up.', 'info');
   });
 
@@ -1471,8 +1471,8 @@ document.addEventListener('DOMContentLoaded', () => {
       (i.name || '').toLowerCase().includes(q) || (i.campusCode || '').toLowerCase().includes(q)
     );
     const reqMatch  = State.accessRequests.find(r =>
-      (r.applicantName || '').toLowerCase().includes(q) ||
-      (r.applicantEmail || '').toLowerCase().includes(q) ||
+      (r.fullName || '').toLowerCase().includes(q) ||
+      (r.email || '').toLowerCase().includes(q) ||
       r.id.toLowerCase().includes(q)
     );
     const userMatch = State.users.find(u =>
@@ -1480,7 +1480,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     if (instMatch)  { switchView('institutions'); showNotification(`Found institution: ${instMatch.name}`, 'info'); }
-    else if (reqMatch)  { switchView('requests');    showNotification(`Found request from: ${reqMatch.applicantName || reqMatch.id}`, 'info'); }
+    else if (reqMatch)  { switchView('requests');    showNotification(`Found request from: ${reqMatch.fullName || reqMatch.id}`, 'info'); }
     else if (userMatch) { switchView('users');       showNotification(`Found user: ${userMatch.name || userMatch.email}`, 'info'); }
   });
 
@@ -1721,5 +1721,3 @@ document.addEventListener('DOMContentLoaded', () => {
   boot();
 
 }); // end DOMContentLoaded
-                                                                          
-                          

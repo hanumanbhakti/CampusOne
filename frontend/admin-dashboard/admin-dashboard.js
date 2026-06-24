@@ -271,6 +271,12 @@ initNotices();
   $("form-create-teacher").addEventListener("submit", handleCreateTeacher);
   $("form-create-parent").addEventListener("submit", handleCreateParent);
 
+  const noticeForm = $("notice-form");
+
+if (noticeForm) {
+  noticeForm.addEventListener("submit", handleCreateNotice);
+}
+
   // ---- SEARCH ----
   $("search-students").addEventListener("input", (e) => renderStudents(e.target.value));
   $("search-teachers").addEventListener("input", (e) => renderTeachers(e.target.value));
@@ -292,13 +298,13 @@ initNotices();
   $("req-modal-close").addEventListener("click", closeRequestModal);
   $("req-modal-cancel-btn").addEventListener("click", closeRequestModal);
 
-  // ---- LOAD ALL DATA ----
-  await Promise.all([
-    loadStudents(),
-    loadTeachers(),
-    loadParents(),
-    loadRequests()
-  ]);
+await Promise.all([
+  loadStudents(),
+  loadTeachers(),
+  loadParents(),
+  loadRequests(),
+  loadNotices()
+]);
   renderDashboardActivity();
 }
 
@@ -812,6 +818,8 @@ function renderParents(filterText) {
   attachRowActions();
 }
 
+let noticesCache = [];
+
 // ============ CREATE FORMS ============
 async function findUserByEmail(email) {
   const q = query(collection(db, "users"), where("email", "==", email.trim().toLowerCase()), limit(1));
@@ -1037,3 +1045,164 @@ async function handleDelete(entityType, id) {
     showToast("Could not remove: " + (err?.message || err), "error");
   }
 }
+
+// =====================================================
+// NOTICE BOARD MODULE
+// =====================================================
+
+async function handleCreateNotice(e) {
+  e.preventDefault();
+
+  const title = $("notice-title").value.trim();
+  const body = $("notice-body").value.trim();
+  const audience = $("notice-audience").value;
+
+  if (!title || !body) return;
+
+  try {
+
+    await addDoc(collection(db, "notices"), {
+      title,
+      body,
+      audience,
+
+      campusCode: activeCampus,
+
+      createdBy: currentUser.uid,
+      createdByName: adminProfile?.name || "Institute Admin",
+
+      isPinned: false,
+      status: "published",
+
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+
+    e.target.reset();
+
+    await loadNotices();
+
+    showToast("📢 Notice published!", "success");
+
+  } catch (err) {
+    console.error(err);
+    showToast("Failed to publish notice", "error");
+  }
+}
+
+async function loadNotices() {
+
+  try {
+
+    const q = query(
+      collection(db, "notices"),
+      where("campusCode", "==", activeCampus)
+    );
+
+    const snap = await getDocs(q);
+
+    noticesCache = snap.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    renderNotices();
+
+  } catch (err) {
+
+    console.error(err);
+
+    noticesCache = [];
+
+    renderNotices();
+  }
+}
+
+function renderNotices() {
+
+  const container = $("notice-list");
+
+  if (!container) return;
+
+  if (!noticesCache.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+        No notices published yet.
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = noticesCache.map(n => `
+
+    <div class="glass-card" style="margin-top:16px;">
+
+      <h4>${n.title}</h4>
+
+      <p>${n.body}</p>
+
+      <small>
+        Audience: ${n.audience}
+      </small>
+
+      <br><br>
+
+      <button
+        class="btn btn-secondary"
+        onclick="toggleNoticePin('${n.id}', ${n.isPinned})">
+        ${n.isPinned ? "Unpin" : "Pin"}
+      </button>
+
+      <button
+        class="btn btn-danger"
+        onclick="deleteNotice('${n.id}')">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+window.toggleNoticePin = async function(id, currentState) {
+
+  try {
+
+    await updateDoc(
+      doc(db, "notices", id),
+      {
+        isPinned: !currentState,
+        updatedAt: serverTimestamp()
+      }
+    );
+
+    await loadNotices();
+
+  } catch(err) {
+    console.error(err);
+  }
+};
+
+window.deleteNotice = async function(id) {
+
+  if (!confirm("Delete this notice?")) return;
+
+  try {
+
+    await deleteDoc(
+      doc(db, "notices", id)
+    );
+
+    await loadNotices();
+
+    showToast("🗑 Notice deleted", "success");
+
+  } catch(err) {
+
+    console.error(err);
+
+    showToast("Delete failed", "error");
+  }
+};

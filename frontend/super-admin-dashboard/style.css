@@ -305,10 +305,18 @@ table { border-collapse: collapse; width: 100%; }
     line-height: 1.4;
 }
 
-.sidebar-footer-block {
-    padding: 16px 14px 18px; border-top: 1px solid var(--glass-border);
-    display: flex; flex-direction: column; gap: 14px;
-    position: relative;
+.sidebar-footer-block{
+    padding:18px 14px 20px;
+    border-top:1px solid var(--glass-border);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    position:relative;
+    background:linear-gradient(
+        to top,
+        rgba(255,255,255,.02),
+        transparent
+    );
 }
 
 .theme-switch-orchestrator { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
@@ -324,20 +332,41 @@ table { border-collapse: collapse; width: 100%; }
 }
 .theme-switch-orchestrator .theme-toggle-trigger:hover { transform: scale(1.08); }
 
-.sidebar-profile-pod {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px; border-radius: var(--radius-md);
-    background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);
-    cursor: pointer; width: 100%; text-align: left;
-    transition: background var(--t-fast);
+.sidebar-profile-pod{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    border-radius:14px;
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--glass-border);
+    cursor:pointer;
+    width:100%;
+    text-align:left;
+    transition:
+        background .25s ease,
+        transform .25s ease,
+        border-color .25s ease;
 }
-.sidebar-profile-pod:hover { background: rgba(255, 255, 255, 0.06); }
 
-.profile-avatar-initials {
-    width: 34px; height: 34px; border-radius: var(--radius-full);
-    background: var(--brand-gradient); color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.72rem; font-weight: 700; flex-shrink: 0;
+.sidebar-profile-pod:hover{
+    background:rgba(255,255,255,.06);
+    border-color:rgba(37,99,235,.25);
+    transform:translateY(-1px);
+}
+.profile-avatar-initials{
+    width:38px;
+    height:38px;
+    border-radius:999px;
+    background:var(--brand-gradient);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:.74rem;
+    font-weight:700;
+    flex-shrink:0;
+    box-shadow:0 6px 18px rgba(37,99,235,.30);
 }
 
 .profile-text-stack { display: flex; flex-direction: column; flex: 1; min-width: 0; }

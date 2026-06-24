@@ -26,7 +26,7 @@
 
 // ── Firestore functions only (auth + db come from shared config) ──
 import {
-  collection, doc, getDoc, setDoc, updateDoc, deleteDoc,
+  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc,
   query, orderBy, limit, onSnapshot, serverTimestamp, addDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 import {
@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     auditLogs:                 [],
     notices:                   [],
     unsubscribers:             [],
+    rolesData:                 {},
     activeRequestStatusFilter: 'all',
     activeInstituteStatusFilter: 'all',
     activeUserRoleFilter:      'all',
@@ -1319,7 +1320,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>${escapeHtml(row.label)}</td>
         ${ROLE_COLUMNS.map(role => {
           const locked  = role === 'super_admin';
-          const checked = locked || row.grants.includes(role);
+          // Use live Firestore data if loaded, else fall back to hardcoded defaults
+          const rolePerms = State.rolesData[role]?.permissions;
+          const checked = locked || (rolePerms ? !!rolePerms[row.key] : row.grants.includes(role));
           return `
             <td>
               <span class="permission-check-toggle ${checked ? 'state-checked' : ''} ${locked ? 'state-locked' : ''}"
@@ -1333,17 +1336,45 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
   }
 
-  DOM.permissionMatrixBody?.addEventListener('click', (e) => {
+  DOM.permissionMatrixBody?.addEventListener('click', async (e) => {
     const toggle = e.target.closest('.permission-check-toggle');
     if (!toggle || toggle.classList.contains('state-locked')) return;
-    toggle.classList.toggle('state-checked');
-    toggle.innerHTML = toggle.classList.contains('state-checked')
-      ? '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'
-      : '';
-    showNotification(
-      `Updated "${toggle.dataset.permission.replace(/_/g, ' ')}" for ${toggle.dataset.role.replace(/_/g, ' ')}.`,
-      'info'
-    );
+
+    const perm    = toggle.dataset.permission;
+    const role    = toggle.dataset.role;
+    const newVal  = !toggle.classList.contains('state-checked');
+
+    // Optimistic UI update
+    toggle.classList.toggle('state-checked', newVal);
+    toggle.innerHTML = newVal ? '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' : '';
+
+    // Save to Firestore roles/{role}
+    try {
+      await setDoc(
+        doc(db, 'roles', role),
+        { permissions: { [perm]: newVal } },
+        { merge: true }
+      );
+      // Update local State so re-render stays in sync
+      if (!State.rolesData[role]) State.rolesData[role] = { permissions: {} };
+      State.rolesData[role].permissions[perm] = newVal;
+
+      await logAuditEvent(
+        `${newVal ? 'Granted' : 'Revoked'} permission: ${perm.replace(/_/g, ' ')}`,
+        role.replace(/_/g, ' '),
+        newVal ? 'success' : 'warning'
+      );
+      showNotification(
+        `${newVal ? '✅ Granted' : '❌ Revoked'}: "${perm.replace(/_/g, ' ')}" for ${role.replace(/_/g, ' ')}.`,
+        newVal ? 'success' : 'warning'
+      );
+    } catch (err) {
+      // Revert UI on failure
+      toggle.classList.toggle('state-checked', !newVal);
+      toggle.innerHTML = !newVal ? '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' : '';
+      console.error('[Permissions] Firestore write failed:', err);
+      showNotification('Could not save permission. Check Firestore rules.', 'danger');
+    }
   });
 
   document.getElementById('add-custom-role-btn')?.addEventListener('click', () => {
@@ -1645,6 +1676,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (State.currentView === 'audit') renderAuditTimeline();
       }
     );
+
+    // roles — load all role permission docs at once
+    try {
+      const rolesSnap = await getDocs(collection(db, 'roles'));
+      rolesSnap.forEach(d => { State.rolesData[d.id] = d.data(); });
+      renderPermissionMatrix();
+
+      // Also listen for real-time changes
+      const rolesUnsub = onSnapshot(collection(db, 'roles'), (snap) => {
+        snap.docs.forEach(d => { State.rolesData[d.id] = d.data(); });
+        if (State.currentView === 'roles') renderPermissionMatrix();
+      }, (err) => {
+        console.warn('[Firestore] roles listener error:', err.message);
+      });
+      State.unsubscribers.push(rolesUnsub);
+    } catch (err) {
+      console.warn('[Roles] Could not load roles collection — using defaults:', err.message);
+    }
 
     // notices
     attachSnapshot('notices', 'createdAt',

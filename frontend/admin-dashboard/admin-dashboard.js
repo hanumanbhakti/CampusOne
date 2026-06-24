@@ -30,7 +30,7 @@ import { signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth
 import {
   doc, getDoc, updateDoc,
   collection, query, where, limit,
-  getDocs, serverTimestamp
+  getDocs, serverTimestamp, onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 // ============ HELPERS ============
@@ -523,15 +523,15 @@ async function handleRequestAction(reqId, newStatus) {
   if (!req) return;
 
   try {
-    // Update Firestore
     await updateDoc(doc(db, "access_requests", reqId), {
       status: newStatus,
       reviewedAt: serverTimestamp(),
       reviewedBy: currentUser?.uid || "admin"
     });
   } catch (err) {
-    console.warn("Could not update Firestore (demo mode):", err.message);
-    // In demo mode, just update local cache
+    console.error("Could not update access_requests:", err.message);
+    showToast("Could not save decision: " + (err?.message || err), "error");
+    return; // don't touch local cache if the write actually failed
   }
 
   // Update local cache
@@ -543,11 +543,55 @@ async function handleRequestAction(reqId, newStatus) {
   renderDashboardRequestsPreview();
   renderDashboardActivity();
 
-  if (newStatus === "approved") {
-    showToast(`✅ ${req.name}'s request approved!`, "success");
-  } else {
+  if (newStatus === "rejected") {
     showToast(`❌ ${req.name}'s request rejected.`, "error");
+    return;
   }
+
+  // Approved: the actual account is created by the provisioning Cloud
+  // Function (onAccessRequestApproved), not by this client. Watch the
+  // doc briefly so the admin sees a real outcome instead of a lie.
+  showToast(`⏳ Approved — provisioning ${req.name}'s account...`, "info");
+  watchProvisioning(reqId, req.name);
+}
+
+function watchProvisioning(reqId, name) {
+  let settled = false;
+  const timeout = setTimeout(() => {
+    if (settled) return;
+    settled = true;
+    unsubscribe();
+    showToast(`Still provisioning ${name}'s account — check back shortly.`, "info");
+  }, 20000);
+
+  const unsubscribe = onSnapshot(doc(db, "access_requests", reqId), async (snap) => {
+    const data = snap.data();
+    if (!data || settled) return;
+
+    if (data.provisioned === true) {
+      settled = true;
+      clearTimeout(timeout);
+      unsubscribe();
+      const action = data.accountAction === "reused_existing_account"
+        ? "linked to their existing account" : "account created";
+      showToast(`✅ ${name} approved — ${action}, setup email sent.`, "success");
+      // A real member now exists — refresh the relevant lists/stats.
+      await Promise.all([loadStudents(), loadTeachers(), loadParents(), loadRequests()]);
+      renderDashboardActivity();
+    } else if (data.requiresManualReview === true) {
+      settled = true;
+      clearTimeout(timeout);
+      unsubscribe();
+      showToast(`⚠ ${name}'s request needs Super Admin review (sensitive role).`, "info");
+      await loadRequests();
+    } else if (data.status === "provisioning_failed") {
+      settled = true;
+      clearTimeout(timeout);
+      unsubscribe();
+      showToast(`❌ Provisioning failed for ${name}: ${data.provisionError || "unknown error"}`, "error");
+      await loadRequests();
+    }
+  });
 }
 
 // ============ DASHBOARD RECENT ACTIVITY ============

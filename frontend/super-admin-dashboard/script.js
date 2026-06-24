@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar: document.getElementById('co-sidebar'),
         sidebarScrim: document.getElementById('sidebar-scrim'),
         sidebarOpenBtn: document.getElementById('sidebar-open-trigger'),
-        sidebarCloseBtn: document.getElementById('sidebar-close-trigger')
-        navItems: document.querySelectorAll('.nav-item-link'),
+sidebarCloseBtn: document.getElementById('sidebar-close-trigger'),
+navItems: document.querySelectorAll('.nav-item-link'),
         viewPanels: document.querySelectorAll('.view-panel'),
         viewTitle: document.getElementById('view-title'),
         viewSubtitle: document.getElementById('view-subtitle'),

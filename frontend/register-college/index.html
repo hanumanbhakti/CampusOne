@@ -104,54 +104,312 @@
 </head>
 <body>
 
-  <div class="card">
+  <!-- Background Layers -->
+  <div class="bg-grid"></div>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
 
-    <div class="brand">
-      <img src="../../assets/logo-icon.png" alt="CampusOne">
-      <h1>College Registration</h1>
-      <p>
-        Join CampusOne and transform your institution into a modern digital campus.
-      </p>
-    </div>
+  <main class="page-shell">
 
-    <form id="collegeForm">
+    <!-- LEFT PANEL -->
+    <section class="hero-panel">
 
-      <div class="form-group">
-        <label>College Name</label>
-        <input type="text" placeholder="Enter college name" required>
+      <header class="hero-header">
+
+        <a href="/" class="brand">
+
+          <img
+            src="../../assets/logo-full.png"
+            alt="CampusOne"
+            class="brand-logo">
+
+        </a>
+
+        <div class="platform-badge">
+          Enterprise Education Platform
+        </div>
+
+      </header>
+
+      <div class="hero-content">
+
+        <div class="eyebrow">
+          DIGITAL CAMPUS INFRASTRUCTURE
+        </div>
+
+        <h1 class="hero-title">
+          Transform Your Institution Into A
+          <span>Modern Digital Campus</span>
+        </h1>
+
+        <p class="hero-description">
+          Centralize academic operations, attendance,
+          communication and administration through a
+          secure cloud-native platform built for
+          educational institutions.
+        </p>
+
+        <!-- Features -->
+
+        <div class="feature-list">
+
+          <article class="feature-card">
+
+            <div class="feature-icon">
+              <!-- Building SVG -->
+            </div>
+
+            <div>
+              <h3>Institution Management</h3>
+              <p>Centralized administration and governance.</p>
+            </div>
+
+          </article>
+
+          <article class="feature-card">
+
+            <div class="feature-icon">
+              <!-- Users SVG -->
+            </div>
+
+            <div>
+              <h3>Faculty & Student Records</h3>
+              <p>Unified academic data management.</p>
+            </div>
+
+          </article>
+
+          <article class="feature-card">
+
+            <div class="feature-icon">
+              <!-- Shield SVG -->
+            </div>
+
+            <div>
+              <h3>Enterprise Security</h3>
+              <p>Tenant isolation and secure access control.</p>
+            </div>
+
+          </article>
+
+          <article class="feature-card">
+
+            <div class="feature-icon">
+              <!-- Activity SVG -->
+            </div>
+
+            <div>
+              <h3>Real-Time Operations</h3>
+              <p>Instant updates across campus workflows.</p>
+            </div>
+
+          </article>
+
+        </div>
+
+        <!-- Stats -->
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <h2>Multi</h2>
+            <span>Tenant Architecture</span>
+          </div>
+
+          <div class="stat-card">
+            <h2>Cloud</h2>
+            <span>Native Platform</span>
+          </div>
+
+          <div class="stat-card">
+            <h2>24/7</h2>
+            <span>Availability</span>
+          </div>
+
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Principal Name</label>
-        <input type="text" placeholder="Enter principal name" required>
+    </section>
+
+    <!-- RIGHT PANEL -->
+
+    <section class="form-panel">
+
+      <div class="registration-card">
+
+        <div class="card-top">
+
+          <div class="card-badge">
+            Institution Onboarding
+          </div>
+
+          <h2>
+            Register Your Institution
+          </h2>
+
+          <p>
+            Start your CampusOne onboarding process.
+            Our team will review your request and
+            provision your digital campus.
+          </p>
+
+        </div>
+
+        <form id="collegeRegistrationForm">
+
+          <div class="input-group">
+
+            <label>Institution Name</label>
+
+            <div class="input-wrapper">
+
+              <span class="input-icon">
+                <!-- Building SVG -->
+              </span>
+
+              <input
+                type="text"
+                name="collegeName"
+                placeholder="ABC College"
+                required>
+
+            </div>
+
+          </div>
+
+          <div class="input-group">
+
+            <label>Principal / Director</label>
+
+            <div class="input-wrapper">
+
+              <span class="input-icon">
+                <!-- User SVG -->
+              </span>
+
+              <input
+                type="text"
+                name="principalName"
+                placeholder="Rajesh Sharma"
+                required>
+
+            </div>
+
+          </div>
+
+          <div class="input-group">
+
+            <label>Official Email</label>
+
+            <div class="input-wrapper">
+
+              <span class="input-icon">
+                <!-- Mail SVG -->
+              </span>
+
+              <input
+                type="email"
+                name="email"
+                placeholder="admin@college.edu"
+                required>
+
+            </div>
+
+          </div>
+
+          <div class="input-group">
+
+            <label>Official Mobile Number</label>
+
+            <div class="input-wrapper">
+
+              <span class="input-icon">
+                <!-- Phone SVG -->
+              </span>
+
+              <input
+                type="tel"
+                name="mobile"
+                placeholder="+91 XXXXX XXXXX"
+                required>
+
+            </div>
+
+          </div>
+
+          <div class="input-group">
+
+            <label>Student Strength</label>
+
+            <div class="input-wrapper">
+
+              <span class="input-icon">
+                <!-- Users SVG -->
+              </span>
+
+              <input
+                type="number"
+                name="studentStrength"
+                placeholder="2500"
+                required>
+
+            </div>
+
+          </div>
+
+          <button
+            type="submit"
+            class="submit-btn">
+
+            Submit Registration Request
+
+          </button>
+
+        </form>
+
+        <!-- Security Section -->
+
+        <div class="security-strip">
+
+          <div class="security-item">
+
+            <span class="security-icon">
+              <!-- Shield Check SVG -->
+            </span>
+
+            <span>Secure Registration</span>
+
+          </div>
+
+          <div class="security-item">
+
+            <span class="security-icon">
+              <!-- Building SVG -->
+            </span>
+
+            <span>Built For Institutions</span>
+
+          </div>
+
+          <div class="security-item">
+
+            <span class="security-icon">
+              <!-- Zap SVG -->
+            </span>
+
+            <span>Fast Onboarding</span>
+
+          </div>
+
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Official Email</label>
-        <input type="email" placeholder="college@example.com" required>
-      </div>
+    </section>
 
-      <div class="form-group">
-        <label>Mobile Number</label>
-        <input type="tel" placeholder="Enter mobile number" required>
-      </div>
-
-      <div class="form-group">
-        <label>Student Strength</label>
-        <input type="number" placeholder="e.g. 2500" required>
-      </div>
-
-      <button type="submit">
-        Submit Registration Request
-      </button>
-
-    </form>
-
-    <div class="footer">
-      CampusOne • Smart Campus Management Platform
-    </div>
-
-  </div>
+  </main>
 
 </body>
 </html>

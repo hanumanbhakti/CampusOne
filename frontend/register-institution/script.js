@@ -18,7 +18,7 @@ import {
   doc,
   getDoc,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
 (function () {
   "use strict";
@@ -167,7 +167,10 @@ import {
       return false;
     }
 
-    if (field.value && !field.checkValidity()) {
+    if (name === "website" && field.value) {
+      try { new URL(field.value); }
+      catch (_) { return false; }
+    } else if (field.value && !field.checkValidity()) {
       return false;
     }
 
@@ -179,6 +182,23 @@ import {
 
     if ((name === "studentStrength" || name === "facultyStrength") && field.value) {
       if (Number(field.value) <= 0) return false;
+    }
+
+    // Auto-calculate institutionSize when studentStrength changes
+    if (name === "studentStrength" && field.value) {
+      const n = Number(field.value);
+      const sizeField = form.elements["institutionSize"];
+      if (sizeField) {
+        let autoSize = "";
+        if (n <= 500)       autoSize = "1-500";
+        else if (n <= 2000) autoSize = "501-2000";
+        else if (n <= 5000) autoSize = "2001-5000";
+        else                autoSize = "5000+";
+        if (!sizeField.value || sizeField.dataset.autoSet === "true") {
+          sizeField.value = autoSize;
+          sizeField.dataset.autoSet = "true";
+        }
+      }
     }
 
     return true;
@@ -434,12 +454,23 @@ import {
       .map((el) => el.value);
   }
 
+  function sanitize(value) {
+    if (typeof value !== "string") return value;
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      .trim();
+  }
+
   function buildPayload() {
     const data = new FormData(form);
 
     return {
       institution: {
-        name: data.get("institutionName")?.trim(),
+        name: sanitize(data.get("institutionName")),
         type: data.get("institutionType"),
         category: data.get("institutionCategory"),
         code: data.get("institutionCode")?.trim() || null,
@@ -453,8 +484,8 @@ import {
         size: data.get("institutionSize") || null
       },
       contact: {
-        principalName: data.get("principalName")?.trim(),
-        email: data.get("email")?.trim().toLowerCase(),
+        principalName: sanitize(data.get("principalName")),
+        email: sanitize(data.get("email"))?.toLowerCase(),
         mobile: data.get("mobile")?.trim()
       },
       strength: {
@@ -507,8 +538,11 @@ import {
     return `CO-REQ-${stamp}-${rand}`;
   }
 
+  let submissionLock = false;
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (submissionLock) return;
 
     // validate every step before final submit
     let allValid = true;
@@ -526,6 +560,7 @@ import {
     const payload = buildPayload();
     const submitBtn = form.querySelector(".submit-btn");
 
+    submissionLock = true;
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.textContent = "Submitting...";
@@ -574,10 +609,10 @@ console.log(
     err
   );
 
+  submissionLock = false;
   if (submitBtn) {
     submitBtn.disabled = false;
-    submitBtn.textContent =
-      "Submit Application";
+    submitBtn.textContent = "Submit Application";
   }
 
   alert(
@@ -620,7 +655,7 @@ console.log(
 
     const trackingLinkEl = document.getElementById("successTrackingLink");
     if (trackingLinkEl) {
-      trackingLinkEl.textContent = trackingUrl.replace("https://", "");
+      trackingLinkEl.textContent = referenceId;
     }
 
     const openTrackingBtn = document.getElementById("successOpenTrackingBtn");
@@ -661,12 +696,12 @@ console.log(
         });
     }
 
-    // Copy-to-clipboard
+    // Copy-to-clipboard — copies only the Reference ID
     const copyBtn = document.getElementById("successCopyBtn");
     if (copyBtn) {
       copyBtn.onclick = async () => {
         try {
-          await navigator.clipboard.writeText(trackingUrl);
+          await navigator.clipboard.writeText(referenceId);
           copyBtn.textContent = "Copied!";
           copyBtn.classList.add("is-copied");
           setTimeout(() => {
@@ -925,10 +960,11 @@ function loadScriptOnce(src) {
   return new Promise((resolve, reject) => {
     const existing = document.querySelector(`script[src="${src}"]`);
     if (existing) {
+      // Already fully loaded
+      if (existing.dataset.loaded === "true") { resolve(); return; }
+      // Still loading — wait for it
       existing.addEventListener("load", () => resolve());
       existing.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)));
-      // If it's already loaded by the time we get here, resolve immediately.
-      if (existing.dataset.loaded === "true") resolve();
       return;
     }
     const script = document.createElement("script");
@@ -970,11 +1006,20 @@ async function ensureGlobal(globalName, withTimeoutMs = 8000) {
 }
 
 async function generateApplicationPdf({ referenceId, payload, submittedDate, trackingUrl }) {
-  // Make sure both CDN libraries are actually available before
-  // doing any work — re-fetches them if the original <script>
-  // tags failed silently.
+  // pdf-lib is required — without it there is no PDF at all.
   await ensureGlobal("PDFLib");
-  await ensureGlobal("QRCode");
+
+  // The QR code is a nice-to-have visual on the cover/verification
+  // pages. If it can't be loaded (CDN blocked, flaky network), the
+  // PDF should still generate — just without the QR image.
+  // Use a shorter timeout (4s) so we don't block PDF generation long.
+  let qrAvailable = true;
+  try {
+    await ensureGlobal("QRCode", 4000);
+  } catch (err) {
+    console.warn("QR library unavailable — generating PDF without QR code:", err);
+    qrAvailable = false;
+  }
 
   const { PDFDocument, rgb, StandardFonts } = window.PDFLib;
 
@@ -1003,14 +1048,24 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   const PAGE_H = 841.89;
   const MARGIN = 48;
 
-  // QR code as PNG data URL, shared by cover + verification page
-  const qrDataUrl = await window.QRCode.toDataURL(trackingUrl, {
-    width: 300,
-    margin: 1,
-    color: { dark: "#0F172A", light: "#FFFFFF" }
-  });
-  const qrImageBytes = await fetch(qrDataUrl).then((r) => r.arrayBuffer());
-  const qrImage = await pdfDoc.embedPng(qrImageBytes);
+  // QR code as PNG data URL, shared by cover + verification page.
+  // qrImage stays null if the library wasn't available — every
+  // place that draws it below checks for this first.
+  let qrImage = null;
+  if (qrAvailable) {
+    try {
+      const qrDataUrl = await window.QRCode.toDataURL(trackingUrl, {
+        width: 300,
+        margin: 1,
+        color: { dark: "#0F172A", light: "#FFFFFF" }
+      });
+      const qrImageBytes = await fetch(qrDataUrl).then((r) => r.arrayBuffer());
+      qrImage = await pdfDoc.embedPng(qrImageBytes);
+    } catch (err) {
+      console.warn("QR code generation failed — continuing without it:", err);
+      qrImage = null;
+    }
+  }
 
   /* ---------------------------------------------------
      Helper: gradient bar (approximated with N vertical
@@ -1152,7 +1207,7 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
 
   // Tagline footer block
   cover.drawLine({ start: { x: MARGIN, y: 130 }, end: { x: PAGE_W - MARGIN, y: 130 }, thickness: 1, color: LINE });
-  cover.drawText("\u201CDigital Campus Management Platform\u201D", {
+  cover.drawText(""Digital Campus Management Platform"", {
     x: MARGIN, y: 100, size: 11, font: fontRegular, color: MUTED
   });
   cover.drawText("This document is a system-generated official copy of an institution onboarding", {
@@ -1322,12 +1377,19 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
 
   const verifyRows = [
     ["Reference ID", referenceId],
-    ["Tracking URL", trackingUrl],
     ["Digital Timestamp", submittedDate.toISOString()],
     ["Generated By", "CampusOne — Automated Onboarding System"],
     ["Support Email", "support@campusone.app"],
     ["Website", "campusone.app"]
   ];
+
+  // QR code box on the right of the verification card
+  // (qrSize must be declared before verifyRows uses it to
+  // compute available text width — this ordering bug previously
+  // caused a ReferenceError that aborted PDF generation.)
+  const qrSize = 110;
+  const qrX = PAGE_W - MARGIN - qrSize - 24;
+  const qrY = vy - 150;
 
   verifyRows.forEach(([label, value]) => {
     verifyPage.drawText(label.toUpperCase(), { x: verifyLeftX, y: vRowY, size: 7.5, font: fontBold, color: MUTED });
@@ -1339,18 +1401,32 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
     vRowY -= valueLines.length > 1 ? 42 : 30;
   });
 
-  // QR code box on the right of the verification card
-  const qrSize = 110;
-  const qrX = PAGE_W - MARGIN - qrSize - 24;
-  const qrY = vy - 150;
-  verifyPage.drawRectangle({
-    x: qrX - 8, y: qrY - 8, width: qrSize + 16, height: qrSize + 16,
-    color: WHITE, borderColor: LINE, borderWidth: 1
-  });
-  verifyPage.drawImage(qrImage, { x: qrX, y: qrY, width: qrSize, height: qrSize });
-  verifyPage.drawText("Scan to track status", {
-    x: qrX - 4, y: qrY - 24, size: 8, font: fontRegular, color: MUTED
-  });
+  if (qrImage) {
+    verifyPage.drawRectangle({
+      x: qrX - 8, y: qrY - 8, width: qrSize + 16, height: qrSize + 16,
+      color: WHITE, borderColor: LINE, borderWidth: 1
+    });
+    verifyPage.drawImage(qrImage, { x: qrX, y: qrY, width: qrSize, height: qrSize });
+    verifyPage.drawText("Scan to track status", {
+      x: qrX - 4, y: qrY - 24, size: 8, font: fontRegular, color: MUTED
+    });
+  } else {
+    // Fallback when the QR library wasn't available — show the
+    // tracking link as plain text instead of leaving blank space.
+    verifyPage.drawRectangle({
+      x: qrX - 8, y: qrY - 8, width: qrSize + 16, height: qrSize + 16,
+      color: CARD_BG, borderColor: LINE, borderWidth: 1
+    });
+    verifyPage.drawText("Visit", {
+      x: qrX + 12, y: qrY + qrSize - 30, size: 9, font: fontRegular, color: MUTED
+    });
+    verifyPage.drawText("campusone.app/track", {
+      x: qrX + 4, y: qrY + qrSize - 46, size: 9, font: fontBold, color: INK
+    });
+    verifyPage.drawText("to check status", {
+      x: qrX + 12, y: qrY + qrSize - 62, size: 9, font: fontRegular, color: MUTED
+    });
+  }
 
   vy -= 240;
   verifyPage.drawLine({ start: { x: MARGIN, y: vy }, end: { x: PAGE_W - MARGIN, y: vy }, thickness: 0.75, color: LINE });

@@ -167,10 +167,7 @@ import {
       return false;
     }
 
-    if (name === "website" && field.value) {
-      try { new URL(field.value); }
-      catch (_) { return false; }
-    } else if (field.value && !field.checkValidity()) {
+    if (field.value && !field.checkValidity()) {
       return false;
     }
 
@@ -182,23 +179,6 @@ import {
 
     if ((name === "studentStrength" || name === "facultyStrength") && field.value) {
       if (Number(field.value) <= 0) return false;
-    }
-
-    // Auto-calculate institutionSize when studentStrength changes
-    if (name === "studentStrength" && field.value) {
-      const n = Number(field.value);
-      const sizeField = form.elements["institutionSize"];
-      if (sizeField) {
-        let autoSize = "";
-        if (n <= 500)       autoSize = "1-500";
-        else if (n <= 2000) autoSize = "501-2000";
-        else if (n <= 5000) autoSize = "2001-5000";
-        else                autoSize = "5000+";
-        if (!sizeField.value || sizeField.dataset.autoSet === "true") {
-          sizeField.value = autoSize;
-          sizeField.dataset.autoSet = "true";
-        }
-      }
     }
 
     return true;
@@ -454,23 +434,12 @@ import {
       .map((el) => el.value);
   }
 
-  function sanitize(value) {
-    if (typeof value !== "string") return value;
-    return value
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#x27;")
-      .trim();
-  }
-
   function buildPayload() {
     const data = new FormData(form);
 
     return {
       institution: {
-        name: sanitize(data.get("institutionName")),
+        name: data.get("institutionName")?.trim(),
         type: data.get("institutionType"),
         category: data.get("institutionCategory"),
         code: data.get("institutionCode")?.trim() || null,
@@ -484,8 +453,8 @@ import {
         size: data.get("institutionSize") || null
       },
       contact: {
-        principalName: sanitize(data.get("principalName")),
-        email: sanitize(data.get("email"))?.toLowerCase(),
+        principalName: data.get("principalName")?.trim(),
+        email: data.get("email")?.trim().toLowerCase(),
         mobile: data.get("mobile")?.trim()
       },
       strength: {
@@ -524,8 +493,8 @@ import {
         // Client-side ISO strings are kept here only as a
         // safe fallback for environments without the SDK.
         // ----------------------------------------------
-         createdAt: new Date().toISOString(),
-         updatedAt: new Date().toISOString()
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
       }
     };
     // Note: institutionLogo (File) is sent separately via
@@ -538,11 +507,8 @@ import {
     return `CO-REQ-${stamp}-${rand}`;
   }
 
-  let submissionLock = false;
-
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (submissionLock) return;
 
     // validate every step before final submit
     let allValid = true;
@@ -558,11 +524,8 @@ import {
     if (!allValid) return;
 
     const payload = buildPayload();
-    payload.meta.createdAt = serverTimestamp();
-    payload.meta.updatedAt = serverTimestamp();
     const submitBtn = form.querySelector(".submit-btn");
 
-    submissionLock = true;
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.textContent = "Submitting...";
@@ -582,32 +545,44 @@ import {
       // const result = await res.json();
       // ------------------------------------------------
 
-      console.log("Institution registration payload:", payload);
+console.log(
+    "Institution registration payload:",
+    payload
+  );
 
-      const docRef = await addDoc(
-        collection(db, "accessRequests"),
-        payload
-      );
+  const docRef = await addDoc(
+    collection(db, "accessRequests"),
+    payload
+  );
 
-      // Firestore document ID
-      const referenceId = docRef.id;
+  // Firestore document ID
+  const referenceId = docRef.id;
 
-      // Success UI
-      form.hidden = true;
-      document.getElementById("formProgress").hidden = true;
-      successPanel.hidden = false;
-      renderSuccessScreen(referenceId, payload);
+  // Success UI
+  form.hidden = true;
 
-    } catch (err) {
-      console.error("Institution registration failed:", err);
+  document.getElementById("formProgress").hidden = true;
 
-      submissionLock = false;
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Application";
-      }
+  successPanel.hidden = false;
 
-      alert("Unable to submit your registration request. Please try again.");
+  renderSuccessScreen(referenceId, payload);
+
+} catch (err) {
+
+  console.error(
+    "Institution registration failed:",
+    err
+  );
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.textContent =
+      "Submit Application";
+  }
+
+  alert(
+    "Unable to submit your registration request. Please try again."
+  );
     }
   });
 
@@ -645,7 +620,7 @@ import {
 
     const trackingLinkEl = document.getElementById("successTrackingLink");
     if (trackingLinkEl) {
-      trackingLinkEl.textContent = referenceId;
+      trackingLinkEl.textContent = trackingUrl.replace("https://", "");
     }
 
     const openTrackingBtn = document.getElementById("successOpenTrackingBtn");
@@ -686,12 +661,12 @@ import {
         });
     }
 
-    // Copy-to-clipboard — copies only the Reference ID
+    // Copy-to-clipboard
     const copyBtn = document.getElementById("successCopyBtn");
     if (copyBtn) {
       copyBtn.onclick = async () => {
         try {
-          await navigator.clipboard.writeText(referenceId);
+          await navigator.clipboard.writeText(trackingUrl);
           copyBtn.textContent = "Copied!";
           copyBtn.classList.add("is-copied");
           setTimeout(() => {
@@ -950,11 +925,10 @@ function loadScriptOnce(src) {
   return new Promise((resolve, reject) => {
     const existing = document.querySelector(`script[src="${src}"]`);
     if (existing) {
-      // Already fully loaded
-      if (existing.dataset.loaded === "true") { resolve(); return; }
-      // Still loading — wait for it
       existing.addEventListener("load", () => resolve());
       existing.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)));
+      // If it's already loaded by the time we get here, resolve immediately.
+      if (existing.dataset.loaded === "true") resolve();
       return;
     }
     const script = document.createElement("script");
@@ -1002,10 +976,9 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   // The QR code is a nice-to-have visual on the cover/verification
   // pages. If it can't be loaded (CDN blocked, flaky network), the
   // PDF should still generate — just without the QR image.
-  // Use a shorter timeout (4s) so we don't block PDF generation long.
   let qrAvailable = true;
   try {
-    await ensureGlobal("QRCode", 4000);
+    await ensureGlobal("QRCode");
   } catch (err) {
     console.warn("QR library unavailable — generating PDF without QR code:", err);
     qrAvailable = false;
@@ -1338,7 +1311,7 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   // Section: Compliance
   drawSectionHeading("Compliance & Recognition");
   drawFieldRow([
-    { label: "Accreditation / Recognition", value: (payload.institution.accreditation || []).join(", ") || "—" }
+    { label: "Accreditation / Recognition", value: (payload.institution.accreditation || []).join(", ") || "—" },
   ]);
   drawFieldRow([
     { label: "GST Number", value: payload.compliance.gstNumber },
@@ -1367,6 +1340,7 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
 
   const verifyRows = [
     ["Reference ID", referenceId],
+    ["Tracking URL", trackingUrl],
     ["Digital Timestamp", submittedDate.toISOString()],
     ["Generated By", "CampusOne — Automated Onboarding System"],
     ["Support Email", "support@campusone.app"],

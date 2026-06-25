@@ -592,7 +592,7 @@ console.log(
      submission date, tracking link + QR + copy button.
   ---------------------------------------------------- */
 
-  const TRACK_BASE_URL = "https://hanumanbhakti.github.io/CampusOne/frontend/register-institution/?ref=";
+  const TRACK_BASE_URL = "https://campusone.app/track/";
 
   function formatSubmittedOn(date) {
     return date.toLocaleDateString("en-IN", {
@@ -620,34 +620,38 @@ console.log(
 
     const trackingLinkEl = document.getElementById("successTrackingLink");
     if (trackingLinkEl) {
-      trackingLinkEl.textContent = "campusone.app/track — Ref: " + referenceId;
+      trackingLinkEl.textContent = trackingUrl.replace("https://", "");
     }
 
     const openTrackingBtn = document.getElementById("successOpenTrackingBtn");
     if (openTrackingBtn) {
-      openTrackingBtn.href = `https://hanumanbhakti.github.io/CampusOne/frontend/register-institution/?ref=${referenceId}#trackRequestCard`;
-      openTrackingBtn.target = "_blank";
-      openTrackingBtn.rel = "noopener noreferrer";
-      openTrackingBtn.onclick = null;
+      // No live external tracking page exists yet — for now this
+      // routes to the on-page "Track Your Registration Request"
+      // card and pre-fills the Reference ID for the user.
+      openTrackingBtn.href = "#trackRequestCard";
+      openTrackingBtn.removeAttribute("target");
+      openTrackingBtn.removeAttribute("rel");
+      openTrackingBtn.onclick = (e) => {
+        e.preventDefault();
+        const trackCard = document.getElementById("trackRequestCard");
+        const refIdField = document.getElementById("trackReferenceId");
+        if (refIdField) refIdField.value = referenceId;
+        if (trackCard) trackCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
     }
 
     // QR code — renders to canvas via the QRCode CDN library.
     // Self-heals if the library failed to load initially.
     const qrCanvas = document.getElementById("successQrCanvas");
     if (qrCanvas) {
-      const qrTrackUrl = `https://hanumanbhakti.github.io/CampusOne/frontend/register-institution/?ref=${referenceId}#trackRequestCard`;
       ensureGlobal("QRCode")
         .then(() => {
-          window.QRCode.toCanvas(qrCanvas, qrTrackUrl, {
-             width: 120,
-            margin: 2,
+          window.QRCode.toCanvas(qrCanvas, trackingUrl, {
+            width: 96,
+            margin: 1,
             color: { dark: "#0F172A", light: "#FFFFFF" }
           }, (err) => {
-            if (err) {
-              console.error("QR render failed:", err);
-              const wrap = qrCanvas.closest(".success-qr-wrap");
-              if (wrap) wrap.hidden = true;
-            }
+            if (err) console.error("QR render failed:", err);
           });
         })
         .catch((err) => {
@@ -888,20 +892,6 @@ console.log(
       }
     });
   }
-
-  // Auto-prefill Reference ID from URL param ?ref=XXXX
-  (function prefillFromUrl() {
-    const params = new URLSearchParams(window.location.search);
-    const refFromUrl = params.get("ref");
-    if (refFromUrl) {
-      const refIdField = document.getElementById("trackReferenceId");
-      if (refIdField) refIdField.value = refFromUrl.trim();
-      const trackCard = document.getElementById("trackRequestCard");
-      if (trackCard) {
-        setTimeout(() => trackCard.scrollIntoView({ behavior: "smooth", block: "start" }), 300);
-      }
-    }
-  })();
 })();
 
 /* ==========================================================
@@ -912,7 +902,7 @@ console.log(
      - Dark slate surfaces, rounded cards
      - Cover page → form data pages → verification page
    ========================================================== */
-      
+
 /* ----------------------------------------------------------
    Self-healing loader for the two CDN libraries.
    If the <script> tags in <head>/<body> failed to load
@@ -1027,8 +1017,7 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   let qrImage = null;
   if (qrAvailable) {
     try {
-      const qrPdfUrl = `https://hanumanbhakti.github.io/CampusOne/frontend/register-institution/?ref=${referenceId}#trackRequestCard`;
-      const qrDataUrl = await window.QRCode.toDataURL(qrPdfUrl, {
+      const qrDataUrl = await window.QRCode.toDataURL(trackingUrl, {
         width: 300,
         margin: 1,
         color: { dark: "#0F172A", light: "#FFFFFF" }
@@ -1039,18 +1028,6 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
       console.warn("QR code generation failed — continuing without it:", err);
       qrImage = null;
     }
-  }
-
-  // ---- Fetch brand logo from project assets ----
-  let brandLogoImage = null;
-  try {
-    const logoResp = await fetch("/CampusOne/assets/logo-icon.png");
-    if (logoResp.ok) {
-      const logoBytes = await logoResp.arrayBuffer();
-      brandLogoImage = await pdfDoc.embedPng(logoBytes);
-    }
-  } catch (err) {
-    console.warn("Logo fetch failed, using text fallback:", err);
   }
 
   /* ---------------------------------------------------
@@ -1127,28 +1104,21 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   // Full gradient header band
   drawGradientBar(cover, 0, PAGE_H - 230, PAGE_W, 230);
 
-  // Watermark (drawn first so content sits on top)
-  drawWatermark(cover);
+  // Logo badge (circle) with "CO" mark — placeholder brand mark
+  cover.drawCircle({
+    x: MARGIN + 28, y: PAGE_H - 70, size: 28,
+    color: WHITE
+  });
+  cover.drawText("CO", {
+    x: MARGIN + 14, y: PAGE_H - 78, size: 20, font: fontBold, color: BRAND_PRIMARY
+  });
 
-  // Brand logo — real PNG or fallback CO badge
-  if (brandLogoImage) {
-    const logoDims = brandLogoImage.scaleToFit(52, 52);
-    cover.drawImage(brandLogoImage, {
-      x: MARGIN, y: PAGE_H - 80,
-      width: logoDims.width, height: logoDims.height
-    });
-    cover.drawText("CampusOne", {
-      x: MARGIN + 62, y: PAGE_H - 64, size: 22, font: fontBold, color: WHITE
-    });
-    cover.drawText("Digital Campus Management Platform", {
-      x: MARGIN + 62, y: PAGE_H - 82, size: 10, font: fontRegular, color: WHITE
-    });
-  } else {
-    cover.drawCircle({ x: MARGIN + 28, y: PAGE_H - 70, size: 28, color: WHITE });
-    cover.drawText("CO", { x: MARGIN + 14, y: PAGE_H - 78, size: 20, font: fontBold, color: BRAND_PRIMARY });
-    cover.drawText("CampusOne", { x: MARGIN + 68, y: PAGE_H - 78, size: 22, font: fontBold, color: WHITE });
-    cover.drawText("Digital Campus Management Platform", { x: MARGIN + 68, y: PAGE_H - 96, size: 10, font: fontRegular, color: WHITE });
-  }
+  cover.drawText("CampusOne", {
+    x: MARGIN + 68, y: PAGE_H - 78, size: 22, font: fontBold, color: WHITE
+  });
+  cover.drawText("Digital Campus Management Platform", {
+    x: MARGIN + 68, y: PAGE_H - 96, size: 10, font: fontRegular, color: WHITE
+  });
 
   cover.drawText("Institution Registration Application", {
     x: MARGIN, y: PAGE_H - 165, size: 24, font: fontBold, color: WHITE
@@ -1198,44 +1168,9 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   cover.drawText("Location", { x: MARGIN + 20 + (colW + 10) * 2, y: cardY + 28, size: 8, font: fontBold, color: MUTED });
   cover.drawText(`${payload.location.city || "—"}, ${payload.location.state || "—"}`, { x: MARGIN + 20 + (colW + 10) * 2, y: cardY + 12, size: 11, font: fontRegular, color: SLATE });
 
-  // ---- Institution Profile Summary Dashboard ----
-  const summaryCardY = PAGE_H - 620;
-  const summaryH = 160;
-  drawRoundedCard(cover, MARGIN, summaryCardY, PAGE_W - MARGIN * 2, summaryH, CARD_BG, LINE);
-
-  // Header row of summary card
-  cover.drawText("INSTITUTION PROFILE", {
-    x: MARGIN + 20, y: summaryCardY + summaryH - 22, size: 9, font: fontBold, color: BRAND_PRIMARY
-  });
-  cover.drawLine({
-    start: { x: MARGIN + 20, y: summaryCardY + summaryH - 30 },
-    end:   { x: PAGE_W - MARGIN - 20, y: summaryCardY + summaryH - 30 },
-    thickness: 0.5, color: LINE
-  });
-
-  // Two-column summary grid
-  const sumColW = (PAGE_W - MARGIN * 2 - 40) / 2;
-  const sumItems = [
-    ["Institution Type", payload.institution.type ? payload.institution.type.charAt(0).toUpperCase() + payload.institution.type.slice(1) : "—"],
-    ["Location", `${payload.location.city || "—"}, ${payload.location.state || "—"}`],
-    ["Student Strength", payload.strength.students ? String(payload.strength.students) : "—"],
-    ["Faculty Strength", payload.strength.faculty ? String(payload.strength.faculty) : "—"],
-    ["Academic Session", payload.academicSession || "—"],
-    ["Application Status", "Pending Review"]
-  ];
-
-  sumItems.forEach((item, idx) => {
-    const col = idx % 2;
-    const row = Math.floor(idx / 2);
-    const sx = MARGIN + 20 + col * (sumColW + 10);
-    const sy = summaryCardY + summaryH - 55 - row * 36;
-    cover.drawText(item[0].toUpperCase(), { x: sx, y: sy, size: 7.5, font: fontBold, color: MUTED });
-    cover.drawText(item[1], { x: sx, y: sy - 14, size: 11, font: idx === 5 ? fontBold : fontRegular, color: idx === 5 ? AMBER : INK });
-  });
-
   // Tagline footer block
   cover.drawLine({ start: { x: MARGIN, y: 130 }, end: { x: PAGE_W - MARGIN, y: 130 }, thickness: 1, color: LINE });
-  cover.drawText("\u201CDigital Campus Management Platform\u201D", {
+  cover.drawText(""Digital Campus Management Platform"", {
     x: MARGIN, y: 100, size: 11, font: fontRegular, color: MUTED
   });
   cover.drawText("This document is a system-generated official copy of an institution onboarding", {
@@ -1252,7 +1187,6 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
 
   function newDataPage(pageNumber) {
     const page = pdfDoc.addPage([PAGE_W, PAGE_H]);
-    drawWatermark(page);
     drawGradientBar(page, 0, PAGE_H - 6, PAGE_W, 6);
     page.drawText("Institution Registration Application", {
       x: MARGIN, y: PAGE_H - 40, size: 13, font: fontBold, color: INK
@@ -1260,14 +1194,6 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
     page.drawText(referenceId, {
       x: PAGE_W - MARGIN - fontRegular.widthOfTextAtSize(referenceId, 9), y: PAGE_H - 38, size: 9, font: fontRegular, color: MUTED
     });
-    // Small logo top-right corner on data pages
-    if (brandLogoImage) {
-      const ldims = brandLogoImage.scaleToFit(22, 22);
-      page.drawImage(brandLogoImage, {
-        x: PAGE_W - MARGIN - ldims.width, y: PAGE_H - 28,
-        width: ldims.width, height: ldims.height
-      });
-    }
     footer(page, `Page ${pageNumber}`);
     return page;
   }
@@ -1287,7 +1213,7 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   }
 
   function drawSectionHeading(title) {
-    ensureSpace(40 + rowH * 2);
+    ensureSpace(40);
     drawGradientBar(page, MARGIN, cursorY - 4, 4, 18);
     page.drawText(title, { x: MARGIN + 14, y: cursorY, size: 13, font: fontBold, color: INK });
     cursorY -= 26;
@@ -1298,10 +1224,10 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
     const colWidth = contentW / pairs.length;
     pairs.forEach((pair, i) => {
       const x = MARGIN + i * colWidth;
-      page.drawText(pair.label.toUpperCase(), { x, y: cursorY, size: 8.5, font: fontBold, color: MUTED });
-      const valueLines = wrapText(pair.value || "—", fontRegular, 11.5, colWidth - 10);
+      page.drawText(pair.label.toUpperCase(), { x, y: cursorY, size: 7.5, font: fontBold, color: MUTED });
+      const valueLines = wrapText(pair.value || "—", fontRegular, 10.5, colWidth - 10);
       valueLines.slice(0, 2).forEach((line, li) => {
-        page.drawText(line, { x, y: cursorY - 15 - li * 13, size: 11.5, font: fontRegular, color: INK });
+        page.drawText(line, { x, y: cursorY - 15 - li * 13, size: 10.5, font: fontRegular, color: INK });
       });
     });
     cursorY -= rowH;
@@ -1309,27 +1235,6 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
 
   function drawDivider() {
     page.drawLine({ start: { x: MARGIN, y: cursorY + 8 }, end: { x: PAGE_W - MARGIN, y: cursorY + 8 }, thickness: 0.5, color: LINE });
-  }
-
-  function drawWatermark(pg) {
-    const wmColor = rgb(0.90, 0.93, 0.97); // very light blue-grey
-    const line1 = "CAMPUSONE";
-    const line2 = "DIGITAL CAMPUS PLATFORM";
-    const sz1 = 38, sz2 = 16;
-    const cx = PAGE_W / 2;
-    const cy = PAGE_H / 2;
-    // Diagonal rotation via manual x/y offset approximation
-    // pdf-lib supports rotation on text via `rotate` option
-    pg.drawText(line1, {
-      x: cx - fontBold.widthOfTextAtSize(line1, sz1) / 2,
-      y: cy + 20, size: sz1, font: fontBold, color: wmColor,
-      opacity: 0.12, rotate: { type: "degrees", angle: 35 }
-    });
-    pg.drawText(line2, {
-      x: cx - fontRegular.widthOfTextAtSize(line2, sz2) / 2,
-      y: cy - 30, size: sz2, font: fontRegular, color: wmColor,
-      opacity: 0.10, rotate: { type: "degrees", angle: 35 }
-    });
   }
 
   // Section: Institution Identity
@@ -1374,10 +1279,10 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   drawSectionHeading("Modules of Interest & Referral");
   const moduleLabels = (payload.interest.modules || []).join(", ") || "None selected";
   ensureSpace(40);
-  page.drawText("SELECTED MODULES", { x: MARGIN, y: cursorY, size: 8.5, font: fontBold, color: MUTED });
+  page.drawText("SELECTED MODULES", { x: MARGIN, y: cursorY, size: 7.5, font: fontBold, color: MUTED });
   const moduleLines = wrapText(moduleLabels, fontRegular, 10.5, contentW);
   moduleLines.forEach((line, li) => {
-    page.drawText(line, { x: MARGIN, y: cursorY - 15 - li * 13, size: 11.5, font: fontRegular, color: INK });
+    page.drawText(line, { x: MARGIN, y: cursorY - 15 - li * 13, size: 10.5, font: fontRegular, color: INK });
   });
   cursorY -= 15 + moduleLines.length * 13 + 10;
   drawFieldRow([
@@ -1389,10 +1294,10 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   // Section: Location
   drawSectionHeading("Location");
   ensureSpace(40);
-  page.drawText("FULL ADDRESS", { x: MARGIN, y: cursorY, size: 8.5, font: fontBold, color: MUTED });
+  page.drawText("FULL ADDRESS", { x: MARGIN, y: cursorY, size: 7.5, font: fontBold, color: MUTED });
   const addressLines = wrapText(payload.location.address || "—", fontRegular, 10.5, contentW);
   addressLines.forEach((line, li) => {
-    page.drawText(line, { x: MARGIN, y: cursorY - 15 - li * 13, size: 11.5, font: fontRegular, color: INK });
+    page.drawText(line, { x: MARGIN, y: cursorY - 15 - li * 13, size: 10.5, font: fontRegular, color: INK });
   });
   cursorY -= 15 + addressLines.length * 13 + 10;
   drawFieldRow([
@@ -1412,56 +1317,9 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
     { label: "GST Number", value: payload.compliance.gstNumber },
     { label: "PAN Number", value: payload.compliance.panNumber }
   ]);
-  // ---- Consent Details Block (premium redesign) ----
-  ensureSpace(200);
-  const consentCardY = cursorY - 170;
-  drawRoundedCard(page, MARGIN, consentCardY, contentW, 170, CARD_BG, LINE);
-
-  page.drawText("CONSENT & DECLARATIONS", {
-    x: MARGIN + 20, y: consentCardY + 150, size: 9, font: fontBold, color: BRAND_PRIMARY
-  });
-  page.drawLine({
-    start: { x: MARGIN + 20, y: consentCardY + 140 },
-    end:   { x: PAGE_W - MARGIN - 20, y: consentCardY + 140 },
-    thickness: 0.5, color: LINE
-  });
-
-  const consentItems = [
-    "Privacy Policy Accepted",
-    "Terms & Conditions Accepted",
-    "Data Processing Consent Accepted",
-    "Communication Consent Accepted"
-  ];
-  const consentAccepted = payload.consent;
-  consentItems.forEach((item, i) => {
-    const cy2 = consentCardY + 118 - i * 24;
-    // Checkmark circle
-    page.drawCircle({ x: MARGIN + 32, y: cy2 + 5, size: 7, color: consentAccepted ? SUCCESS : MUTED });
-    page.drawText(consentAccepted ? "\u2713" : "\u2715", {
-      x: MARGIN + 27, y: cy2 + 1, size: 8, font: fontBold, color: WHITE
-    });
-    page.drawText(item, { x: MARGIN + 48, y: cy2, size: 10.5, font: fontRegular, color: INK });
-  });
-
-  // Accepted On timestamp
-  const consentDateStr = submittedDate.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
-  page.drawText("Accepted On:", {
-    x: MARGIN + 20, y: consentCardY + 14, size: 8, font: fontBold, color: MUTED
-  });
-  page.drawText(consentDateStr, {
-    x: MARGIN + 90, y: consentCardY + 14, size: 8.5, font: fontBold, color: INK
-  });
-
-  cursorY = consentCardY - 14;
-
-  // Legal paragraph
-  const legalText = "By submitting this application, the applicant institution confirms that all provided information is accurate and complete, and agrees to abide by CampusOne\'s Terms of Service and Privacy Policy. CampusOne reserves the right to verify the information provided and may reject applications that contain inaccurate or misleading details.";
-  const legalLines = wrapText(legalText, fontRegular, 8, contentW);
-  ensureSpace(legalLines.length * 11 + 10);
-  legalLines.forEach((line, li) => {
-    page.drawText(line, { x: MARGIN, y: cursorY - li * 11, size: 8, font: fontRegular, color: MUTED });
-  });
-  cursorY -= legalLines.length * 11 + 20;
+  drawFieldRow([
+    { label: "Terms & Privacy Consent", value: payload.consent ? "Accepted" : "Not Accepted" }
+  ]);
 
   /* =====================================================
      FINAL PAGE — VERIFICATION
@@ -1535,31 +1393,6 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   }
 
   vy -= 240;
-
-  // ---- Digital Verification Badge ----
-  const badgeY2 = vy - 70;
-  const SHIELD_COLOR = rgb(0x05 / 255, 0x96 / 255, 0x69 / 255); // success green
-  const SHIELD_BG = rgb(0xEC / 255, 0xFD / 255, 0xF5 / 255);
-  drawRoundedCard(verifyPage, MARGIN, badgeY2, contentW, 60, SHIELD_BG, SHIELD_COLOR);
-
-  // Shield icon (simple rectangle approximation)
-  verifyPage.drawRectangle({
-    x: MARGIN + 20, y: badgeY2 + 16, width: 22, height: 28,
-    color: SHIELD_COLOR, borderColor: SHIELD_COLOR, borderWidth: 0
-  });
-  verifyPage.drawText("\u2713", { x: MARGIN + 24, y: badgeY2 + 24, size: 18, font: fontBold, color: WHITE });
-
-  verifyPage.drawText("DIGITALLY VERIFIED", {
-    x: MARGIN + 54, y: badgeY2 + 38, size: 11, font: fontBold, color: SHIELD_COLOR
-  });
-  verifyPage.drawText("Generated by CampusOne Automated Onboarding System  \u2022  Tamper-Evident Reference: " + referenceId, {
-    x: MARGIN + 54, y: badgeY2 + 22, size: 7.5, font: fontRegular, color: SHIELD_COLOR
-  });
-  verifyPage.drawText("This document is cryptographically bound to the submitted data and is valid only in unmodified form.", {
-    x: MARGIN + 54, y: badgeY2 + 10, size: 7, font: fontRegular, color: SHIELD_COLOR
-  });
-
-  vy = badgeY2 - 20;
   verifyPage.drawLine({ start: { x: MARGIN, y: vy }, end: { x: PAGE_W - MARGIN, y: vy }, thickness: 0.75, color: LINE });
   vy -= 24;
   verifyPage.drawText("This is a system-generated document and does not require a physical signature.", {
@@ -1582,5 +1415,4 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
-
 

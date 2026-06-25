@@ -592,7 +592,7 @@ console.log(
      submission date, tracking link + QR + copy button.
   ---------------------------------------------------- */
 
-  const TRACK_BASE_URL = "https://campusone.app/track/";
+  const TRACK_BASE_URL = "https://hanumanbhakti.github.io/CampusOne/frontend/register-institution/?ref=";
 
   function formatSubmittedOn(date) {
     return date.toLocaleDateString("en-IN", {
@@ -620,38 +620,34 @@ console.log(
 
     const trackingLinkEl = document.getElementById("successTrackingLink");
     if (trackingLinkEl) {
-      trackingLinkEl.textContent = trackingUrl.replace("https://", "");
+      trackingLinkEl.textContent = "campusone.app/track — Ref: " + referenceId;
     }
 
     const openTrackingBtn = document.getElementById("successOpenTrackingBtn");
     if (openTrackingBtn) {
-      // No live external tracking page exists yet — for now this
-      // routes to the on-page "Track Your Registration Request"
-      // card and pre-fills the Reference ID for the user.
-      openTrackingBtn.href = "#trackRequestCard";
-      openTrackingBtn.removeAttribute("target");
-      openTrackingBtn.removeAttribute("rel");
-      openTrackingBtn.onclick = (e) => {
-        e.preventDefault();
-        const trackCard = document.getElementById("trackRequestCard");
-        const refIdField = document.getElementById("trackReferenceId");
-        if (refIdField) refIdField.value = referenceId;
-        if (trackCard) trackCard.scrollIntoView({ behavior: "smooth", block: "start" });
-      };
+      openTrackingBtn.href = `https://hanumanbhakti.github.io/CampusOne/frontend/register-institution/?ref=${referenceId}#trackRequestCard`;
+      openTrackingBtn.target = "_blank";
+      openTrackingBtn.rel = "noopener noreferrer";
+      openTrackingBtn.onclick = null;
     }
 
     // QR code — renders to canvas via the QRCode CDN library.
     // Self-heals if the library failed to load initially.
     const qrCanvas = document.getElementById("successQrCanvas");
     if (qrCanvas) {
+      const qrTrackUrl = `https://hanumanbhakti.github.io/CampusOne/frontend/register-institution/?ref=${referenceId}#trackRequestCard`;
       ensureGlobal("QRCode")
         .then(() => {
-          window.QRCode.toCanvas(qrCanvas, trackingUrl, {
-            width: 96,
-            margin: 1,
+          window.QRCode.toCanvas(qrCanvas, qrTrackUrl, {
+            width: 120,
+            margin: 2,
             color: { dark: "#0F172A", light: "#FFFFFF" }
           }, (err) => {
-            if (err) console.error("QR render failed:", err);
+            if (err) {
+              console.error("QR render failed:", err);
+              const wrap = qrCanvas.closest(".success-qr-wrap");
+              if (wrap) wrap.hidden = true;
+            }
           });
         })
         .catch((err) => {
@@ -892,6 +888,22 @@ console.log(
       }
     });
   }
+
+  // Auto-prefill Reference ID from URL param ?ref=XXXX
+  // Used when user arrives via the tracking link from success screen.
+  (function prefillFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const refFromUrl = params.get("ref");
+    if (refFromUrl) {
+      const refIdField = document.getElementById("trackReferenceId");
+      if (refIdField) refIdField.value = refFromUrl.trim();
+      // Scroll to track card smoothly
+      const trackCard = document.getElementById("trackRequestCard");
+      if (trackCard) {
+        setTimeout(() => trackCard.scrollIntoView({ behavior: "smooth", block: "start" }), 300);
+      }
+    }
+  })();
 })();
 
 /* ==========================================================

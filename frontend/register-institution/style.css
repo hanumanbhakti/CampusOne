@@ -1404,6 +1404,9 @@ html[data-theme="light"] .theme-switch{
 .menu-toggle{
   display:none;
 
+  align-items:center;
+  justify-content:center;
+
   width:48px;
   height:48px;
 
@@ -1422,6 +1425,15 @@ html[data-theme="light"] .theme-switch{
   font-weight:700;
 
   transition:.3s ease;
+}
+
+.menu-toggle-icon{
+  width:22px;
+  height:22px;
+
+  object-fit:contain;
+
+  pointer-events:none;
 }
 
 .menu-toggle:hover{
@@ -1568,6 +1580,105 @@ html[data-theme="light"] .theme-switch{
 
 .drawer-footer{
   margin-top:auto;
+}
+
+/* Drawer Auth Row (Sign Up / Sign In) */
+
+.drawer-auth-row{
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:10px;
+
+  margin-bottom:24px;
+}
+
+.drawer-auth-link{
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  height:48px;
+
+  border-radius:14px;
+
+  text-decoration:none;
+
+  font-size:.88rem;
+  font-weight:700;
+
+  transition:.25s ease;
+}
+
+.drawer-auth-signup{
+
+  background:var(--gradient);
+
+  color:white;
+}
+
+.drawer-auth-signup:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(37,99,235,.3);
+}
+
+.drawer-auth-signin{
+
+  background:rgba(255,255,255,.05);
+
+  border:1px solid rgba(255,255,255,.1);
+
+  color:var(--text);
+}
+
+.drawer-auth-signin:hover{
+  background:rgba(255,255,255,.08);
+}
+
+/* Drawer Social Icons */
+
+.drawer-social{
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.drawer-social-icon{
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  width:40px;
+  height:40px;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.05);
+
+  border:1px solid rgba(255,255,255,.08);
+
+  color:var(--text-muted);
+
+  transition:.25s ease;
+}
+
+.drawer-social-icon svg{
+  width:18px;
+  height:18px;
+}
+
+.drawer-social-icon:hover{
+  color:white;
+
+  background:var(--gradient);
+
+  border-color:transparent;
+
+  transform:translateY(-2px);
 }
 
 /* Mobile Header */

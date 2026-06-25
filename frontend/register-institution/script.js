@@ -524,8 +524,8 @@ import {
         // Client-side ISO strings are kept here only as a
         // safe fallback for environments without the SDK.
         // ----------------------------------------------
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp()
+         createdAt: new Date().toISOString(),
+         updatedAt: new Date().toISOString()
       }
     };
     // Note: institutionLogo (File) is sent separately via
@@ -557,7 +557,9 @@ import {
 
     if (!allValid) return;
 
-    const payload = buildPayload();
+const payload = buildPayload();
+    payload.meta.createdAt = serverTimestamp();
+    payload.meta.updatedAt = serverTimestamp();
     const submitBtn = form.querySelector(".submit-btn");
 
     submissionLock = true;

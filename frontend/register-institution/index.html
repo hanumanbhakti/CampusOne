@@ -1,1 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Register Institution • CampusOne</title>
+
+  <meta name="description"
+        content="Onboard your college, university, school, coaching institute or training center onto CampusOne — a multi-tenant educational ERP and digital campus platform.">
+
+  <link rel="icon" href="../../assets/favicon.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+  <!-- ========================= -->
+  <!-- ENVIRONMENT CANVAS -->
+  <!-- ========================= -->
+
+  <div class="env-viewport">
+
+    <div class="aurora-layer">
+      <div class="aurora-band aurora-band-1"></div>
+      <div class="aurora-band aurora-band-2"></div>
+      <div class="aurora-band aurora-band-3"></div>
+    </div>
+
+    <div class="particle-field">
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+      <div class="star-particle"></div>
+    </div>
+
+    <div class="grid-mesh-layer"></div>
+
+    <div class="blur-matrix-orbs">
+      <div class="orb node-primary-glowing"></div>
+      <div class="orb node-secondary-glowing"></div>
+      <div class="orb node-accent-glowing"></div>
+    </div>
+
+    <div class="beam-lines-layer">
+      <div class="beam-line beam-line-1"></div>
+      <div class="beam-line beam-line-2"></div>
+      <div class="beam-line beam-line-3"></div>
+    </div>
+
+    <div class="mesh-overlay-gradient"></div>
+
+  </div>
+
+  <!-- ========================= -->
+  <!-- HEADER -->
+  <!-- ========================= -->
+
+  <header class="registration-header">
+
+    <a href="/" class="brand-anchor">
+
+      <img
+        src="../../assets/logo-full.png"
+        alt="CampusOne"
+        class="header-logo">
+
+    </a>
+
+    <div class="header-actions">
+
+      <div class="theme-switch" id="themeSwitch" role="group" aria-label="Theme">
+
+        <button type="button" class="theme-option" data-theme-option="system" aria-pressed="false" aria-label="System theme">
+          <svg class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="13" rx="2"/>
+            <path d="M8 21h8M12 17v4"/>
+          </svg>
+          <span class="theme-option-label">System</span>
+        </button>
+
+        <button type="button" class="theme-option" data-theme-option="light" aria-pressed="false" aria-label="Light theme">
+          <svg class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.2"/>
+            <path d="M12 2.5v2.3M12 19.2v2.3M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/>
+          </svg>
+          <span class="theme-option-label">Light</span>
+        </button>
+
+        <button type="button" class="theme-option" data-theme-option="dark" aria-pressed="false" aria-label="Dark theme">
+          <svg class="theme-icon" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+            <path d="M20.8 14.6A8.6 8.6 0 0 1 9.4 3.2a.7.7 0 0 0-.8-1A10 10 0 1 0 21.8 15.4a.7.7 0 0 0-1-.8Z"/>
+          </svg>
+          <span class="theme-option-label">Dark</span>
+        </button>
+
+      </div>
+
+      <a href="../login-screen/" class="header-link">
+        Sign In
+      </a>
+
+      <a href="../auth/signup/" class="header-cta">
+        Sign Up
+      </a>
+
+      <button
+        type="button"
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Open menu"
+        aria-controls="mobileDrawer"
+        aria-expanded="false">
+
+        <img
+          src="../../assets/menu-icon.png"
+          alt=""
+          class="menu-toggle-icon">
+
+      </button>
+
+    </div>
+
+  </header>
+
+  <!-- ========================= -->
+  <!-- MOBILE DRAWER -->
+  <!-- ========================= -->
+
+  <div
+    class="drawer-overlay"
+    id="drawerOverlay">
+  </div>
+
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+
+    <div class="drawer-header">
+
+      <div class="drawer-brand">
+
+        <img
+          src="../../assets/logo-full.png"
+          alt="CampusOne"
+          class="drawer-logo">
+
+        <span class="drawer-tagline">
+          Enterprise Education Platform
+        </span>
+
+      </div>
+
+      <button
+        type="button"
+        class="drawer-close"
+        id="drawerClose"
+        aria-label="Close menu">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <div class="drawer-scroll">
+
+      <!-- PRIMARY ACTIONS -->
+
+      <div class="drawer-auth-row">
+
+        <a href="../login-screen/" class="drawer-auth-link drawer-auth-signin">
+          Sign In
+        </a>
+
+        <a href="../auth/signup/" class="drawer-auth-link drawer-auth-signup">
+          Sign Up
+        </a>
+
+      </div>
+
+      <!-- INFORMATION LINKS -->
+
+      <div class="drawer-section">
+
+        <span class="drawer-section-label">Information</span>
+
+        <nav class="drawer-nav">
+
+          <a href="../about/">About</a>
+
+          <a href="../contact/">Contact</a>
+
+          <a href="../privacy/">Privacy Policy</a>
+
+          <a href="../terms/">Terms of Service</a>
+
+        </nav>
+
+      </div>
+
+      <!-- ONBOARDING LINKS -->
+
+      <div class="drawer-section">
+
+        <span class="drawer-section-label">Onboarding</span>
+
+        <nav class="drawer-nav">
+
+          <a href="../register-institution/">Register Institution</a>
+
+          <a href="../how-it-works/">How CampusOne Works</a>
+
+        </nav>
+
+      </div>
+
+      <!-- SOCIAL SECTION -->
+
+      <div class="drawer-section">
+
+        <span class="drawer-section-label">Connect With CampusOne</span>
+
+        <div class="drawer-social" aria-label="Social media links">
+
+          <a href="https://linkedin.com/" target="_blank" rel="noopener" class="drawer-social-icon" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6.5 0H14v1.8h.06c.55-1 1.9-2.06 3.9-2.06 4.17 0 4.94 2.75 4.94 6.32V21h-4v-5.4c0-1.29-.02-2.96-1.8-2.96-1.8 0-2.08 1.41-2.08 2.86V21h-4V9Z"/>
+            </svg>
+            <span>LinkedIn</span>
+          </a>
+
+          <a href="https://github.com/" target="_blank" rel="noopener" class="drawer-social-icon" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2a10 10 0 0 0-3.16 19.5c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.36 1.08 2.93.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.84-2.35 4.69-4.58 4.94.36.31.68.92.68 1.85v2.75c0 .26.18.57.69.48A10 10 0 0 0 12 2Z"/>
+            </svg>
+            <span>GitHub</span>
+          </a>
+
+          <a href="https://twitter.com/" target="_blank" rel="noopener" class="drawer-social-icon" aria-label="X (Twitter)">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.9 2H22l-7.6 8.7L23 22h-6.9l-5.4-7-6.2 7H1.3l8.1-9.3L1 2h7l4.9 6.4L18.9 2Zm-2.4 18h1.9L7.6 4H5.6l10.9 16Z"/>
+            </svg>
+            <span>X</span>
+          </a>
+
+          <a href="https://youtube.com/" target="_blank" rel="noopener" class="drawer-social-icon" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M21.6 7.2a2.7 2.7 0 0 0-1.9-1.9C18 4.8 12 4.8 12 4.8s-6 0-7.7.5a2.7 2.7 0 0 0-1.9 1.9C2 8.9 2 12 2 12s0 3.1.4 4.8a2.7 2.7 0 0 0 1.9 1.9c1.7.5 7.7.5 7.7.5s6 0 7.7-.5a2.7 2.7 0 0 0 1.9-1.9c.4-1.7.4-4.8.4-4.8s0-3.1-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z"/>
+            </svg>
+            <span>YouTube</span>
+          </a>
+
+          <a href="https://instagram.com/" target="_blank" rel="noopener" class="drawer-social-icon" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/>
+            </svg>
+            <span>Instagram</span>
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <div class="drawer-footer">
+
+      <span class="drawer-footer-version">Version 1.0.0</span>
+      <span class="drawer-footer-tagline">Enterprise Education Platform</span>
+      <span class="drawer-footer-copyright">© 2026 CampusOne. All Rights Reserved.</span>
+
+    </div>
+
+  </aside>
+  <!-- ========================= -->
+  <!-- MAIN -->
+  <!-- ========================= -->
+
+  <main class="registration-shell">
+
+    <!-- LEFT SIDE -->
+
+    <section class="hero-column">
+
+      <div class="hero-badge">
+        Multi-Tenant Educational ERP
+      </div>
+
+      <h1 class="hero-title">
+
+        Built For Every Kind Of
+
+        <span>
+          Educational Institution
+        </span>
+
+      </h1>
+
+      <p class="hero-description">
+
+        Colleges, universities, schools, coaching
+        institutes, training centers, polytechnics,
+        ITIs and more — one platform for academic
+        operations, attendance, communication,
+        administration and the full student lifecycle.
+
+      </p>
+
+      <!-- BENEFITS -->
+
+      <div class="hero-benefits">
+
+        <div class="benefit-item">
+          <div class="benefit-icon" data-icon="tenant"></div>
+          <span>Multi-Tenant Architecture</span>
+        </div>
+
+        <div class="benefit-item">
+          <div class="benefit-icon" data-icon="shield"></div>
+          <span>Enterprise Security</span>
+        </div>
+
+        <div class="benefit-item">
+          <div class="benefit-icon" data-icon="cloud"></div>
+          <span>Cloud Native Infrastructure</span>
+        </div>
+
+        <div class="benefit-item">
+          <div class="benefit-icon" data-icon="pulse"></div>
+          <span>Real-Time Operations</span>
+        </div>
+
+      </div>
+
+      <!-- STATS -->
+
+      <div class="hero-stats">
+
+        <article class="stat-card">
+          <h3>99.9%</h3>
+          <p>Platform Availability</p>
+        </article>
+
+        <article class="stat-card">
+          <h3>Multi-Tenant</h3>
+          <p>Architecture</p>
+        </article>
+
+        <article class="stat-card">
+          <h3>Cloud Native</h3>
+          <p>Infrastructure</p>
+        </article>
+
+      </div>
+
+    </section>
+
+    <!-- RIGHT SIDE -->
+
+    <section class="form-column">
+
+      <div class="registration-card">
+
+        <div class="card-top">
+
+          <div class="card-badge">
+            Institution Onboarding
+          </div>
+
+          <h2>
+            Register Your Institution
+          </h2>
+
+          <p>
+            Tell us about your institution. Our team
+            will verify your request and set up your
+            dedicated digital campus.
+          </p>
+
+        </div>
+
+        <!-- PROGRESS -->
+
+        <div class="form-progress" id="formProgress">
+
+          <div class="progress-step is-active" data-step="1">
+            <span class="progress-dot">1</span>
+            <span class="progress-label">Institution</span>
+          </div>
+
+          <div class="progress-step" data-step="2">
+            <span class="progress-dot">2</span>
+            <span class="progress-label">Contact</span>
+          </div>
+
+          <div class="progress-step" data-step="3">
+            <span class="progress-dot">3</span>
+            <span class="progress-label">Profile</span>
+          </div>
+
+          <div class="progress-step" data-step="4">
+            <span class="progress-dot">4</span>
+            <span class="progress-label">Location</span>
+          </div>
+
+          <div class="progress-step" data-step="5">
+            <span class="progress-dot">5</span>
+            <span class="progress-label">Compliance</span>
+          </div>
+
+          <div class="progress-step" data-step="6">
+            <span class="progress-dot">6</span>
+            <span class="progress-label">Review</span>
+          </div>
+
+        </div>
+
+        <form
+          id="institutionRegistrationForm"
+          class="registration-form"
+          novalidate>
+
+          <!-- ================================================ -->
+          <!-- STEP 1 — INSTITUTION IDENTITY -->
+          <!-- ================================================ -->
+
+          <fieldset class="form-step is-active" data-step="1">
+
+            <legend class="step-legend">Institution Identity</legend>
+
+            <div class="input-group">
+
+              <label for="institutionName">
+                Institution Name <span class="req">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="institutionName"
+                name="institutionName"
+                placeholder="e.g. ABC Institute of Technology"
+                autocomplete="organization"
+                required>
+
+              <span class="field-error" data-error-for="institutionName"></span>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="institutionType">
+                  Institution Type <span class="req">*</span>
+                </label>
+
+                <div class="select-wrap">
+                  <select id="institutionType" name="institutionType" required>
+                    <option value="" disabled selected>Select type</option>
+                    <option value="college">College</option>
+                    <option value="university">University</option>
+                    <option value="school">School</option>
+                    <option value="coaching">Coaching Institute</option>
+                    <option value="training-center">Training Center</option>
+                    <option value="polytechnic">Polytechnic</option>
+                    <option value="iti">ITI</option>
+                    <option value="nursing">Nursing College</option>
+                    <option value="management">Management Institute</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <span class="field-error" data-error-for="institutionType"></span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="institutionCategory">
+                  Institution Category <span class="req">*</span>
+                </label>
+
+                <div class="select-wrap">
+                  <select id="institutionCategory" name="institutionCategory" required>
+                    <option value="" disabled selected>Select category</option>
+                    <option value="government">Government</option>
+                    <option value="private">Private</option>
+                    <option value="semi-government">Semi-Government</option>
+                    <option value="autonomous">Autonomous</option>
+                  </select>
+                </div>
+
+                <span class="field-error" data-error-for="institutionCategory"></span>
+
+              </div>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="institutionCode">
+                  Institution Code
+                </label>
+
+                <input
+                  type="text"
+                  id="institutionCode"
+                  name="institutionCode"
+                  placeholder="e.g. AICTE/UGC assigned code">
+
+                <span class="field-hint">Optional — official code, if already assigned</span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="establishmentYear">
+                  Establishment Year <span class="req">*</span>
+                </label>
+
+                <input
+                  type="number"
+                  id="establishmentYear"
+                  name="establishmentYear"
+                  placeholder="e.g. 2005"
+                  min="1800"
+                  max="2026"
+                  required>
+
+                <span class="field-error" data-error-for="establishmentYear"></span>
+
+              </div>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="universityAffiliation">
+                University / Board Affiliation
+              </label>
+
+              <input
+                type="text"
+                id="universityAffiliation"
+                name="universityAffiliation"
+                placeholder="e.g. Affiliated to XYZ University (optional)">
+
+              <span class="field-hint">Leave blank if not applicable</span>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="institutionLogo">
+                Institution Logo
+              </label>
+
+              <div class="file-drop" id="logoDrop">
+                <input
+                  type="file"
+                  id="institutionLogo"
+                  name="institutionLogo"
+                  accept="image/png,image/jpeg,image/svg+xml"
+                  class="file-input">
+                <div class="file-drop-inner">
+                  <span class="file-drop-title">Upload logo</span>
+                  <span class="file-drop-hint">PNG, JPG or SVG — up to 2MB</span>
+                </div>
+                <span class="file-drop-filename" id="logoFilename"></span>
+              </div>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-next" data-next>
+                Continue
+              </button>
+            </div>
+
+          </fieldset>
+
+          <!-- ================================================ -->
+          <!-- STEP 2 — CONTACT & STRENGTH -->
+          <!-- ================================================ -->
+
+          <fieldset class="form-step" data-step="2">
+
+            <legend class="step-legend">Contact &amp; Strength</legend>
+
+            <div class="input-group">
+
+              <label for="principalName">
+                Principal / Director Name <span class="req">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="principalName"
+                name="principalName"
+                placeholder="e.g. Rajesh Sharma"
+                autocomplete="name"
+                required>
+
+              <span class="field-error" data-error-for="principalName"></span>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="email">
+                  Official Email Address <span class="req">*</span>
+                </label>
+
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="admin@institution.edu"
+                  autocomplete="email"
+                  required>
+
+                <span class="field-error" data-error-for="email"></span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="mobile">
+                  Official Mobile Number <span class="req">*</span>
+                </label>
+
+                <input
+                  type="tel"
+                  id="mobile"
+                  name="mobile"
+                  placeholder="+91 XXXXX XXXXX"
+                  autocomplete="tel"
+                  required>
+
+                <span class="field-error" data-error-for="mobile"></span>
+
+              </div>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="website">
+                Institution Website
+              </label>
+
+              <input
+                type="url"
+                id="website"
+                name="website"
+                placeholder="https://www.institution.edu"
+                autocomplete="url">
+
+              <span class="field-error" data-error-for="website"></span>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="studentStrength">
+                  Student Strength <span class="req">*</span>
+                </label>
+
+                <input
+                  type="number"
+                  id="studentStrength"
+                  name="studentStrength"
+                  placeholder="e.g. 2500"
+                  min="1"
+                  required>
+
+                <span class="field-error" data-error-for="studentStrength"></span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="facultyStrength">
+                  Faculty Strength <span class="req">*</span>
+                </label>
+
+                <input
+                  type="number"
+                  id="facultyStrength"
+                  name="facultyStrength"
+                  placeholder="e.g. 120"
+                  min="1"
+                  required>
+
+                <span class="field-error" data-error-for="facultyStrength"></span>
+
+              </div>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="institutionSize">
+                  Institution Size <span class="req">*</span>
+                </label>
+
+                <div class="select-wrap">
+                  <select id="institutionSize" name="institutionSize" required>
+                    <option value="" disabled selected>Select size</option>
+                    <option value="1-500">1 – 500</option>
+                    <option value="501-2000">501 – 2,000</option>
+                    <option value="2001-5000">2,001 – 5,000</option>
+                    <option value="5000+">5,000+</option>
+                  </select>
+                </div>
+
+                <span class="field-error" data-error-for="institutionSize"></span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="academicSession">
+                  Current Academic Session <span class="req">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  id="academicSession"
+                  name="academicSession"
+                  placeholder="e.g. 2026–2027"
+                  required>
+
+                <span class="field-error" data-error-for="academicSession"></span>
+
+              </div>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-back" data-back>
+                Back
+              </button>
+              <button type="button" class="btn-next" data-next>
+                Continue
+              </button>
+            </div>
+
+          </fieldset>
+
+          <!-- ================================================ -->
+          <!-- STEP 3 — PROFILE (MODULES & REFERRAL) -->
+          <!-- ================================================ -->
+
+          <fieldset class="form-step" data-step="3">
+
+            <legend class="step-legend">Tell Us What You Need</legend>
+
+            <div class="input-group">
+
+              <label>
+                Which modules are you interested in?
+              </label>
+
+              <div class="checkbox-grid" id="modulesGrid">
+
+                <label class="chip-checkbox">
+                  <input type="checkbox" name="modules" value="attendance">
+                  <span>Attendance</span>
+                </label>
+
+                <label class="chip-checkbox">
+                  <input type="checkbox" name="modules" value="student-management">
+                  <span>Student Management</span>
+                </label>
+
+                <label class="chip-checkbox">
+                  <input type="checkbox" name="modules" value="faculty-management">
+                  <span>Faculty Management</span>
+                </label>
+
+                <label class="chip-checkbox">
+                  <input type="checkbox" name="modules" value="notice-board">
+                  <span>Notice Board</span>
+                </label>
+
+                <label class="chip-checkbox">
+                  <input type="checkbox" name="modules" value="examination">
+                  <span>Examination</span>
+                </label>
+
+                <label class="chip-checkbox">
+                  <input type="checkbox" name="modules" value="fees">
+                  <span>Fees</span>
+                </label>
+
+                <label class="chip-checkbox">
+                  <input type="checkbox" name="modules" value="library">
+                  <span>Library</span>
+                </label>
+
+                <label class="chip-checkbox">
+                  <input type="checkbox" name="modules" value="hostel">
+                  <span>Hostel</span>
+                </label>
+
+                <label class="chip-checkbox">
+                  <input type="checkbox" name="modules" value="transport">
+                  <span>Transport</span>
+                </label>
+
+                <label class="chip-checkbox">
+                  <input type="checkbox" name="modules" value="placements">
+                  <span>Placements</span>
+                </label>
+
+              </div>
+
+              <span class="field-hint">Optional — select all that apply</span>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="referralSource">
+                How did you hear about CampusOne?
+              </label>
+
+              <div class="select-wrap">
+                <select id="referralSource" name="referralSource">
+                  <option value="" disabled selected>Select an option</option>
+                  <option value="google">Google</option>
+                  <option value="social-media">Social Media</option>
+                  <option value="referral">Referral</option>
+                  <option value="conference">Conference</option>
+                  <option value="friend">Friend</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <span class="field-hint">Optional — helps us improve outreach</span>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-back" data-back>
+                Back
+              </button>
+              <button type="button" class="btn-next" data-next>
+                Continue
+              </button>
+            </div>
+
+          </fieldset>
+
+          <!-- ================================================ -->
+          <!-- STEP 4 — LOCATION -->
+          <!-- ================================================ -->
+
+          <fieldset class="form-step" data-step="4">
+
+            <legend class="step-legend">Location</legend>
+
+            <div class="input-group">
+
+              <label for="address">
+                Full Address <span class="req">*</span>
+              </label>
+
+              <textarea
+                id="address"
+                name="address"
+                placeholder="Building, street, area"
+                autocomplete="street-address"
+                required></textarea>
+
+              <span class="field-error" data-error-for="address"></span>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="city">
+                  City <span class="req">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  placeholder="e.g. Pune"
+                  autocomplete="address-level2"
+                  required>
+
+                <span class="field-error" data-error-for="city"></span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="state">
+                  State <span class="req">*</span>
+                </label>
+
+                <div class="select-wrap">
+                  <select id="state" name="state" autocomplete="address-level1" required>
+                    <option value="" disabled selected>Select state</option>
+                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Bihar">Bihar</option>
+                    <option value="Chandigarh">Chandigarh</option>
+                    <option value="Chhattisgarh">Chhattisgarh</option>
+                    <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Ladakh">Ladakh</option>
+                    <option value="Lakshadweep">Lakshadweep</option>
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Mizoram">Mizoram</option>
+                    <option value="Nagaland">Nagaland</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Puducherry">Puducherry</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Sikkim">Sikkim</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Tripura">Tripura</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Other">Other / Outside India</option>
+                  </select>
+                </div>
+
+                <span class="field-error" data-error-for="state"></span>
+
+              </div>
+
+            </div>
+
+            <div class="input-group">
+
+              <label for="country">
+                Country <span class="req">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="country"
+                name="country"
+                placeholder="e.g. India"
+                autocomplete="country-name"
+                value="India"
+                required>
+
+              <span class="field-error" data-error-for="country"></span>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-back" data-back>
+                Back
+              </button>
+              <button type="button" class="btn-next" data-next>
+                Continue
+              </button>
+            </div>
+
+          </fieldset>
+
+          <!-- ================================================ -->
+          <!-- STEP 5 — COMPLIANCE -->
+          <!-- ================================================ -->
+
+          <fieldset class="form-step" data-step="5">
+
+            <legend class="step-legend">Compliance &amp; Recognition</legend>
+
+            <div class="input-group">
+
+              <label for="accreditation">
+                Accreditation / Recognition
+              </label>
+
+              <input
+                type="text"
+                id="accreditation"
+                name="accreditation"
+                placeholder="e.g. NAAC, AICTE, UGC, CBSE, ICSE, State Board">
+
+              <span class="field-hint">Comma-separate if more than one applies</span>
+
+            </div>
+
+            <div class="input-row">
+
+              <div class="input-group">
+
+                <label for="gstNumber">
+                  GST Number
+                </label>
+
+                <input
+                  type="text"
+                  id="gstNumber"
+                  name="gstNumber"
+                  placeholder="22AAAAA0000A1Z5">
+
+                <span class="field-hint">Optional</span>
+
+              </div>
+
+              <div class="input-group">
+
+                <label for="panNumber">
+                  PAN Number
+                </label>
+
+                <input
+                  type="text"
+                  id="panNumber"
+                  name="panNumber"
+                  placeholder="AAAAA0000A">
+
+                <span class="field-hint">Optional</span>
+
+              </div>
+
+            </div>
+
+            <div class="consent-group">
+
+              <label class="checkbox-row" for="consent">
+
+                <input
+                  type="checkbox"
+                  id="consent"
+                  name="consent"
+                  required>
+
+                <span class="checkbox-box"></span>
+
+                <span class="checkbox-text">
+                  I confirm the details above are accurate and I am
+                  authorized to register this institution on behalf
+                  of the organization. I agree to CampusOne's
+                  <a href="/terms" target="_blank">Terms of Service</a>
+                  and
+                  <a href="/privacy" target="_blank">Privacy Policy</a>.
+                </span>
+
+              </label>
+
+              <span class="field-error" data-error-for="consent"></span>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-back" data-back>
+                Back
+              </button>
+              <button
+                type="button"
+                class="btn-next"
+                data-next>
+
+                Continue to Review
+
+              </button>
+            </div>
+
+          </fieldset>
+
+          <!-- ================================================ -->
+          <!-- STEP 6 — REVIEW & CONFIRM -->
+          <!-- ================================================ -->
+
+          <fieldset class="form-step" data-step="6">
+
+            <legend class="step-legend">Review &amp; Confirm</legend>
+
+            <p class="review-intro">
+              Please review your application before submitting.
+              Use Edit to correct any section.
+            </p>
+
+            <div class="review-section" data-review-section="1">
+
+              <div class="review-section-head">
+                <h4>Institution Identity</h4>
+                <button type="button" class="review-edit-btn" data-edit-step="1">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                  </svg>
+                  Edit
+                </button>
+              </div>
+
+              <div class="review-logo-row" id="reviewLogoRow" hidden>
+                <img id="reviewLogoPreview" class="review-logo-preview" alt="Institution logo preview">
+              </div>
+
+              <dl class="review-grid">
+                <div><dt>Institution Name</dt><dd data-review="institutionName">—</dd></div>
+                <div><dt>Type</dt><dd data-review="institutionType">—</dd></div>
+                <div><dt>Category</dt><dd data-review="institutionCategory">—</dd></div>
+                <div><dt>Institution Code</dt><dd data-review="institutionCode">—</dd></div>
+                <div><dt>Establishment Year</dt><dd data-review="establishmentYear">—</dd></div>
+                <div><dt>University / Board Affiliation</dt><dd data-review="universityAffiliation">—</dd></div>
+              </dl>
+
+            </div>
+
+            <div class="review-section" data-review-section="2">
+
+              <div class="review-section-head">
+                <h4>Contact &amp; Strength</h4>
+                <button type="button" class="review-edit-btn" data-edit-step="2">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                  </svg>
+                  Edit
+                </button>
+              </div>
+
+              <dl class="review-grid">
+                <div><dt>Principal / Director</dt><dd data-review="principalName">—</dd></div>
+                <div><dt>Official Email</dt><dd data-review="email">—</dd></div>
+                <div><dt>Official Mobile</dt><dd data-review="mobile">—</dd></div>
+                <div><dt>Website</dt><dd data-review="website">—</dd></div>
+                <div><dt>Student Strength</dt><dd data-review="studentStrength">—</dd></div>
+                <div><dt>Faculty Strength</dt><dd data-review="facultyStrength">—</dd></div>
+                <div><dt>Institution Size</dt><dd data-review="institutionSize">—</dd></div>
+                <div><dt>Academic Session</dt><dd data-review="academicSession">—</dd></div>
+              </dl>
+
+            </div>
+
+            <div class="review-section" data-review-section="3">
+
+              <div class="review-section-head">
+                <h4>Modules &amp; Referral</h4>
+                <button type="button" class="review-edit-btn" data-edit-step="3">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                  </svg>
+                  Edit
+                </button>
+              </div>
+
+              <div class="review-chip-row" id="reviewModules"></div>
+
+              <dl class="review-grid">
+                <div><dt>How You Heard About Us</dt><dd data-review="referralSource">—</dd></div>
+              </dl>
+
+            </div>
+
+            <div class="review-section" data-review-section="4">
+
+              <div class="review-section-head">
+                <h4>Location</h4>
+                <button type="button" class="review-edit-btn" data-edit-step="4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                  </svg>
+                  Edit
+                </button>
+              </div>
+
+              <dl class="review-grid">
+                <div class="review-grid-full"><dt>Address</dt><dd data-review="address">—</dd></div>
+                <div><dt>City</dt><dd data-review="city">—</dd></div>
+                <div><dt>State</dt><dd data-review="state">—</dd></div>
+                <div><dt>Country</dt><dd data-review="country">—</dd></div>
+              </dl>
+
+            </div>
+
+            <div class="review-section" data-review-section="5">
+
+              <div class="review-section-head">
+                <h4>Compliance &amp; Recognition</h4>
+                <button type="button" class="review-edit-btn" data-edit-step="5">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                  </svg>
+                  Edit
+                </button>
+              </div>
+
+              <dl class="review-grid">
+                <div><dt>Accreditation / Recognition</dt><dd data-review="accreditation">—</dd></div>
+                <div><dt>GST Number</dt><dd data-review="gstNumber">—</dd></div>
+                <div><dt>PAN Number</dt><dd data-review="panNumber">—</dd></div>
+              </dl>
+
+              <div class="review-consent-status" id="reviewConsentStatus">
+                <span class="review-consent-icon" id="reviewConsentIcon"></span>
+                <span id="reviewConsentText">Terms &amp; Privacy Policy not yet accepted</span>
+              </div>
+
+            </div>
+
+            <div class="review-timeline-card">
+
+              <div class="review-timeline-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M12 7v5l3.5 2"/>
+                </svg>
+              </div>
+
+              <div class="review-timeline-text">
+                <span class="review-timeline-label">Estimated Onboarding Timeline</span>
+                <span class="review-timeline-value">Review within 24–72 hours after submission</span>
+              </div>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-back" data-back>
+                Back to Edit
+              </button>
+              <button
+                type="submit"
+                class="submit-btn">
+
+                Submit Application
+
+              </button>
+            </div>
+
+          </fieldset>
+
+        </form>
+
+        <!-- SUCCESS STATE -->
+
+        <div class="submission-success" id="submissionSuccess" hidden>
+
+          <div class="success-hero-card">
+
+            <div class="success-hero-glow"></div>
+
+            <div class="success-hero-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5"/>
+              </svg>
+            </div>
+
+            <span class="success-hero-emoji" aria-hidden="true">🎉</span>
+
+            <h3>Application Received</h3>
+
+            <p class="success-hero-sub">
+              Your institution registration request has been
+              submitted to CampusOne for review.
+            </p>
+
+            <div class="success-status-pill" id="successStatusPill">
+              <span class="status-dot"></span>
+              Pending Review
+            </div>
+
+            <dl class="success-detail-grid">
+
+              <div>
+                <dt>Reference ID</dt>
+                <dd id="referenceId">—</dd>
+              </div>
+
+              <div>
+                <dt>Institution</dt>
+                <dd id="successInstitutionName">—</dd>
+              </div>
+
+              <div>
+                <dt>Expected Review Time</dt>
+                <dd>24 – 72 Hours</dd>
+              </div>
+
+              <div>
+                <dt>Submitted On</dt>
+                <dd id="successSubmittedOn">—</dd>
+              </div>
+
+            </dl>
+
+          </div>
+
+          <!-- TRACKING LINK -->
+
+          <div class="success-track-card">
+
+            <div class="success-track-head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="m20 20-3.5-3.5"/>
+              </svg>
+              <span>Track Application</span>
+            </div>
+
+            <div class="success-track-body">
+
+              <div class="success-track-link-row">
+
+                <code id="successTrackingLink">campusone.app/track/—</code>
+
+                <button type="button" class="success-copy-btn" id="successCopyBtn">
+                  Copy
+                </button>
+
+              </div>
+
+              <div class="success-track-actions">
+
+                <a href="#trackRequestCard" id="successOpenTrackingBtn" class="success-track-open-btn">
+                  Open Tracking Page
+                </a>
+
+                <div class="success-qr-wrap">
+                  <canvas id="successQrCanvas" width="96" height="96"></canvas>
+                  <span>Scan to track</span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <button type="button" class="success-pdf-btn" id="downloadPdfBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3v12m0 0-4-4m4 4 4-4"/>
+              <path d="M5 17v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"/>
+            </svg>
+            Download Official Application Copy (PDF)
+          </button>
+
+          <a href="#trackRequestCard" class="track-another-link" id="trackAnotherLink">
+            Track another request
+          </a>
+
+        </div>
+
+        <div class="trust-strip">
+
+          <span>Secure Registration</span>
+          <span>Institution Ready</span>
+          <span>Fast Onboarding</span>
+
+        </div>
+
+      </div>
+
+      <!-- ========================= -->
+      <!-- TRACK REQUEST CARD -->
+      <!-- ========================= -->
+
+      <div class="track-request-card" id="trackRequestCard">
+
+        <div class="track-card-header">
+
+          <h3>Track Your Registration Request</h3>
+
+          <p>
+            Already submitted a request? Enter your Reference ID
+            and the official email used during registration to
+            check its current status.
+          </p>
+
+        </div>
+
+        <form id="trackRequestForm" class="track-request-form" novalidate>
+
+          <div class="input-group">
+
+            <label for="trackReferenceId">
+              Reference ID *
+            </label>
+
+            <input
+              type="text"
+              id="trackReferenceId"
+              name="trackReferenceId"
+              placeholder="e.g. nCRVFMRcavPM5nL0hiy0"
+              autocomplete="off"
+              required>
+
+            <span class="field-error" data-error-for="trackReferenceId"></span>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="trackEmail">
+              Official Email Address *
+            </label>
+
+            <input
+              type="email"
+              id="trackEmail"
+              name="trackEmail"
+              placeholder="you@institution.edu"
+              autocomplete="off"
+              required>
+
+            <span class="field-error" data-error-for="trackEmail"></span>
+
+          </div>
+
+          <button type="submit" class="track-submit-btn" id="trackSubmitBtn">
+            Check Status
+          </button>
+
+        </form>
+
+        <div class="track-result" id="trackResult" hidden></div>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+  <!-- ========================= -->
+  <!-- HOW CAMPUSONE WORKS -->
+  <!-- ========================= -->
+
+  <section class="how-it-works">
+
+    <div class="how-it-works-inner">
+
+      <div class="section-heading">
+
+        <div class="section-badge">
+          How It Works
+        </div>
+
+        <h2>
+          How CampusOne Works
+        </h2>
+
+        <p>
+          From registration to a fully live digital campus —
+          here's what happens after you submit your request.
+        </p>
+
+      </div>
+
+      <div class="how-it-works-grid">
+
+        <article class="how-step-card">
+
+          <span class="how-step-number">01</span>
+
+          <h3>Register</h3>
+
+          <p>
+            Submit your institution's details through our
+            guided onboarding form.
+          </p>
+
+        </article>
+
+        <article class="how-step-card">
+
+          <span class="how-step-number">02</span>
+
+          <h3>Verify</h3>
+
+          <p>
+            Our Super Admin team reviews and verifies your
+            request for authenticity.
+          </p>
+
+        </article>
+
+        <article class="how-step-card">
+
+          <span class="how-step-number">03</span>
+
+          <h3>Provision</h3>
+
+          <p>
+            A dedicated tenant and primary administrator
+            account are created for your institution.
+          </p>
+
+        </article>
+
+        <article class="how-step-card">
+
+          <span class="how-step-number">04</span>
+
+          <h3>Go Live</h3>
+
+          <p>
+            Configure your digital campus and start
+            onboarding students and faculty.
+          </p>
+
+        </article>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ========================= -->
+  <!-- TRUST SECTION -->
+  <!-- ========================= -->
+
+  <section class="trust-section">
+
+    <div class="trust-section-inner">
+
+      <div class="section-heading">
+
+        <div class="section-badge">
+          Why Institutions Trust Us
+        </div>
+
+        <h2>
+          Built On Enterprise-Grade Foundations
+        </h2>
+
+      </div>
+
+      <div class="trust-grid">
+
+        <article class="trust-card">
+
+          <div class="trust-card-icon" data-icon="security"></div>
+
+          <h3>Enterprise Security</h3>
+
+          <p>
+            End-to-end encryption and secure infrastructure
+            protecting every institution's data.
+          </p>
+
+        </article>
+
+        <article class="trust-card">
+
+          <div class="trust-card-icon" data-icon="rbac"></div>
+
+          <h3>Role Based Access</h3>
+
+          <p>
+            Granular permissions for admins, faculty, and
+            students — no one sees more than they should.
+          </p>
+
+        </article>
+
+        <article class="trust-card">
+
+          <div class="trust-card-icon" data-icon="cloud"></div>
+
+          <h3>Cloud Infrastructure</h3>
+
+          <p>
+            Built on resilient cloud infrastructure designed
+            for uptime and scale.
+          </p>
+
+        </article>
+
+        <article class="trust-card">
+
+          <div class="trust-card-icon" data-icon="tenant"></div>
+
+          <h3>Multi-Tenant Isolation</h3>
+
+          <p>
+            Every institution's data is fully isolated within
+            its own secure tenant.
+          </p>
+
+        </article>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ========================= -->
+  <!-- CTA STRIP -->
+  <!-- ========================= -->
+
+  <section class="footer-cta-strip">
+
+    <div class="footer-cta-glow"></div>
+
+    <div class="footer-cta-card">
+
+      <div class="footer-cta-inner">
+
+        <div class="footer-cta-text">
+          <h2>Ready To <span class="cta-highlight">Modernize</span> Your Institution?</h2>
+          <p>Join CampusOne and build your digital campus today.</p>
+        </div>
+
+        <a href="#institutionRegistrationForm" class="footer-cta-button">
+          <span>Register Institution</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
+
+      </div>
+
+    </div>
+
+    <svg class="footer-cta-wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,90 L0,90 Z"></path>
+    </svg>
+
+  </section>
+
+  <!-- ========================= -->
+  <!-- FOOTER -->
+  <!-- ========================= -->
+
+  <footer class="site-footer">
+
+    <div class="site-footer-inner">
+
+      <!-- BRAND -->
+
+      <div class="footer-brand-block">
+
+        <img
+          src="../../assets/logo-full.png"
+          alt="CampusOne"
+          class="footer-logo">
+
+        <p class="footer-brand-tagline">Enterprise Education Platform</p>
+
+        <p class="footer-brand-desc">
+          Transforming educational institutions through modern
+          digital infrastructure — built for <span class="footer-highlight">colleges, universities,
+          schools, coaching institutes</span> and modern educational
+          organizations.
+        </p>
+
+      </div>
+
+      <!-- LINK COLUMNS -->
+
+      <div class="footer-columns">
+
+        <nav class="footer-col" aria-label="Product">
+          <span class="footer-col-title">Product</span>
+          <a href="../features/">Features</a>
+          <a href="../institutions/">Institutions</a>
+          <a href="../pricing/">Pricing</a>
+          <a href="../security/">Security</a>
+        </nav>
+
+        <nav class="footer-col" aria-label="Company">
+          <span class="footer-col-title">Company</span>
+          <a href="../about/">About</a>
+          <a href="../contact/">Contact</a>
+          <a href="../careers/">Careers</a>
+          <a href="../partners/">Partners</a>
+        </nav>
+
+        <nav class="footer-col" aria-label="Resources">
+          <span class="footer-col-title">Resources</span>
+          <a href="../docs/">Documentation</a>
+          <a href="../help/">Help Center</a>
+          <a href="../status/">Status</a>
+          <a href="../roadmap/">Roadmap</a>
+        </nav>
+
+      </div>
+
+      <!-- DOWNLOAD + SOCIAL -->
+
+      <div class="footer-distribution-block">
+
+        <div class="footer-download">
+
+          <span class="footer-col-title">Download CampusOne</span>
+
+          <div class="footer-store-badges">
+
+            <span class="store-badge store-badge-disabled" aria-disabled="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 20.5V3.5c0-.4.2-.8.6-1l9.9 9.5-9.9 9.5c-.4-.2-.6-.6-.6-1ZM14.6 12.9l2.5 2.4-9.2 5.3 6.7-7.7Zm3.6-.7 3.1 1.8c.7.4.7 1.4 0 1.8l-3.1 1.8-2.8-2.7 2.8-2.7Zm-3.6-.4-6.7-7.7 9.2 5.3-2.5 2.4Z"/></svg>
+              <span>
+                <small>Coming Soon</small>
+                Google Play
+              </span>
+            </span>
+
+            <span class="store-badge store-badge-disabled" aria-disabled="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.2 1.2-3.6 2.4-4.4-1-1.4-2.6-2.2-4-2.2-1.1 0-2.4.7-3.2.7-.8 0-2-.7-3.3-.7-2.5 0-5.2 2.2-5.2 6.3 0 1.6.3 3.3 1 4.7.6 1.4 1.8 3.5 3.2 3.4 1 0 1.6-.7 2.9-.7 1.3 0 1.7.7 2.9.7 1.4 0 2.4-1.7 3.1-3.1.5-.9.9-2 1.2-3.1-1.5-.6-2.9-2.2-3-3.6Zm-2.7-7.8c.6-.8 1-1.9.9-3-1 0-2.1.6-2.8 1.4-.6.7-1 1.8-.9 2.9 1.1.1 2.2-.5 2.8-1.3Z"/></svg>
+              <span>
+                <small>Coming Soon</small>
+                App Store
+              </span>
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="footer-social">
+
+          <span class="footer-col-title">Connect With CampusOne</span>
+
+          <div class="footer-social-icons" aria-label="Social media links">
+
+            <a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <img src="../../assets/social/linkedin.png" alt="LinkedIn" class="social-icon-img">
+            </a>
+
+            <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub">
+              <img src="../../assets/social/github.png" alt="GitHub" class="social-icon-img">
+            </a>
+
+            <a href="https://twitter.com/" target="_blank" rel="noopener" aria-label="X (Twitter)">
+              <img src="../../assets/social/twitter.png" alt="X (Twitter)" class="social-icon-img">
+            </a>
+
+            <a href="https://youtube.com/" target="_blank" rel="noopener" aria-label="YouTube">
+              <img src="../../assets/social/youtube.png" alt="YouTube" class="social-icon-img">
+            </a>
+
+            <a href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
+              <img src="../../assets/social/instagram.png" alt="Instagram" class="social-icon-img">
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- LEGAL -->
+
+    <div class="footer-legal-bar">
+      <a href="../privacy/">Privacy Policy</a>
+      <a href="../terms/">Terms of Service</a>
+      <a href="../cookies/">Cookie Policy</a>
+      <a href="../data-protection/">Data Protection</a>
+    </div>
+
+    <!-- BOTTOM BAR -->
+
+    <div class="footer-bottom-bar">
+      <span>© 2026 CampusOne. All Rights Reserved.</span>
+      <span class="footer-bottom-divider" aria-hidden="true">•</span>
+      <span>Enterprise Education Platform</span>
+      <span class="footer-bottom-divider" aria-hidden="true">•</span>
+      <span>Version 1.0.0</span>
+    </div>
+
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script type="module" src="script.js"></script>
+
+</body>
+</html>

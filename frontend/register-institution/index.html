@@ -76,21 +76,7 @@
 
     </a>
 
-<div class="header-actions">
-
-  <div class="theme-switch">
-    ...
-  </div>
-
-  <a href="../login-screen/" class="header-link">
-    Sign In
-  </a>
-
-  <button class="menu-toggle" id="menuToggle">
-    ☰
-  </button>
-
-</div>
+    <div class="header-actions">
 
       <div class="theme-switch" id="themeSwitch" role="group" aria-label="Theme">
 
@@ -115,31 +101,68 @@
         Sign In
       </a>
 
+      <button
+        type="button"
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Open menu"
+        aria-controls="mobileDrawer"
+        aria-expanded="false">
+
+        ☰
+
+      </button>
+
     </div>
 
   </header>
-  
-<!-- Mobile Drawer -->
 
-<aside class="mobile-drawer" id="mobileDrawer">
+  <!-- ========================= -->
+  <!-- MOBILE DRAWER -->
+  <!-- ========================= -->
 
-  <nav class="drawer-nav">
-
-    <a href="../login-screen/">Sign In</a>
-    <a href="../auth/signup/">Sign Up</a>
-    <a href="../about/">About</a>
-    <a href="../contact/">Contact</a>
-
-  </nav>
-
-  <div class="drawer-footer">
-
-    <!-- Social Icons -->
-
+  <div
+    class="drawer-overlay"
+    id="drawerOverlay">
   </div>
 
-</aside>
-  
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+
+    <div class="drawer-header">
+
+      <div class="drawer-title">
+        CampusOne
+      </div>
+
+      <button
+        type="button"
+        class="drawer-close"
+        id="drawerClose"
+        aria-label="Close menu">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <nav class="drawer-nav">
+
+      <a href="../login-screen/">Sign In</a>
+
+      <a href="../auth/signup/">Sign Up</a>
+
+      <a href="../about/">About</a>
+
+      <a href="../contact/">Contact</a>
+
+    </nav>
+
+    <div class="drawer-footer">
+
+    </div>
+
+  </aside>
   <!-- ========================= -->
   <!-- MAIN -->
   <!-- ========================= -->

@@ -459,15 +459,50 @@
   goToStep(1);
 })();
 
-const menuToggle =
-document.getElementById("menuToggle");
+/* ----------------------------------------------------------
+   MOBILE DRAWER
+   ---------------------------------------------------------- */
 
-const mobileDrawer =
-document.getElementById("mobileDrawer");
+(function () {
+  "use strict";
 
-menuToggle?.addEventListener(
-  "click",
-  () => {
-    mobileDrawer.classList.toggle("open");
+  const menuToggle = document.getElementById("menuToggle");
+  const mobileDrawer = document.getElementById("mobileDrawer");
+  const drawerOverlay = document.getElementById("drawerOverlay");
+  const drawerClose = document.getElementById("drawerClose");
+
+  if (!menuToggle || !mobileDrawer || !drawerOverlay) return;
+
+  function openDrawer() {
+    mobileDrawer.classList.add("open");
+    drawerOverlay.classList.add("active");
+    mobileDrawer.setAttribute("aria-hidden", "false");
+    menuToggle.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
   }
-);
+
+  function closeDrawer() {
+    mobileDrawer.classList.remove("open");
+    drawerOverlay.classList.remove("active");
+    mobileDrawer.setAttribute("aria-hidden", "true");
+    menuToggle.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+
+  menuToggle.addEventListener("click", openDrawer);
+  drawerClose?.addEventListener("click", closeDrawer);
+  drawerOverlay.addEventListener("click", closeDrawer);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && mobileDrawer.classList.contains("open")) {
+      closeDrawer();
+    }
+  });
+
+  // close drawer automatically if the viewport grows back to desktop
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768 && mobileDrawer.classList.contains("open")) {
+      closeDrawer();
+    }
+  });
+})();

@@ -625,19 +625,40 @@ console.log(
 
     const openTrackingBtn = document.getElementById("successOpenTrackingBtn");
     if (openTrackingBtn) {
-      openTrackingBtn.href = trackingUrl;
+      // No live external tracking page exists yet — for now this
+      // routes to the on-page "Track Your Registration Request"
+      // card and pre-fills the Reference ID for the user.
+      openTrackingBtn.href = "#trackRequestCard";
+      openTrackingBtn.removeAttribute("target");
+      openTrackingBtn.removeAttribute("rel");
+      openTrackingBtn.onclick = (e) => {
+        e.preventDefault();
+        const trackCard = document.getElementById("trackRequestCard");
+        const refIdField = document.getElementById("trackReferenceId");
+        if (refIdField) refIdField.value = referenceId;
+        if (trackCard) trackCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
     }
 
     // QR code — renders to canvas via the QRCode CDN library.
+    // Self-heals if the library failed to load initially.
     const qrCanvas = document.getElementById("successQrCanvas");
-    if (qrCanvas && window.QRCode) {
-      window.QRCode.toCanvas(qrCanvas, trackingUrl, {
-        width: 96,
-        margin: 1,
-        color: { dark: "#0F172A", light: "#FFFFFF" }
-      }, (err) => {
-        if (err) console.error("QR render failed:", err);
-      });
+    if (qrCanvas) {
+      ensureGlobal("QRCode")
+        .then(() => {
+          window.QRCode.toCanvas(qrCanvas, trackingUrl, {
+            width: 96,
+            margin: 1,
+            color: { dark: "#0F172A", light: "#FFFFFF" }
+          }, (err) => {
+            if (err) console.error("QR render failed:", err);
+          });
+        })
+        .catch((err) => {
+          console.error("QR library unavailable:", err);
+          const wrap = qrCanvas.closest(".success-qr-wrap");
+          if (wrap) wrap.hidden = true;
+        });
     }
 
     // Copy-to-clipboard
@@ -675,7 +696,7 @@ console.log(
           });
         } catch (err) {
           console.error("PDF generation failed:", err);
-          alert("Unable to generate the PDF right now. Please try again.");
+          alert(`Unable to generate the PDF right now.\n\n${err && err.message ? err.message : "Please try again."}`);
         } finally {
           pdfBtn.disabled = false;
           pdfBtn.innerHTML = originalLabel;
@@ -882,7 +903,79 @@ console.log(
      - Cover page → form data pages → verification page
    ========================================================== */
 
+/* ----------------------------------------------------------
+   Self-healing loader for the two CDN libraries.
+   If the <script> tags in <head>/<body> failed to load
+   (slow network, blocked CDN, etc.) this re-injects them
+   on demand instead of failing the whole PDF generation.
+   ---------------------------------------------------------- */
+
+const LIB_SOURCES = {
+  PDFLib: [
+    "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js",
+    "https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"
+  ],
+  QRCode: [
+    "https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js",
+    "https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"
+  ]
+};
+
+function loadScriptOnce(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      existing.addEventListener("load", () => resolve());
+      existing.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)));
+      // If it's already loaded by the time we get here, resolve immediately.
+      if (existing.dataset.loaded === "true") resolve();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.onload = () => {
+      script.dataset.loaded = "true";
+      resolve();
+    };
+    script.onerror = () => reject(new Error(`Failed to load ${src}`));
+    document.body.appendChild(script);
+  });
+}
+
+async function ensureGlobal(globalName, withTimeoutMs = 8000) {
+  if (window[globalName]) return;
+
+  const sources = LIB_SOURCES[globalName] || [];
+  let lastError = null;
+
+  for (const src of sources) {
+    try {
+      await Promise.race([
+        loadScriptOnce(src),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error(`Timed out loading ${src}`)), withTimeoutMs)
+        )
+      ]);
+      if (window[globalName]) return;
+    } catch (err) {
+      lastError = err;
+    }
+  }
+
+  throw new Error(
+    `${globalName} could not be loaded from the CDN. Please check your internet connection and try again.` +
+    (lastError ? ` (${lastError.message})` : "")
+  );
+}
+
 async function generateApplicationPdf({ referenceId, payload, submittedDate, trackingUrl }) {
+  // Make sure both CDN libraries are actually available before
+  // doing any work — re-fetches them if the original <script>
+  // tags failed silently.
+  await ensureGlobal("PDFLib");
+  await ensureGlobal("QRCode");
+
   const { PDFDocument, rgb, StandardFonts } = window.PDFLib;
 
   const pdfDoc = await PDFDocument.create();

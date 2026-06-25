@@ -18,7 +18,7 @@ import {
   doc,
   getDoc,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 (function () {
   "use strict";

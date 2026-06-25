@@ -458,3 +458,16 @@
 
   goToStep(1);
 })();
+
+const menuToggle =
+document.getElementById("menuToggle");
+
+const mobileDrawer =
+document.getElementById("mobileDrawer");
+
+menuToggle?.addEventListener(
+  "click",
+  () => {
+    mobileDrawer.classList.toggle("open");
+  }
+);

@@ -1119,6 +1119,10 @@
 
           <div class="reference-id" id="referenceId"></div>
 
+          <a href="#trackRequestCard" class="track-another-link" id="trackAnotherLink">
+            Track another request
+          </a>
+
         </div>
 
         <div class="trust-strip">
@@ -1131,7 +1135,74 @@
 
       </div>
 
+      <!-- ========================= -->
+      <!-- TRACK REQUEST CARD -->
+      <!-- ========================= -->
+
+      <div class="track-request-card" id="trackRequestCard">
+
+        <div class="track-card-header">
+
+          <h3>Track Your Registration Request</h3>
+
+          <p>
+            Already submitted a request? Enter your Reference ID
+            and the official email used during registration to
+            check its current status.
+          </p>
+
+        </div>
+
+        <form id="trackRequestForm" class="track-request-form" novalidate>
+
+          <div class="input-group">
+
+            <label for="trackReferenceId">
+              Reference ID *
+            </label>
+
+            <input
+              type="text"
+              id="trackReferenceId"
+              name="trackReferenceId"
+              placeholder="e.g. nCRVFMRcavPM5nL0hiy0"
+              autocomplete="off"
+              required>
+
+            <span class="field-error" data-error-for="trackReferenceId"></span>
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="trackEmail">
+              Official Email Address *
+            </label>
+
+            <input
+              type="email"
+              id="trackEmail"
+              name="trackEmail"
+              placeholder="you@institution.edu"
+              autocomplete="off"
+              required>
+
+            <span class="field-error" data-error-for="trackEmail"></span>
+
+          </div>
+
+          <button type="submit" class="track-submit-btn" id="trackSubmitBtn">
+            Check Status
+          </button>
+
+        </form>
+
+        <div class="track-result" id="trackResult" hidden></div>
+
+      </div>
+
     </section>
+
 
   </main>
 

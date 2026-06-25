@@ -15,6 +15,8 @@ import {
 import {
   collection,
   addDoc,
+  doc,
+  getDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
@@ -536,4 +538,143 @@ console.log(
       closeDrawer();
     }
   });
+})();
+
+/* ----------------------------------------------------------
+   TRACK REQUEST
+   Public status lookup — Reference ID + Email must both
+   match before any status is revealed (no other identifying
+   info is shown on mismatch, to avoid leaking which field
+   was wrong).
+   ---------------------------------------------------------- */
+
+(function () {
+  "use strict";
+
+  const trackForm = document.getElementById("trackRequestForm");
+  if (!trackForm) return;
+
+  const trackResult = document.getElementById("trackResult");
+  const trackSubmitBtn = document.getElementById("trackSubmitBtn");
+  const trackAnotherLink = document.getElementById("trackAnotherLink");
+
+  const STATUS_LABELS = {
+    pending: "Pending Review",
+    under_review: "Under Review",
+    verified: "Verified",
+    approved: "Approved",
+    rejected: "Rejected",
+    tenant_created: "Tenant Created",
+    admin_created: "Admin Account Created",
+    onboarded: "Onboarded — Live"
+  };
+
+  const GENERIC_NOT_FOUND =
+    "We couldn't find a request matching those details. Please double-check your Reference ID and email.";
+
+  function showTrackError(message) {
+    trackResult.hidden = false;
+    trackResult.className = "track-result is-error";
+    trackResult.textContent = message;
+  }
+
+  function showTrackStatus(data) {
+    const statusKey = (data && data.meta && data.meta.status) || "pending";
+    const label = STATUS_LABELS[statusKey] || statusKey;
+    const institutionName = (data && data.institution && data.institution.name) || "Your institution";
+
+    trackResult.hidden = false;
+    trackResult.className = "track-result is-success";
+    trackResult.innerHTML = "";
+
+    const nameEl = document.createElement("p");
+    nameEl.className = "track-result-name";
+    nameEl.textContent = institutionName;
+
+    const statusEl = document.createElement("p");
+    statusEl.className = "track-result-status";
+    statusEl.innerHTML = `Status: <strong>${label}</strong>`;
+
+    trackResult.appendChild(nameEl);
+    trackResult.appendChild(statusEl);
+  }
+
+  trackForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const refIdField = document.getElementById("trackReferenceId");
+    const emailField = document.getElementById("trackEmail");
+    const refIdError = trackForm.querySelector('[data-error-for="trackReferenceId"]');
+    const emailError = trackForm.querySelector('[data-error-for="trackEmail"]');
+
+    const refId = refIdField.value.trim();
+    const email = emailField.value.trim().toLowerCase();
+
+    trackResult.hidden = true;
+    trackResult.textContent = "";
+
+    let hasError = false;
+
+    if (!refId) {
+      if (refIdError) refIdError.textContent = "Reference ID is required.";
+      hasError = true;
+    } else if (refIdError) {
+      refIdError.textContent = "";
+    }
+
+    if (!email) {
+      if (emailError) emailError.textContent = "Email is required.";
+      hasError = true;
+    } else if (emailError) {
+      emailError.textContent = "";
+    }
+
+    if (hasError) return;
+
+    if (trackSubmitBtn) {
+      trackSubmitBtn.disabled = true;
+      trackSubmitBtn.textContent = "Checking...";
+    }
+
+    try {
+      const snap = await getDoc(doc(db, "accessRequests", refId));
+
+      if (!snap.exists()) {
+        showTrackError(GENERIC_NOT_FOUND);
+        return;
+      }
+
+      const data = snap.data();
+      const storedEmail = ((data && data.contact && data.contact.email) || "").toLowerCase();
+
+      if (storedEmail !== email) {
+        showTrackError(GENERIC_NOT_FOUND);
+        return;
+      }
+
+      showTrackStatus(data);
+
+    } catch (err) {
+      console.error("Track request failed:", err);
+      showTrackError("Something went wrong while checking your request. Please try again.");
+    } finally {
+      if (trackSubmitBtn) {
+        trackSubmitBtn.disabled = false;
+        trackSubmitBtn.textContent = "Check Status";
+      }
+    }
+  });
+
+  // Pre-fill the Reference ID field when arriving via the success
+  // screen's "Track another request" link.
+  if (trackAnotherLink) {
+    trackAnotherLink.addEventListener("click", () => {
+      const refIdEl = document.getElementById("referenceId");
+      const refIdField = document.getElementById("trackReferenceId");
+      if (refIdField && refIdEl) {
+        const match = refIdEl.textContent.match(/Reference ID:\s*(.+)/);
+        if (match) refIdField.value = match[1].trim();
+      }
+    });
+  }
 })();

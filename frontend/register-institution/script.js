@@ -8,6 +8,16 @@
    Priority: User preference (localStorage) → System theme → Default
    Options: "system" | "light" | "dark"
    ---------------------------------------------------------- */
+import {
+  db
+} from "../shared/firebase-config.js";
+
+import {
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
 
 (function () {
   "use strict";
@@ -386,8 +396,8 @@
         // Client-side ISO strings are kept here only as a
         // safe fallback for environments without the SDK.
         // ----------------------------------------------
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
       }
     };
     // Note: institutionLogo (File) is sent separately via
@@ -438,26 +448,46 @@
       // const result = await res.json();
       // ------------------------------------------------
 
-      console.log("Institution registration payload:", payload);
+console.log(
+    "Institution registration payload:",
+    payload
+  );
 
-      const referenceId = generateReferenceId();
+  const docRef = await addDoc(
+    collection(db, "accessRequests"),
+    payload
+  );
 
-      form.hidden = true;
-      document.getElementById("formProgress").hidden = true;
-      successPanel.hidden = false;
-      referenceIdEl.textContent = `Reference ID: ${referenceId}`;
-    } catch (err) {
-      console.error(err);
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Registration Request";
-      }
-      alert("Something went wrong submitting your request. Please try again.");
+  // Firestore document ID
+  const referenceId = docRef.id;
+
+  // Success UI
+  form.hidden = true;
+
+  document.getElementById("formProgress").hidden = true;
+
+  successPanel.hidden = false;
+
+  referenceIdEl.textContent =
+    `Reference ID: ${referenceId}`;
+
+} catch (err) {
+
+  console.error(
+    "Institution registration failed:",
+    err
+  );
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.textContent =
+      "Submit Registration Request";
+  }
+
+  alert(
+    "Unable to submit your registration request. Please try again."
+  );
     }
-  });
-
-  goToStep(1);
-})();
 
 /* ----------------------------------------------------------
    MOBILE DRAWER

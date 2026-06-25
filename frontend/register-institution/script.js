@@ -114,7 +114,8 @@ import {
     2: ["principalName", "email", "mobile", "website", "studentStrength", "facultyStrength", "institutionSize", "academicSession"],
     3: [],
     4: ["address", "city", "state", "country"],
-    5: ["consent"]
+    5: ["consent"],
+    6: []
   };
 
   /* ----------------------------------------------------
@@ -232,6 +233,10 @@ import {
 
     currentStep = stepNumber;
 
+    if (stepNumber === 6) {
+      populateReviewStep();
+    }
+
     if (card) {
       card.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -250,6 +255,97 @@ import {
       goToStep(Math.max(currentStep - 1, 1));
     });
   });
+
+  form.querySelectorAll("[data-edit-step]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      goToStep(Number(btn.dataset.editStep));
+    });
+  });
+
+  /* ----------------------------------------------------
+     REVIEW STEP — populate read-only summary from
+     the live form values right before Step 6 is shown.
+  ---------------------------------------------------- */
+
+  const MODULE_LABELS = {
+    "attendance": "Attendance",
+    "student-management": "Student Management",
+    "faculty-management": "Faculty Management",
+    "notice-board": "Notice Board",
+    "examination": "Examination",
+    "fees": "Fees",
+    "library": "Library",
+    "hostel": "Hostel",
+    "transport": "Transport",
+    "placements": "Placements"
+  };
+
+  const SELECT_LABEL_FIELDS = ["institutionType", "institutionCategory", "institutionSize", "state", "referralSource"];
+
+  function getSelectLabel(name) {
+    const field = getField(name);
+    if (!field || field.tagName !== "SELECT") return null;
+    const opt = field.options[field.selectedIndex];
+    return opt ? opt.textContent.trim() : null;
+  }
+
+  function reviewValueFor(name) {
+    if (SELECT_LABEL_FIELDS.includes(name)) {
+      return getSelectLabel(name) || "—";
+    }
+    const field = getField(name);
+    if (!field) return "—";
+    const value = field.value && field.value.trim();
+    return value ? value : "—";
+  }
+
+  function populateReviewStep() {
+    form.querySelectorAll("[data-review]").forEach((dd) => {
+      const name = dd.dataset.review;
+      dd.textContent = reviewValueFor(name);
+    });
+
+    // Logo preview
+    const reviewLogoRow = document.getElementById("reviewLogoRow");
+    const reviewLogoPreview = document.getElementById("reviewLogoPreview");
+    const logoFile = logoInput && logoInput.files && logoInput.files[0];
+
+    if (logoFile && reviewLogoRow && reviewLogoPreview) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        reviewLogoPreview.src = reader.result;
+        reviewLogoRow.hidden = false;
+      };
+      reader.readAsDataURL(logoFile);
+    } else if (reviewLogoRow) {
+      reviewLogoRow.hidden = true;
+    }
+
+    // Modules as chips
+    const modulesWrap = document.getElementById("reviewModules");
+    if (modulesWrap) {
+      modulesWrap.innerHTML = "";
+      getSelectedModules().forEach((value) => {
+        const chip = document.createElement("span");
+        chip.className = "review-chip";
+        chip.textContent = MODULE_LABELS[value] || value;
+        modulesWrap.appendChild(chip);
+      });
+    }
+
+    // Consent status
+    const consentField = getField("consent");
+    const consentStatusEl = document.getElementById("reviewConsentStatus");
+    const consentTextEl = document.getElementById("reviewConsentText");
+    const isAccepted = consentField && consentField.checked;
+
+    if (consentStatusEl && consentTextEl) {
+      consentStatusEl.classList.toggle("is-pending", !isAccepted);
+      consentTextEl.textContent = isAccepted
+        ? "Terms & Privacy Policy accepted"
+        : "Terms & Privacy Policy not yet accepted — go back to Step 5";
+    }
+  }
 
   /* ----------------------------------------------------
      LIVE VALIDATION ON BLUR / INPUT
@@ -469,8 +565,7 @@ console.log(
 
   successPanel.hidden = false;
 
-  referenceIdEl.textContent =
-    `Reference ID: ${referenceId}`;
+  renderSuccessScreen(referenceId, payload);
 
 } catch (err) {
 
@@ -482,7 +577,7 @@ console.log(
   if (submitBtn) {
     submitBtn.disabled = false;
     submitBtn.textContent =
-      "Submit Registration Request";
+      "Submit Application";
   }
 
   alert(
@@ -490,7 +585,107 @@ console.log(
   );
     }
   });
+
+  /* ----------------------------------------------------
+     PREMIUM SUCCESS SCREEN
+     Renders the reference ID, status, institution name,
+     submission date, tracking link + QR + copy button.
+  ---------------------------------------------------- */
+
+  const TRACK_BASE_URL = "https://campusone.app/track/";
+
+  function formatSubmittedOn(date) {
+    return date.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+  }
+
+  function renderSuccessScreen(referenceId, payload) {
+    const submittedDate = new Date();
+    const trackingUrl = `${TRACK_BASE_URL}${referenceId}`;
+
+    referenceIdEl.textContent = referenceId;
+
+    const institutionNameEl = document.getElementById("successInstitutionName");
+    if (institutionNameEl) {
+      institutionNameEl.textContent = payload.institution.name || "—";
+    }
+
+    const submittedOnEl = document.getElementById("successSubmittedOn");
+    if (submittedOnEl) {
+      submittedOnEl.textContent = formatSubmittedOn(submittedDate);
+    }
+
+    const trackingLinkEl = document.getElementById("successTrackingLink");
+    if (trackingLinkEl) {
+      trackingLinkEl.textContent = trackingUrl.replace("https://", "");
+    }
+
+    const openTrackingBtn = document.getElementById("successOpenTrackingBtn");
+    if (openTrackingBtn) {
+      openTrackingBtn.href = trackingUrl;
+    }
+
+    // QR code — renders to canvas via the QRCode CDN library.
+    const qrCanvas = document.getElementById("successQrCanvas");
+    if (qrCanvas && window.QRCode) {
+      window.QRCode.toCanvas(qrCanvas, trackingUrl, {
+        width: 96,
+        margin: 1,
+        color: { dark: "#0F172A", light: "#FFFFFF" }
+      }, (err) => {
+        if (err) console.error("QR render failed:", err);
+      });
+    }
+
+    // Copy-to-clipboard
+    const copyBtn = document.getElementById("successCopyBtn");
+    if (copyBtn) {
+      copyBtn.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(trackingUrl);
+          copyBtn.textContent = "Copied!";
+          copyBtn.classList.add("is-copied");
+          setTimeout(() => {
+            copyBtn.textContent = "Copy";
+            copyBtn.classList.remove("is-copied");
+          }, 1800);
+        } catch (err) {
+          console.error("Copy failed:", err);
+        }
+      };
+    }
+
+    // PDF download
+    const pdfBtn = document.getElementById("downloadPdfBtn");
+    if (pdfBtn) {
+      pdfBtn.onclick = async () => {
+        pdfBtn.disabled = true;
+        const originalLabel = pdfBtn.innerHTML;
+        pdfBtn.textContent = "Generating PDF...";
+
+        try {
+          await generateApplicationPdf({
+            referenceId,
+            payload,
+            submittedDate,
+            trackingUrl
+          });
+        } catch (err) {
+          console.error("PDF generation failed:", err);
+          alert("Unable to generate the PDF right now. Please try again.");
+        } finally {
+          pdfBtn.disabled = false;
+          pdfBtn.innerHTML = originalLabel;
+        }
+      };
+    }
+  }
+
 })();
+
 
 /* ----------------------------------------------------------
    MOBILE DRAWER
@@ -671,10 +866,420 @@ console.log(
     trackAnotherLink.addEventListener("click", () => {
       const refIdEl = document.getElementById("referenceId");
       const refIdField = document.getElementById("trackReferenceId");
-      if (refIdField && refIdEl) {
-        const match = refIdEl.textContent.match(/Reference ID:\s*(.+)/);
-        if (match) refIdField.value = match[1].trim();
+      if (refIdField && refIdEl && refIdEl.textContent.trim() && refIdEl.textContent.trim() !== "—") {
+        refIdField.value = refIdEl.textContent.trim();
       }
     });
   }
 })();
+
+/* ==========================================================
+   OFFICIAL APPLICATION COPY — PDF GENERATOR
+   Built with pdf-lib (window.PDFLib) + QRCode (window.QRCode).
+   Mirrors the site's design system:
+     - CampusOne blue gradient (#2563EB → #0EA5E9)
+     - Dark slate surfaces, rounded cards
+     - Cover page → form data pages → verification page
+   ========================================================== */
+
+async function generateApplicationPdf({ referenceId, payload, submittedDate, trackingUrl }) {
+  const { PDFDocument, rgb, StandardFonts } = window.PDFLib;
+
+  const pdfDoc = await PDFDocument.create();
+  pdfDoc.setTitle(`CampusOne Institution Registration Application — ${referenceId}`);
+  pdfDoc.setAuthor("CampusOne");
+  pdfDoc.setSubject("Institution Registration Application");
+
+  const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+  // ---- Brand palette (matches style.css tokens) ----
+  const BRAND_PRIMARY = rgb(0x25 / 255, 0x63 / 255, 0xEB / 255);   // #2563EB
+  const BRAND_SECONDARY = rgb(0x0E / 255, 0xA5 / 255, 0xE9 / 255); // #0EA5E9
+  const INK = rgb(0x0F / 255, 0x17 / 255, 0x2A / 255);             // #0F172A
+  const SLATE = rgb(0x33 / 255, 0x41 / 255, 0x55 / 255);           // text-secondary
+  const MUTED = rgb(0x64 / 255, 0x74 / 255, 0x8B / 255);           // text-muted
+  const LINE = rgb(0xE2 / 255, 0xE8 / 255, 0xF0 / 255);
+  const CARD_BG = rgb(0xF8 / 255, 0xFA / 255, 0xFC / 255);
+  const WHITE = rgb(1, 1, 1);
+  const SUCCESS = rgb(0x05 / 255, 0x96 / 255, 0x69 / 255);
+  const AMBER = rgb(0xB4 / 255, 0x5B / 255, 0x09 / 255);
+  const AMBER_BG = rgb(0xFE / 255, 0xF3 / 255, 0xC7 / 255);
+
+  const PAGE_W = 595.28; // A4 pt
+  const PAGE_H = 841.89;
+  const MARGIN = 48;
+
+  // QR code as PNG data URL, shared by cover + verification page
+  const qrDataUrl = await window.QRCode.toDataURL(trackingUrl, {
+    width: 300,
+    margin: 1,
+    color: { dark: "#0F172A", light: "#FFFFFF" }
+  });
+  const qrImageBytes = await fetch(qrDataUrl).then((r) => r.arrayBuffer());
+  const qrImage = await pdfDoc.embedPng(qrImageBytes);
+
+  /* ---------------------------------------------------
+     Helper: gradient bar (approximated with N vertical
+     strips since pdf-lib has no native gradient fills)
+  --------------------------------------------------- */
+  function drawGradientBar(page, x, y, w, h) {
+    const steps = 40;
+    const stepW = w / steps;
+    for (let i = 0; i < steps; i++) {
+      const t = i / (steps - 1);
+      const r = 0x25 / 255 + t * (0x0E / 255 - 0x25 / 255);
+      const g = 0x63 / 255 + t * (0xA5 / 255 - 0x63 / 255);
+      const b = 0xEB / 255 + t * (0xE9 / 255 - 0xEB / 255);
+      page.drawRectangle({
+        x: x + i * stepW,
+        y,
+        width: stepW + 0.5,
+        height: h,
+        color: rgb(r, g, b)
+      });
+    }
+  }
+
+  function drawRoundedCard(page, x, y, w, h, fillColor, borderColor) {
+    page.drawRectangle({
+      x, y, width: w, height: h,
+      color: fillColor || CARD_BG,
+      borderColor: borderColor || LINE,
+      borderWidth: borderColor ? 1 : 0.75
+    });
+  }
+
+  function wrapText(text, font, size, maxWidth) {
+    const words = String(text).split(" ");
+    const lines = [];
+    let current = "";
+    words.forEach((word) => {
+      const test = current ? `${current} ${word}` : word;
+      if (font.widthOfTextAtSize(test, size) > maxWidth && current) {
+        lines.push(current);
+        current = word;
+      } else {
+        current = test;
+      }
+    });
+    if (current) lines.push(current);
+    return lines;
+  }
+
+  function footer(page, pageLabel) {
+    page.drawLine({
+      start: { x: MARGIN, y: 56 },
+      end: { x: PAGE_W - MARGIN, y: 56 },
+      thickness: 0.75,
+      color: LINE
+    });
+    page.drawText("CampusOne — Digital Campus Management Platform", {
+      x: MARGIN, y: 40, size: 8, font: fontRegular, color: MUTED
+    });
+    page.drawText(pageLabel, {
+      x: PAGE_W - MARGIN - fontRegular.widthOfTextAtSize(pageLabel, 8),
+      y: 40, size: 8, font: fontRegular, color: MUTED
+    });
+  }
+
+  const STATUS_LABEL = "Pending Review";
+
+  /* =====================================================
+     PAGE 1 — COVER PAGE
+  ===================================================== */
+  const cover = pdfDoc.addPage([PAGE_W, PAGE_H]);
+
+  // Full gradient header band
+  drawGradientBar(cover, 0, PAGE_H - 230, PAGE_W, 230);
+
+  // Logo badge (circle) with "CO" mark — placeholder brand mark
+  cover.drawCircle({
+    x: MARGIN + 28, y: PAGE_H - 70, size: 28,
+    color: WHITE
+  });
+  cover.drawText("CO", {
+    x: MARGIN + 14, y: PAGE_H - 78, size: 20, font: fontBold, color: BRAND_PRIMARY
+  });
+
+  cover.drawText("CampusOne", {
+    x: MARGIN + 68, y: PAGE_H - 78, size: 22, font: fontBold, color: WHITE
+  });
+  cover.drawText("Digital Campus Management Platform", {
+    x: MARGIN + 68, y: PAGE_H - 96, size: 10, font: fontRegular, color: WHITE
+  });
+
+  cover.drawText("Institution Registration Application", {
+    x: MARGIN, y: PAGE_H - 165, size: 24, font: fontBold, color: WHITE
+  });
+  cover.drawText("Official Application Copy", {
+    x: MARGIN, y: PAGE_H - 188, size: 12, font: fontRegular, color: WHITE
+  });
+
+  // Institution name block
+  const institutionName = payload.institution.name || "—";
+  cover.drawText(institutionName, {
+    x: MARGIN, y: PAGE_H - 280, size: 19, font: fontBold, color: INK
+  });
+  cover.drawText("Submitted Institution", {
+    x: MARGIN, y: PAGE_H - 298, size: 9, font: fontRegular, color: MUTED
+  });
+
+  // Status badge
+  const badgeW = fontBold.widthOfTextAtSize(STATUS_LABEL, 10) + 28;
+  drawRoundedCard(cover, MARGIN, PAGE_H - 340, badgeW, 26, AMBER_BG, null);
+  cover.drawText(STATUS_LABEL, {
+    x: MARGIN + 14, y: PAGE_H - 332, size: 10, font: fontBold, color: AMBER
+  });
+
+  // Info card: Reference ID / Submission Date / Generated By
+  const cardY = PAGE_H - 470;
+  drawRoundedCard(cover, MARGIN, cardY, PAGE_W - MARGIN * 2, 110, CARD_BG, LINE);
+
+  const colW = (PAGE_W - MARGIN * 2 - 40) / 3;
+  const infoCols = [
+    { label: "REFERENCE ID", value: referenceId },
+    { label: "SUBMISSION DATE", value: submittedDate.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) },
+    { label: "GENERATED BY", value: "CampusOne" }
+  ];
+  infoCols.forEach((col, i) => {
+    const colX = MARGIN + 20 + i * (colW + 10);
+    cover.drawText(col.label, { x: colX, y: cardY + 75, size: 8, font: fontBold, color: MUTED });
+    cover.drawText(col.value, { x: colX, y: cardY + 55, size: 11, font: fontBold, color: INK });
+  });
+
+  cover.drawText("Onboarding Type", { x: MARGIN + 20, y: cardY + 28, size: 8, font: fontBold, color: MUTED });
+  cover.drawText(payload.institution.type || "—", { x: MARGIN + 20, y: cardY + 12, size: 11, font: fontRegular, color: SLATE });
+
+  cover.drawText("Category", { x: MARGIN + 20 + colW + 10, y: cardY + 28, size: 8, font: fontBold, color: MUTED });
+  cover.drawText(payload.institution.category || "—", { x: MARGIN + 20 + colW + 10, y: cardY + 12, size: 11, font: fontRegular, color: SLATE });
+
+  cover.drawText("Location", { x: MARGIN + 20 + (colW + 10) * 2, y: cardY + 28, size: 8, font: fontBold, color: MUTED });
+  cover.drawText(`${payload.location.city || "—"}, ${payload.location.state || "—"}`, { x: MARGIN + 20 + (colW + 10) * 2, y: cardY + 12, size: 11, font: fontRegular, color: SLATE });
+
+  // Tagline footer block
+  cover.drawLine({ start: { x: MARGIN, y: 130 }, end: { x: PAGE_W - MARGIN, y: 130 }, thickness: 1, color: LINE });
+  cover.drawText("\u201CDigital Campus Management Platform\u201D", {
+    x: MARGIN, y: 100, size: 11, font: fontRegular, color: MUTED
+  });
+  cover.drawText("This document is a system-generated official copy of an institution onboarding", {
+    x: MARGIN, y: 78, size: 8.5, font: fontRegular, color: MUTED
+  });
+  cover.drawText("request submitted to CampusOne. See Page 2 onward for full submitted details.", {
+    x: MARGIN, y: 66, size: 8.5, font: fontRegular, color: MUTED
+  });
+  footer(cover, "Page 1");
+
+  /* =====================================================
+     PAGE 2+ — FORM DATA (rendered as section cards)
+  ===================================================== */
+
+  function newDataPage(pageNumber) {
+    const page = pdfDoc.addPage([PAGE_W, PAGE_H]);
+    drawGradientBar(page, 0, PAGE_H - 6, PAGE_W, 6);
+    page.drawText("Institution Registration Application", {
+      x: MARGIN, y: PAGE_H - 40, size: 13, font: fontBold, color: INK
+    });
+    page.drawText(referenceId, {
+      x: PAGE_W - MARGIN - fontRegular.widthOfTextAtSize(referenceId, 9), y: PAGE_H - 38, size: 9, font: fontRegular, color: MUTED
+    });
+    footer(page, `Page ${pageNumber}`);
+    return page;
+  }
+
+  let pageNum = 2;
+  let page = newDataPage(pageNum);
+  let cursorY = PAGE_H - 80;
+  const contentW = PAGE_W - MARGIN * 2;
+  const rowH = 34;
+
+  function ensureSpace(neededHeight) {
+    if (cursorY - neededHeight < 90) {
+      pageNum += 1;
+      page = newDataPage(pageNum);
+      cursorY = PAGE_H - 80;
+    }
+  }
+
+  function drawSectionHeading(title) {
+    ensureSpace(40);
+    drawGradientBar(page, MARGIN, cursorY - 4, 4, 18);
+    page.drawText(title, { x: MARGIN + 14, y: cursorY, size: 13, font: fontBold, color: INK });
+    cursorY -= 26;
+  }
+
+  function drawFieldRow(pairs) {
+    ensureSpace(rowH);
+    const colWidth = contentW / pairs.length;
+    pairs.forEach((pair, i) => {
+      const x = MARGIN + i * colWidth;
+      page.drawText(pair.label.toUpperCase(), { x, y: cursorY, size: 7.5, font: fontBold, color: MUTED });
+      const valueLines = wrapText(pair.value || "—", fontRegular, 10.5, colWidth - 10);
+      valueLines.slice(0, 2).forEach((line, li) => {
+        page.drawText(line, { x, y: cursorY - 15 - li * 13, size: 10.5, font: fontRegular, color: INK });
+      });
+    });
+    cursorY -= rowH;
+  }
+
+  function drawDivider() {
+    page.drawLine({ start: { x: MARGIN, y: cursorY + 8 }, end: { x: PAGE_W - MARGIN, y: cursorY + 8 }, thickness: 0.5, color: LINE });
+  }
+
+  // Section: Institution Identity
+  drawSectionHeading("Institution Identity");
+  drawFieldRow([
+    { label: "Institution Name", value: payload.institution.name },
+    { label: "Institution Type", value: payload.institution.type }
+  ]);
+  drawFieldRow([
+    { label: "Category", value: payload.institution.category },
+    { label: "Institution Code", value: payload.institution.code }
+  ]);
+  drawFieldRow([
+    { label: "Establishment Year", value: payload.institution.establishmentYear ? String(payload.institution.establishmentYear) : null },
+    { label: "University / Board Affiliation", value: payload.institution.universityAffiliation }
+  ]);
+  drawDivider();
+  cursorY -= 14;
+
+  // Section: Contact & Strength
+  drawSectionHeading("Contact & Strength");
+  drawFieldRow([
+    { label: "Principal / Director", value: payload.contact.principalName },
+    { label: "Official Email", value: payload.contact.email }
+  ]);
+  drawFieldRow([
+    { label: "Official Mobile", value: payload.contact.mobile },
+    { label: "Website", value: payload.institution.website }
+  ]);
+  drawFieldRow([
+    { label: "Student Strength", value: payload.strength.students ? String(payload.strength.students) : null },
+    { label: "Faculty Strength", value: payload.strength.faculty ? String(payload.strength.faculty) : null }
+  ]);
+  drawFieldRow([
+    { label: "Institution Size", value: payload.institution.size },
+    { label: "Academic Session", value: payload.academicSession }
+  ]);
+  drawDivider();
+  cursorY -= 14;
+
+  // Section: Modules & Referral
+  drawSectionHeading("Modules of Interest & Referral");
+  const moduleLabels = (payload.interest.modules || []).join(", ") || "None selected";
+  ensureSpace(40);
+  page.drawText("SELECTED MODULES", { x: MARGIN, y: cursorY, size: 7.5, font: fontBold, color: MUTED });
+  const moduleLines = wrapText(moduleLabels, fontRegular, 10.5, contentW);
+  moduleLines.forEach((line, li) => {
+    page.drawText(line, { x: MARGIN, y: cursorY - 15 - li * 13, size: 10.5, font: fontRegular, color: INK });
+  });
+  cursorY -= 15 + moduleLines.length * 13 + 10;
+  drawFieldRow([
+    { label: "How They Heard About CampusOne", value: payload.interest.referralSource }
+  ]);
+  drawDivider();
+  cursorY -= 14;
+
+  // Section: Location
+  drawSectionHeading("Location");
+  ensureSpace(40);
+  page.drawText("FULL ADDRESS", { x: MARGIN, y: cursorY, size: 7.5, font: fontBold, color: MUTED });
+  const addressLines = wrapText(payload.location.address || "—", fontRegular, 10.5, contentW);
+  addressLines.forEach((line, li) => {
+    page.drawText(line, { x: MARGIN, y: cursorY - 15 - li * 13, size: 10.5, font: fontRegular, color: INK });
+  });
+  cursorY -= 15 + addressLines.length * 13 + 10;
+  drawFieldRow([
+    { label: "City", value: payload.location.city },
+    { label: "State", value: payload.location.state },
+    { label: "Country", value: payload.location.country }
+  ]);
+  drawDivider();
+  cursorY -= 14;
+
+  // Section: Compliance
+  drawSectionHeading("Compliance & Recognition");
+  drawFieldRow([
+    { label: "Accreditation / Recognition", value: (payload.institution.accreditation || []).join(", ") || "—" },
+  ]);
+  drawFieldRow([
+    { label: "GST Number", value: payload.compliance.gstNumber },
+    { label: "PAN Number", value: payload.compliance.panNumber }
+  ]);
+  drawFieldRow([
+    { label: "Terms & Privacy Consent", value: payload.consent ? "Accepted" : "Not Accepted" }
+  ]);
+
+  /* =====================================================
+     FINAL PAGE — VERIFICATION
+  ===================================================== */
+  pageNum += 1;
+  const verifyPage = newDataPage(pageNum);
+  let vy = PAGE_H - 110;
+
+  verifyPage.drawText("Verification Information", {
+    x: MARGIN, y: vy, size: 16, font: fontBold, color: INK
+  });
+  vy -= 30;
+
+  drawRoundedCard(verifyPage, MARGIN, vy - 210, contentW, 210, CARD_BG, LINE);
+
+  const verifyLeftX = MARGIN + 24;
+  let vRowY = vy - 30;
+
+  const verifyRows = [
+    ["Reference ID", referenceId],
+    ["Tracking URL", trackingUrl],
+    ["Digital Timestamp", submittedDate.toISOString()],
+    ["Generated By", "CampusOne — Automated Onboarding System"],
+    ["Support Email", "support@campusone.app"],
+    ["Website", "campusone.app"]
+  ];
+
+  verifyRows.forEach(([label, value]) => {
+    verifyPage.drawText(label.toUpperCase(), { x: verifyLeftX, y: vRowY, size: 7.5, font: fontBold, color: MUTED });
+    const valueMaxWidth = contentW - 48 - (qrSize + 40);
+    const valueLines = wrapText(value, fontRegular, 10, valueMaxWidth);
+    valueLines.slice(0, 2).forEach((line, li) => {
+      verifyPage.drawText(line, { x: verifyLeftX, y: vRowY - 14 - li * 12, size: 10, font: fontRegular, color: INK });
+    });
+    vRowY -= valueLines.length > 1 ? 42 : 30;
+  });
+
+  // QR code box on the right of the verification card
+  const qrSize = 110;
+  const qrX = PAGE_W - MARGIN - qrSize - 24;
+  const qrY = vy - 150;
+  verifyPage.drawRectangle({
+    x: qrX - 8, y: qrY - 8, width: qrSize + 16, height: qrSize + 16,
+    color: WHITE, borderColor: LINE, borderWidth: 1
+  });
+  verifyPage.drawImage(qrImage, { x: qrX, y: qrY, width: qrSize, height: qrSize });
+  verifyPage.drawText("Scan to track status", {
+    x: qrX - 4, y: qrY - 24, size: 8, font: fontRegular, color: MUTED
+  });
+
+  vy -= 240;
+  verifyPage.drawLine({ start: { x: MARGIN, y: vy }, end: { x: PAGE_W - MARGIN, y: vy }, thickness: 0.75, color: LINE });
+  vy -= 24;
+  verifyPage.drawText("This is a system-generated document and does not require a physical signature.", {
+    x: MARGIN, y: vy, size: 8.5, font: fontRegular, color: MUTED
+  });
+  vy -= 14;
+  verifyPage.drawText("For queries regarding this application, contact support@campusone.app", {
+    x: MARGIN, y: vy, size: 8.5, font: fontRegular, color: MUTED
+  });
+
+  // ---- Save & trigger download ----
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `CampusOne-Application-${referenceId}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+

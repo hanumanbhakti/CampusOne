@@ -420,6 +420,11 @@
             <span class="progress-label">Compliance</span>
           </div>
 
+          <div class="progress-step" data-step="6">
+            <span class="progress-dot">6</span>
+            <span class="progress-label">Review</span>
+          </div>
+
         </div>
 
         <form
@@ -1090,10 +1095,178 @@
                 Back
               </button>
               <button
+                type="button"
+                class="btn-next"
+                data-next>
+
+                Continue to Review
+
+              </button>
+            </div>
+
+          </fieldset>
+
+          <!-- ================================================ -->
+          <!-- STEP 6 — REVIEW & CONFIRM -->
+          <!-- ================================================ -->
+
+          <fieldset class="form-step" data-step="6">
+
+            <legend class="step-legend">Review &amp; Confirm</legend>
+
+            <p class="review-intro">
+              Please review your application before submitting.
+              Use Edit to correct any section.
+            </p>
+
+            <div class="review-section" data-review-section="1">
+
+              <div class="review-section-head">
+                <h4>Institution Identity</h4>
+                <button type="button" class="review-edit-btn" data-edit-step="1">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                  </svg>
+                  Edit
+                </button>
+              </div>
+
+              <div class="review-logo-row" id="reviewLogoRow" hidden>
+                <img id="reviewLogoPreview" class="review-logo-preview" alt="Institution logo preview">
+              </div>
+
+              <dl class="review-grid">
+                <div><dt>Institution Name</dt><dd data-review="institutionName">—</dd></div>
+                <div><dt>Type</dt><dd data-review="institutionType">—</dd></div>
+                <div><dt>Category</dt><dd data-review="institutionCategory">—</dd></div>
+                <div><dt>Institution Code</dt><dd data-review="institutionCode">—</dd></div>
+                <div><dt>Establishment Year</dt><dd data-review="establishmentYear">—</dd></div>
+                <div><dt>University / Board Affiliation</dt><dd data-review="universityAffiliation">—</dd></div>
+              </dl>
+
+            </div>
+
+            <div class="review-section" data-review-section="2">
+
+              <div class="review-section-head">
+                <h4>Contact &amp; Strength</h4>
+                <button type="button" class="review-edit-btn" data-edit-step="2">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                  </svg>
+                  Edit
+                </button>
+              </div>
+
+              <dl class="review-grid">
+                <div><dt>Principal / Director</dt><dd data-review="principalName">—</dd></div>
+                <div><dt>Official Email</dt><dd data-review="email">—</dd></div>
+                <div><dt>Official Mobile</dt><dd data-review="mobile">—</dd></div>
+                <div><dt>Website</dt><dd data-review="website">—</dd></div>
+                <div><dt>Student Strength</dt><dd data-review="studentStrength">—</dd></div>
+                <div><dt>Faculty Strength</dt><dd data-review="facultyStrength">—</dd></div>
+                <div><dt>Institution Size</dt><dd data-review="institutionSize">—</dd></div>
+                <div><dt>Academic Session</dt><dd data-review="academicSession">—</dd></div>
+              </dl>
+
+            </div>
+
+            <div class="review-section" data-review-section="3">
+
+              <div class="review-section-head">
+                <h4>Modules &amp; Referral</h4>
+                <button type="button" class="review-edit-btn" data-edit-step="3">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                  </svg>
+                  Edit
+                </button>
+              </div>
+
+              <div class="review-chip-row" id="reviewModules"></div>
+
+              <dl class="review-grid">
+                <div><dt>How You Heard About Us</dt><dd data-review="referralSource">—</dd></div>
+              </dl>
+
+            </div>
+
+            <div class="review-section" data-review-section="4">
+
+              <div class="review-section-head">
+                <h4>Location</h4>
+                <button type="button" class="review-edit-btn" data-edit-step="4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                  </svg>
+                  Edit
+                </button>
+              </div>
+
+              <dl class="review-grid">
+                <div class="review-grid-full"><dt>Address</dt><dd data-review="address">—</dd></div>
+                <div><dt>City</dt><dd data-review="city">—</dd></div>
+                <div><dt>State</dt><dd data-review="state">—</dd></div>
+                <div><dt>Country</dt><dd data-review="country">—</dd></div>
+              </dl>
+
+            </div>
+
+            <div class="review-section" data-review-section="5">
+
+              <div class="review-section-head">
+                <h4>Compliance &amp; Recognition</h4>
+                <button type="button" class="review-edit-btn" data-edit-step="5">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                  </svg>
+                  Edit
+                </button>
+              </div>
+
+              <dl class="review-grid">
+                <div><dt>Accreditation / Recognition</dt><dd data-review="accreditation">—</dd></div>
+                <div><dt>GST Number</dt><dd data-review="gstNumber">—</dd></div>
+                <div><dt>PAN Number</dt><dd data-review="panNumber">—</dd></div>
+              </dl>
+
+              <div class="review-consent-status" id="reviewConsentStatus">
+                <span class="review-consent-icon" id="reviewConsentIcon"></span>
+                <span id="reviewConsentText">Terms &amp; Privacy Policy not yet accepted</span>
+              </div>
+
+            </div>
+
+            <div class="review-timeline-card">
+
+              <div class="review-timeline-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M12 7v5l3.5 2"/>
+                </svg>
+              </div>
+
+              <div class="review-timeline-text">
+                <span class="review-timeline-label">Estimated Onboarding Timeline</span>
+                <span class="review-timeline-value">Review within 24–72 hours after submission</span>
+              </div>
+
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn-back" data-back>
+                Back to Edit
+              </button>
+              <button
                 type="submit"
                 class="submit-btn">
 
-                Submit Registration Request
+                Submit Application
 
               </button>
             </div>
@@ -1106,18 +1279,104 @@
 
         <div class="submission-success" id="submissionSuccess" hidden>
 
-          <div class="success-icon"></div>
+          <div class="success-hero-card">
 
-          <h3>Registration request received</h3>
+            <div class="success-hero-glow"></div>
 
-          <p>
-            Your request is now pending verification.
-            Our Super Admin team will review the details
-            and email your official CampusOne login once
-            your tenant is provisioned.
-          </p>
+            <div class="success-hero-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5"/>
+              </svg>
+            </div>
 
-          <div class="reference-id" id="referenceId"></div>
+            <span class="success-hero-emoji" aria-hidden="true">🎉</span>
+
+            <h3>Application Received</h3>
+
+            <p class="success-hero-sub">
+              Your institution registration request has been
+              submitted to CampusOne for review.
+            </p>
+
+            <div class="success-status-pill" id="successStatusPill">
+              <span class="status-dot"></span>
+              Pending Review
+            </div>
+
+            <dl class="success-detail-grid">
+
+              <div>
+                <dt>Reference ID</dt>
+                <dd id="referenceId">—</dd>
+              </div>
+
+              <div>
+                <dt>Institution</dt>
+                <dd id="successInstitutionName">—</dd>
+              </div>
+
+              <div>
+                <dt>Expected Review Time</dt>
+                <dd>24 – 72 Hours</dd>
+              </div>
+
+              <div>
+                <dt>Submitted On</dt>
+                <dd id="successSubmittedOn">—</dd>
+              </div>
+
+            </dl>
+
+          </div>
+
+          <!-- TRACKING LINK -->
+
+          <div class="success-track-card">
+
+            <div class="success-track-head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="m20 20-3.5-3.5"/>
+              </svg>
+              <span>Track Application</span>
+            </div>
+
+            <div class="success-track-body">
+
+              <div class="success-track-link-row">
+
+                <code id="successTrackingLink">campusone.app/track/—</code>
+
+                <button type="button" class="success-copy-btn" id="successCopyBtn">
+                  Copy
+                </button>
+
+              </div>
+
+              <div class="success-track-actions">
+
+                <a href="#" id="successOpenTrackingBtn" class="success-track-open-btn" target="_blank" rel="noopener">
+                  Open Tracking Page
+                </a>
+
+                <div class="success-qr-wrap">
+                  <canvas id="successQrCanvas" width="96" height="96"></canvas>
+                  <span>Scan to track</span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <button type="button" class="success-pdf-btn" id="downloadPdfBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3v12m0 0-4-4m4 4 4-4"/>
+              <path d="M5 17v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"/>
+            </svg>
+            Download Official Application Copy (PDF)
+          </button>
 
           <a href="#trackRequestCard" class="track-another-link" id="trackAnotherLink">
             Track another request
@@ -1548,6 +1807,8 @@
 
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <script type="module" src="script.js"></script>
 
 </body>

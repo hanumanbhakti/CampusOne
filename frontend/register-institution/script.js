@@ -970,19 +970,11 @@ async function ensureGlobal(globalName, withTimeoutMs = 8000) {
 }
 
 async function generateApplicationPdf({ referenceId, payload, submittedDate, trackingUrl }) {
-  // pdf-lib is required — without it there is no PDF at all.
+  // Make sure both CDN libraries are actually available before
+  // doing any work — re-fetches them if the original <script>
+  // tags failed silently.
   await ensureGlobal("PDFLib");
-
-  // The QR code is a nice-to-have visual on the cover/verification
-  // pages. If it can't be loaded (CDN blocked, flaky network), the
-  // PDF should still generate — just without the QR image.
-  let qrAvailable = true;
-  try {
-    await ensureGlobal("QRCode");
-  } catch (err) {
-    console.warn("QR library unavailable — generating PDF without QR code:", err);
-    qrAvailable = false;
-  }
+  await ensureGlobal("QRCode");
 
   const { PDFDocument, rgb, StandardFonts } = window.PDFLib;
 
@@ -1011,24 +1003,14 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
   const PAGE_H = 841.89;
   const MARGIN = 48;
 
-  // QR code as PNG data URL, shared by cover + verification page.
-  // qrImage stays null if the library wasn't available — every
-  // place that draws it below checks for this first.
-  let qrImage = null;
-  if (qrAvailable) {
-    try {
-      const qrDataUrl = await window.QRCode.toDataURL(trackingUrl, {
-        width: 300,
-        margin: 1,
-        color: { dark: "#0F172A", light: "#FFFFFF" }
-      });
-      const qrImageBytes = await fetch(qrDataUrl).then((r) => r.arrayBuffer());
-      qrImage = await pdfDoc.embedPng(qrImageBytes);
-    } catch (err) {
-      console.warn("QR code generation failed — continuing without it:", err);
-      qrImage = null;
-    }
-  }
+  // QR code as PNG data URL, shared by cover + verification page
+  const qrDataUrl = await window.QRCode.toDataURL(trackingUrl, {
+    width: 300,
+    margin: 1,
+    color: { dark: "#0F172A", light: "#FFFFFF" }
+  });
+  const qrImageBytes = await fetch(qrDataUrl).then((r) => r.arrayBuffer());
+  const qrImage = await pdfDoc.embedPng(qrImageBytes);
 
   /* ---------------------------------------------------
      Helper: gradient bar (approximated with N vertical
@@ -1170,7 +1152,7 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
 
   // Tagline footer block
   cover.drawLine({ start: { x: MARGIN, y: 130 }, end: { x: PAGE_W - MARGIN, y: 130 }, thickness: 1, color: LINE });
-  cover.drawText(""Digital Campus Management Platform"", {
+  cover.drawText("\u201CDigital Campus Management Platform\u201D", {
     x: MARGIN, y: 100, size: 11, font: fontRegular, color: MUTED
   });
   cover.drawText("This document is a system-generated official copy of an institution onboarding", {
@@ -1347,14 +1329,6 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
     ["Website", "campusone.app"]
   ];
 
-  // QR code box on the right of the verification card
-  // (qrSize must be declared before verifyRows uses it to
-  // compute available text width — this ordering bug previously
-  // caused a ReferenceError that aborted PDF generation.)
-  const qrSize = 110;
-  const qrX = PAGE_W - MARGIN - qrSize - 24;
-  const qrY = vy - 150;
-
   verifyRows.forEach(([label, value]) => {
     verifyPage.drawText(label.toUpperCase(), { x: verifyLeftX, y: vRowY, size: 7.5, font: fontBold, color: MUTED });
     const valueMaxWidth = contentW - 48 - (qrSize + 40);
@@ -1365,32 +1339,18 @@ async function generateApplicationPdf({ referenceId, payload, submittedDate, tra
     vRowY -= valueLines.length > 1 ? 42 : 30;
   });
 
-  if (qrImage) {
-    verifyPage.drawRectangle({
-      x: qrX - 8, y: qrY - 8, width: qrSize + 16, height: qrSize + 16,
-      color: WHITE, borderColor: LINE, borderWidth: 1
-    });
-    verifyPage.drawImage(qrImage, { x: qrX, y: qrY, width: qrSize, height: qrSize });
-    verifyPage.drawText("Scan to track status", {
-      x: qrX - 4, y: qrY - 24, size: 8, font: fontRegular, color: MUTED
-    });
-  } else {
-    // Fallback when the QR library wasn't available — show the
-    // tracking link as plain text instead of leaving blank space.
-    verifyPage.drawRectangle({
-      x: qrX - 8, y: qrY - 8, width: qrSize + 16, height: qrSize + 16,
-      color: CARD_BG, borderColor: LINE, borderWidth: 1
-    });
-    verifyPage.drawText("Visit", {
-      x: qrX + 12, y: qrY + qrSize - 30, size: 9, font: fontRegular, color: MUTED
-    });
-    verifyPage.drawText("campusone.app/track", {
-      x: qrX + 4, y: qrY + qrSize - 46, size: 9, font: fontBold, color: INK
-    });
-    verifyPage.drawText("to check status", {
-      x: qrX + 12, y: qrY + qrSize - 62, size: 9, font: fontRegular, color: MUTED
-    });
-  }
+  // QR code box on the right of the verification card
+  const qrSize = 110;
+  const qrX = PAGE_W - MARGIN - qrSize - 24;
+  const qrY = vy - 150;
+  verifyPage.drawRectangle({
+    x: qrX - 8, y: qrY - 8, width: qrSize + 16, height: qrSize + 16,
+    color: WHITE, borderColor: LINE, borderWidth: 1
+  });
+  verifyPage.drawImage(qrImage, { x: qrX, y: qrY, width: qrSize, height: qrSize });
+  verifyPage.drawText("Scan to track status", {
+    x: qrX - 4, y: qrY - 24, size: 8, font: fontRegular, color: MUTED
+  });
 
   vy -= 240;
   verifyPage.drawLine({ start: { x: MARGIN, y: vy }, end: { x: PAGE_W - MARGIN, y: vy }, thickness: 0.75, color: LINE });

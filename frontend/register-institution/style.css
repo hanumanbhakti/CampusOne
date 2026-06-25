@@ -2664,11 +2664,10 @@ button:active,
   opacity:.85;
 }
 
-.footer-social-icons{
 /* Social Icons */
 .footer-social-icons{
   display:flex;
-  gap:14px;
+  gap:10px;
   margin-top:8px;
   flex-wrap:wrap;
 }
@@ -2678,10 +2677,10 @@ button:active,
   align-items:center;
   justify-content:center;
 
-  width:72px;
-  height:72px;
+  width:40px;
+  height:40px;
 
-  border-radius:20px;
+  border-radius:10px;
   overflow:hidden;
 
   background:rgba(255,255,255,.08);
@@ -2711,12 +2710,11 @@ button:active,
   object-fit:cover;
   object-position:center;
 
-  border-radius:18px;
+  border-radius:9px;
 
-  filter:none;
   padding:0;
   margin:0;
-   }
+}
 
 /* Legal bar */
 

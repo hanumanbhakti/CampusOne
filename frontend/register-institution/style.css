@@ -1482,6 +1482,7 @@ html[data-theme="light"] .theme-switch{
   max-width:90vw;
 
   height:100vh;
+  height:100dvh;
 
   padding:24px 20px;
 
@@ -1489,7 +1490,7 @@ html[data-theme="light"] .theme-switch{
   flex-direction:column;
 
   background:
-    rgba(15,23,42,.92);
+    rgba(15,23,42,.96);
 
   backdrop-filter:blur(28px);
 
@@ -1501,6 +1502,8 @@ html[data-theme="light"] .theme-switch{
 
   transition:.4s cubic-bezier(.22,.61,.36,1);
 
+  overflow:hidden;
+
   z-index:999;
 }
 
@@ -1511,6 +1514,8 @@ html[data-theme="light"] .theme-switch{
 /* Drawer Header — Brand Block */
 
 .drawer-header{
+
+  flex-shrink:0;
 
   display:flex;
   align-items:flex-start;
@@ -1545,6 +1550,10 @@ html[data-theme="light"] .theme-switch{
 
   flex-shrink:0;
 
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
   width:40px;
   height:40px;
 
@@ -1553,11 +1562,12 @@ html[data-theme="light"] .theme-switch{
 
   border-radius:12px;
 
-  background:rgba(var(--tint-rgb),.05);
+  background:rgba(var(--tint-rgb),.08);
 
   color:var(--text);
 
-  font-size:1.2rem;
+  font-size:1.15rem;
+  line-height:1;
 }
 
 /* Scrollable body (everything between brand header and footer) */
@@ -1565,8 +1575,12 @@ html[data-theme="light"] .theme-switch{
 .drawer-scroll{
 
   flex:1;
+  min-height:0;
 
   overflow-y:auto;
+
+  scroll-behavior:smooth;
+  scrollbar-width:thin;
 
   display:flex;
   flex-direction:column;
@@ -1627,12 +1641,12 @@ html[data-theme="light"] .theme-switch{
 
   text-decoration:none;
 
-  color:var(--text-secondary);
+  color:var(--text);
 
   font-weight:600;
   font-size:.92rem;
 
-  transition:.25s ease;
+  transition:.2s ease;
 }
 
 .drawer-nav a:hover{
@@ -1809,4 +1823,97 @@ html[data-theme="light"] .theme-switch{
     grid-template-columns:1fr;
   }
 
+}
+
+/* ==========================================================
+   GLOBAL PRESS FEEDBACK
+   A soft blue scale + shadow shift on every interactive
+   element when actively pressed/tapped, for a tactile,
+   modern SaaS feel across the whole experience.
+   ========================================================== */
+
+a,
+button,
+.theme-option,
+.drawer-nav a,
+.drawer-auth-link,
+.drawer-social-icon,
+.chip-checkbox,
+.checkbox-row,
+.btn-next,
+.btn-back,
+.submit-btn,
+.menu-toggle,
+.drawer-close,
+.header-link{
+
+  -webkit-tap-highlight-color:transparent;
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background-color .2s ease,
+    color .2s ease,
+    border-color .2s ease;
+}
+
+a:active,
+button:active,
+.theme-option:active,
+.drawer-nav a:active,
+.drawer-auth-link:active,
+.drawer-social-icon:active,
+.chip-checkbox:active,
+.btn-next:active,
+.btn-back:active,
+.submit-btn:active,
+.menu-toggle:active,
+.drawer-close:active,
+.header-link:active{
+
+  transform:scale(.96);
+
+  box-shadow:
+    0 0 0 5px rgba(59,130,246,.16);
+}
+
+/* Buttons that already carry their own lift/shadow on hover
+   get a slightly stronger combined press state so the press
+   doesn't fight the hover transform. */
+
+.btn-next:active,
+.submit-btn:active,
+.drawer-auth-signup:active{
+
+  transform:scale(.97) translateY(0);
+
+  box-shadow:
+    0 0 0 5px rgba(59,130,246,.22),
+    0 10px 25px rgba(37,99,235,.3);
+}
+
+.menu-toggle:active{
+  border-color:rgba(37,99,235,.5);
+}
+
+.drawer-close:active{
+  background:rgba(59,130,246,.18);
+}
+
+@media(prefers-reduced-motion:reduce){
+  a:active,
+  button:active,
+  .theme-option:active,
+  .drawer-nav a:active,
+  .drawer-auth-link:active,
+  .drawer-social-icon:active,
+  .chip-checkbox:active,
+  .btn-next:active,
+  .btn-back:active,
+  .submit-btn:active,
+  .menu-toggle:active,
+  .drawer-close:active,
+  .header-link:active{
+    transform:none;
+  }
 }

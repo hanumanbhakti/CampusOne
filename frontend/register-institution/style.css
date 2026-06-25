@@ -2691,9 +2691,6 @@ button:active,
   width:20px;
   height:20px;
   object-fit:contain;
-  /* Real PNG icons being uploaded — if icons are dark/colored,
-     remove the filter line below so original colors show. */
-  filter:brightness(0) invert(1);
 }
 
 .footer-social-icons a:hover{

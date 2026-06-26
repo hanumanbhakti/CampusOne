@@ -10,7 +10,7 @@
    ---------------------------------------------------------- */
 import {
   db
-} from "../shared/firebase-config.js";
+} from "./firebase-config.js";
 
 import {
   collection,

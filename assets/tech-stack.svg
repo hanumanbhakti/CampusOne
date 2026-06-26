@@ -1,0 +1,80 @@
+<svg width="1200" height="190" viewBox="0 0 1200 190" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="iconbg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0.04"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="190" fill="#0B1220"/>
+
+  <!-- 9 columns, 130 each, start x=18 -->
+  <g font-family="Helvetica, Arial, sans-serif">
+    <!-- HTML5 -->
+    <g transform="translate(18,16)">
+      <rect width="118" height="118" rx="16" fill="#111A2E" stroke="#1E293B" stroke-width="1.4"/>
+      <path d="M38 36 H80 L77 78 L59 84 L41 78 Z" fill="none" stroke="url(#brand)" stroke-width="2.6" stroke-linejoin="round"/>
+      <text x="59" y="142" text-anchor="middle" font-size="12" fill="#94A3B8">HTML5</text>
+    </g>
+    <!-- CSS3 -->
+    <g transform="translate(148,16)">
+      <rect width="118" height="118" rx="16" fill="#111A2E" stroke="#1E293B" stroke-width="1.4"/>
+      <path d="M38 36 H80 L77 78 L59 84 L41 78 Z" fill="none" stroke="#3B82F6" stroke-width="2.6" stroke-linejoin="round"/>
+      <line x1="44" y1="52" x2="74" y2="52" stroke="#3B82F6" stroke-width="2"/>
+      <text x="59" y="142" text-anchor="middle" font-size="12" fill="#94A3B8">CSS3</text>
+    </g>
+    <!-- JavaScript -->
+    <g transform="translate(278,16)">
+      <rect width="118" height="118" rx="16" fill="#111A2E" stroke="#1E293B" stroke-width="1.4"/>
+      <rect x="38" y="36" width="42" height="42" rx="6" fill="none" stroke="url(#brand)" stroke-width="2.6"/>
+      <text x="59" y="64" text-anchor="middle" font-size="16" font-weight="700" fill="#3B82F6">JS</text>
+      <text x="59" y="142" text-anchor="middle" font-size="12" fill="#94A3B8">JavaScript</text>
+    </g>
+    <!-- Firebase -->
+    <g transform="translate(408,16)">
+      <rect width="118" height="118" rx="16" fill="#111A2E" stroke="#1E293B" stroke-width="1.4"/>
+      <path d="M48 78 L54 30 L62 50 L68 42 L80 78 Z" fill="none" stroke="url(#brand)" stroke-width="2.6" stroke-linejoin="round"/>
+      <text x="59" y="142" text-anchor="middle" font-size="12" fill="#94A3B8">Firebase</text>
+    </g>
+    <!-- Firestore -->
+    <g transform="translate(538,16)">
+      <rect width="118" height="118" rx="16" fill="#111A2E" stroke="#1E293B" stroke-width="1.4"/>
+      <ellipse cx="59" cy="42" rx="20" ry="8" fill="none" stroke="url(#brand)" stroke-width="2.4"/>
+      <path d="M39 42 V70 a20 8 0 0 0 40 0 V42" fill="none" stroke="url(#brand)" stroke-width="2.4"/>
+      <path d="M39 56 a20 8 0 0 0 40 0" fill="none" stroke="#3B82F6" stroke-width="2.4"/>
+      <text x="59" y="142" text-anchor="middle" font-size="12" fill="#94A3B8">Firestore</text>
+    </g>
+    <!-- GitHub -->
+    <g transform="translate(668,16)">
+      <rect width="118" height="118" rx="16" fill="#111A2E" stroke="#1E293B" stroke-width="1.4"/>
+      <circle cx="59" cy="58" r="22" fill="none" stroke="url(#brand)" stroke-width="2.6"/>
+      <path d="M50 70 c-6 2 -8 -2 -8 -2" fill="none" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round"/>
+      <text x="59" y="142" text-anchor="middle" font-size="12" fill="#94A3B8">GitHub</text>
+    </g>
+    <!-- PWA -->
+    <g transform="translate(798,16)">
+      <rect width="118" height="118" rx="16" fill="#111A2E" stroke="#1E293B" stroke-width="1.4"/>
+      <path d="M38 62 a30 30 0 0 1 42 0" fill="none" stroke="url(#brand)" stroke-width="2.6"/>
+      <path d="M46 68 a18 18 0 0 1 26 0" fill="none" stroke="#3B82F6" stroke-width="2.6"/>
+      <circle cx="59" cy="76" r="3.2" fill="#3B82F6"/>
+      <text x="59" y="142" text-anchor="middle" font-size="12" fill="#94A3B8">PWA</text>
+    </g>
+    <!-- Cloud -->
+    <g transform="translate(928,16)">
+      <rect width="118" height="118" rx="16" fill="#111A2E" stroke="#1E293B" stroke-width="1.4"/>
+      <path d="M36 68 a14 14 0 0 1 4 -27.5 a18 18 0 0 1 34 -5 a15 15 0 0 1 5 32.5 Z"
+            fill="none" stroke="url(#brand)" stroke-width="2.6" stroke-linejoin="round"/>
+      <text x="59" y="142" text-anchor="middle" font-size="12" fill="#94A3B8">Cloud</text>
+    </g>
+    <!-- Responsive -->
+    <g transform="translate(1058,16)">
+      <rect width="118" height="118" rx="16" fill="#111A2E" stroke="#1E293B" stroke-width="1.4"/>
+      <rect x="34" y="38" width="28" height="40" rx="3" fill="none" stroke="url(#brand)" stroke-width="2.2"/>
+      <rect x="66" y="50" width="20" height="28" rx="3" fill="none" stroke="#3B82F6" stroke-width="2.2"/>
+      <text x="59" y="142" text-anchor="middle" font-size="11.5" fill="#94A3B8">Responsive</text>
+    </g>
+  </g>
+</svg>

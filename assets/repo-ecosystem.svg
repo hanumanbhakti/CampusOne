@@ -1,0 +1,58 @@
+<svg width="1200" height="520" viewBox="0 0 1200 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <radialGradient id="hubglow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="520" fill="#0B1220"/>
+  <text x="600" y="38" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#F1F5F9">Repository Ecosystem</text>
+
+  <!-- connector lines -->
+  <g stroke="#1E293B" stroke-width="1.6">
+    <line x1="600" y1="270" x2="195" y2="80"/>
+    <line x1="600" y1="270" x2="1005" y2="80"/>
+    <line x1="600" y1="270" x2="150" y2="270"/>
+    <line x1="600" y1="270" x2="1050" y2="270"/>
+    <line x1="600" y1="270" x2="195" y2="450"/>
+    <line x1="600" y1="270" x2="1005" y2="450"/>
+  </g>
+
+  <!-- hub -->
+  <circle cx="600" cy="270" r="110" fill="url(#hubglow)"/>
+  <circle cx="600" cy="270" r="70" fill="#111A2E" stroke="url(#brand)" stroke-width="3"/>
+  <text x="600" y="265" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#F1F5F9">CampusOne</text>
+  <text x="600" y="284" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#93C5FD">Organization</text>
+
+  <!-- satellite nodes -->
+  <g font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#E2E8F0" text-anchor="middle">
+    <g transform="translate(40,50)">
+      <rect width="155" height="60" rx="12" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+      <text x="77.5" y="36">CampusOne-Web</text>
+    </g>
+    <g transform="translate(1005,50)">
+      <rect width="155" height="60" rx="12" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+      <text x="77.5" y="36">CampusOne-Admin</text>
+    </g>
+    <g transform="translate(20,240)">
+      <rect width="155" height="60" rx="12" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+      <text x="77.5" y="36">CampusOne-Mobile</text>
+    </g>
+    <g transform="translate(1025,240)">
+      <rect width="155" height="60" rx="12" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+      <text x="77.5" y="36">CampusOne-Docs</text>
+    </g>
+    <g transform="translate(40,420)">
+      <rect width="155" height="60" rx="12" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+      <text x="77.5" y="36">CampusOne-Brand</text>
+    </g>
+    <g transform="translate(1005,420)">
+      <rect width="155" height="60" rx="12" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+      <text x="77.5" y="36">.github</text>
+    </g>
+  </g>
+</svg>

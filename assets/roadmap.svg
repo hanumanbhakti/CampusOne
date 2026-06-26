@@ -1,0 +1,54 @@
+<svg width="1200" height="260" viewBox="0 0 1200 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="260" fill="#0B1220"/>
+
+  <line x1="80" y1="110" x2="1120" y2="110" stroke="#1E293B" stroke-width="3"/>
+  <line x1="80" y1="110" x2="1120" y2="110" stroke="url(#brand)" stroke-width="3" stroke-dasharray="2 1200" opacity="0"/>
+
+  <g font-family="Helvetica, Arial, sans-serif">
+    <!-- v1.0 -->
+    <g transform="translate(110,110)">
+      <circle r="9" fill="#0B1220" stroke="url(#brand)" stroke-width="3"/>
+      <circle r="3" fill="#3B82F6"/>
+      <text x="0" y="-26" text-anchor="middle" font-size="16" font-weight="700" fill="#F1F5F9">v1.0</text>
+      <text x="0" y="36" text-anchor="middle" font-size="12" fill="#94A3B8">Core platform launch</text>
+      <text x="0" y="52" text-anchor="middle" font-size="12" fill="#94A3B8">Student &amp; faculty modules</text>
+    </g>
+    <!-- v1.1 -->
+    <g transform="translate(360,110)">
+      <circle r="9" fill="#0B1220" stroke="url(#brand)" stroke-width="3"/>
+      <circle r="3" fill="#3B82F6"/>
+      <text x="0" y="-26" text-anchor="middle" font-size="16" font-weight="700" fill="#F1F5F9">v1.1</text>
+      <text x="0" y="36" text-anchor="middle" font-size="12" fill="#94A3B8">Parent portal</text>
+      <text x="0" y="52" text-anchor="middle" font-size="12" fill="#94A3B8">Communication hub</text>
+    </g>
+    <!-- v1.2 -->
+    <g transform="translate(610,110)">
+      <circle r="9" fill="#0B1220" stroke="url(#brand)" stroke-width="3"/>
+      <circle r="3" fill="#3B82F6"/>
+      <text x="0" y="-26" text-anchor="middle" font-size="16" font-weight="700" fill="#F1F5F9">v1.2</text>
+      <text x="0" y="36" text-anchor="middle" font-size="12" fill="#94A3B8">Analytics dashboard</text>
+      <text x="0" y="52" text-anchor="middle" font-size="12" fill="#94A3B8">Document center</text>
+    </g>
+    <!-- v2.0 -->
+    <g transform="translate(860,110)">
+      <circle r="9" fill="#0B1220" stroke="url(#brand)" stroke-width="3"/>
+      <circle r="3" fill="#3B82F6"/>
+      <text x="0" y="-26" text-anchor="middle" font-size="16" font-weight="700" fill="#F1F5F9">v2.0</text>
+      <text x="0" y="36" text-anchor="middle" font-size="12" fill="#94A3B8">Mobile app launch</text>
+      <text x="0" y="52" text-anchor="middle" font-size="12" fill="#94A3B8">Cloud infrastructure overhaul</text>
+    </g>
+    <!-- future -->
+    <g transform="translate(1110,110)">
+      <circle r="11" fill="#0B1220" stroke="url(#brand)" stroke-width="3" stroke-dasharray="4 3"/>
+      <text x="0" y="-26" text-anchor="middle" font-size="16" font-weight="700" fill="#F1F5F9">Future</text>
+      <text x="0" y="36" text-anchor="middle" font-size="12" fill="#94A3B8">AI-assisted insights</text>
+      <text x="0" y="52" text-anchor="middle" font-size="12" fill="#94A3B8">&amp; predictive analytics</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,74 @@
+<svg width="1200" height="320" viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="iconbg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="320" fill="#0B1220"/>
+
+  <!-- card template repeated via groups -->
+  <!-- Card 1: Web -->
+  <g transform="translate(20,20)">
+    <rect width="270" height="280" rx="18" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+    <rect x="0" y="0" width="270" height="4" rx="2" fill="url(#brand)"/>
+    <circle cx="135" cy="78" r="40" fill="url(#iconbg)"/>
+    <rect x="105" y="58" width="60" height="42" rx="6" fill="none" stroke="url(#brand)" stroke-width="3"/>
+    <line x1="105" y1="70" x2="165" y2="70" stroke="url(#brand)" stroke-width="3"/>
+    <circle cx="113" cy="64" r="2.2" fill="#3B82F6"/>
+    <circle cx="121" cy="64" r="2.2" fill="#3B82F6"/>
+    <text x="135" y="148" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#F1F5F9">CampusOne Web</text>
+    <text x="135" y="178" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#94A3B8">
+      <tspan x="135" dy="0">Unified web portal for</tspan>
+      <tspan x="135" dy="18">institutions and staff</tspan>
+    </text>
+  </g>
+
+  <!-- Card 2: Admin -->
+  <g transform="translate(310,20)">
+    <rect width="270" height="280" rx="18" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+    <rect x="0" y="0" width="270" height="4" rx="2" fill="url(#brand)"/>
+    <circle cx="135" cy="78" r="40" fill="url(#iconbg)"/>
+    <path d="M135 52 L160 62 V84 C160 100 149 110 135 116 C121 110 110 100 110 84 V62 Z"
+          fill="none" stroke="url(#brand)" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M124 84 L133 93 L148 74" fill="none" stroke="#3B82F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="135" y="148" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#F1F5F9">CampusOne Admin</text>
+    <text x="135" y="178" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#94A3B8">
+      <tspan x="135" dy="0">Control center for</tspan>
+      <tspan x="135" dy="18">operations and oversight</tspan>
+    </text>
+  </g>
+
+  <!-- Card 3: Mobile -->
+  <g transform="translate(600,20)">
+    <rect width="270" height="280" rx="18" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+    <rect x="0" y="0" width="270" height="4" rx="2" fill="url(#brand)"/>
+    <circle cx="135" cy="78" r="40" fill="url(#iconbg)"/>
+    <rect x="118" y="50" width="34" height="58" rx="7" fill="none" stroke="url(#brand)" stroke-width="3"/>
+    <line x1="118" y1="92" x2="152" y2="92" stroke="url(#brand)" stroke-width="3"/>
+    <circle cx="135" cy="100" r="2.4" fill="#3B82F6"/>
+    <text x="135" y="148" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#F1F5F9">CampusOne Mobile</text>
+    <text x="135" y="178" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#94A3B8">
+      <tspan x="135" dy="0">Native experience for</tspan>
+      <tspan x="135" dy="18">students and parents</tspan>
+    </text>
+  </g>
+
+  <!-- Card 4: Cloud -->
+  <g transform="translate(890,20)">
+    <rect width="270" height="280" rx="18" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+    <rect x="0" y="0" width="270" height="4" rx="2" fill="url(#brand)"/>
+    <circle cx="135" cy="78" r="40" fill="url(#iconbg)"/>
+    <path d="M108 92 a16 16 0 0 1 4 -31.5 a20 20 0 0 1 38.5 -6 a17 17 0 0 1 5.5 33.5 Z"
+          fill="none" stroke="url(#brand)" stroke-width="3" stroke-linejoin="round"/>
+    <text x="135" y="148" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#F1F5F9">CampusOne Cloud</text>
+    <text x="135" y="178" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#94A3B8">
+      <tspan x="135" dy="0">Managed infrastructure</tspan>
+      <tspan x="135" dy="18">and data backbone</tspan>
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,111 @@
+<svg width="1200" height="480" viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="bar1" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="480" fill="#0B1220"/>
+
+  <!-- Dashboard mockup -->
+  <g transform="translate(20,20)">
+    <text x="220" y="-2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#64748B" letter-spacing="1">DASHBOARD</text>
+    <rect y="10" width="440" height="420" rx="14" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+    <rect y="10" width="440" height="34" rx="14" fill="#0E1830"/>
+    <circle cx="22" cy="27" r="4" fill="#EF4444" opacity="0.7"/>
+    <circle cx="36" cy="27" r="4" fill="#EAB308" opacity="0.7"/>
+    <circle cx="50" cy="27" r="4" fill="#22C55E" opacity="0.7"/>
+    <!-- sidebar -->
+    <rect x="14" y="58" width="80" height="362" rx="8" fill="#0E1830"/>
+    <rect x="26" y="74" width="56" height="8" rx="4" fill="url(#brand)"/>
+    <rect x="26" y="98" width="56" height="6" rx="3" fill="#1E293B"/>
+    <rect x="26" y="116" width="56" height="6" rx="3" fill="#1E293B"/>
+    <rect x="26" y="134" width="56" height="6" rx="3" fill="#1E293B"/>
+    <rect x="26" y="152" width="56" height="6" rx="3" fill="#1E293B"/>
+    <!-- stat cards -->
+    <rect x="106" y="58" width="100" height="60" rx="10" fill="#0E1830" stroke="#1E293B"/>
+    <rect x="118" y="70" width="40" height="6" rx="3" fill="#3B82F6"/>
+    <rect x="118" y="86" width="60" height="12" rx="3" fill="#E2E8F0"/>
+    <rect x="218" y="58" width="100" height="60" rx="10" fill="#0E1830" stroke="#1E293B"/>
+    <rect x="230" y="70" width="40" height="6" rx="3" fill="#3B82F6"/>
+    <rect x="230" y="86" width="60" height="12" rx="3" fill="#E2E8F0"/>
+    <rect x="330" y="58" width="96" height="60" rx="10" fill="#0E1830" stroke="#1E293B"/>
+    <rect x="342" y="70" width="40" height="6" rx="3" fill="#3B82F6"/>
+    <rect x="342" y="86" width="60" height="12" rx="3" fill="#E2E8F0"/>
+    <!-- chart -->
+    <rect x="106" y="132" width="320" height="150" rx="10" fill="#0E1830" stroke="#1E293B"/>
+    <g>
+      <rect x="126" y="240" width="18" height="28" fill="url(#bar1)"/>
+      <rect x="154" y="220" width="18" height="48" fill="url(#bar1)"/>
+      <rect x="182" y="200" width="18" height="68" fill="url(#bar1)"/>
+      <rect x="210" y="230" width="18" height="38" fill="url(#bar1)"/>
+      <rect x="238" y="190" width="18" height="78" fill="url(#bar1)"/>
+      <rect x="266" y="210" width="18" height="58" fill="url(#bar1)"/>
+      <rect x="294" y="170" width="18" height="98" fill="url(#bar1)"/>
+      <rect x="322" y="200" width="18" height="68" fill="url(#bar1)"/>
+      <rect x="350" y="220" width="18" height="48" fill="url(#bar1)"/>
+      <rect x="378" y="150" width="18" height="118" fill="#3B82F6"/>
+    </g>
+    <!-- table rows -->
+    <rect x="106" y="296" width="320" height="124" rx="10" fill="#0E1830" stroke="#1E293B"/>
+    <rect x="122" y="312" width="288" height="10" rx="3" fill="#1E293B"/>
+    <rect x="122" y="332" width="288" height="10" rx="3" fill="#1E293B"/>
+    <rect x="122" y="352" width="288" height="10" rx="3" fill="#1E293B"/>
+    <rect x="122" y="372" width="288" height="10" rx="3" fill="#1E293B"/>
+    <rect x="122" y="392" width="200" height="10" rx="3" fill="#1E293B"/>
+  </g>
+
+  <!-- Mobile mockup -->
+  <g transform="translate(500,20)">
+    <text x="100" y="-2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#64748B" letter-spacing="1">MOBILE APP</text>
+    <rect y="10" width="200" height="420" rx="26" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+    <rect x="14" y="34" width="172" height="372" rx="10" fill="#0B1220"/>
+    <rect x="14" y="34" width="172" height="46" rx="10" fill="#0E1830"/>
+    <circle cx="38" cy="57" r="10" fill="url(#brand)"/>
+    <rect x="56" y="50" width="70" height="7" rx="3" fill="#E2E8F0"/>
+    <rect x="56" y="62" width="50" height="6" rx="3" fill="#475569"/>
+    <!-- card list -->
+    <rect x="26" y="92" width="148" height="64" rx="10" fill="#111A2E" stroke="#1E293B"/>
+    <rect x="38" y="106" width="60" height="8" rx="3" fill="#3B82F6"/>
+    <rect x="38" y="122" width="100" height="6" rx="3" fill="#475569"/>
+    <rect x="38" y="134" width="80" height="6" rx="3" fill="#475569"/>
+    <rect x="26" y="168" width="148" height="64" rx="10" fill="#111A2E" stroke="#1E293B"/>
+    <rect x="38" y="182" width="60" height="8" rx="3" fill="#3B82F6"/>
+    <rect x="38" y="198" width="100" height="6" rx="3" fill="#475569"/>
+    <rect x="38" y="210" width="80" height="6" rx="3" fill="#475569"/>
+    <rect x="26" y="244" width="148" height="64" rx="10" fill="#111A2E" stroke="#1E293B"/>
+    <rect x="38" y="258" width="60" height="8" rx="3" fill="#3B82F6"/>
+    <rect x="38" y="274" width="100" height="6" rx="3" fill="#475569"/>
+    <rect x="38" y="286" width="80" height="6" rx="3" fill="#475569"/>
+    <!-- bottom nav -->
+    <rect x="14" y="372" width="172" height="34" rx="10" fill="#0E1830"/>
+    <circle cx="55" cy="389" r="6" fill="url(#brand)"/>
+    <circle cx="100" cy="389" r="6" fill="#334155"/>
+    <circle cx="145" cy="389" r="6" fill="#334155"/>
+  </g>
+
+  <!-- Security interface mockup -->
+  <g transform="translate(740,20)">
+    <text x="220" y="-2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#64748B" letter-spacing="1">SECURITY INTERFACE</text>
+    <rect y="10" width="440" height="420" rx="14" fill="#111A2E" stroke="#1E293B" stroke-width="1.5"/>
+    <rect y="10" width="440" height="34" rx="14" fill="#0E1830"/>
+    <circle cx="22" cy="27" r="4" fill="#EF4444" opacity="0.7"/>
+    <circle cx="36" cy="27" r="4" fill="#EAB308" opacity="0.7"/>
+    <circle cx="50" cy="27" r="4" fill="#22C55E" opacity="0.7"/>
+    <!-- centered lock card -->
+    <g transform="translate(220,200)">
+      <circle r="70" fill="#0E1830"/>
+      <path d="M-22 -8 V-22 a22 22 0 0 1 44 0 V-8" fill="none" stroke="url(#brand)" stroke-width="5"/>
+      <rect x="-30" y="-8" width="60" height="46" rx="8" fill="none" stroke="#3B82F6" stroke-width="5"/>
+      <circle cx="0" cy="14" r="4" fill="#3B82F6"/>
+    </g>
+    <rect x="120" y="300" width="200" height="14" rx="7" fill="#0E1830"/>
+    <rect x="120" y="322" width="200" height="14" rx="7" fill="#0E1830"/>
+    <rect x="120" y="352" width="200" height="30" rx="8" fill="url(#brand)"/>
+    <text x="220" y="372" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#0B1220">AUTHENTICATE</text>
+  </g>
+</svg>

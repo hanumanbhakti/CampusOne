@@ -681,7 +681,20 @@ mask-composite:exclude;
 
 pointer-events:none;
 
-opacity:.85;
+opacity:.65;
+transition:
+opacity .35s ease,
+filter .35s ease;
+
+filter:brightness(1);
+
+}
+
+.registration-card:hover::after{
+
+opacity:1;
+
+filter:brightness(1.35);
 
 }
 
@@ -900,24 +913,37 @@ opacity:.85;
 
   height:60px;
 
-  padding:0 18px;
+  padding:0 20px;
 
-  border-radius:16px;
+  border-radius:18px;
 
   background:
-    var(--surface-input);
+  linear-gradient(
+      180deg,
+      rgba(255,255,255,.05),
+      rgba(255,255,255,.02)
+  );
 
-  border:
-    1px solid
-    rgba(var(--tint-rgb),.08);
+  backdrop-filter:blur(16px);
 
-  color:white;
+  border:1px solid rgba(255,255,255,.08);
 
-  font-size:.95rem;
+  color:#fff;
+
+  font-size:1rem;
 
   font-family:inherit;
 
-  transition:.25s;
+  box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.05),
+      0 10px 30px rgba(0,0,0,.12);
+
+  transition:
+      border-color .3s ease,
+      box-shadow .3s ease,
+      transform .3s ease,
+      background .3s ease;
+
 }
 
 .input-group textarea{
@@ -934,17 +960,50 @@ opacity:.85;
 
   outline:none;
 
-  border-color:
-    rgba(59,130,246,.7);
+  transform:translateY(-2px);
+
+  border-color:rgba(96,165,250,.85);
+
+  background:
+  linear-gradient(
+      180deg,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,.04)
+  );
 
   box-shadow:
-    0 0 0 4px
-    rgba(59,130,246,.12);
+      0 0 0 4px rgba(37,99,235,.12),
+      0 12px 35px rgba(37,99,235,.18),
+      inset 0 1px 0 rgba(255,255,255,.08);
+
+}
+
+.input-group input:hover,
+.input-group textarea:hover,
+.input-group select:hover{
+
+  border-color:rgba(96,165,250,.35);
+
+  transition:.3s ease;
+
 }
 
 .input-group input::placeholder,
 .input-group textarea::placeholder{
-  color:#64748B;
+
+  color:rgba(148,163,184,.85);
+
+  letter-spacing:.3px;
+
+  transition:opacity .3s ease;
+
+}
+
+.input-group input:focus::placeholder,
+.input-group textarea:focus::placeholder{
+
+  opacity:.45;
+
 }
 
 .input-group input:invalid[data-touched="true"],

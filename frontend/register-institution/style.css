@@ -2433,7 +2433,10 @@ html[data-theme="light"] .theme-switch{
   transition:.35s ease;
 
   z-index:998;
+  
+  isolation:isolate;
 }
+
 
 .drawer-overlay.active{
   opacity:1;
@@ -2460,10 +2463,18 @@ html[data-theme="light"] .theme-switch{
   display:flex;
   flex-direction:column;
 
-  background:
-    rgba(15,23,42,.96);
+background: #0F172A;
+-webkit-backdrop-filter: none;
 
-  backdrop-filter:blur(28px);
+  /* Drawer background is always dark, regardless of site theme.
+     Pin these text-color variables to their dark-theme values
+     here so light theme doesn't flip --text to a dark color
+     and make drawer content invisible against the dark panel. */
+  --text:#F8FAFC;
+  --text-secondary:#CBD5E1;
+  --text-muted:#94A3B8;
+  --tint-rgb:255,255,255;
+
 
   border-left:
     1px solid rgba(255,255,255,.08);
@@ -3513,31 +3524,14 @@ display:block;
 
 /* ----------------------------------------------------------
    MOBILE DRAWER — OPEN/CLOSE TRANSITIONS
+   (duplicate .mobile-drawer / .drawer-overlay rules removed —
+   they used a different modifier class ".is-open"/".is-visible"
+   than the JS toggles (".open"/".active"), and the unconditional
+   transform:translateX(100%) was permanently pushing the drawer
+   panel off-screen. Original rules near line ~2421 already
+   handle open/close via right:-340px → right:0 and
+   opacity/visibility, so no replacement is needed here.)
    ---------------------------------------------------------- */
-
-.mobile-drawer {
-  transform: translateX(100%);
-}
-
-.mobile-drawer.open {
-  transform: translateX(0);
-}
-
-.drawer-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 149;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.drawer-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
 
 /* ----------------------------------------------------------
    HEADER — GLASSMORPHISM ENHANCEMENT

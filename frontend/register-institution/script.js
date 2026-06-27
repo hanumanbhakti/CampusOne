@@ -466,8 +466,10 @@ async function generateQR(canvas, text) {
       console.warn('QRCode library not loaded');
       return;
     }
-    // Detect current theme for QR colors
-    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+if (themeAttr === 'dark')       isDark = true;
+else if (themeAttr === 'light') isDark = false;
+else  // 'system'
+  isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     await QRCode.toCanvas(canvas, text, {
       width: 112,
       margin: 2,

@@ -587,6 +587,14 @@ transform .45s cubic-bezier(.2,.8,.2,1),
 box-shadow .45s,
 background .45s,
 border-color .45s;
+
+will-change: transform;
+
+transform-origin: center center;
+
+isolation: isolate;
+
+border-radius: 32px;
 }
 
 .registration-card:hover{
@@ -608,31 +616,38 @@ content:"";
 
 position:absolute;
 
-inset:-30%;
+inset:-35%;
 
 background:
-
 radial-gradient(
-
-circle at top left,
-
-rgba(255,255,255,.22),
-
-transparent 45%
-
+circle at 20% 20%,
+rgba(255,255,255,.30),
+rgba(255,255,255,.12) 20%,
+transparent 60%
 );
+
+filter:blur(8px);
+
+opacity:.9;
 
 pointer-events:none;
 
-opacity:.8;
+transition:
+transform .6s ease,
+opacity .4s ease;
 
-transition:.45s;
+will-change:transform;
+
+z-index:0;
 
 }
 
 .registration-card:hover::before{
 
-transform:translate(8%,8%);
+transform:
+translate3d(25px,25px,0);
+
+opacity:1;
 
 }
 

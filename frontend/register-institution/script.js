@@ -466,30 +466,59 @@ async function generateQR(canvas, text) {
       console.warn('QRCode library not loaded');
       return;
     }
-if (themeAttr === 'dark')       isDark = true;
-else if (themeAttr === 'light') isDark = false;
-else  // 'system'
-  isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // Proper dark mode detection — handles system/light/dark + OS preference
+    const themeAttr = document.documentElement.getAttribute('data-theme');
+    let isDark;
+    if (themeAttr === 'dark') {
+      isDark = true;
+    } else if (themeAttr === 'light') {
+      isDark = false;
+    } else {
+      // 'system' or unset — check actual OS preference
+      isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+
+    // Always use high-contrast fixed colors — never rely on theme alone
+    // Dark mode: white modules on dark bg
+    // Light mode: dark modules on white bg
     await QRCode.toCanvas(canvas, text, {
       width: 112,
       margin: 2,
       color: {
-        dark:  isDark ? '#FFFFFF' : '#0F172A',
-        light: isDark ? '#1E293B' : '#F1F5F9',
+        dark:  isDark ? '#E2E8F0' : '#0F172A',  // QR modules (the squares)
+        light: isDark ? '#0F172A' : '#FFFFFF',   // QR background
       },
     });
+
+    // Style the canvas element
     canvas.style.borderRadius = '10px';
+    canvas.style.display = 'block';
+    if (isDark) {
+      canvas.style.background = '#0F172A';
+      canvas.style.border = '2px solid rgba(255,255,255,0.1)';
+    } else {
+      canvas.style.background = '#FFFFFF';
+      canvas.style.border = '2px solid rgba(0,0,0,0.08)';
+    }
+
   } catch (err) {
     console.warn('QR generation failed:', err);
-    // Fallback
+    // Canvas fallback — draw a visible placeholder
+    const size = 112;
+    canvas.width  = size;
+    canvas.height = size;
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.fillStyle = '#1E293B';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, size, size);
+      ctx.strokeStyle = '#3B82F6';
+      ctx.strokeRect(4, 4, size - 8, size - 8);
       ctx.fillStyle = '#60A5FA';
-      ctx.font = '10px sans-serif';
+      ctx.font = 'bold 9px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('QR unavailable', canvas.width / 2, canvas.height / 2);
+      ctx.fillText('Track via', size / 2, size / 2 - 6);
+      ctx.fillText('tracking link', size / 2, size / 2 + 8);
     }
   }
 }
@@ -606,7 +635,7 @@ function initCopyBtn() {
    ---------------------------------------------------------- */
 
 async function buildAndDownloadPDF() {
-  // Wait for pdf-lib to load if not yet available (CDN async)
+  // ---- Wait for pdf-lib CDN load ----
   if (typeof PDFLib === 'undefined') {
     let waited = 0;
     while (typeof PDFLib === 'undefined' && waited < 5000) {
@@ -621,186 +650,324 @@ async function buildAndDownloadPDF() {
 
   const { PDFDocument, rgb, StandardFonts, degrees } = PDFLib;
 
+  // ---- SETUP ----
   const pdfDoc = await PDFDocument.create();
   const page   = pdfDoc.addPage([595.28, 841.89]); // A4
   const { width, height } = page.getSize();
+  const MARGIN = 40;
+  const COL_W  = (width - MARGIN * 2) / 2;
 
   const fontBold    = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
   const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-  const blue   = rgb(0.149, 0.392, 0.922);
-  const dark   = rgb(0.059, 0.090, 0.165);
-  const muted  = rgb(0.396, 0.455, 0.573);
-  const white  = rgb(1, 1, 1);
-  const green  = rgb(0.204, 0.827, 0.6);
+  // ---- COLOR PALETTE ----
+  const cBlue      = rgb(0.149, 0.392, 0.922);   // #2563EB
+  const cBlueDark  = rgb(0.094, 0.259, 0.682);   // darker blue
+  const cBlueMid   = rgb(0.224, 0.478, 0.965);   // mid blue accent
+  const cDark      = rgb(0.059, 0.090, 0.165);   // #0F172A
+  const cMuted     = rgb(0.396, 0.455, 0.573);   // #657591
+  const cWhite     = rgb(1, 1, 1);
+  const cGray      = rgb(0.945, 0.953, 0.965);   // light gray bg
+  const cGrayLine  = rgb(0.878, 0.898, 0.925);   // divider color
+  const cYellow    = rgb(0.996, 0.847, 0.094);   // status badge
+  const cYellowDk  = rgb(0.451, 0.318, 0);       // status text
 
-  // ---- HEADER BAND ----
-  page.drawRectangle({ x: 0, y: height - 90, width, height: 90, color: blue });
+  // ---- HELPER: capitalize ----
+  const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+  const safeStr = s => (s && s.trim()) ? s.trim() : '—';
 
+  // ---- HELPER: wrap long text into multiple lines ----
+  function wrapText(text, maxChars) {
+    if (!text || text === '—') return ['—'];
+    const words = text.split(' ');
+    const lines = [];
+    let line = '';
+    for (const word of words) {
+      if ((line + ' ' + word).trim().length > maxChars) {
+        if (line) lines.push(line.trim());
+        line = word;
+      } else {
+        line = (line + ' ' + word).trim();
+      }
+    }
+    if (line) lines.push(line.trim());
+    return lines;
+  }
+
+  // ---- COLLECT DATA ----
+  const refId    = document.getElementById('referenceId')?.textContent?.trim() || '—';
+  const dateStr  = document.getElementById('successSubmittedOn')?.textContent?.trim() || '—';
+  const genTime  = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+  const instName = safeStr(getVal('institutionName'));
+
+  const mods = [...document.querySelectorAll('input[name="modules"]:checked')]
+    .map(cb => cb.nextElementSibling?.textContent?.trim() || cb.value);
+  const modsText = mods.length ? mods.join(', ') : '—';
+
+  // ================================================================
+  // HEADER BAND (full width blue)
+  // ================================================================
+  const HEADER_H = 100;
+  page.drawRectangle({ x: 0, y: height - HEADER_H, width, height: HEADER_H, color: cBlue });
+
+  // Subtle darker strip at bottom of header
+  page.drawRectangle({ x: 0, y: height - HEADER_H, width, height: 4, color: cBlueDark });
+
+  // Brand name
   page.drawText('CampusOne', {
-    x: 40, y: height - 38,
-    size: 22, font: fontBold, color: white,
+    x: MARGIN, y: height - 38,
+    size: 26, font: fontBold, color: cWhite,
   });
 
+  // Tagline
   page.drawText('Enterprise Education Platform', {
-    x: 40, y: height - 57,
+    x: MARGIN, y: height - 58,
     size: 9, font: fontRegular, color: rgb(0.74, 0.85, 0.99),
   });
 
+  // Doc title
   page.drawText('INSTITUTION REGISTRATION APPLICATION', {
-    x: 40, y: height - 80,
-    size: 10, font: fontBold, color: white,
+    x: MARGIN, y: height - 82,
+    size: 9, font: fontBold, color: rgb(0.85, 0.92, 1.0),
   });
 
-  // ---- Reference & Date ----
-  const refId = document.getElementById('referenceId')?.textContent || '—';
-  const dateStr = document.getElementById('successSubmittedOn')?.textContent || '—';
-
-  page.drawText(`Ref: ${refId}`, {
-    x: width - 200, y: height - 42,
-    size: 8, font: fontBold, color: white,
+  // Right side — Ref ID box
+  const refBoxX = width - 190;
+  page.drawText('REF ID', {
+    x: refBoxX, y: height - 28,
+    size: 6.5, font: fontBold, color: rgb(0.74, 0.85, 0.99),
+  });
+  page.drawText(refId, {
+    x: refBoxX, y: height - 43,
+    size: 7.5, font: fontBold, color: cWhite,
+  });
+  page.drawText('DATE', {
+    x: refBoxX, y: height - 60,
+    size: 6.5, font: fontBold, color: rgb(0.74, 0.85, 0.99),
+  });
+  page.drawText(dateStr, {
+    x: refBoxX, y: height - 73,
+    size: 8, font: fontRegular, color: cWhite,
   });
 
-  page.drawText(`Date: ${dateStr}`, {
-    x: width - 200, y: height - 57,
-    size: 8, font: fontRegular, color: rgb(0.74, 0.85, 0.99),
+  // Status badge — yellow pill shape
+  page.drawRectangle({
+    x: refBoxX, y: height - 95, width: 130, height: 18,
+    color: cYellow, borderRadius: 3,
   });
-
-  // ---- STATUS BADGE ----
-  page.drawRectangle({ x: width - 200, y: height - 82, width: 145, height: 18, color: rgb(0.98, 0.75, 0.14) });
   page.drawText('PENDING REVIEW', {
-    x: width - 196, y: height - 78,
-    size: 8, font: fontBold, color: dark,
+    x: refBoxX + 10, y: height - 91,
+    size: 8, font: fontBold, color: cYellowDk,
   });
 
-  // ---- LOGO (if present) ----
-  let yPos = height - 110;
+  // ================================================================
+  // INSTITUTION NAME BANNER (below header)
+  // ================================================================
+  page.drawRectangle({ x: 0, y: height - HEADER_H - 36, width, height: 36, color: cGray });
+  page.drawText(instName.substring(0, 60), {
+    x: MARGIN, y: height - HEADER_H - 22,
+    size: 13, font: fontBold, color: cDark,
+  });
+  page.drawText('Registered Institution', {
+    x: width - 140, y: height - HEADER_H - 22,
+    size: 8, font: fontRegular, color: cMuted,
+  });
 
-  if (logoDataURL) {
-    try {
-      let img;
-      if (logoDataURL.startsWith('data:image/png')) {
-        const pngData = logoDataURL.split(',')[1];
-        img = await pdfDoc.embedPng(Uint8Array.from(atob(pngData), c => c.charCodeAt(0)));
-      } else if (logoDataURL.startsWith('data:image/jpeg')) {
-        const jpgData = logoDataURL.split(',')[1];
-        img = await pdfDoc.embedJpg(Uint8Array.from(atob(jpgData), c => c.charCodeAt(0)));
-      }
-      if (img) {
-        const dims = img.scale(0.25);
-        page.drawImage(img, {
-          x: width - 40 - dims.width,
-          y: yPos - dims.height + 20,
-          width: dims.width,
-          height: dims.height,
+  // ================================================================
+  // SECTION DRAWING ENGINE
+  // ================================================================
+  let curY = height - HEADER_H - 36 - 20; // start below banner
+
+  // Draw a section with proper label+value rows, wrapping, alternating bg
+  function drawSection(sectionNum, sectionTitle, fields) {
+    const LABEL_SIZE  = 6.5;
+    const VALUE_SIZE  = 9;
+    const ROW_H       = 28;
+    const SECTION_PAD = 8;
+
+    // Section header bar
+    page.drawRectangle({
+      x: 0, y: curY - 22, width, height: 22, color: rgb(0.235, 0.451, 0.918),
+    });
+    page.drawText(`${sectionNum}. ${sectionTitle.toUpperCase()}`, {
+      x: MARGIN, y: curY - 15,
+      size: 8, font: fontBold, color: cWhite,
+    });
+    curY -= 22;
+
+    // Pair fields into rows of 2 columns
+    const rows = [];
+    for (let i = 0; i < fields.length; i += 2) {
+      rows.push([fields[i], fields[i + 1] || null]);
+    }
+
+    rows.forEach((pair, rowIdx) => {
+      const rowBg = rowIdx % 2 === 0 ? rgb(1,1,1) : rgb(0.976, 0.980, 0.988);
+      const rowY  = curY - ROW_H;
+
+      // Row background
+      page.drawRectangle({ x: MARGIN - 4, y: rowY, width: width - (MARGIN - 4) * 2, height: ROW_H, color: rowBg });
+
+      // Left cell
+      const left = pair[0];
+      const leftLines = wrapText(safeStr(left.value), 32);
+      page.drawText(left.label.toUpperCase(), {
+        x: MARGIN, y: curY - 10,
+        size: LABEL_SIZE, font: fontBold, color: cMuted,
+      });
+      page.drawText(leftLines[0], {
+        x: MARGIN, y: curY - 21,
+        size: VALUE_SIZE, font: fontBold, color: cDark,
+      });
+      if (leftLines[1]) {
+        page.drawText(leftLines[1], {
+          x: MARGIN, y: curY - 32,
+          size: VALUE_SIZE, font: fontBold, color: cDark,
         });
       }
-    } catch (e) {
-      console.warn('Logo embedding failed:', e);
-    }
-  }
 
-  // ---- SECTION HELPER ----
-  function drawSection(title, fields, startY) {
-    // Section header
-    page.drawRectangle({ x: 40, y: startY - 2, width: width - 80, height: 1, color: rgb(0.9, 0.93, 0.98) });
+      // Right cell (if exists)
+      if (pair[1]) {
+        const right = pair[1];
+        const rightLines = wrapText(safeStr(right.value), 32);
+        page.drawText(right.label.toUpperCase(), {
+          x: MARGIN + COL_W, y: curY - 10,
+          size: LABEL_SIZE, font: fontBold, color: cMuted,
+        });
+        page.drawText(rightLines[0], {
+          x: MARGIN + COL_W, y: curY - 21,
+          size: VALUE_SIZE, font: fontBold, color: cDark,
+        });
+        if (rightLines[1]) {
+          page.drawText(rightLines[1], {
+            x: MARGIN + COL_W, y: curY - 32,
+            size: VALUE_SIZE, font: fontBold, color: cDark,
+          });
+        }
+      }
 
-    page.drawText(title.toUpperCase(), {
-      x: 40, y: startY + 6,
-      size: 7.5, font: fontBold, color: blue,
-    });
-
-    let y = startY - 18;
-    const colW = (width - 80) / 2;
-
-    fields.forEach((field, i) => {
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-      const x   = 40 + col * colW;
-      const fy  = y - row * 30;
-
-      page.drawText(field.label + ':', {
-        x, y: fy,
-        size: 7, font: fontBold, color: muted,
+      // Bottom divider
+      page.drawLine({
+        start: { x: MARGIN - 4, y: rowY },
+        end:   { x: width - MARGIN + 4, y: rowY },
+        thickness: 0.5, color: cGrayLine,
       });
 
-      page.drawText(String(field.value || '—').substring(0, 55), {
-        x, y: fy - 11,
-        size: 9, font: fontRegular, color: dark,
-      });
+      curY -= ROW_H;
     });
 
-    const rows = Math.ceil(fields.length / 2);
-    return y - rows * 30 - 20;
+    curY -= SECTION_PAD; // gap after section
   }
 
-  // ---- INSTITUTION IDENTITY ----
-  yPos = drawSection('1. Institution Identity', [
-    { label: 'Institution Name',    value: getVal('institutionName') },
-    { label: 'Type',                value: getVal('institutionType') },
-    { label: 'Category',            value: getVal('institutionCategory') },
-    { label: 'Code',                value: getVal('institutionCode') },
-    { label: 'Established',         value: getVal('establishmentYear') },
-    { label: 'University/Board',    value: getVal('universityAffiliation') },
-  ], yPos);
+  // ================================================================
+  // SECTION 1 — INSTITUTION IDENTITY
+  // ================================================================
+  drawSection(1, 'Institution Identity', [
+    { label: 'Institution Name',       value: safeStr(getVal('institutionName')) },
+    { label: 'Establishment Year',     value: safeStr(getVal('establishmentYear')) },
+    { label: 'Institution Type',       value: cap(getVal('institutionType')) },
+    { label: 'Institution Category',   value: cap(getVal('institutionCategory')) },
+    { label: 'Institution Code',       value: safeStr(getVal('institutionCode')) },
+    { label: 'University / Board',     value: safeStr(getVal('universityAffiliation')) },
+  ]);
 
-  // ---- CONTACT ----
-  yPos = drawSection('2. Contact & Strength', [
-    { label: 'Principal/Director',  value: getVal('principalName') },
-    { label: 'Official Email',      value: getVal('email') },
-    { label: 'Mobile',              value: getVal('mobile') },
-    { label: 'Website',             value: getVal('website') },
-    { label: 'Student Strength',    value: getVal('studentStrength') },
-    { label: 'Faculty Strength',    value: getVal('facultyStrength') },
-    { label: 'Institution Size',    value: getVal('institutionSize') },
-    { label: 'Academic Session',    value: getVal('academicSession') },
-  ], yPos);
+  // ================================================================
+  // SECTION 2 — CONTACT & STRENGTH
+  // ================================================================
+  drawSection(2, 'Contact & Strength', [
+    { label: 'Principal / Director',   value: safeStr(getVal('principalName')) },
+    { label: 'Official Email',         value: safeStr(getVal('email')) },
+    { label: 'Official Mobile',        value: safeStr(getVal('mobile')) },
+    { label: 'Website',                value: safeStr(getVal('website')) },
+    { label: 'Student Strength',       value: safeStr(getVal('studentStrength')) },
+    { label: 'Faculty Strength',       value: safeStr(getVal('facultyStrength')) },
+    { label: 'Institution Size',       value: safeStr(getVal('institutionSize')) },
+    { label: 'Academic Session',       value: safeStr(getVal('academicSession')) },
+  ]);
 
-  // ---- MODULES ----
-  const mods = [...document.querySelectorAll('input[name="modules"]:checked')]
-    .map(cb => cb.nextElementSibling?.textContent?.trim() || cb.value)
-    .join(', ') || '—';
+  // ================================================================
+  // SECTION 3 — MODULES & REFERRAL
+  // ================================================================
+  // Modules as full-width row (can be long)
+  const SECTION3_HEADER_H = 22;
+  page.drawRectangle({ x: 0, y: curY - SECTION3_HEADER_H, width, height: SECTION3_HEADER_H, color: rgb(0.235, 0.451, 0.918) });
+  page.drawText('3. MODULES & REFERRAL', {
+    x: MARGIN, y: curY - 15, size: 8, font: fontBold, color: cWhite,
+  });
+  curY -= SECTION3_HEADER_H;
 
-  yPos = drawSection('3. Modules & Referral', [
-    { label: 'Selected Modules',    value: mods },
-    { label: 'Referral Source',     value: getVal('referralSource') },
-  ], yPos);
+  // Modules full-width row
+  const modLines = wrapText(modsText, 90);
+  const modRowH  = 14 + modLines.length * 12;
+  page.drawRectangle({ x: MARGIN - 4, y: curY - modRowH, width: width - (MARGIN-4)*2, height: modRowH, color: cWhite });
+  page.drawText('SELECTED MODULES', { x: MARGIN, y: curY - 10, size: 6.5, font: fontBold, color: cMuted });
+  modLines.forEach((line, i) => {
+    page.drawText(line, { x: MARGIN, y: curY - 21 - i * 12, size: 9, font: fontBold, color: cDark });
+  });
+  page.drawLine({ start: { x: MARGIN-4, y: curY - modRowH }, end: { x: width-MARGIN+4, y: curY - modRowH }, thickness: 0.5, color: cGrayLine });
+  curY -= modRowH;
 
-  // ---- LOCATION ----
-  yPos = drawSection('4. Location', [
-    { label: 'City',                value: getVal('city') },
-    { label: 'State',               value: getVal('state') },
-    { label: 'Country',             value: getVal('country') },
-    { label: 'Address',             value: getVal('address').substring(0, 40) },
-  ], yPos);
+  // Referral source row
+  page.drawRectangle({ x: MARGIN-4, y: curY - 28, width: width-(MARGIN-4)*2, height: 28, color: rgb(0.976, 0.980, 0.988) });
+  page.drawText('REFERRAL SOURCE', { x: MARGIN, y: curY - 10, size: 6.5, font: fontBold, color: cMuted });
+  page.drawText(cap(getVal('referralSource')), { x: MARGIN, y: curY - 21, size: 9, font: fontBold, color: cDark });
+  curY -= 28 + 8;
 
-  // ---- COMPLIANCE ----
-  yPos = drawSection('5. Compliance & Recognition', [
-    { label: 'Accreditation',       value: getVal('accreditation') },
-    { label: 'GST Number',          value: getVal('gstNumber') },
-    { label: 'PAN Number',          value: getVal('panNumber') },
-  ], yPos);
+  // ================================================================
+  // SECTION 4 — LOCATION
+  // ================================================================
+  const addrLines = wrapText(safeStr(getVal('address')), 80);
+  drawSection(4, 'Location', [
+    { label: 'City',    value: safeStr(getVal('city')) },
+    { label: 'State',   value: safeStr(getVal('state')) },
+    { label: 'Country', value: safeStr(getVal('country')) },
+    { label: 'Address', value: addrLines.join(' ') },
+  ]);
 
-  // ---- WATERMARK ----
+  // ================================================================
+  // SECTION 5 — COMPLIANCE & RECOGNITION
+  // ================================================================
+  drawSection(5, 'Compliance & Recognition', [
+    { label: 'Accreditation / Recognition', value: safeStr(getVal('accreditation')) },
+    { label: 'GST Number',                  value: safeStr(getVal('gstNumber')) },
+    { label: 'PAN Number',                  value: safeStr(getVal('panNumber')) },
+    { label: 'Consent',                     value: 'Accepted — Terms & Privacy Policy' },
+  ]);
+
+  // ================================================================
+  // WATERMARK — diagonal, centered, very light
+  // ================================================================
   page.drawText('CAMPUSONE OFFICIAL DOCUMENT', {
-    x: 90, y: height / 2 - 60,
-    size: 38, font: fontBold,
-    color: rgb(0.95, 0.96, 0.98),
-    rotate: degrees(35),
-    opacity: 0.22,
+    x: 75, y: height / 2 - 80,
+    size: 40, font: fontBold,
+    color: rgb(0.878, 0.898, 0.925),
+    rotate: degrees(38),
+    opacity: 0.18,
   });
 
-  // ---- FOOTER ----
-  page.drawRectangle({ x: 0, y: 0, width, height: 40, color: dark });
+  // ================================================================
+  // FOOTER BAR
+  // ================================================================
+  const FOOTER_H = 44;
+  page.drawRectangle({ x: 0, y: 0, width, height: FOOTER_H, color: cDark });
 
-  page.drawText('This document is a digital receipt of your registration request with CampusOne.', {
-    x: 40, y: 24, size: 7.5, font: fontRegular, color: muted,
+  // Left: disclaimer
+  page.drawText('This document is an official digital receipt of your CampusOne registration request.', {
+    x: MARGIN, y: 28, size: 6.5, font: fontRegular, color: rgb(0.6, 0.65, 0.75),
   });
-  page.drawText(`Reference ID: ${refId}  •  campusone.app`, {
-    x: 40, y: 12, size: 7, font: fontBold, color: rgb(0.6, 0.7, 0.85),
+  page.drawText(`Ref: ${refId}   |   Generated: ${dateStr} at ${genTime}   |   campusone.app`, {
+    x: MARGIN, y: 14, size: 6.5, font: fontBold, color: rgb(0.55, 0.65, 0.85),
   });
 
-  // Save and download
+  // Right: Page 1 of 1
+  page.drawText('Page 1 of 1', {
+    x: width - 80, y: 19,
+    size: 7, font: fontRegular, color: rgb(0.5, 0.55, 0.65),
+  });
+
+  // ================================================================
+  // SAVE & DOWNLOAD
+  // ================================================================
   const pdfBytes = await pdfDoc.save();
   const blob     = new Blob([pdfBytes], { type: 'application/pdf' });
   const url      = URL.createObjectURL(blob);

@@ -1,6 +1,6 @@
-//import { submitInstitutionRequest } from "../shared/firestore.js";
+import { submitInstitutionRequest } from "../shared/firestore.js";
 
-//import { generateReferenceId } from "../shared/helpers.js";
+import { generateReferenceId } from "../shared/helpers.js";
 
 /* ==========================================================
    CAMPUSONE - REGISTER INSTITUTION

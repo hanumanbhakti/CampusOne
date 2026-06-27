@@ -4031,3 +4031,349 @@ html[data-theme="light"] .card-top h2 { color: #0F172A; }
   }
 }
 
+
+/* ==========================================================
+   PHASE 1 — DESIGN SYSTEM REFINEMENT LAYER
+   Principal UI / Motion / Performance pass.
+   Pure additive overrides — no prior rule removed, no class
+   renamed, no markup or behavior touched.
+   ========================================================== */
+
+:root{
+  --ease-out-expo: cubic-bezier(.16,1,.3,1);
+  --ease-spring:   cubic-bezier(.34,1.56,.64,1);
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.18);
+  --shadow-md: 0 12px 32px rgba(0,0,0,.28);
+  --shadow-lg: 0 30px 80px rgba(0,0,0,.45);
+  --shadow-glow: 0 0 0 1px rgba(96,165,250,.18), 0 18px 45px rgba(37,99,235,.25);
+
+  --surface-2: rgba(var(--tint-rgb),.05);
+  --border-hairline: rgba(var(--tint-rgb),.09);
+}
+
+html[data-theme="light"]{
+  --shadow-sm: 0 2px 8px rgba(15,23,42,.06);
+  --shadow-md: 0 12px 32px rgba(15,23,42,.08);
+  --shadow-lg: 0 30px 80px rgba(15,23,42,.12);
+  --shadow-glow: 0 0 0 1px rgba(37,99,235,.12), 0 18px 45px rgba(37,99,235,.14);
+}
+
+/* ----------------------------------------------------------
+   GLOBAL FOCUS — consistent, accessible, GPU-only
+   ---------------------------------------------------------- */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  outline:2px solid #60A5FA;
+  outline-offset:2px;
+  border-radius:inherit;
+}
+
+/* ----------------------------------------------------------
+   HEADER — depth on scroll context, crisper glass
+   ---------------------------------------------------------- */
+
+.registration-header{
+  background:rgba(var(--tint-rgb),.035);
+  border-bottom:1px solid var(--border-hairline);
+  box-shadow:var(--shadow-sm);
+}
+
+.header-cta{
+  box-shadow:0 6px 18px rgba(37,99,235,.22);
+  transition:transform .35s var(--ease-out-expo), box-shadow .35s var(--ease-out-expo);
+}
+
+.header-cta:hover{
+  box-shadow:0 14px 32px rgba(37,99,235,.4);
+}
+
+/* ----------------------------------------------------------
+   HERO — refined rhythm + subtle entrance motion
+   ---------------------------------------------------------- */
+
+.hero-badge,
+.hero-title,
+.hero-description{
+  animation:fade-rise .6s var(--ease-out-expo) both;
+}
+
+.hero-title{ animation-delay:.05s; }
+.hero-description{ animation-delay:.1s; }
+
+@keyframes fade-rise{
+  from{ opacity:0; transform:translate3d(0,14px,0); }
+  to{ opacity:1; transform:translate3d(0,0,0); }
+}
+
+.benefit-item{
+  transition:transform .35s var(--ease-out-expo), box-shadow .35s var(--ease-out-expo), border-color .35s ease;
+}
+
+.benefit-item:hover{
+  box-shadow:var(--shadow-sm);
+  border-color:rgba(96,165,250,.22);
+}
+
+.stat-card{
+  transition:transform .35s var(--ease-out-expo), box-shadow .35s var(--ease-out-expo), border-color .35s ease;
+  will-change:transform;
+}
+
+.stat-card:hover{
+  box-shadow:var(--shadow-md);
+  border-color:rgba(96,165,250,.2);
+}
+
+/* ----------------------------------------------------------
+   REGISTRATION CARD — sharper glass, layered elevation
+   ---------------------------------------------------------- */
+
+.registration-card{
+  box-shadow:var(--shadow-lg), 0 1px 0 rgba(255,255,255,.05) inset;
+  transition:box-shadow .4s ease;
+}
+
+.card-badge{
+  box-shadow:0 4px 14px rgba(37,99,235,.18);
+}
+
+/* ----------------------------------------------------------
+   INPUTS — calmer rest state, more confident focus
+   ---------------------------------------------------------- */
+
+.input-group input,
+.input-group textarea,
+.input-group select{
+  transition:
+    border-color .25s var(--ease-out-expo),
+    box-shadow .25s var(--ease-out-expo),
+    transform .25s var(--ease-out-expo);
+}
+
+.input-group input:hover:not(:focus),
+.input-group select:hover:not(:focus),
+.input-group textarea:hover:not(:focus){
+  border-color:rgba(var(--tint-rgb),.16);
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus{
+  box-shadow:0 0 0 4px rgba(59,130,246,.14), var(--shadow-sm);
+}
+
+/* ----------------------------------------------------------
+   BUTTONS — premium press feel, GPU-only transforms
+   ---------------------------------------------------------- */
+
+.btn-next,
+.btn-back,
+.submit-btn{
+  transition:
+    transform .3s var(--ease-out-expo),
+    box-shadow .3s var(--ease-out-expo),
+    background-color .3s ease;
+  will-change:transform;
+}
+
+.btn-next:hover,
+.submit-btn:hover{
+  box-shadow:var(--shadow-glow);
+}
+
+.btn-back:hover{
+  transform:translateY(-2px);
+  background:rgba(var(--tint-rgb),.08);
+}
+
+/* ----------------------------------------------------------
+   PROGRESS STEPPER — smoother fills, no layout shift
+   ---------------------------------------------------------- */
+
+.progress-dot{
+  transition:
+    background-color .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease,
+    transform .35s var(--ease-spring);
+}
+
+.progress-step.is-active .progress-dot{
+  transform:scale(1.06);
+}
+
+.progress-step:not(:last-child)::after{
+  transition:background .4s ease;
+}
+
+/* ----------------------------------------------------------
+   FILE DROP — gentler lift, GPU transform only
+   ---------------------------------------------------------- */
+
+.file-drop{
+  transition:
+    border-color .3s var(--ease-out-expo),
+    background-color .3s var(--ease-out-expo),
+    transform .3s var(--ease-out-expo);
+}
+
+/* ----------------------------------------------------------
+   CHIP CHECKBOX — refined elevation on select
+   ---------------------------------------------------------- */
+
+.chip-checkbox{
+  transition:
+    transform .25s var(--ease-out-expo),
+    border-color .25s ease,
+    background-color .25s ease,
+    box-shadow .25s ease;
+}
+
+/* ----------------------------------------------------------
+   TRUST / STEP CARDS — consistent elevation language
+   ---------------------------------------------------------- */
+
+.how-step-card,
+.trust-card{
+  transition:
+    transform .35s var(--ease-out-expo),
+    box-shadow .35s var(--ease-out-expo),
+    border-color .35s ease;
+}
+
+.how-step-card:hover,
+.trust-card:hover{
+  box-shadow:var(--shadow-md);
+}
+
+/* ----------------------------------------------------------
+   SUCCESS / TRACK CARDS — calmer, consistent depth
+   ---------------------------------------------------------- */
+
+.success-pdf-btn,
+.track-submit-btn,
+.success-copy-btn{
+  will-change:transform;
+}
+
+/* ----------------------------------------------------------
+   SKELETON / LOADING STATES (styling-only, additive)
+   Targets common loading-state hooks if present in markup;
+   harmless no-ops otherwise.
+   ---------------------------------------------------------- */
+
+.is-loading,
+[data-loading="true"]{
+  position:relative;
+  overflow:hidden;
+}
+
+.skeleton,
+.is-loading::after{
+  background:linear-gradient(
+    90deg,
+    rgba(var(--tint-rgb),.04) 25%,
+    rgba(var(--tint-rgb),.09) 37%,
+    rgba(var(--tint-rgb),.04) 63%
+  );
+  background-size:400% 100%;
+  animation:skeleton-sheen 1.6s ease infinite;
+}
+
+@keyframes skeleton-sheen{
+  0%{ background-position:100% 50%; }
+  100%{ background-position:0% 50%; }
+}
+
+/* ----------------------------------------------------------
+   ERROR STATE — calmer, accessible emphasis
+   ---------------------------------------------------------- */
+
+.field-error:not(:empty){
+  animation:error-in .25s var(--ease-out-expo);
+}
+
+@keyframes error-in{
+  from{ opacity:0; transform:translate3d(0,-3px,0); }
+  to{ opacity:1; transform:translate3d(0,0,0); }
+}
+
+/* ----------------------------------------------------------
+   SCROLLBAR — subtle, theme-aware (progressive enhancement)
+   ---------------------------------------------------------- */
+
+::-webkit-scrollbar{
+  width:10px;
+  height:10px;
+}
+
+::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  background:rgba(var(--tint-rgb),.14);
+  border-radius:999px;
+  border:2px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:rgba(var(--tint-rgb),.22);
+}
+
+/* ----------------------------------------------------------
+   SELECTION COLOR — brand-aligned
+   ---------------------------------------------------------- */
+
+::selection{
+  background:rgba(37,99,235,.35);
+  color:var(--text);
+}
+
+/* ----------------------------------------------------------
+   RESPONSIVE POLISH — fluid type, tighter mobile rhythm
+   (additive refinements layered on existing breakpoints)
+   ---------------------------------------------------------- */
+
+@media (max-width:1100px){
+  .registration-shell{
+    padding-top:104px;
+  }
+}
+
+@media (max-width:600px){
+  .registration-header{
+    padding:16px 20px;
+  }
+
+  .hero-stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media (max-width:380px){
+  .card-badge{
+    font-size:.74rem;
+    padding:6px 12px;
+  }
+}
+
+/* ----------------------------------------------------------
+   REDUCED MOTION — respected across all new motion above
+   ---------------------------------------------------------- */
+
+@media(prefers-reduced-motion:reduce){
+  .hero-badge,
+  .hero-title,
+  .hero-description,
+  .field-error:not(:empty),
+  .skeleton,
+  .is-loading::after{
+    animation:none !important;
+  }
+}

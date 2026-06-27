@@ -3519,7 +3519,7 @@ display:block;
   transform: translateX(100%);
 }
 
-.mobile-drawer.is-open {
+.mobile-drawer.open {
   transform: translateX(0);
 }
 
@@ -3534,7 +3534,7 @@ display:block;
   transition: opacity 0.3s ease;
 }
 
-.drawer-overlay.is-visible {
+.drawer-overlay.active {
   opacity: 1;
   pointer-events: auto;
 }

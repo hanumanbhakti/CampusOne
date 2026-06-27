@@ -43,16 +43,16 @@ function initDrawer() {
   if (!menuToggle || !mobileDrawer) return;
 
   function openDrawer() {
-    mobileDrawer.classList.add('is-open');
-    drawerOverlay.classList.add('is-visible');
+    mobileDrawer.classList.add('open');
+    drawerOverlay.classList.add('active');
     mobileDrawer.setAttribute('aria-hidden', 'false');
     menuToggle.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
   }
 
   function closeDrawer() {
-    mobileDrawer.classList.remove('is-open');
-    drawerOverlay.classList.remove('is-visible');
+    mobileDrawer.classList.remove('open');
+    drawerOverlay.classList.remove('active');
     mobileDrawer.setAttribute('aria-hidden', 'true');
     menuToggle.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
@@ -462,17 +462,33 @@ function generateRefId() {
 
 async function generateQR(canvas, text) {
   try {
-    if (typeof QRCode === 'undefined') return;
+    if (typeof QRCode === 'undefined') {
+      console.warn('QRCode library not loaded');
+      return;
+    }
+    // Detect current theme for QR colors
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
     await QRCode.toCanvas(canvas, text, {
-      width: 96,
-      margin: 1,
+      width: 112,
+      margin: 2,
       color: {
-        dark: '#FFFFFF',
-        light: '#00000000',
+        dark:  isDark ? '#FFFFFF' : '#0F172A',
+        light: isDark ? '#1E293B' : '#F1F5F9',
       },
     });
+    canvas.style.borderRadius = '10px';
   } catch (err) {
     console.warn('QR generation failed:', err);
+    // Fallback
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = '#1E293B';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#60A5FA';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('QR unavailable', canvas.width / 2, canvas.height / 2);
+    }
   }
 }
 
@@ -588,12 +604,20 @@ function initCopyBtn() {
    ---------------------------------------------------------- */
 
 async function buildAndDownloadPDF() {
+  // Wait for pdf-lib to load if not yet available (CDN async)
   if (typeof PDFLib === 'undefined') {
-    alert('PDF library not loaded. Please check your internet connection.');
+    let waited = 0;
+    while (typeof PDFLib === 'undefined' && waited < 5000) {
+      await new Promise(r => setTimeout(r, 200));
+      waited += 200;
+    }
+  }
+  if (typeof PDFLib === 'undefined') {
+    alert('PDF library could not load. Please check your internet connection and try again.');
     return;
   }
 
-  const { PDFDocument, rgb, StandardFonts } = PDFLib;
+  const { PDFDocument, rgb, StandardFonts, degrees } = PDFLib;
 
   const pdfDoc = await PDFDocument.create();
   const page   = pdfDoc.addPage([595.28, 841.89]); // A4
@@ -642,7 +666,7 @@ async function buildAndDownloadPDF() {
 
   // ---- STATUS BADGE ----
   page.drawRectangle({ x: width - 200, y: height - 82, width: 145, height: 18, color: rgb(0.98, 0.75, 0.14) });
-  page.drawText('⏳ PENDING REVIEW', {
+  page.drawText('PENDING REVIEW', {
     x: width - 196, y: height - 78,
     size: 8, font: fontBold, color: dark,
   });
@@ -760,7 +784,7 @@ async function buildAndDownloadPDF() {
     x: 90, y: height / 2 - 60,
     size: 38, font: fontBold,
     color: rgb(0.95, 0.96, 0.98),
-    rotate: PDFLib.degrees(35),
+    rotate: degrees(35),
     opacity: 0.22,
   });
 
@@ -1083,7 +1107,7 @@ function injectExtraStyles() {
     /* Mobile drawer transition */
     .mobile-drawer { transition: transform .35s cubic-bezier(.4,0,.2,1); }
     .drawer-overlay { transition: opacity .3s ease; opacity: 0; pointer-events: none; }
-    .drawer-overlay.is-visible { opacity: 1; pointer-events: auto; }
+    .drawer-overlay.active { opacity: 1; pointer-events: auto; }
   `;
   document.head.appendChild(style);
 }

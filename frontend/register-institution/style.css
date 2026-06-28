@@ -917,7 +917,7 @@ filter:brightness(1.35);
     margin-bottom:18px;
 }
 
-.input-group label{
+.input-group > label{
     position:absolute;
     left:20px;
     top:19px;

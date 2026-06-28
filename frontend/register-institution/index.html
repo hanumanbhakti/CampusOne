@@ -620,7 +620,7 @@
                 type="text"
                 id="principalName"
                 name="principalName"
-                placeholder="e.g. Rajesh Sharma"
+                placeholder=" "
                 autocomplete="name"
                 required>
 
@@ -640,7 +640,7 @@
                   type="email"
                   id="email"
                   name="email"
-                  placeholder="admin@institution.edu"
+                  placeholder=" "
                   autocomplete="email"
                   required>
 
@@ -678,7 +678,7 @@
                 type="url"
                 id="website"
                 name="website"
-                placeholder="https://www.institution.edu"
+                placeholder=" "
                 autocomplete="url">
 
               <span class="field-error" data-error-for="website"></span>
@@ -697,7 +697,7 @@
                   type="number"
                   id="studentStrength"
                   name="studentStrength"
-                  placeholder="e.g. 2500"
+                  placeholder=" "
                   min="1"
                   required>
 
@@ -715,7 +715,7 @@
                   type="number"
                   id="facultyStrength"
                   name="facultyStrength"
-                  placeholder="e.g. 120"
+                  placeholder=" "
                   min="1"
                   required>
 
@@ -757,7 +757,7 @@
                   type="text"
                   id="academicSession"
                   name="academicSession"
-                  placeholder="e.g. 2026–2027"
+                  placeholder=" "
                   required>
 
                 <span class="field-error" data-error-for="academicSession"></span>
@@ -899,7 +899,7 @@
               <textarea
                 id="address"
                 name="address"
-                placeholder="Building, street, area"
+                placeholder=" "
                 autocomplete="street-address"
                 required></textarea>
 
@@ -919,7 +919,7 @@
                   type="text"
                   id="city"
                   name="city"
-                  placeholder="e.g. Pune"
+                  placeholder=" "
                   autocomplete="address-level2"
                   required>
 
@@ -992,7 +992,7 @@
                 type="text"
                 id="country"
                 name="country"
-                placeholder="e.g. India"
+                placeholder=" "
                 autocomplete="country-name"
                 value="India"
                 required>
@@ -1030,7 +1030,7 @@
                 type="text"
                 id="accreditation"
                 name="accreditation"
-                placeholder="e.g. NAAC, AICTE, UGC, CBSE, ICSE, State Board">
+                placeholder=" ">
 
               <span class="field-hint">Comma-separate if more than one applies</span>
 
@@ -1048,7 +1048,7 @@
                   type="text"
                   id="gstNumber"
                   name="gstNumber"
-                  placeholder="22AAAAA0000A1Z5">
+                  placeholder=" ">
 
                 <span class="field-hint">Optional</span>
 
@@ -1064,7 +1064,7 @@
                   type="text"
                   id="panNumber"
                   name="panNumber"
-                  placeholder="AAAAA0000A">
+                  placeholder=" ">
 
                 <span class="field-hint">Optional</span>
 
@@ -1273,9 +1273,16 @@
               </button>
               <button
                 type="submit"
-                class="submit-btn">
+                class="submit-btn"
+                id="submitBtn">
 
-                Submit Application
+                <span class="btn-label">Submit Application</span>
+                <span class="btn-spinner" aria-hidden="true"></span>
+                <span class="btn-tick" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </span>
 
               </button>
             </div>

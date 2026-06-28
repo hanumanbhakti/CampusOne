@@ -441,128 +441,136 @@
 
             <legend class="step-legend">Institution Identity</legend>
 
-            <div class="input-group">
+<div class="input-group">
 
-              <label for="institutionName">
-                Institution Name <span class="req">*</span>
-              </label>
+<input
+  type="text"
+  id="institutionName"
+  name="institutionName"
+  placeholder=" "
+  autocomplete="organization"
+  required>
 
-              <input
-                type="text"
-                id="institutionName"
-                name="institutionName"
-                placeholder="e.g. ABC Institute of Technology"
-                autocomplete="organization"
-                required>
+<label for="institutionName">
+  Institution Name <span class="req">*</span>
+</label>
 
-              <span class="field-error" data-error-for="institutionName"></span>
+  <span class="field-error" data-error-for="institutionName"></span>
 
-            </div>
+</div>
 
-            <div class="input-row">
+<div class="input-row">
 
-              <div class="input-group">
+  <div class="input-group">
 
-                <label for="institutionType">
-                  Institution Type <span class="req">*</span>
-                </label>
+    <div class="select-wrap">
 
-                <div class="select-wrap">
-                  <select id="institutionType" name="institutionType" required>
-                    <option value="" disabled selected>Select type</option>
-                    <option value="college">College</option>
-                    <option value="university">University</option>
-                    <option value="school">School</option>
-                    <option value="coaching">Coaching Institute</option>
-                    <option value="training-center">Training Center</option>
-                    <option value="polytechnic">Polytechnic</option>
-                    <option value="iti">ITI</option>
-                    <option value="nursing">Nursing College</option>
-                    <option value="management">Management Institute</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
+      <select id="institutionType" name="institutionType" required>
+        <option value="" disabled selected></option>
+        <option value="college">College</option>
+        <option value="university">University</option>
+        <option value="school">School</option>
+        <option value="coaching">Coaching Institute</option>
+        <option value="training-center">Training Center</option>
+        <option value="polytechnic">Polytechnic</option>
+        <option value="iti">ITI</option>
+        <option value="nursing">Nursing College</option>
+        <option value="management">Management Institute</option>
+        <option value="other">Other</option>
+      </select>
 
-                <span class="field-error" data-error-for="institutionType"></span>
+      <label for="institutionType">
+        Institution Type <span class="req">*</span>
+      </label>
 
-              </div>
+    </div>
 
-              <div class="input-group">
+    <span class="field-error" data-error-for="institutionType"></span>
 
-                <label for="institutionCategory">
-                  Institution Category <span class="req">*</span>
-                </label>
+  </div>
 
-                <div class="select-wrap">
-                  <select id="institutionCategory" name="institutionCategory" required>
-                    <option value="" disabled selected>Select category</option>
-                    <option value="government">Government</option>
-                    <option value="private">Private</option>
-                    <option value="semi-government">Semi-Government</option>
-                    <option value="autonomous">Autonomous</option>
-                  </select>
-                </div>
+  <div class="input-group">
 
-                <span class="field-error" data-error-for="institutionCategory"></span>
+    <div class="select-wrap">
 
-              </div>
+      <select id="institutionCategory" name="institutionCategory" required>
+        <option value="" disabled selected></option>
+        <option value="government">Government</option>
+        <option value="private">Private</option>
+        <option value="semi-government">Semi-Government</option>
+        <option value="autonomous">Autonomous</option>
+      </select>
 
-            </div>
+      <label for="institutionCategory">
+        Institution Category <span class="req">*</span>
+      </label>
 
-            <div class="input-row">
+    </div>
 
-              <div class="input-group">
+    <span class="field-error" data-error-for="institutionCategory"></span>
 
-                <label for="institutionCode">
-                  Institution Code
-                </label>
+  </div>
 
-                <input
-                  type="text"
-                  id="institutionCode"
-                  name="institutionCode"
-                  placeholder="e.g. AICTE/UGC assigned code">
+</div>
 
-                <span class="field-hint">Optional — official code, if already assigned</span>
+<div class="input-row">
 
-              </div>
+  <div class="input-group">
 
-              <div class="input-group">
+    <input
+      type="text"
+      id="institutionCode"
+      name="institutionCode"
+      placeholder=" ">
 
-                <label for="establishmentYear">
-                  Establishment Year <span class="req">*</span>
-                </label>
+    <label for="institutionCode">
+      Institution Code
+    </label>
 
-                <input
-                  type="number"
-                  id="establishmentYear"
-                  name="establishmentYear"
-                  placeholder="e.g. 2005"
-                  min="1800"
-                  max="2026"
-                  required>
+    <span class="field-hint">
+      Optional — official code, if already assigned
+    </span>
 
-                <span class="field-error" data-error-for="establishmentYear"></span>
+  </div>
 
-              </div>
+  <div class="input-group">
 
-            </div>
+    <input
+      type="number"
+      id="establishmentYear"
+      name="establishmentYear"
+      placeholder=" "
+      min="1800"
+      max="2026"
+      required>
 
-            <div class="input-group">
+    <label for="establishmentYear">
+      Establishment Year <span class="req">*</span>
+    </label>
 
-              <label for="universityAffiliation">
-                University / Board Affiliation
-              </label>
+    <span class="field-error" data-error-for="establishmentYear"></span>
 
-              <input
-                type="text"
-                id="universityAffiliation"
-                name="universityAffiliation"
-                placeholder="e.g. Affiliated to XYZ University (optional)">
+  </div>
 
-              <span class="field-hint">Leave blank if not applicable</span>
+</div>
 
-            </div>
+<div class="input-group">
+
+  <input
+    type="text"
+    id="universityAffiliation"
+    name="universityAffiliation"
+    placeholder=" ">
+
+  <label for="universityAffiliation">
+    University / Board Affiliation
+  </label>
+
+  <span class="field-hint">
+    Leave blank if not applicable
+  </span>
+
+</div>
 
             <div class="input-group">
 

@@ -1251,6 +1251,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateProgressConnectors();
     console.log("15");
+    
+    initCard3D();
 
   } catch (e) {
     console.error(e);
@@ -1268,4 +1270,49 @@ if (firstFieldset && !firstFieldset.classList.contains('is-active')) {
 
 if (firstDot && !firstDot.classList.contains('is-active')) {
   firstDot.classList.add('is-active');
+}
+
+/* ==========================================================
+   PREMIUM 3D CARD ENGINE
+========================================================== */
+
+function initCard3D() {
+
+const card = document.querySelector(".registration-card");
+
+if(!card) return;
+
+card.addEventListener("mousemove",(e)=>{
+
+const rect = card.getBoundingClientRect();
+
+const x = e.clientX - rect.left;
+const y = e.clientY - rect.top;
+
+const centerX = rect.width / 2;
+const centerY = rect.height / 2;
+
+const rotateY = ((x-centerX)/centerX)*8;
+const rotateX = ((centerY-y)/centerY)*8;
+
+card.style.transform=`
+perspective(1800px)
+rotateX(${rotateX}deg)
+rotateY(${rotateY}deg)
+translateY(-10px)
+`;
+
+});
+
+card.addEventListener("mouseleave",()=>{
+
+card.style.transform=`
+perspective(1800px)
+rotateX(0deg)
+rotateY(0deg)
+translateY(0px)
+`;
+
+});
+
 }

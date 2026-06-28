@@ -1253,6 +1253,8 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("15");
     
     initCard3D();
+    
+    initPremiumButtonEffects();
 
   } catch (e) {
     console.error(e);
@@ -1316,3 +1318,38 @@ translateY(0px)
 });
 
 }
+
+/* ----------------------------------------------------------
+   PREMIUM BUTTON EFFECTS — Ripple + Magnetic Hover
+   ---------------------------------------------------------- */
+
+function initPremiumButtonEffects() {
+  const btn = document.querySelector('.submit-btn');
+  if (!btn) return;
+
+  // Ripple on click
+  btn.addEventListener('click', function (e) {
+    const circle = document.createElement('span');
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    circle.className = 'ripple';
+    circle.style.width = circle.style.height = size + 'px';
+    circle.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    circle.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    btn.appendChild(circle);
+    setTimeout(() => circle.remove(), 600);
+  });
+
+  // Magnetic hover
+  btn.addEventListener('mousemove', function (e) {
+    const rect = btn.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width / 2) * 0.15;
+    const y = (e.clientY - rect.top - rect.height / 2) * 0.25;
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+  });
+
+  btn.addEventListener('mouseleave', function () {
+    btn.style.transform = '';
+  });
+}
+

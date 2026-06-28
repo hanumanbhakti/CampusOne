@@ -116,11 +116,19 @@ function getField(id) {
 function showFieldError(fieldName, msg) {
   const el = document.querySelector(`[data-error-for="${fieldName}"]`);
   if (el) el.textContent = msg;
+
+  const field = getField(fieldName);
+  const group = field ? field.closest('.input-group') : null;
+  if (group) group.classList.add('has-error');
 }
 
 function clearFieldError(fieldName) {
   const el = document.querySelector(`[data-error-for="${fieldName}"]`);
   if (el) el.textContent = '';
+
+  const field = getField(fieldName);
+  const group = field ? field.closest('.input-group') : null;
+  if (group) group.classList.remove('has-error');
 }
 
 function validateField(fieldName) {
@@ -312,6 +320,22 @@ function initMultiStepForm() {
     e.preventDefault();
     handleFormSubmit();
   });
+
+  // Ripple effect on submit button click
+  const submitBtnEl = form.querySelector('.submit-btn');
+  if (submitBtnEl) {
+    submitBtnEl.addEventListener('click', e => {
+      const rect = submitBtnEl.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = `${size}px`;
+      ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+      ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+      submitBtnEl.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    });
+  }
 }
 
 /* ----------------------------------------------------------
@@ -521,7 +545,7 @@ async function handleFormSubmit() {
   const submitBtn = document.querySelector('.submit-btn');
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting…';
+    submitBtn.classList.add('is-loading');
   }
 
 
@@ -584,7 +608,7 @@ try {
 
   if (submitBtn) {
     submitBtn.disabled = false;
-    submitBtn.textContent = "Submit Application";
+    submitBtn.classList.remove('is-loading');
   }
 
   return;
@@ -632,10 +656,10 @@ try {
     submittedOn,
   }));
 
-  // Generate PDF
+  // Show success tick on the submit button briefly
   if (submitBtn) {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit Application';
+    submitBtn.classList.remove('is-loading');
+    submitBtn.classList.add('is-success');
   }
 
   // Scroll to success card
@@ -656,17 +680,13 @@ function initCopyBtn() {
     try {
       await navigator.clipboard.writeText(text);
       copyBtn.textContent = 'Copied!';
-      copyBtn.style.background = 'rgba(52,211,153,.15)';
-      copyBtn.style.borderColor = 'rgba(52,211,153,.4)';
-      copyBtn.style.color = '#34D399';
+      copyBtn.classList.add('is-copied');
     } catch {
       copyBtn.textContent = 'Copy Failed';
     }
     setTimeout(() => {
       copyBtn.textContent = 'Copy';
-      copyBtn.style.background = '';
-      copyBtn.style.borderColor = '';
-      copyBtn.style.color = '';
+      copyBtn.classList.remove('is-copied');
     }, 2500);
   });
 }

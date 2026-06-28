@@ -612,10 +612,6 @@
 
             <div class="input-group">
 
-              <label for="principalName">
-                Principal / Director Name <span class="req">*</span>
-              </label>
-
               <input
                 type="text"
                 id="principalName"
@@ -623,6 +619,10 @@
                 placeholder=" "
                 autocomplete="name"
                 required>
+
+              <label for="principalName">
+                Principal / Director Name <span class="req">*</span>
+              </label>
 
               <span class="field-error" data-error-for="principalName"></span>
 
@@ -632,10 +632,6 @@
 
               <div class="input-group">
 
-                <label for="email">
-                  Official Email Address <span class="req">*</span>
-                </label>
-
                 <input
                   type="email"
                   id="email"
@@ -644,15 +640,15 @@
                   autocomplete="email"
                   required>
 
+                <label for="email">
+                  Official Email Address <span class="req">*</span>
+                </label>
+
                 <span class="field-error" data-error-for="email"></span>
 
               </div>
 
               <div class="input-group">
-
-                <label for="mobile">
-                  Official Mobile Number <span class="req">*</span>
-                </label>
 
                 <input
                   type="tel"
@@ -662,6 +658,10 @@
                   autocomplete="tel"
                   required>
 
+                <label for="mobile">
+                  Official Mobile Number <span class="req">*</span>
+                </label>
+
                 <span class="field-error" data-error-for="mobile"></span>
 
               </div>
@@ -670,16 +670,16 @@
 
             <div class="input-group">
 
-              <label for="website">
-                Institution Website
-              </label>
-
               <input
                 type="url"
                 id="website"
                 name="website"
                 placeholder=" "
                 autocomplete="url">
+
+              <label for="website">
+                Institution Website
+              </label>
 
               <span class="field-error" data-error-for="website"></span>
 
@@ -689,10 +689,6 @@
 
               <div class="input-group">
 
-                <label for="studentStrength">
-                  Student Strength <span class="req">*</span>
-                </label>
-
                 <input
                   type="number"
                   id="studentStrength"
@@ -701,15 +697,15 @@
                   min="1"
                   required>
 
+                <label for="studentStrength">
+                  Student Strength <span class="req">*</span>
+                </label>
+
                 <span class="field-error" data-error-for="studentStrength"></span>
 
               </div>
 
               <div class="input-group">
-
-                <label for="facultyStrength">
-                  Faculty Strength <span class="req">*</span>
-                </label>
 
                 <input
                   type="number"
@@ -718,6 +714,10 @@
                   placeholder=" "
                   min="1"
                   required>
+
+                <label for="facultyStrength">
+                  Faculty Strength <span class="req">*</span>
+                </label>
 
                 <span class="field-error" data-error-for="facultyStrength"></span>
 
@@ -729,18 +729,20 @@
 
               <div class="input-group">
 
-                <label for="institutionSize">
-                  Institution Size <span class="req">*</span>
-                </label>
-
                 <div class="select-wrap">
+
                   <select id="institutionSize" name="institutionSize" required>
-                    <option value="" disabled selected> </option>
+                    <option value="" disabled selected></option>
                     <option value="1-500">1 – 500</option>
                     <option value="501-2000">501 – 2,000</option>
                     <option value="2001-5000">2,001 – 5,000</option>
                     <option value="5000+">5,000+</option>
                   </select>
+
+                  <label for="institutionSize">
+                    Institution Size <span class="req">*</span>
+                  </label>
+
                 </div>
 
                 <span class="field-error" data-error-for="institutionSize"></span>
@@ -749,16 +751,16 @@
 
               <div class="input-group">
 
-                <label for="academicSession">
-                  Current Academic Session <span class="req">*</span>
-                </label>
-
                 <input
                   type="text"
                   id="academicSession"
                   name="academicSession"
                   placeholder=" "
                   required>
+
+                <label for="academicSession">
+                  Current Academic Session <span class="req">*</span>
+                </label>
 
                 <span class="field-error" data-error-for="academicSession"></span>
 
@@ -892,16 +894,16 @@
 
             <div class="input-group">
 
-              <label for="address">
-                Full Address <span class="req">*</span>
-              </label>
-
               <textarea
                 id="address"
                 name="address"
                 placeholder=" "
                 autocomplete="street-address"
                 required></textarea>
+
+              <label for="address">
+                Full Address <span class="req">*</span>
+              </label>
 
               <span class="field-error" data-error-for="address"></span>
 
@@ -911,10 +913,6 @@
 
               <div class="input-group">
 
-                <label for="city">
-                  City <span class="req">*</span>
-                </label>
-
                 <input
                   type="text"
                   id="city"
@@ -923,19 +921,19 @@
                   autocomplete="address-level2"
                   required>
 
+                <label for="city">
+                  City <span class="req">*</span>
+                </label>
+
                 <span class="field-error" data-error-for="city"></span>
 
               </div>
 
               <div class="input-group">
 
-                <label for="state">
-                  State <span class="req">*</span>
-                </label>
-
                 <div class="select-wrap">
                   <select id="state" name="state" autocomplete="address-level1" required>
-                    <option value="" disabled selected>Select state</option>
+                    <option value="" disabled selected></option>
                     <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
                     <option value="Andhra Pradesh">Andhra Pradesh</option>
                     <option value="Arunachal Pradesh">Arunachal Pradesh</option>
@@ -974,6 +972,11 @@
                     <option value="West Bengal">West Bengal</option>
                     <option value="Other">Other / Outside India</option>
                   </select>
+
+                  <label for="state">
+                    State <span class="req">*</span>
+                  </label>
+
                 </div>
 
                 <span class="field-error" data-error-for="state"></span>
@@ -984,10 +987,6 @@
 
             <div class="input-group">
 
-              <label for="country">
-                Country <span class="req">*</span>
-              </label>
-
               <input
                 type="text"
                 id="country"
@@ -996,6 +995,10 @@
                 autocomplete="country-name"
                 value="India"
                 required>
+
+              <label for="country">
+                Country <span class="req">*</span>
+              </label>
 
               <span class="field-error" data-error-for="country"></span>
 
@@ -1022,15 +1025,15 @@
 
             <div class="input-group">
 
-              <label for="accreditation">
-                Accreditation / Recognition
-              </label>
-
               <input
                 type="text"
                 id="accreditation"
                 name="accreditation"
                 placeholder=" ">
+
+              <label for="accreditation">
+                Accreditation / Recognition
+              </label>
 
               <span class="field-hint">Comma-separate if more than one applies</span>
 
@@ -1040,15 +1043,15 @@
 
               <div class="input-group">
 
-                <label for="gstNumber">
-                  GST Number
-                </label>
-
                 <input
                   type="text"
                   id="gstNumber"
                   name="gstNumber"
                   placeholder=" ">
+
+                <label for="gstNumber">
+                  GST Number
+                </label>
 
                 <span class="field-hint">Optional</span>
 
@@ -1056,15 +1059,15 @@
 
               <div class="input-group">
 
-                <label for="panNumber">
-                  PAN Number
-                </label>
-
                 <input
                   type="text"
                   id="panNumber"
                   name="panNumber"
                   placeholder=" ">
+
+                <label for="panNumber">
+                  PAN Number
+                </label>
 
                 <span class="field-hint">Optional</span>
 
@@ -1301,11 +1304,9 @@
 
             <div class="success-hero-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 6 9 17l-5-5"/>
+                <path class="success-check-path" d="M20 6 9 17l-5-5"/>
               </svg>
             </div>
-
-            <span class="success-hero-emoji" aria-hidden="true">🎉</span>
 
             <h3>Application Received</h3>
 
@@ -1432,10 +1433,6 @@
 
           <div class="input-group">
 
-            <label for="trackReferenceId">
-              Reference ID *
-            </label>
-
             <input
               type="text"
               id="trackReferenceId"
@@ -1444,15 +1441,15 @@
               autocomplete="off"
               required>
 
+            <label for="trackReferenceId">
+              Reference ID *
+            </label>
+
             <span class="field-error" data-error-for="trackReferenceId"></span>
 
           </div>
 
           <div class="input-group">
-
-            <label for="trackEmail">
-              Official Email Address *
-            </label>
 
             <input
               type="email"
@@ -1461,6 +1458,10 @@
               placeholder=" "
               autocomplete="off"
               required>
+
+            <label for="trackEmail">
+              Official Email Address *
+            </label>
 
             <span class="field-error" data-error-for="trackEmail"></span>
 

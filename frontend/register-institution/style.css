@@ -2485,7 +2485,7 @@ filter:brightness(1.35);
 
   transition:.35s ease;
 
-  z-index:998;
+  z-index:1001;
   
   isolation:isolate;
 }
@@ -2539,7 +2539,7 @@ background: #0F172A;
 
   overflow:hidden;
 
-  z-index:999;
+  z-index:1002;
 }
 
 .mobile-drawer.open{

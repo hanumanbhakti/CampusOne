@@ -90,11 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dashboard
     kpiGrid:            document.getElementById('kpi-grid'),
+    pipelineTrack:      document.getElementById('pipeline-track'),
+    liveActivityFeed:   document.getElementById('live-activity-feed'),
     topCampusesList:    document.getElementById('top-campuses-list'),
     latestRequestsList: document.getElementById('latest-requests-list'),
     recentAuditList:    document.getElementById('recent-audit-list'),
     healthRingProgress: document.getElementById('health-ring-progress'),
     healthRingValue:    document.getElementById('health-ring-value'),
+    healthOverallBadge: document.getElementById('health-overall-badge'),
 
     // Institutions
     institutionGrid:       document.getElementById('institution-grid'),
@@ -138,17 +141,41 @@ document.addEventListener('DOMContentLoaded', () => {
     globalSearchInput: document.getElementById('global-search-input')
   };
 
+  // Command bar: wire quick-action buttons to their targets
+  document.getElementById('cmd-add-institution-trigger')?.addEventListener('click', () => {
+    openModal(DOM.institutionModal);
+    DOM.institutionModalTitle.textContent = 'Add Institution';
+    DOM.institutionForm.reset();
+    document.getElementById('institution-form-campus-code').value = '';
+  });
+
+  // Quick action tiles in dashboard
+  document.addEventListener('click', (e) => {
+    const tile = e.target.closest('.quick-action-tile[data-view]');
+    if (tile) switchView(tile.dataset.view);
+    const qaAddInst = e.target.closest('#qa-add-institution');
+    if (qaAddInst) {
+      switchView('institutions');
+      setTimeout(() => {
+        openModal(DOM.institutionModal);
+        DOM.institutionModalTitle.textContent = 'Add Institution';
+        DOM.institutionForm.reset();
+        document.getElementById('institution-form-campus-code').value = '';
+      }, 80);
+    }
+  });
+
   const VIEW_META = {
-    dashboard:    { title: 'Executive Dashboard',      subtitle: 'Platform-wide overview across every campus on CampusOne.' },
-    institutions: { title: 'Institution Management',   subtitle: 'Add, configure and monitor every campus on the platform.' },
-    requests:     { title: 'Access Requests Center',   subtitle: 'Verify and resolve institutional access requests.' },
-    users:        { title: 'User Management',          subtitle: 'Search, manage and audit every account on CampusOne.' },
-    verification: { title: 'Verification Center',      subtitle: 'Identity, email, phone and institution checks before approval.' },
-    notices:      { title: 'Global Notice Center',     subtitle: 'Broadcast announcements to campuses, groups or individuals.' },
-    roles:        { title: 'Roles & Permissions',      subtitle: 'Define what each role can see, create and manage.' },
-    analytics:    { title: 'Analytics Center',         subtitle: 'Engagement, growth and request trends across the platform.' },
-    audit:        { title: 'Audit Logs',               subtitle: 'A complete, immutable record of every administrative action.' },
-    settings:     { title: 'System Settings',          subtitle: 'Configure platform-wide rules, templates and branding.' }
+    dashboard:    { title: 'Dashboard',               subtitle: 'Platform-wide operations across every campus on CampusOne.' },
+    institutions: { title: 'Institution Management',  subtitle: 'Add, configure and monitor every campus on the platform.' },
+    requests:     { title: 'Access Requests',         subtitle: 'Verify and resolve institutional access requests.' },
+    users:        { title: 'User Management',         subtitle: 'Search, manage and audit every account on CampusOne.' },
+    verification: { title: 'Verification Center',     subtitle: 'Identity, email, phone and institution checks before approval.' },
+    notices:      { title: 'Notice Center',           subtitle: 'Broadcast announcements to campuses, groups or individuals.' },
+    roles:        { title: 'Roles & Permissions',     subtitle: 'Define what each role can see, create and manage.' },
+    analytics:    { title: 'Analytics',               subtitle: 'Engagement, growth and request trends across the platform.' },
+    audit:        { title: 'Audit Logs',              subtitle: 'A complete, immutable record of every administrative action.' },
+    settings:     { title: 'Settings',                subtitle: 'Configure platform-wide rules, templates and branding.' }
   };
 
   // ===========================================================================
@@ -493,8 +520,163 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===========================================================================
-  // 5B. TREND & GROWTH CHARTS
+  // 5A. REGISTRATION PIPELINE TRACKER  (Phase 1)
   // ===========================================================================
+  /**
+   * Renders the 6-stage pipeline tracker on the dashboard.
+   * All counts are derived from live Firestore State — never hardcoded.
+   */
+  function renderRegistrationPipeline() {
+    if (!DOM.pipelineTrack) return;
+
+    const reqs = State.accessRequests;
+
+    const stages = [
+      {
+        key:      'submitted',
+        label:    'Submitted',
+        sublabel: 'All-time',
+        tone:     'neutral',
+        count:    reqs.length,
+        icon:     `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`
+      },
+      {
+        key:      'new',
+        label:    'New',
+        sublabel: 'Awaiting review',
+        tone:     'info',
+        count:    reqs.filter(r => ['new', 'pending'].includes((r.status || 'new').toLowerCase())).length,
+        icon:     `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+      },
+      {
+        key:      'review',
+        label:    'Under Review',
+        sublabel: 'In progress',
+        tone:     'warning',
+        count:    reqs.filter(r => ['review', 'under_review'].includes((r.status || '').toLowerCase())).length,
+        icon:     `<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`
+      },
+      {
+        key:      'verification',
+        label:    'Verification',
+        sublabel: 'Checks running',
+        tone:     'primary',
+        count:    reqs.filter(r => {
+          const s = (r.status || '').toLowerCase();
+          const v = r.verification || {};
+          return s === 'review' && (!v.identity || !v.email || !v.phone || !v.institution);
+        }).length,
+        icon:     `<svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5.25 3.4 9.74 8 11 4.6-1.26 8-5.75 8-11V5z"/></svg>`
+      },
+      {
+        key:      'approved',
+        label:    'Approved',
+        sublabel: 'Provisioned',
+        tone:     'success',
+        count:    reqs.filter(r => (r.status || '').toLowerCase() === 'approved').length,
+        icon:     `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`
+      },
+      {
+        key:      'rejected',
+        label:    'Rejected',
+        sublabel: 'Not approved',
+        tone:     'danger',
+        count:    reqs.filter(r => ['rejected', 'blocked', 'expired'].includes((r.status || '').toLowerCase())).length,
+        icon:     `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
+      }
+    ];
+
+    DOM.pipelineTrack.innerHTML = stages.map(stage => `
+      <div class="pipeline-stage tone-${escapeHtml(stage.tone)}"
+           role="listitem"
+           aria-label="${escapeHtml(stage.label)}: ${escapeHtml(String(stage.count))}">
+        <div class="pipeline-stage-icon" aria-hidden="true">${stage.icon}</div>
+        <span class="pipeline-stage-count">${escapeHtml(String(stage.count))}</span>
+        <span class="pipeline-stage-label">${escapeHtml(stage.label)}</span>
+        <span class="pipeline-stage-sublabel">${escapeHtml(stage.sublabel)}</span>
+      </div>
+    `).join('');
+  }
+
+  // ===========================================================================
+  // 5B. LIVE ACTIVITY FEED  (Phase 1)
+  // ===========================================================================
+  /**
+   * Merges audit_logs + access_requests into a unified chronological feed.
+   * Shows the 15 most recent events. Updates whenever State changes.
+   */
+  function renderLiveActivityFeed() {
+    if (!DOM.liveActivityFeed) return;
+
+    // Build feed items from audit logs
+    const auditItems = State.auditLogs
+      .slice(0, 40)
+      .map(log => ({
+        _ts:    log._sortTs || 0,
+        type:   log.type || 'info',
+        text:   `<strong>${escapeHtml(log.actorName || 'System')}</strong> ${escapeHtml(log.action || 'performed an action')}${log.target ? ` on <strong>${escapeHtml(log.target)}</strong>` : ''}`,
+        time:   log.createdAt,
+        icon:   getActivityIcon(log.type, log.action)
+      }));
+
+    // Build feed items from recent requests (new arrivals)
+    const reqItems = State.accessRequests
+      .filter(r => r._sortTs && (Date.now() - r._sortTs) < 86400000 * 3) // last 3 days
+      .map(req => ({
+        _ts:  req._sortTs || 0,
+        type: 'info',
+        text: `<strong>${escapeHtml(req.fullName || 'New applicant')}</strong> submitted a registration request for <strong>${escapeHtml(req.institution || req.campusCode || 'Unknown Institution')}</strong>`,
+        time: req.createdAt,
+        icon: { tone: 'info', svg: `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` }
+      }));
+
+    const allItems = [...auditItems, ...reqItems]
+      .sort((a, b) => b._ts - a._ts)
+      .slice(0, 18);
+
+    if (!allItems.length) {
+      DOM.liveActivityFeed.innerHTML = `
+        <li class="activity-feed-empty" role="status" aria-live="polite">
+          <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>No activity yet. Actions will appear here in real time.</span>
+        </li>`;
+      return;
+    }
+
+    DOM.liveActivityFeed.innerHTML = allItems.map(item => `
+      <li class="activity-item">
+        <div class="activity-icon-pod tone-${escapeHtml(item.icon.tone)}" aria-hidden="true">
+          ${item.icon.svg}
+        </div>
+        <div class="activity-content">
+          <p class="activity-text">${item.text}</p>
+          <time class="activity-time" datetime="${item.time?.toDate ? item.time.toDate().toISOString() : ''}">${timeAgo(item.time)}</time>
+        </div>
+      </li>
+    `).join('');
+  }
+
+  /** Maps audit log type + action to a tone + svg icon for the activity feed */
+  function getActivityIcon(type, action) {
+    const a = (action || '').toLowerCase();
+
+    if (a.includes('approv')) return { tone: 'success', svg: `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>` };
+    if (a.includes('reject') || a.includes('block')) return { tone: 'danger', svg: `<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>` };
+    if (a.includes('suspend')) return { tone: 'warning', svg: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>` };
+    if (a.includes('add') || a.includes('creat') || a.includes('new')) return { tone: 'primary', svg: `<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>` };
+    if (a.includes('login') || a.includes('auth')) return { tone: 'info', svg: `<svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>` };
+    if (a.includes('delet') || a.includes('remov')) return { tone: 'danger', svg: `<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>` };
+    if (a.includes('update') || a.includes('edit') || a.includes('chang')) return { tone: 'warning', svg: `<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>` };
+
+    const toneMap = { success: 'success', danger: 'danger', warning: 'warning', info: 'info' };
+    return {
+      tone: toneMap[type] || 'neutral',
+      svg:  `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+    };
+  }
   /** Segmented time-range toggle for trend chart */
   let activeTrendRange = '7d';
   document.querySelectorAll('[data-toggle-group="trend-range"] .segmented-mini-btn').forEach(btn => {
@@ -1638,6 +1820,8 @@ document.addEventListener('DOMContentLoaded', () => {
       (docs) => {
         State.accessRequests = docs;
         renderRequests(); renderKpis(); renderLatestRequests();
+        renderRegistrationPipeline();
+        renderLiveActivityFeed();
         if (State.currentView === 'verification') renderVerificationCenter();
         else renderVerificationCenter();          // always keep center fresh
         if (State.currentView === 'analytics') renderAnalytics();
@@ -1673,6 +1857,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (docs) => {
         State.auditLogs = docs;
         renderRecentAudit();
+        renderLiveActivityFeed();
         if (State.currentView === 'audit') renderAuditTimeline();
       }
     );
@@ -1758,8 +1943,10 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPermissionMatrix();
     renderSettingsTab('request-rules');
     renderHealthRing(99.9);
+    renderRegistrationPipeline();   // empty state until Firestore loads
+    renderLiveActivityFeed();       // empty state until Firestore loads
     initializeAuthGate();
-    console.log('[CampusOne] Super Admin Console initialized ✓');
+    console.log('[CampusOne] Super Admin Console v2.1 initialized ✓');
   }
 
   boot();

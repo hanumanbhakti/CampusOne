@@ -158,101 +158,247 @@
          ============================================================ -->
     <main id="co-app-shell">
 
-        <header class="view-topbar">
-            <div class="topbar-heading-stack">
-<h1 id="view-title" class="view-title">
-    Welcome Back, Super Admin 👋
-</h1>
+        <!-- ============================================================
+             TOP COMMAND BAR — Global search, quick actions, env badge
+             ============================================================ -->
+        <header class="command-bar" role="banner" aria-label="Command bar">
 
-<p id="view-subtitle" class="view-subtitle">
-    Manage institutions, users and platform operations across CampusOne.
-</p>
-            </div>
-            <div class="topbar-action-row">
-                <div class="global-search-shell">
-                    <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input type="text" id="global-search-input" class="global-search-input" placeholder="Search institutions, requests, users…">
+            <!-- Left: Breadcrumb + Page title -->
+            <div class="command-bar-left">
+                <div class="cmd-breadcrumb" aria-label="Current view">
+                    <span class="cmd-breadcrumb-root">CampusOne</span>
+                    <svg class="cmd-breadcrumb-sep" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                    <span class="cmd-breadcrumb-current" id="view-title">Dashboard</span>
                 </div>
-                <button type="button" class="icon-btn topbar-icon-btn" id="notif-bell-trigger" aria-label="Notifications">
-                    <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                    <span class="notif-dot"></span>
+                <p class="cmd-view-subtitle" id="view-subtitle">Platform-wide overview across every campus on CampusOne.</p>
+            </div>
+
+            <!-- Center: Global search -->
+            <div class="cmd-search-pod" role="search">
+                <svg class="cmd-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input
+                    type="search"
+                    id="global-search-input"
+                    class="cmd-search-input"
+                    placeholder="Search institutions, requests, users…"
+                    aria-label="Global search"
+                    autocomplete="off"
+                    spellcheck="false">
+                <kbd class="cmd-search-shortcut" aria-label="Keyboard shortcut: Slash">/</kbd>
+            </div>
+
+            <!-- Right: Environment badge + actions + notification + session -->
+            <div class="command-bar-right">
+
+                <span class="env-badge env-badge-production" aria-label="Environment: Production">
+                    <span class="env-badge-dot" aria-hidden="true"></span>
+                    Production
+                </span>
+
+                <button
+                    type="button"
+                    class="cmd-quick-action-btn"
+                    id="cmd-add-institution-trigger"
+                    aria-label="Add new institution">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    New Institution
                 </button>
+
+                <button
+                    type="button"
+                    class="icon-btn cmd-icon-btn"
+                    id="notif-bell-trigger"
+                    aria-label="Notifications"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span class="notif-dot" id="cmd-notif-dot" aria-hidden="true"></span>
+                </button>
+
+                <div class="cmd-session-indicator" aria-label="Active session">
+                    <span class="session-pulse-dot" aria-hidden="true"></span>
+                    <span class="session-label" id="cmd-session-label">Live</span>
+                </div>
+
             </div>
         </header>
 
         <div class="view-scroll-region" id="view-scroll-region">
 
             <!-- ============================================================
-                 VIEW: DASHBOARD
+                 VIEW: DASHBOARD — Operations Console
                  ============================================================ -->
             <section class="view-panel state-active" id="view-dashboard" data-view-panel="dashboard">
 
-                <div class="kpi-grid" id="kpi-grid">
+                <!-- KPI Command Strip -->
+                <div class="kpi-grid" id="kpi-grid" role="region" aria-label="Key performance indicators">
                     <!-- KPI cards injected by script.js (live Firestore counts) -->
                 </div>
 
-                <div class="dash-content-grid">
-                    <div class="card-panel span-2">
-                        <div class="card-panel-head">
-                            <h3 class="card-panel-title">Daily Active Users</h3>
-                            <div class="segmented-mini-toggle" data-toggle-group="trend-range">
-                                <button type="button" class="segmented-mini-btn state-active" data-range="7d">7D</button>
-                                <button type="button" class="segmented-mini-btn" data-range="30d">30D</button>
-                                <button type="button" class="segmented-mini-btn" data-range="90d">90D</button>
-                            </div>
+                <!-- Registration Pipeline Tracker -->
+                <div class="ops-pipeline-section" role="region" aria-label="Registration pipeline">
+                    <div class="ops-section-header">
+                        <div class="ops-section-title-group">
+                            <h2 class="ops-section-title">Registration Pipeline</h2>
+                            <span class="ops-section-subtitle">Live status of every institution request</span>
                         </div>
-                        <div class="chart-canvas-shell">
-                            <svg id="trend-chart-svg" viewBox="0 0 600 220" preserveAspectRatio="none" class="trend-chart-svg"></svg>
-                        </div>
+                        <button type="button" class="cta-outline-button ops-section-action" data-view-link="requests" aria-label="View all requests">
+                            View all
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
                     </div>
-
-                    <div class="card-panel">
-                        <div class="card-panel-head">
-                            <h3 class="card-panel-title">System Health</h3>
-                        </div>
-                        <div class="health-ring-wrap">
-                            <svg viewBox="0 0 120 120" class="health-ring-svg">
-                                <circle cx="60" cy="60" r="52" class="health-ring-track"/>
-                                <circle cx="60" cy="60" r="52" class="health-ring-progress" id="health-ring-progress"/>
-                            </svg>
-                            <div class="health-ring-center">
-                                <span class="health-ring-value" id="health-ring-value">99.9%</span>
-                                <span class="health-ring-caption">Uptime</span>
-                            </div>
-                        </div>
-                        <ul class="health-status-list">
-                            <li><span class="status-heartbeat-pulse"></span> Firestore — Operational</li>
-                            <li><span class="status-heartbeat-pulse"></span> Auth — Operational</li>
-                            <li><span class="status-heartbeat-pulse"></span> Cloud Functions — Operational</li>
-                        </ul>
+                    <div class="pipeline-track" id="pipeline-track" role="list" aria-label="Pipeline stages">
+                        <!-- Pipeline stages injected by script.js -->
                     </div>
                 </div>
 
-                <div class="dash-content-grid">
-                    <div class="card-panel">
-                        <div class="card-panel-head">
-                            <h3 class="card-panel-title">Top Active Campuses</h3>
-                            <a class="card-panel-link" data-view-link="institutions">View all</a>
+                <!-- Main Operations Grid: Activity + System + Queue -->
+                <div class="ops-main-grid">
+
+                    <!-- Live Activity Feed -->
+                    <div class="ops-activity-col" role="complementary" aria-label="Live activity feed">
+                        <div class="card-panel ops-activity-card">
+                            <div class="card-panel-head">
+                                <h3 class="card-panel-title">Live Activity</h3>
+                                <span class="live-indicator" aria-label="Updating in real time">
+                                    <span class="live-dot" aria-hidden="true"></span>
+                                    Real-time
+                                </span>
+                            </div>
+                            <ul class="activity-feed" id="live-activity-feed" aria-live="polite" aria-label="Recent activity">
+                                <!-- Feed items injected by script.js -->
+                            </ul>
                         </div>
-                        <ul class="ranked-list" id="top-campuses-list"></ul>
                     </div>
 
-                    <div class="card-panel">
-                        <div class="card-panel-head">
-                            <h3 class="card-panel-title">Latest Access Requests</h3>
-                            <a class="card-panel-link" data-view-link="requests">View all</a>
+                    <!-- System Health + Reviewer Queue -->
+                    <div class="ops-center-col">
+
+                        <!-- System Health -->
+                        <div class="card-panel ops-health-card">
+                            <div class="card-panel-head">
+                                <h3 class="card-panel-title">Platform Health</h3>
+                                <span class="status-badge tone-success" id="health-overall-badge">All Systems Operational</span>
+                            </div>
+                            <div class="health-ring-wrap">
+                                <svg viewBox="0 0 120 120" class="health-ring-svg" role="img" aria-label="System uptime ring chart">
+                                    <circle cx="60" cy="60" r="52" class="health-ring-track"/>
+                                    <circle cx="60" cy="60" r="52" class="health-ring-progress" id="health-ring-progress"/>
+                                </svg>
+                                <div class="health-ring-center" aria-live="polite">
+                                    <span class="health-ring-value" id="health-ring-value">99.9%</span>
+                                    <span class="health-ring-caption">Uptime</span>
+                                </div>
+                            </div>
+                            <ul class="health-status-list" aria-label="Service status">
+                                <li>
+                                    <span class="status-heartbeat-pulse" aria-hidden="true"></span>
+                                    <span>Firestore</span>
+                                    <span class="health-service-label tone-success">Operational</span>
+                                </li>
+                                <li>
+                                    <span class="status-heartbeat-pulse" aria-hidden="true"></span>
+                                    <span>Auth</span>
+                                    <span class="health-service-label tone-success">Operational</span>
+                                </li>
+                                <li>
+                                    <span class="status-heartbeat-pulse" aria-hidden="true"></span>
+                                    <span>Cloud Functions</span>
+                                    <span class="health-service-label tone-success">Operational</span>
+                                </li>
+                                <li>
+                                    <span class="status-heartbeat-pulse" aria-hidden="true"></span>
+                                    <span>Storage</span>
+                                    <span class="health-service-label tone-success">Operational</span>
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="ranked-list" id="latest-requests-list"></ul>
+
+                        <!-- Pending Reviewer Queue -->
+                        <div class="card-panel ops-queue-card">
+                            <div class="card-panel-head">
+                                <h3 class="card-panel-title">Reviewer Queue</h3>
+                                <a class="card-panel-link" data-view-link="verification" role="link">Open Center</a>
+                            </div>
+                            <ul class="ranked-list" id="latest-requests-list" aria-label="Pending requests for review"></ul>
+                        </div>
+
                     </div>
+
+                    <!-- DAU Chart + Top Campuses -->
+                    <div class="ops-analytics-col">
+
+                        <div class="card-panel ops-chart-card">
+                            <div class="card-panel-head">
+                                <h3 class="card-panel-title">Daily Active Users</h3>
+                                <div class="segmented-mini-toggle" data-toggle-group="trend-range" role="group" aria-label="Chart time range">
+                                    <button type="button" class="segmented-mini-btn state-active" data-range="7d" aria-pressed="true">7D</button>
+                                    <button type="button" class="segmented-mini-btn" data-range="30d" aria-pressed="false">30D</button>
+                                    <button type="button" class="segmented-mini-btn" data-range="90d" aria-pressed="false">90D</button>
+                                </div>
+                            </div>
+                            <div class="chart-canvas-shell">
+                                <svg id="trend-chart-svg" viewBox="0 0 600 220" preserveAspectRatio="none" class="trend-chart-svg" role="img" aria-label="Daily active users trend chart"></svg>
+                            </div>
+                        </div>
+
+                        <div class="card-panel">
+                            <div class="card-panel-head">
+                                <h3 class="card-panel-title">Top Active Campuses</h3>
+                                <a class="card-panel-link" data-view-link="institutions" role="link">View all</a>
+                            </div>
+                            <ul class="ranked-list" id="top-campuses-list" aria-label="Most active campuses by student count"></ul>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Bottom Row: Audit + Quick Actions -->
+                <div class="ops-bottom-grid">
 
                     <div class="card-panel">
                         <div class="card-panel-head">
                             <h3 class="card-panel-title">Recent Audit Activity</h3>
-                            <a class="card-panel-link" data-view-link="audit">View all</a>
+                            <a class="card-panel-link" data-view-link="audit" role="link">Full log</a>
                         </div>
-                        <ul class="ranked-list" id="recent-audit-list"></ul>
+                        <ul class="ranked-list" id="recent-audit-list" aria-label="Recent audit events"></ul>
                     </div>
+
+                    <div class="card-panel ops-quick-actions-card" role="region" aria-label="Quick actions">
+                        <div class="card-panel-head">
+                            <h3 class="card-panel-title">Quick Actions</h3>
+                        </div>
+                        <div class="quick-action-grid">
+                            <button type="button" class="quick-action-tile" id="qa-add-institution" data-view="institutions" aria-label="Add institution">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+                                <span>Add Institution</span>
+                            </button>
+                            <button type="button" class="quick-action-tile" data-view="requests" aria-label="Review requests">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                <span>Review Requests</span>
+                            </button>
+                            <button type="button" class="quick-action-tile" data-view="verification" aria-label="Verification center">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5.25 3.4 9.74 8 11 4.6-1.26 8-5.75 8-11V5z"/><polyline points="9 12 11 14 15 10"/></svg>
+                                <span>Verification</span>
+                            </button>
+                            <button type="button" class="quick-action-tile" data-view="audit" aria-label="View audit logs">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                <span>Audit Logs</span>
+                            </button>
+                            <button type="button" class="quick-action-tile" data-view="notices" aria-label="Send notice">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+                                <span>Send Notice</span>
+                            </button>
+                            <button type="button" class="quick-action-tile" data-view="settings" aria-label="Settings">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9"/></svg>
+                                <span>Settings</span>
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
+
             </section>
 
             <!-- ============================================================

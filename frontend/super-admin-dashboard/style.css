@@ -1346,3 +1346,762 @@ color:var(--text-muted);
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* =========================================================================
+   PILLAR 22 — COMMAND BAR  (Phase 1)
+   Replaces .view-topbar — unified command surface
+   ========================================================================= */
+.command-bar {
+    height: var(--topbar-height);
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 440px) auto;
+    align-items: center;
+    gap: 20px;
+    padding: 0 32px;
+
+    border-bottom: 1px solid var(--glass-border);
+
+    background: rgba(15, 23, 42, 0.80);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+/* Left — breadcrumb + subtitle */
+.command-bar-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.cmd-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    line-height: 1;
+}
+
+.cmd-breadcrumb-root {
+    color: var(--text-muted);
+    letter-spacing: 0.01em;
+}
+
+.cmd-breadcrumb-sep {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke-width: 2.5;
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.cmd-breadcrumb-current {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.01em;
+}
+
+.cmd-view-subtitle {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Center — search */
+.cmd-search-pod {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 16px;
+
+    background: var(--color-surface-input);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+
+    transition:
+        border-color var(--t-normal) var(--ease-standard),
+        box-shadow var(--t-normal) var(--ease-standard),
+        transform var(--t-fast) var(--ease-standard);
+}
+
+.cmd-search-pod:has(.cmd-search-input:focus) {
+    border-color: var(--glass-border-focus);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12), 0 0 20px rgba(37, 99, 235, 0.15);
+    transform: translateY(-1px);
+}
+
+.cmd-search-icon {
+    width: 15px;
+    height: 15px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    margin-right: 10px;
+    stroke-width: 2;
+}
+
+.cmd-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 500;
+    min-width: 0;
+}
+
+.cmd-search-input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.cmd-search-shortcut {
+    flex-shrink: 0;
+    margin-left: 8px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    font-family: var(--mono-font);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    pointer-events: none;
+}
+
+/* Right — env badge + actions + notif + session */
+.command-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* Environment badge */
+.env-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    border-radius: var(--radius-full);
+    font-size: 0.70rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.env-badge-production {
+    background: rgba(34, 197, 94, 0.10);
+    border: 1px solid rgba(34, 197, 94, 0.22);
+    color: #22C55E;
+}
+
+.env-badge-staging {
+    background: rgba(245, 158, 11, 0.10);
+    border: 1px solid rgba(245, 158, 11, 0.22);
+    color: #F59E0B;
+}
+
+.env-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: envDotPulse 2s ease-in-out infinite;
+}
+
+@keyframes envDotPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+}
+
+/* Quick action button in command bar */
+.cmd-quick-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 16px;
+    height: 36px;
+    border-radius: var(--radius-full);
+
+    background: var(--brand-gradient);
+    color: #fff;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    cursor: pointer;
+
+    transition:
+        filter var(--t-fast) var(--ease-standard),
+        transform var(--t-fast) var(--ease-standard),
+        box-shadow var(--t-fast) var(--ease-standard);
+}
+
+.cmd-quick-action-btn:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+}
+
+.cmd-quick-action-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2.5;
+    flex-shrink: 0;
+}
+
+/* Command bar icon button */
+.cmd-icon-btn {
+    position: relative;
+}
+
+.cmd-icon-btn .notif-dot {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+}
+
+/* Session indicator */
+.cmd-session-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
+}
+
+.session-pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22C55E;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+    animation: sessionPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes sessionPulse {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.session-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #22C55E;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* =========================================================================
+   PILLAR 23 — OPERATIONS DASHBOARD LAYOUT  (Phase 1)
+   ========================================================================= */
+
+/* Section header: title + action link */
+.ops-pipeline-section {
+    margin-bottom: 24px;
+}
+
+.ops-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.ops-section-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ops-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.ops-section-subtitle {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.ops-section-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    font-size: 0.78rem;
+}
+
+.ops-section-action svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2.5;
+}
+
+/* =========================================================================
+   PILLAR 24 — REGISTRATION PIPELINE TRACKER  (Phase 1)
+   ========================================================================= */
+.pipeline-track {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+    background: var(--color-surface);
+}
+
+.pipeline-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 12px 18px;
+    position: relative;
+    cursor: default;
+    transition: background var(--t-normal) var(--ease-standard);
+}
+
+.pipeline-stage + .pipeline-stage {
+    border-left: 1px solid var(--glass-border);
+}
+
+.pipeline-stage:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Arrow connector between stages */
+.pipeline-stage + .pipeline-stage::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 36px;
+    background: var(--glass-border);
+}
+
+.pipeline-stage-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform var(--t-normal) var(--ease-out-back);
+}
+
+.pipeline-stage:hover .pipeline-stage-icon {
+    transform: scale(1.08);
+}
+
+.pipeline-stage-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
+}
+
+.pipeline-stage-count {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--text-primary);
+    font-family: var(--mono-font);
+    transition: color var(--t-normal) var(--ease-standard);
+}
+
+.pipeline-stage-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+}
+
+.pipeline-stage-sublabel {
+    font-size: 0.64rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+    text-align: center;
+    margin-top: -4px;
+}
+
+/* Stage tone variants */
+.pipeline-stage.tone-info .pipeline-stage-icon    { background: var(--color-info-bg); color: var(--color-info); }
+.pipeline-stage.tone-warning .pipeline-stage-icon { background: var(--color-warning-bg); color: var(--color-warning); }
+.pipeline-stage.tone-success .pipeline-stage-icon { background: var(--color-success-bg); color: var(--color-success); }
+.pipeline-stage.tone-danger .pipeline-stage-icon  { background: var(--color-danger-bg); color: var(--color-danger); }
+.pipeline-stage.tone-neutral .pipeline-stage-icon { background: var(--color-neutral-bg); color: var(--text-muted); }
+.pipeline-stage.tone-primary .pipeline-stage-icon { background: var(--brand-glow-alpha); color: var(--brand-primary); }
+
+.pipeline-stage.tone-info .pipeline-stage-count    { color: var(--color-info); }
+.pipeline-stage.tone-warning .pipeline-stage-count { color: var(--color-warning); }
+.pipeline-stage.tone-success .pipeline-stage-count { color: var(--color-success); }
+.pipeline-stage.tone-danger .pipeline-stage-count  { color: var(--color-danger); }
+.pipeline-stage.tone-primary .pipeline-stage-count { color: var(--brand-accent); }
+
+/* =========================================================================
+   PILLAR 25 — OPERATIONS MAIN GRID  (Phase 1)
+   ========================================================================= */
+.ops-main-grid {
+    display: grid;
+    grid-template-columns: 260px 1fr 320px;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 20px;
+}
+
+.ops-activity-col,
+.ops-center-col,
+.ops-analytics-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* =========================================================================
+   PILLAR 26 — LIVE ACTIVITY FEED  (Phase 1)
+   ========================================================================= */
+.ops-activity-card {
+    max-height: 560px;
+    display: flex;
+    flex-direction: column;
+}
+
+.live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.70rem;
+    font-weight: 700;
+    color: #22C55E;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22C55E;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+    animation: sessionPulse 2s ease-in-out infinite;
+}
+
+.activity-feed {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--glass-border) transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 8px;
+}
+
+.activity-feed::-webkit-scrollbar { width: 4px; }
+.activity-feed::-webkit-scrollbar-track { background: transparent; }
+.activity-feed::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--glass-border);
+    animation: fadeUpPanel 0.3s var(--ease-standard) both;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon-pod {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.activity-icon-pod svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
+}
+
+.activity-icon-pod.tone-success { background: var(--color-success-bg); color: var(--color-success); }
+.activity-icon-pod.tone-warning { background: var(--color-warning-bg); color: var(--color-warning); }
+.activity-icon-pod.tone-danger  { background: var(--color-danger-bg);  color: var(--color-danger);  }
+.activity-icon-pod.tone-info    { background: var(--color-info-bg);    color: var(--color-info);    }
+.activity-icon-pod.tone-neutral { background: var(--color-neutral-bg); color: var(--text-muted);   }
+.activity-icon-pod.tone-primary { background: var(--brand-glow-alpha); color: var(--brand-accent); }
+
+.activity-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.activity-text {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.activity-text strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.activity-time {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+    font-family: var(--mono-font);
+    letter-spacing: 0.02em;
+}
+
+.activity-feed-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.80rem;
+}
+
+/* =========================================================================
+   PILLAR 27 — HEALTH CARD ENHANCEMENTS  (Phase 1)
+   ========================================================================= */
+.ops-health-card {
+    /* Inherits .card-panel */
+}
+
+.health-service-label {
+    margin-left: auto;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.health-service-label.tone-success { color: var(--color-success); }
+.health-service-label.tone-warning { color: var(--color-warning); }
+.health-service-label.tone-danger  { color: var(--color-danger);  }
+
+.health-status-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* =========================================================================
+   PILLAR 28 — QUICK ACTIONS PANEL  (Phase 1)
+   ========================================================================= */
+.quick-action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.quick-action-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px 12px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+    text-align: center;
+    transition:
+        background var(--t-normal) var(--ease-standard),
+        border-color var(--t-normal) var(--ease-standard),
+        transform var(--t-fast) var(--ease-standard),
+        box-shadow var(--t-fast) var(--ease-standard);
+}
+
+.quick-action-tile:hover {
+    background: var(--brand-glow-alpha);
+    border-color: rgba(37, 99, 235, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.12);
+}
+
+.quick-action-tile:active {
+    transform: translateY(0);
+}
+
+.quick-action-tile svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.75;
+    color: var(--brand-accent);
+    transition: color var(--t-normal) var(--ease-standard);
+}
+
+.quick-action-tile span {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    transition: color var(--t-normal) var(--ease-standard);
+}
+
+.quick-action-tile:hover svg { color: #fff; }
+.quick-action-tile:hover span { color: var(--text-primary); }
+
+/* =========================================================================
+   PILLAR 29 — OPS BOTTOM GRID  (Phase 1)
+   ========================================================================= */
+.ops-bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
+}
+
+.ops-chart-card {
+    /* inherits .card-panel */
+}
+
+.ops-queue-card {
+    /* inherits .card-panel */
+}
+
+/* =========================================================================
+   PILLAR 30 — RESPONSIVE: OPS CONSOLE  (Phase 1)
+   ========================================================================= */
+@media (max-width: 1400px) {
+    .command-bar {
+        grid-template-columns: 1fr minmax(0, 360px) auto;
+    }
+
+    .ops-main-grid {
+        grid-template-columns: 240px 1fr 280px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .pipeline-track {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pipeline-stage:nth-child(4) {
+        border-top: 1px solid var(--glass-border);
+    }
+
+    .ops-main-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+    }
+
+    .ops-activity-col {
+        grid-column: 1 / -1;
+        order: 3;
+    }
+
+    .ops-analytics-col {
+        grid-column: 1 / -1;
+        order: 4;
+    }
+
+    .ops-bottom-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .command-bar {
+        grid-template-columns: 1fr auto;
+        padding: 0 20px;
+        gap: 12px;
+    }
+
+    .cmd-search-pod {
+        display: none;
+    }
+
+    .env-badge { display: none; }
+
+    .cmd-view-subtitle { display: none; }
+
+    .pipeline-track {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ops-main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ops-activity-col,
+    .ops-center-col,
+    .ops-analytics-col {
+        order: unset;
+    }
+}
+
+@media (max-width: 640px) {
+    .pipeline-track {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .quick-action-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cmd-quick-action-btn span {
+        display: none;
+    }
+
+    .cmd-quick-action-btn {
+        width: 36px;
+        padding: 0;
+        justify-content: center;
+    }
+}

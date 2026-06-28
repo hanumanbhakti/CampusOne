@@ -115,11 +115,19 @@ function getField(id) {
 
 function showFieldError(fieldName, msg) {
   const el = document.querySelector(`[data-error-for="${fieldName}"]`);
-  if (el) el.textContent = msg;
+  if (el) {
+    el.textContent = msg;
+    if (!el.id) el.id = `error-${fieldName}`;
+  }
 
   const field = getField(fieldName);
   const group = field ? field.closest('.input-group') : null;
   if (group) group.classList.add('has-error');
+
+  if (field) {
+    field.setAttribute('aria-invalid', 'true');
+    if (el) field.setAttribute('aria-describedby', el.id);
+  }
 }
 
 function clearFieldError(fieldName) {
@@ -129,6 +137,11 @@ function clearFieldError(fieldName) {
   const field = getField(fieldName);
   const group = field ? field.closest('.input-group') : null;
   if (group) group.classList.remove('has-error');
+
+  if (field) {
+    field.setAttribute('aria-invalid', 'false');
+    field.removeAttribute('aria-describedby');
+  }
 }
 
 function validateField(fieldName) {
@@ -227,11 +240,25 @@ function validateField(fieldName) {
 function validateStep(step) {
   const fields = STEP_VALIDATORS[step] || [];
   let allValid = true;
+  let firstInvalidField = null;
 
   fields.forEach(fieldName => {
     const ok = validateField(fieldName);
-    if (!ok) allValid = false;
+    if (!ok) {
+      allValid = false;
+      if (!firstInvalidField) firstInvalidField = fieldName;
+    }
   });
+
+  if (firstInvalidField) {
+    const el = getField(firstInvalidField);
+    if (el) {
+      el.closest('.input-group, .consent-group')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Slight delay so the scroll finishes before focus jumps the viewport again
+      setTimeout(() => el.focus({ preventScroll: true }), 300);
+    }
+  }
 
   return allValid;
 }

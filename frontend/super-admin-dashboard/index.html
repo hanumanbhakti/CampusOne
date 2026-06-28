@@ -20,12 +20,27 @@
 </head>
 <body>
 
+    <!-- SVG Defs — global gradients used by ring charts etc -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <linearGradient id="healthGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#22C55E"/>
+                <stop offset="100%" stop-color="#10B981"/>
+            </linearGradient>
+            <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#2563EB"/>
+                <stop offset="100%" stop-color="#0EA5E9"/>
+            </linearGradient>
+        </defs>
+    </svg>
+
     <div id="co-layer-ambient-canvas" class="env-viewport" aria-hidden="true" role="presentation">
         <div class="mesh-overlay-gradient"></div>
         <div class="blur-matrix-orbs">
             <div class="orb node-primary-glowing"></div>
             <div class="orb node-secondary-glowing"></div>
             <div class="orb node-accent-glowing"></div>
+            <div class="orb node-depth-glowing"></div>
         </div>
     </div>
 
@@ -252,8 +267,8 @@
                     </div>
                 </div>
 
-                <!-- Main Operations Grid: Activity + System + Queue -->
-                <div class="ops-main-grid">
+                <!-- Main Operations Grid: Activity + System + Queue + Right Panel -->
+                <div class="ops-main-grid-v2">
 
                     <!-- Live Activity Feed -->
                     <div class="ops-activity-col" role="complementary" aria-label="Live activity feed">
@@ -348,6 +363,36 @@
                                 <a class="card-panel-link" data-view-link="institutions" role="link">View all</a>
                             </div>
                             <ul class="ranked-list" id="top-campuses-list" aria-label="Most active campuses by student count"></ul>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT OPERATIONS PANEL (Sprint 1 — 4th column) -->
+                    <div class="ops-right-panel" role="complementary" aria-label="Operations panel">
+
+                        <!-- Pending Actions -->
+                        <div class="card-panel ops-pending-card">
+                            <div class="card-panel-head">
+                                <h3 class="card-panel-title">Pending Actions</h3>
+                                <span class="nav-badge-pill" id="pending-actions-count" aria-label="Pending action count">—</span>
+                            </div>
+                            <ul class="pending-actions-list" id="pending-actions-list" aria-label="Actions requiring your attention">
+                                <!-- Injected by script.js from live Firestore data -->
+                            </ul>
+                        </div>
+
+                        <!-- Real-Time Metrics Pulse -->
+                        <div class="card-panel ops-metrics-pulse">
+                            <div class="card-panel-head">
+                                <h3 class="card-panel-title">Metrics Pulse</h3>
+                                <span class="live-indicator" aria-label="Live metrics">
+                                    <span class="live-dot" aria-hidden="true"></span>
+                                    Live
+                                </span>
+                            </div>
+                            <div class="metrics-pulse-list" id="metrics-pulse-list" aria-label="Real-time platform metrics">
+                                <!-- Injected by script.js -->
+                            </div>
                         </div>
 
                     </div>

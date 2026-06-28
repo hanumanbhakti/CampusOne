@@ -99,6 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
     healthRingValue:    document.getElementById('health-ring-value'),
     healthOverallBadge: document.getElementById('health-overall-badge'),
 
+    // Right Ops Panel (Sprint 1)
+    pendingActionsList:  document.getElementById('pending-actions-list'),
+    pendingActionsCount: document.getElementById('pending-actions-count'),
+    metricsPulseList:    document.getElementById('metrics-pulse-list'),
+
     // Institutions
     institutionGrid:       document.getElementById('institution-grid'),
     addInstitutionBtn:     document.getElementById('open-add-institution-modal'),
@@ -659,6 +664,154 @@ document.addEventListener('DOMContentLoaded', () => {
           <time class="activity-time" datetime="${item.time?.toDate ? item.time.toDate().toISOString() : ''}">${timeAgo(item.time)}</time>
         </div>
       </li>
+    `).join('');
+  }
+
+  // ===========================================================================
+  // 5C. RIGHT OPERATIONS PANEL — Pending Actions + Metrics Pulse (Sprint 1)
+  // ===========================================================================
+
+  /**
+   * Renders the Pending Actions list in the Right Ops Panel.
+   * Derives actionable items from live Firestore state — no dummy data.
+   */
+  function renderPendingActions() {
+    if (!DOM.pendingActionsList) return;
+
+    const reqs = State.accessRequests;
+    const actions = [];
+
+    // New requests awaiting review
+    const newCount = reqs.filter(r => ['new', 'pending'].includes((r.status || 'new').toLowerCase())).length;
+    if (newCount > 0) {
+      actions.push({
+        priority: 'urgent',
+        label: `${newCount} new request${newCount > 1 ? 's' : ''}`,
+        sublabel: 'Awaiting initial review',
+        view: 'requests',
+        icon: `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`
+      });
+    }
+
+    // Requests under review but verification incomplete
+    const verifyCount = reqs.filter(r => {
+      const s = (r.status || '').toLowerCase();
+      const v = r.verification || {};
+      return s === 'review' && (!v.identity || !v.email || !v.phone || !v.institution);
+    }).length;
+    if (verifyCount > 0) {
+      actions.push({
+        priority: 'normal',
+        label: `${verifyCount} pending verification${verifyCount > 1 ? 's' : ''}`,
+        sublabel: 'Checks incomplete',
+        view: 'verification',
+        icon: `<svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5.25 3.4 9.74 8 11 4.6-1.26 8-5.75 8-11V5z"/></svg>`
+      });
+    }
+
+    // Suspended institutions
+    const suspendedCount = State.institutions.filter(i => (i.status || '').toLowerCase() === 'suspended').length;
+    if (suspendedCount > 0) {
+      actions.push({
+        priority: 'normal',
+        label: `${suspendedCount} suspended campus${suspendedCount > 1 ? 'es' : ''}`,
+        sublabel: 'Review required',
+        view: 'institutions',
+        icon: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`
+      });
+    }
+
+    // Trial institutions expiring soon (placeholder logic — no date available)
+    const trialCount = State.institutions.filter(i => (i.plan || i.status || '').toLowerCase() === 'trial').length;
+    if (trialCount > 0) {
+      actions.push({
+        priority: 'low',
+        label: `${trialCount} trial campus${trialCount > 1 ? 'es' : ''}`,
+        sublabel: 'Convert or extend',
+        view: 'institutions',
+        icon: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
+      });
+    }
+
+    if (DOM.pendingActionsCount) {
+      DOM.pendingActionsCount.textContent = actions.length || '0';
+    }
+
+    if (!actions.length) {
+      DOM.pendingActionsList.innerHTML = `
+        <li class="empty-state-pod">
+          <div class="empty-state-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p class="empty-state-title">All clear</p>
+          <p class="empty-state-desc">No actions pending.</p>
+        </li>`;
+      return;
+    }
+
+    DOM.pendingActionsList.innerHTML = actions.map(a => `
+      <li class="pending-action-item" role="button" tabindex="0" data-view="${escapeHtml(a.view)}" aria-label="${escapeHtml(a.label)}">
+        <span class="pending-action-dot ${a.priority}" aria-hidden="true"></span>
+        <div class="pending-action-text">
+          ${escapeHtml(a.label)}
+          <span>${escapeHtml(a.sublabel)}</span>
+        </div>
+        <svg class="pending-action-arrow" viewBox="0 0 24 24" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </li>
+    `).join('');
+
+    // Wire click/keyboard navigation
+    DOM.pendingActionsList.querySelectorAll('.pending-action-item').forEach(item => {
+      const handler = () => {
+        const view = item.dataset.view;
+        if (view) switchView(view);
+      };
+      item.addEventListener('click', handler);
+      item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); } });
+    });
+  }
+
+  /**
+   * Renders real-time Metrics Pulse in the Right Ops Panel.
+   * All values derived from live Firestore state.
+   */
+  function renderMetricsPulse() {
+    if (!DOM.metricsPulseList) return;
+
+    const total  = State.institutions.length;
+    const active = State.institutions.filter(i => (i.status || '').toLowerCase() === 'active').length;
+    const users  = State.users.length;
+    const pending = State.accessRequests.filter(r =>
+      ['new', 'pending', 'review', 'under_review'].includes((r.status || '').toLowerCase())
+    ).length;
+    const approved = State.accessRequests.filter(r => (r.status || '').toLowerCase() === 'approved').length;
+    const total_reqs = State.accessRequests.length;
+    const approvalRate = total_reqs > 0 ? Math.round((approved / total_reqs) * 100) : 0;
+
+    const metrics = [
+      { label: 'Active Campuses',  value: active,       trend: 'up',   unit: '' },
+      { label: 'Total Users',      value: users,        trend: 'up',   unit: '' },
+      { label: 'Open Requests',    value: pending,      trend: pending > 5 ? 'up' : 'flat', unit: '' },
+      { label: 'Approval Rate',    value: approvalRate, trend: approvalRate >= 70 ? 'up' : 'down', unit: '%' },
+      { label: 'Total Campuses',   value: total,        trend: 'flat', unit: '' },
+    ];
+
+    const trendSvg = {
+      up:   `<svg class="metrics-trend-arrow up" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>`,
+      down: `<svg class="metrics-trend-arrow down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>`,
+      flat: `<svg class="metrics-trend-arrow flat" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>`
+    };
+
+    DOM.metricsPulseList.innerHTML = metrics.map(m => `
+      <div class="metrics-pulse-row">
+        <span class="metrics-pulse-label">${escapeHtml(m.label)}</span>
+        <span class="metrics-pulse-value">
+          ${escapeHtml(String(m.value))}${escapeHtml(m.unit)}
+          ${trendSvg[m.trend] || ''}
+        </span>
+      </div>
     `).join('');
   }
 
@@ -1810,6 +1963,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (docs) => {
         State.institutions = docs;
         renderInstitutions(); renderKpis(); renderTopCampuses();
+        renderPendingActions(); renderMetricsPulse();
         if (State.currentView === 'analytics') renderAnalytics();
       }
     );
@@ -1825,6 +1979,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderRequests(); renderKpis(); renderLatestRequests();
         renderRegistrationPipeline();
         renderLiveActivityFeed();
+        renderPendingActions(); renderMetricsPulse();
         if (State.currentView === 'verification') renderVerificationCenter();
         else renderVerificationCenter();          // always keep center fresh
         if (State.currentView === 'analytics') renderAnalytics();
@@ -1837,7 +1992,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (docs) => {
         State.users = docs;
         renderUsersTable(); renderKpis();
-        renderTrendChart();
+        renderTrendChart(); renderMetricsPulse();
         if (State.currentView === 'analytics') renderAnalytics();
       }
     );
@@ -1948,10 +2103,62 @@ document.addEventListener('DOMContentLoaded', () => {
     renderHealthRing(99.9);
     renderRegistrationPipeline();   // empty state until Firestore loads
     renderLiveActivityFeed();       // empty state until Firestore loads
+    renderPendingActions();         // empty state until Firestore loads
+    renderMetricsPulse();           // empty state until Firestore loads
     initializeAuthGate();
     initStatusBarClock();
     initMobileBottomNav();
-    console.log('[CampusOne] Super Admin Console v2.1 initialized ✓');
+    initRippleEffect();
+    initKeyboardShortcuts();
+    console.log('[CampusOne] Super Admin Console v2.1-Sprint1 initialized ✓');
+  }
+
+  /**
+   * Adds ripple effect on click to CTA buttons
+   */
+  function initRippleEffect() {
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.cta-solid-button, .cta-gradient-button, .cmd-quick-action-btn, .quick-action-tile');
+      if (!btn) return;
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple-effect';
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height) * 2;
+      ripple.style.cssText = `
+        width: ${size}px; height: ${size}px;
+        left: ${e.clientX - rect.left - size/2}px;
+        top: ${e.clientY - rect.top - size/2}px;
+      `;
+      // Ensure btn is positioned
+      if (getComputedStyle(btn).position === 'static') btn.style.position = 'relative';
+      btn.style.overflow = 'hidden';
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+  }
+
+  /**
+   * Keyboard shortcuts:
+   * / → focus global search
+   * Escape → close open modals
+   * Ctrl+K → focus global search
+   */
+  function initKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+      // / or Ctrl+K → focus search (when not in input)
+      const tag = document.activeElement?.tagName;
+      if ((e.key === '/' || (e.ctrlKey && e.key === 'k')) && !['INPUT','TEXTAREA','SELECT'].includes(tag)) {
+        e.preventDefault();
+        DOM.globalSearchInput?.focus();
+      }
+      // Escape → close top-most open modal
+      if (e.key === 'Escape') {
+        const openModal = document.querySelector('.modal-overlay.state-open');
+        if (openModal) {
+          openModal.classList.remove('state-open');
+        }
+      }
+    });
   }
 
   function initStatusBarClock() {

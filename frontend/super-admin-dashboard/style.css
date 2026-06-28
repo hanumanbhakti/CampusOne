@@ -54,9 +54,10 @@
     --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    --sidebar-width: 264px;
-    --topbar-height: 76px;
+    --sidebar-width: 248px;
+    --topbar-height: 52px;
     --mono-font: 'JetBrains Mono', monospace;
+    --display-font: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
 }
 
 [data-theme="light"] {
@@ -82,7 +83,7 @@
 html, body {
     width: 100%;
     min-height: 100vh;
-    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--color-bg);
     color: var(--text-primary);
     overflow-x: hidden;
@@ -157,15 +158,15 @@ table { border-collapse: collapse; width: 100%; }
 .sidebar-brand-row{
     display:flex;
     align-items:center;
-    gap:14px;
-    padding:24px 22px 20px;
+    gap:10px;
+    padding:16px 16px 14px;
     border-bottom:1px solid var(--glass-border);
     position:relative;
 }
 .sidebar-logo-pod{
-    width:50px;
-    height:50px;
-    border-radius:16px;
+    width:34px;
+    height:34px;
+    border-radius:10px;
     background:#ffffff;
     display:flex;
     align-items:center;
@@ -173,8 +174,8 @@ table { border-collapse: collapse; width: 100%; }
     flex-shrink:0;
     overflow:hidden;
     box-shadow:
-        0 12px 28px rgba(37,99,235,.18),
-        0 4px 12px rgba(0,0,0,.08);
+        0 6px 18px rgba(37,99,235,.18),
+        0 2px 8px rgba(0,0,0,.08);
 }
 
 .sidebar-logo-img{
@@ -185,15 +186,15 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 .sidebar-close-btn{
-    width:40px;
-    height:40px;
+    width:28px;
+    height:28px;
     border:none;
     background:transparent;
     display:flex;
     align-items:center;
     justify-content:center;
     cursor:pointer;
-    border-radius:12px;
+    border-radius:8px;
     color:var(--text-secondary);
     transition:
         background .25s ease,
@@ -212,8 +213,8 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 .sidebar-close-btn svg{
-    width:18px;
-    height:18px;
+    width:15px;
+    height:15px;
     stroke-width:2.2;
 }
 
@@ -225,19 +226,19 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 .sidebar-brand-name{
-  font-size:1.05rem;
+  font-size:0.88rem;
   font-weight:800;
   color:var(--text-primary);
   letter-spacing:-0.02em;
-  line-height:1.1;
+  line-height:1.15;
 }
 
 .sidebar-brand-role{
-  margin-top:2px;
-  font-size:0.72rem;
+  margin-top:1px;
+  font-size:0.62rem;
   font-weight:600;
-  color:var(--text-secondary);
-  letter-spacing:0.08em;
+  color:var(--text-muted);
+  letter-spacing:0.06em;
   text-transform:uppercase;
 }
 .sidebar-close-only { display: none; }
@@ -247,32 +248,32 @@ table { border-collapse: collapse; width: 100%; }
     overflow-y:auto;
     display:flex;
     flex-direction:column;
-    gap:4px;
-    padding:18px 14px;
+    gap:2px;
+    padding:12px 10px;
 }
 
 .nav-item-link{
     display:flex;
     align-items:center;
-    gap:12px;
-    padding:12px 14px;
-    border-radius:14px;
-    font-size:.85rem;
+    gap:10px;
+    padding:9px 12px;
+    border-radius:10px;
+    font-size:.80rem;
     font-weight:600;
     color:var(--text-secondary);
     cursor:pointer;
     position:relative;
     text-align:left;
     transition:
-        background .25s ease,
-        color .25s ease,
-        transform .25s ease;
+        background .20s ease,
+        color .20s ease,
+        transform .20s ease;
 }
 
 .nav-item-link:hover{
     background:rgba(255,255,255,.05);
     color:var(--text-primary);
-    transform:translateX(3px);
+    transform:translateX(2px);
 }
 
 .nav-item-link.state-active{
@@ -280,7 +281,7 @@ table { border-collapse: collapse; width: 100%; }
     color:var(--text-primary);
     box-shadow:
         inset 0 0 0 1px rgba(37,99,235,.18),
-        0 6px 18px rgba(37,99,235,.10);
+        0 4px 14px rgba(37,99,235,.08);
 }
 
 .nav-item-link.state-active::before{
@@ -306,17 +307,12 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 .sidebar-footer-block{
-    padding:18px 14px 20px;
+    padding:12px 10px 14px;
     border-top:1px solid var(--glass-border);
     display:flex;
     flex-direction:column;
-    gap:14px;
+    gap:10px;
     position:relative;
-    background:linear-gradient(
-        to top,
-        rgba(255,255,255,.02),
-        transparent
-    );
 }
 
 .theme-switch-orchestrator { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
@@ -335,9 +331,9 @@ table { border-collapse: collapse; width: 100%; }
 .sidebar-profile-pod{
     display:flex;
     align-items:center;
-    gap:12px;
-    padding:12px;
-    border-radius:14px;
+    gap:9px;
+    padding:9px 10px;
+    border-radius:10px;
     background:rgba(255,255,255,.03);
     border:1px solid var(--glass-border);
     cursor:pointer;
@@ -355,18 +351,18 @@ table { border-collapse: collapse; width: 100%; }
     transform:translateY(-1px);
 }
 .profile-avatar-initials{
-    width:38px;
-    height:38px;
+    width:30px;
+    height:30px;
     border-radius:999px;
     background:var(--brand-gradient);
     color:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:.74rem;
+    font-size:.66rem;
     font-weight:700;
     flex-shrink:0;
-    box-shadow:0 6px 18px rgba(37,99,235,.30);
+    box-shadow:0 4px 12px rgba(37,99,235,.28);
 }
 
 .profile-text-stack { display: flex; flex-direction: column; flex: 1; min-width: 0; }
@@ -378,7 +374,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 .profile-name{
-    font-size:.82rem;
+    font-size:.78rem;
     font-weight:700;
     color:var(--text-primary);
     white-space:nowrap;
@@ -387,8 +383,8 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 .profile-email{
-    margin-top:2px;
-    font-size:.68rem;
+    margin-top:1px;
+    font-size:.64rem;
     color:var(--text-muted);
     white-space:nowrap;
     overflow:hidden;
@@ -690,7 +686,7 @@ box-shadow:0 0 12px rgba(239,68,68,.55);
 
 .view-scroll-region{
 flex:1;
-padding:32px 32px 52px;
+padding:20px 24px 40px;
 }
 
 .view-panel{
@@ -705,128 +701,104 @@ display:block;
 /* =========================================================================
 PILLAR 6 — KPI GRID (Executive Dashboard)
 ========================================================================= */
-.kpi-grid{
-display:grid;
-grid-template-columns:repeat(6,1fr);
-gap:18px;
-margin-bottom:28px;
+/* =========================================================================
+   KPI COMMAND STRIP — Compact enterprise style (6 cards, 1 row always)
+   ========================================================================= */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+    margin-bottom: 20px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
-.kpi-card{
-background:var(--color-surface);
-background-image:var(--glass-reflection);
-
-backdrop-filter:blur(22px);
--webkit-backdrop-filter:blur(22px);
-
-border:1px solid var(--glass-border);
-border-radius:20px;
-
-padding:20px;
-
-box-shadow:var(--shadow-md);
-
-display:flex;
-flex-direction:column;
-gap:12px;
-
-transition:
-    transform .25s ease,
-    border-color .25s ease,
-    box-shadow .25s ease;
-
+.kpi-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-right: 1px solid var(--glass-border);
+    position: relative;
+    transition: background var(--t-fast) var(--ease-standard);
+    cursor: default;
 }
 
-.kpi-card:hover{
-transform:translateY(-4px);
+.kpi-card:last-child { border-right: none; }
 
-border-color:rgba(59,130,246,.18);
-
-box-shadow:
-    0 16px 32px rgba(0,0,0,.12),
-    0 6px 20px rgba(59,130,246,.08);
-
+.kpi-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--brand-gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--t-normal) var(--ease-standard);
 }
 
-.kpi-card-head{
-display:flex;
-align-items:center;
-justify-content:space-between;
+.kpi-card:hover { background: rgba(255,255,255,0.03); }
+.kpi-card:hover::after { transform: scaleX(1); }
+
+.kpi-icon-pod {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.kpi-icon-pod{
-width:36px;
-height:36px;
+.kpi-icon-pod svg { width: 15px; height: 15px; stroke-width: 2; }
 
-border-radius:12px;
+.kpi-icon-pod.tone-primary  { background: var(--color-info-bg);    color: var(--brand-secondary); }
+.kpi-icon-pod.tone-warning  { background: var(--color-warning-bg); color: var(--color-warning); }
+.kpi-icon-pod.tone-success  { background: var(--color-success-bg); color: var(--color-success); }
+.kpi-icon-pod.tone-danger   { background: var(--color-danger-bg);  color: var(--color-danger); }
+.kpi-icon-pod.tone-neutral  { background: var(--color-neutral-bg); color: var(--text-muted); }
 
-display:flex;
-align-items:center;
-justify-content:center;
+.kpi-card-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
 
+.kpi-card-head { display: flex; align-items: center; justify-content: space-between; }
+
+.kpi-value {
+    font-size: 1.30rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    font-family: var(--mono-font);
+    color: var(--text-primary);
+    line-height: 1.1;
 }
 
-.kpi-icon-pod.tone-primary{
-background:var(--color-info-bg);
-color:var(--brand-secondary);
+.kpi-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.01em;
 }
 
-.kpi-icon-pod.tone-warning{
-background:var(--color-warning-bg);
-color:var(--color-warning);
+.kpi-trend-chip {
+    font-size: 0.60rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
 }
-
-.kpi-icon-pod.tone-success{
-background:var(--color-success-bg);
-color:var(--color-success);
-}
-
-.kpi-icon-pod.tone-danger{
-background:var(--color-danger-bg);
-color:var(--color-danger);
-}
-
-.kpi-trend-chip{
-font-size:.68rem;
-font-weight:700;
-
-padding:3px 8px;
-
-border-radius:999px;
-
-display:flex;
-align-items:center;
-gap:4px;
-
-}
-
-.kpi-trend-chip.trend-up{
-background:var(--color-success-bg);
-color:var(--color-success);
-}
-
-.kpi-trend-chip.trend-down{
-background:var(--color-danger-bg);
-color:var(--color-danger);
-}
-
-.kpi-trend-chip.trend-flat{
-background:var(--color-neutral-bg);
-color:var(--text-muted);
-}
-
-.kpi-value{
-font-size:1.75rem;
-font-weight:800;
-letter-spacing:-0.03em;
-font-family:var(--mono-font);
-}
-
-.kpi-label{
-font-size:.78rem;
-font-weight:600;
-color:var(--text-muted);
-}
+.kpi-trend-chip.trend-up   { background: var(--color-success-bg); color: var(--color-success); }
+.kpi-trend-chip.trend-down { background: var(--color-danger-bg);  color: var(--color-danger); }
+.kpi-trend-chip.trend-flat { background: var(--color-neutral-bg); color: var(--text-muted); }
 
 /* =========================================================================
    PILLAR 7 — DASHBOARD CONTENT GRID + CARD PANELS
@@ -838,13 +810,13 @@ color:var(--text-muted);
 .card-panel {
     background: var(--color-surface); background-image: var(--glass-reflection);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
-    padding: 22px; box-shadow: var(--shadow-md);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-md);
+    padding: 16px; box-shadow: var(--shadow-md);
 }
 .card-panel.span-2 { grid-column: span 2; }
 
-.card-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.card-panel-title { font-size: 0.92rem; font-weight: 600; }
+.card-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.card-panel-title { font-size: 0.82rem; font-weight: 700; letter-spacing: -0.01em; }
 .card-panel-link { font-size: 0.74rem; font-weight: 600; color: var(--brand-secondary); cursor: pointer; }
 .card-panel-link:hover { color: #60A5FA; }
 
@@ -1265,10 +1237,9 @@ color:var(--text-muted);
 #co-toast-stack-container { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; pointer-events: none; }
 
 /* =========================================================================
-   PILLAR 20 — RESPONSIVE BREAKPOINTS
+   PILLAR 20 — RESPONSIVE BREAKPOINTS (base - non-ops views)
    ========================================================================= */
 @media (max-width: 1280px) {
-    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
     .dash-content-grid { grid-template-columns: repeat(2, 1fr); }
     .card-panel.span-2 { grid-column: span 2; }
     .institution-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1278,28 +1249,13 @@ color:var(--text-muted);
 }
 
 @media (max-width: 1023px) {
-    :root { --topbar-height: 64px; }
-    #co-mobile-topbar {
-        display: flex; align-items: center; justify-content: space-between;
-        height: var(--topbar-height); padding: 0 14px;
-        background: var(--color-surface); backdrop-filter: blur(16px);
-        border-bottom: 1px solid var(--glass-border);
-        position: sticky; top: 0; z-index: 150;
-    }
     .mobile-brand-pod { display: flex; flex-direction: column; align-items: center; }
     .mobile-brand-mark { font-size: 0.88rem; font-weight: 700; }
     .mobile-brand-tag { font-size: 0.62rem; color: var(--brand-secondary); font-weight: 600; text-transform: uppercase; }
-
-    .co-sidebar { transform: translateX(-100%); box-shadow: var(--shadow-xl); }
-    .co-sidebar.state-open { transform: translateX(0); }
     .sidebar-close-only { display: flex; margin-left: auto; }
     .sidebar-scrim { display: block; }
-
-    #co-app-shell { margin-left: 0; }
     .view-topbar { display: none; }
     .global-search-shell { display: none; }
-
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     .dash-content-grid { grid-template-columns: 1fr; }
     .card-panel.span-2 { grid-column: span 1; }
     .institution-grid { grid-template-columns: 1fr; }
@@ -1307,11 +1263,9 @@ color:var(--text-muted);
     .verification-grid { grid-template-columns: 1fr; }
     .notice-composer-grid { grid-template-columns: 1fr; }
     .settings-nav-grid { grid-template-columns: repeat(3, 1fr); }
-    .view-scroll-region { padding: 20px 16px 40px; }
 }
 
 @media (max-width: 640px) {
-    .kpi-grid { grid-template-columns: 1fr 1fr; }
     .request-card { grid-template-columns: 1fr; }
     .settings-nav-grid { grid-template-columns: repeat(2, 1fr); }
     .panel-toolbar { flex-direction: column; align-items: stretch; }
@@ -1354,20 +1308,21 @@ color:var(--text-muted);
 .command-bar {
     height: var(--topbar-height);
     display: grid;
-    grid-template-columns: 1fr minmax(0, 440px) auto;
+    grid-template-columns: 1fr minmax(0, 380px) auto;
     align-items: center;
-    gap: 20px;
-    padding: 0 32px;
+    gap: 16px;
+    padding: 0 24px;
 
     border-bottom: 1px solid var(--glass-border);
 
-    background: rgba(15, 23, 42, 0.80);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: rgba(9, 14, 29, 0.88);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
 
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: 100;
+    box-shadow: 0 1px 0 var(--glass-border), 0 4px 24px rgba(0,0,0,0.2);
 }
 
 /* Left — breadcrumb + subtitle */
@@ -1777,10 +1732,10 @@ color:var(--text-muted);
    ========================================================================= */
 .ops-main-grid {
     display: grid;
-    grid-template-columns: 260px 1fr 320px;
-    gap: 20px;
+    grid-template-columns: 240px 1fr 300px;
+    gap: 16px;
     align-items: start;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .ops-activity-col,
@@ -1788,7 +1743,7 @@ color:var(--text-muted);
 .ops-analytics-col {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
 }
 
 /* =========================================================================
@@ -2002,8 +1957,8 @@ color:var(--text-muted);
    ========================================================================= */
 .ops-bottom-grid {
     display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: 20px;
+    grid-template-columns: 1fr 300px;
+    gap: 16px;
 }
 
 .ops-chart-card {
@@ -2019,11 +1974,11 @@ color:var(--text-muted);
    ========================================================================= */
 @media (max-width: 1400px) {
     .command-bar {
-        grid-template-columns: 1fr minmax(0, 360px) auto;
+        grid-template-columns: 1fr minmax(0, 320px) auto;
     }
 
     .ops-main-grid {
-        grid-template-columns: 240px 1fr 280px;
+        grid-template-columns: 220px 1fr 260px;
     }
 }
 
@@ -2037,7 +1992,7 @@ color:var(--text-muted);
     }
 
     .ops-main-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 260px;
         grid-template-rows: auto auto;
     }
 
@@ -2059,7 +2014,7 @@ color:var(--text-muted);
 @media (max-width: 900px) {
     .command-bar {
         grid-template-columns: 1fr auto;
-        padding: 0 20px;
+        padding: 0 16px;
         gap: 12px;
     }
 
@@ -2105,3 +2060,362 @@ color:var(--text-muted);
         justify-content: center;
     }
 }
+
+/* =========================================================================
+   PILLAR 31 — SKELETON LOADERS
+   ========================================================================= */
+@keyframes skeletonShimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+.skeleton-base {
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.04) 25%,
+        rgba(255,255,255,0.09) 50%,
+        rgba(255,255,255,0.04) 75%
+    );
+    background-size: 800px 100%;
+    animation: skeletonShimmer 1.6s ease-in-out infinite;
+    border-radius: 6px;
+}
+
+.skeleton-kpi-value { height: 24px; width: 60px; }
+.skeleton-kpi-label { height: 10px; width: 80px; margin-top: 4px; }
+.skeleton-text-sm   { height: 12px; width: 100%; }
+.skeleton-text-sm-half { height: 12px; width: 55%; }
+.skeleton-avatar    { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; }
+.skeleton-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid var(--glass-border);
+}
+.skeleton-row:last-child { border-bottom: none; }
+
+/* =========================================================================
+   PILLAR 32 — STATUS BAR (Bottom)
+   ========================================================================= */
+.ops-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 6px 24px;
+    border-top: 1px solid var(--glass-border);
+    background: rgba(9, 14, 29, 0.6);
+    backdrop-filter: blur(16px);
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    position: sticky;
+    bottom: 0;
+    z-index: 40;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+}
+
+.status-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.status-bar-item .status-heartbeat-pulse {
+    width: 6px;
+    height: 6px;
+}
+
+.status-bar-sep {
+    width: 1px;
+    height: 12px;
+    background: var(--glass-border);
+}
+
+.status-bar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.status-bar-clock {
+    font-family: var(--mono-font);
+    font-size: 0.68rem;
+    color: var(--text-muted);
+}
+
+/* =========================================================================
+   PILLAR 33 — PIPELINE SECTION UPGRADE (compact)
+   ========================================================================= */
+.ops-pipeline-section {
+    margin-bottom: 16px;
+}
+
+.pipeline-stage {
+    padding: 14px 10px 12px;
+    gap: 6px;
+}
+
+.pipeline-stage-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+}
+
+.pipeline-stage-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.pipeline-stage-count {
+    font-size: 1.45rem;
+    font-weight: 800;
+}
+
+.pipeline-stage-label {
+    font-size: 0.65rem;
+}
+
+/* =========================================================================
+   PILLAR 34 — COMMAND BAR BREADCRUMB UPGRADE
+   ========================================================================= */
+.cmd-breadcrumb-current {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 0.88rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.02em;
+}
+
+.cmd-view-subtitle {
+    font-size: 0.70rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.8;
+}
+
+/* =========================================================================
+   PILLAR 35 — ENHANCED ACTIVITY FEED (Live Panel right col)
+   ========================================================================= */
+.ops-live-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Live Alerts card */
+.live-alerts-card {
+    border-left: 2px solid var(--color-warning);
+}
+
+.alert-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+.alert-item:last-child { border-bottom: none; }
+
+.alert-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+}
+.alert-dot.tone-warning { background: var(--color-warning); box-shadow: 0 0 6px rgba(245,158,11,0.5); }
+.alert-dot.tone-danger  { background: var(--color-danger);  box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+.alert-dot.tone-info    { background: var(--color-info);    box-shadow: 0 0 6px rgba(59,130,246,0.5); }
+.alert-dot.tone-success { background: var(--color-success); box-shadow: 0 0 6px rgba(34,197,94,0.5); }
+
+.alert-text {
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+.alert-text strong { color: var(--text-primary); font-weight: 700; }
+.alert-time {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    font-family: var(--mono-font);
+    margin-top: 2px;
+}
+
+/* =========================================================================
+   PILLAR 36 — SECTION LABELS (eyebrow text)
+   ========================================================================= */
+.section-eyebrow {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--glass-border);
+}
+
+/* =========================================================================
+   PILLAR 37 — EMPTY STATES (professional)
+   ========================================================================= */
+.empty-state-pod {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 16px;
+    text-align: center;
+}
+
+.empty-state-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background: var(--color-neutral-bg);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.empty-state-icon svg { width: 18px; height: 18px; stroke-width: 1.5; }
+
+.empty-state-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.empty-state-desc {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 200px;
+}
+
+/* =========================================================================
+   PILLAR 38 — MOBILE TOPBAR UPGRADE
+   ========================================================================= */
+@media (max-width: 1023px) {
+    :root {
+        --topbar-height: 52px;
+        --sidebar-width: 248px;
+    }
+
+    #co-mobile-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: var(--topbar-height);
+        padding: 0 16px;
+        background: rgba(9,14,29,0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        position: sticky;
+        top: 0;
+        z-index: 150;
+        box-shadow: 0 1px 0 var(--glass-border);
+    }
+
+    .co-sidebar { transform: translateX(-100%); box-shadow: var(--shadow-xl); }
+    .co-sidebar.state-open { transform: translateX(0); }
+    #co-app-shell { margin-left: 0; }
+
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); border-radius: var(--radius-md); }
+    .kpi-card { border-bottom: 1px solid var(--glass-border); }
+    .kpi-card:nth-child(3) { border-right: none; }
+    .kpi-card:nth-child(4), .kpi-card:nth-child(5), .kpi-card:nth-child(6) { border-bottom: none; }
+
+    .ops-main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ops-live-panel {
+        order: -1;
+    }
+
+    .view-scroll-region { padding: 16px 14px 32px; }
+    .ops-bottom-grid { grid-template-columns: 1fr; }
+    .ops-status-bar { display: none; }
+}
+
+@media (max-width: 640px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .kpi-card:nth-child(2) { border-right: none; }
+    .kpi-card:nth-child(3) { border-right: 1px solid var(--glass-border); }
+    .kpi-card:nth-child(3),
+    .kpi-card:nth-child(4) { border-bottom: 1px solid var(--glass-border); }
+    .kpi-card:nth-child(5) { border-right: none; border-bottom: none; }
+    .kpi-card:nth-child(6) { border-bottom: none; }
+
+    .pipeline-track { grid-template-columns: repeat(3, 1fr); }
+    .pipeline-stage:nth-child(4) { border-top: 1px solid var(--glass-border); }
+
+    .command-bar { grid-template-columns: 1fr auto; padding: 0 14px; }
+    .cmd-search-pod { display: none; }
+    .cmd-view-subtitle { display: none; }
+    .env-badge { display: none; }
+}
+
+/* =========================================================================
+   PILLAR 39 — MOBILE BOTTOM QUICK ACTIONS
+   ========================================================================= */
+@media (max-width: 768px) {
+    .mobile-quick-actions {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+        background: rgba(9,14,29,0.95);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid var(--glass-border);
+        gap: 4px;
+        z-index: 80;
+    }
+
+    .mobile-qa-btn {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 4px;
+        border-radius: 10px;
+        background: transparent;
+        color: var(--text-muted);
+        font-size: 0.58rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: color var(--t-fast), background var(--t-fast);
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+
+    .mobile-qa-btn svg { width: 18px; height: 18px; stroke-width: 1.8; }
+    .mobile-qa-btn.active { color: var(--brand-accent); }
+    .mobile-qa-btn:hover { background: rgba(255,255,255,0.05); }
+}
+
+@media (min-width: 769px) {
+    .mobile-quick-actions { display: none; }
+}
+

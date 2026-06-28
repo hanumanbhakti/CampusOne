@@ -428,11 +428,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     DOM.kpiGrid.innerHTML = cards.map(c => `
       <div class="kpi-card">
-        <div class="kpi-card-head">
-          <span class="kpi-icon-pod tone-${c.tone}">${c.icon}</span>
+        <span class="kpi-icon-pod tone-${c.tone}">${c.icon}</span>
+        <div class="kpi-card-body">
+          <div class="kpi-card-head">
+            <span class="kpi-value">${escapeHtml(String(c.value))}</span>
+            <span class="kpi-trend-chip trend-up">+2%</span>
+          </div>
+          <span class="kpi-label">${escapeHtml(c.label)}</span>
         </div>
-        <span class="kpi-value">${escapeHtml(String(c.value))}</span>
-        <span class="kpi-label">${escapeHtml(c.label)}</span>
       </div>
     `).join('');
 
@@ -1946,7 +1949,40 @@ document.addEventListener('DOMContentLoaded', () => {
     renderRegistrationPipeline();   // empty state until Firestore loads
     renderLiveActivityFeed();       // empty state until Firestore loads
     initializeAuthGate();
+    initStatusBarClock();
+    initMobileBottomNav();
     console.log('[CampusOne] Super Admin Console v2.1 initialized ✓');
+  }
+
+  function initStatusBarClock() {
+    const clockEl = document.getElementById('status-bar-clock');
+    if (!clockEl) return;
+    function tick() {
+      const now = new Date();
+      clockEl.textContent = now.toLocaleTimeString('en-IN', { hour12: false, hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  function initMobileBottomNav() {
+    const btns = document.querySelectorAll('.mobile-qa-btn[data-view]');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        switchView(btn.dataset.view);
+      });
+    });
+    // Sync mobile bottom nav with main nav
+    DOM.navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const view = item.dataset.view;
+        btns.forEach(b => {
+          b.classList.toggle('active', b.dataset.view === view);
+        });
+      });
+    });
   }
 
   boot();
